@@ -14,13 +14,9 @@ public class TileSelect : MonoBehaviour
         if (deckManager.selectedTiles.Count < deckManager.MAX_DISCARD_SELECTION)
         {
             if(!deckManager.selectedTiles.Contains(gameObject))
-            {
                 addToSelection();
-            }
             else
-            {
                 removeFromSelection();
-            }
         }
     }
     void addToSelection()

@@ -46,7 +46,12 @@ public class DeckManager : MonoBehaviour
             if (!success)
                 break;
         }
+        sortHand();
     }
+    void sortHand()
+    {
+        //Here we will sort the hand based on the tile types and values, and update the positions of the gameObjects accordingly.
+    }   
     public bool drawTile()
     {
         if (hand.Count < HAND_SIZE)

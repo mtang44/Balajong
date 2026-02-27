@@ -91,6 +91,16 @@ public class MahjongTileData : MonoBehaviour
         sprite = newSprite;
     }
 
+    private void OnValidate()
+    {
+        // Notify display component to update when data changes
+        MahjongTileDisplay display = GetComponent<MahjongTileDisplay>();
+        if (display != null)
+        {
+            display.ApplyTileSprite();
+        }
+    }
+
     public string GetTileDisplayName()
     {
         return tileType switch

@@ -50,7 +50,10 @@ public class MahjongTileDisplay : MonoBehaviour
 
     private void OnValidate()
     {
-        ApplyTileSprite();
+        if (!Application.isPlaying)
+        {
+            ApplyTileSprite();
+        }
     }
 
     public void ApplyTileSprite()

@@ -51,7 +51,8 @@ public class DeckManager : MonoBehaviour
     }
     void sortHand()
     {
-        //Here we will sort the hand based on the tile types and values, and update the positions of the gameObjects accordingly.
+        //Here we will sort the hand based on the tile types and values,
+        //and update the positions of the gameObjects accordingly.
     }   
     public bool drawTile()
     {

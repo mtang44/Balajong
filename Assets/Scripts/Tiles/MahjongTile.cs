@@ -137,6 +137,17 @@ public class MahjongTile : ScriptableObject
             };
         }
     }
+    public MahjongTile(MahjongTile otherTile)
+    {
+        tileType = otherTile.TileType;
+        numberedValue = otherTile.NumberedValue;
+        windValue = otherTile.WindValue;
+        dragonValue = otherTile.DragonValue;
+        flowerValue = otherTile.FlowerValue;
+        seasonValue = otherTile.SeasonValue;
+        sprite = otherTile.Sprite;
+    }
+    
     [SerializeField]
     private TileType tileType;
 

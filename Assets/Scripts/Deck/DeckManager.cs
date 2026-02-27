@@ -5,6 +5,7 @@ using System.Collections.Generic;
 // This class will manage the deck of tiles during the game, holding what is in the hand and in the wall.
 public class DeckManager : MonoBehaviour
 {
+    [SerializeField] GameObject tilePrefab;
     public int HAND_SIZE = 14;
     public int MAX_DISCARD_SELECTION = 5;
     public static DeckManager Instance;

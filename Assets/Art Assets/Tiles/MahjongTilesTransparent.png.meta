@@ -1,0 +1,1131 @@
+fileFormatVersion: 2
+guid: 728422e951c025d44b907401c3a07f88
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 1
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 0
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: MahjongTilesTransparent_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 364
+        width: 61
+        height: 82
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7a880394a256f3e41a5f4641c1fc8b88
+      internalID: 1245946512
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MahjongTilesTransparent_1
+      rect:
+        serializedVersion: 2
+        x: 69
+        y: 364
+        width: 61
+        height: 82
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3e5c952582c92924b8763dfbbfd79662
+      internalID: -193703245
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MahjongTilesTransparent_2
+      rect:
+        serializedVersion: 2
+        x: 138
+        y: 364
+        width: 61
+        height: 82
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: eba607f1440128241a53ec2fb5635512
+      internalID: 1652600004
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MahjongTilesTransparent_3
+      rect:
+        serializedVersion: 2
+        x: 207
+        y: 364
+        width: 61
+        height: 82
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9271be1055d7b964497ad3dc49df3042
+      internalID: 1345430736
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MahjongTilesTransparent_4
+      rect:
+        serializedVersion: 2
+        x: 276
+        y: 364
+        width: 61
+        height: 82
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9ccb72297d49d994f986e53ab71c8fa8
+      internalID: 1948696538
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MahjongTilesTransparent_5
+      rect:
+        serializedVersion: 2
+        x: 345
+        y: 364
+        width: 61
+        height: 82
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8089c8017e8a99341a38d84d381ad106
+      internalID: 1568934009
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MahjongTilesTransparent_6
+      rect:
+        serializedVersion: 2
+        x: 414
+        y: 364
+        width: 61
+        height: 82
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 07d7ebef6a2fb0e4bbe767d8ec2e2bce
+      internalID: -124324561
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MahjongTilesTransparent_7
+      rect:
+        serializedVersion: 2
+        x: 483
+        y: 364
+        width: 61
+        height: 82
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c135b82bcb87e3048a99e3ad4a165d13
+      internalID: -976970116
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MahjongTilesTransparent_8
+      rect:
+        serializedVersion: 2
+        x: 552
+        y: 364
+        width: 61
+        height: 82
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d663901d4474512468e54e4a3deb8b98
+      internalID: 2094799216
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MahjongTilesTransparent_9
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 273
+        width: 61
+        height: 82
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1713ed8f8e6af984cbbedb2c4c9c274a
+      internalID: 109257549
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MahjongTilesTransparent_10
+      rect:
+        serializedVersion: 2
+        x: 69
+        y: 273
+        width: 61
+        height: 82
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9629c8dd23864b14b9681a67ff858bef
+      internalID: -739140385
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MahjongTilesTransparent_11
+      rect:
+        serializedVersion: 2
+        x: 138
+        y: 273
+        width: 61
+        height: 82
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1d7f857f33c21244c8026627317a0a13
+      internalID: -2094346495
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MahjongTilesTransparent_12
+      rect:
+        serializedVersion: 2
+        x: 207
+        y: 273
+        width: 61
+        height: 82
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 79770e2bf754f7145b3c84408f9055a9
+      internalID: -639075515
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MahjongTilesTransparent_13
+      rect:
+        serializedVersion: 2
+        x: 276
+        y: 273
+        width: 61
+        height: 82
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5f2d7774d2cfb0c4bbe695d2401ba64d
+      internalID: 1722924847
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MahjongTilesTransparent_14
+      rect:
+        serializedVersion: 2
+        x: 345
+        y: 273
+        width: 61
+        height: 82
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 33d4af55e71f80947ab6155e76109e99
+      internalID: -305250899
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MahjongTilesTransparent_15
+      rect:
+        serializedVersion: 2
+        x: 414
+        y: 273
+        width: 61
+        height: 82
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9dcf4d0d187c9d64c9aab528465afe23
+      internalID: -1926962452
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MahjongTilesTransparent_16
+      rect:
+        serializedVersion: 2
+        x: 483
+        y: 273
+        width: 61
+        height: 82
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0279a605179948e4997c6c7ad32ef9e0
+      internalID: 7341193
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MahjongTilesTransparent_17
+      rect:
+        serializedVersion: 2
+        x: 552
+        y: 273
+        width: 61
+        height: 82
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 32b4252490bb500479cfe259627a5d2c
+      internalID: -1012910261
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MahjongTilesTransparent_18
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 182
+        width: 61
+        height: 82
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c3d568fff994630409e04f9d0ae6e394
+      internalID: -1622828773
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MahjongTilesTransparent_19
+      rect:
+        serializedVersion: 2
+        x: 69
+        y: 182
+        width: 61
+        height: 82
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 57bb24630233741459020b4c2cb19142
+      internalID: -1527136342
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MahjongTilesTransparent_20
+      rect:
+        serializedVersion: 2
+        x: 138
+        y: 182
+        width: 61
+        height: 82
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f994344d2080967499ec5d26e1df6133
+      internalID: -500874390
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MahjongTilesTransparent_21
+      rect:
+        serializedVersion: 2
+        x: 207
+        y: 182
+        width: 61
+        height: 82
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5b221272abae5704dac94079d613b31b
+      internalID: -531866281
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MahjongTilesTransparent_22
+      rect:
+        serializedVersion: 2
+        x: 276
+        y: 182
+        width: 61
+        height: 82
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4eeb1810317e136449c485ec124bd1f1
+      internalID: -453595614
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MahjongTilesTransparent_23
+      rect:
+        serializedVersion: 2
+        x: 345
+        y: 182
+        width: 61
+        height: 82
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 45800841ec4894144a3efd2e1526390a
+      internalID: 1613145663
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MahjongTilesTransparent_24
+      rect:
+        serializedVersion: 2
+        x: 414
+        y: 182
+        width: 61
+        height: 82
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d347e50babe721841a6e7f8582202c3e
+      internalID: -1662272890
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MahjongTilesTransparent_25
+      rect:
+        serializedVersion: 2
+        x: 483
+        y: 182
+        width: 61
+        height: 82
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f6e1220fc35d2f7449b37892960fc043
+      internalID: 2019168562
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MahjongTilesTransparent_26
+      rect:
+        serializedVersion: 2
+        x: 552
+        y: 182
+        width: 61
+        height: 82
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b745cc92ec0e827488c12a5eb244f35f
+      internalID: -2143023718
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MahjongTilesTransparent_27
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 91
+        width: 61
+        height: 82
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a9e2a755a8e6d53428f920f131bd5b58
+      internalID: -1655935071
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MahjongTilesTransparent_28
+      rect:
+        serializedVersion: 2
+        x: 69
+        y: 91
+        width: 61
+        height: 82
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 242650449400561458d5e84da44f69fe
+      internalID: -304520448
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MahjongTilesTransparent_29
+      rect:
+        serializedVersion: 2
+        x: 138
+        y: 91
+        width: 61
+        height: 82
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d39ebd9d3ec79fc44a952ff64e3f35f8
+      internalID: 1574559354
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MahjongTilesTransparent_30
+      rect:
+        serializedVersion: 2
+        x: 207
+        y: 91
+        width: 61
+        height: 82
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b8b386ec88ca2144ab58ce75ecd58f1d
+      internalID: 1457104547
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MahjongTilesTransparent_31
+      rect:
+        serializedVersion: 2
+        x: 276
+        y: 91
+        width: 61
+        height: 82
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cab41872bcde6d6448704cab5222b312
+      internalID: -52587418
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MahjongTilesTransparent_32
+      rect:
+        serializedVersion: 2
+        x: 345
+        y: 91
+        width: 61
+        height: 82
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 164906805a1528943b501b089d4c19f9
+      internalID: 766424198
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MahjongTilesTransparent_33
+      rect:
+        serializedVersion: 2
+        x: 414
+        y: 91
+        width: 61
+        height: 82
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c26283b827052bc4cb23f0fc3beb7d71
+      internalID: 1039273073
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MahjongTilesTransparent_34
+      rect:
+        serializedVersion: 2
+        x: 483
+        y: 91
+        width: 61
+        height: 82
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7f1161e60de043240b649ead35dcbb90
+      internalID: -1068791120
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MahjongTilesTransparent_35
+      rect:
+        serializedVersion: 2
+        x: 552
+        y: 91
+        width: 61
+        height: 82
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9aebe41b1f0e1b645a33331e824fed5f
+      internalID: 550041045
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MahjongTilesTransparent_36
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 61
+        height: 82
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9bff35264f435124fa196587f9eb5ff9
+      internalID: 1245800405
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MahjongTilesTransparent_37
+      rect:
+        serializedVersion: 2
+        x: 69
+        y: 0
+        width: 61
+        height: 82
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1c7542d0e1a6b5e4aaab362a3477bde3
+      internalID: 1670667706
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MahjongTilesTransparent_38
+      rect:
+        serializedVersion: 2
+        x: 138
+        y: 0
+        width: 61
+        height: 82
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 938eb70f79af2ca408bb169ae3d75dae
+      internalID: -116736388
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MahjongTilesTransparent_39
+      rect:
+        serializedVersion: 2
+        x: 207
+        y: 0
+        width: 61
+        height: 82
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9d193836545a9d04bace095153e60980
+      internalID: -696479526
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MahjongTilesTransparent_40
+      rect:
+        serializedVersion: 2
+        x: 276
+        y: 0
+        width: 61
+        height: 82
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 84bee6eab1baf934898fdf753643869d
+      internalID: -1123727072
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MahjongTilesTransparent_41
+      rect:
+        serializedVersion: 2
+        x: 345
+        y: 0
+        width: 61
+        height: 82
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9e140abdbde1867489a0bd82e5ceba2c
+      internalID: -1231106168
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MahjongTilesTransparent_42
+      rect:
+        serializedVersion: 2
+        x: 414
+        y: 0
+        width: 61
+        height: 82
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 977f11dab59d90b4fb116a11786f117c
+      internalID: -2084649598
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: MahjongTilesTransparent_43
+      rect:
+        serializedVersion: 2
+        x: 483
+        y: 0
+        width: 61
+        height: 82
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 14888a36a4fedeb4089367991b0b6294
+      internalID: 306360366
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 981325f26ede05648b6d00238b0f688f
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":61.0,"y":82.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":8.0,"y":9.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
+    nameFileIdTable:
+      MahjongTilesTransparent_0: 1245946512
+      MahjongTilesTransparent_1: -193703245
+      MahjongTilesTransparent_10: -739140385
+      MahjongTilesTransparent_11: -2094346495
+      MahjongTilesTransparent_12: -639075515
+      MahjongTilesTransparent_13: 1722924847
+      MahjongTilesTransparent_14: -305250899
+      MahjongTilesTransparent_15: -1926962452
+      MahjongTilesTransparent_16: 7341193
+      MahjongTilesTransparent_17: -1012910261
+      MahjongTilesTransparent_18: -1622828773
+      MahjongTilesTransparent_19: -1527136342
+      MahjongTilesTransparent_2: 1652600004
+      MahjongTilesTransparent_20: -500874390
+      MahjongTilesTransparent_21: -531866281
+      MahjongTilesTransparent_22: -453595614
+      MahjongTilesTransparent_23: 1613145663
+      MahjongTilesTransparent_24: -1662272890
+      MahjongTilesTransparent_25: 2019168562
+      MahjongTilesTransparent_26: -2143023718
+      MahjongTilesTransparent_27: -1655935071
+      MahjongTilesTransparent_28: -304520448
+      MahjongTilesTransparent_29: 1574559354
+      MahjongTilesTransparent_3: 1345430736
+      MahjongTilesTransparent_30: 1457104547
+      MahjongTilesTransparent_31: -52587418
+      MahjongTilesTransparent_32: 766424198
+      MahjongTilesTransparent_33: 1039273073
+      MahjongTilesTransparent_34: -1068791120
+      MahjongTilesTransparent_35: 550041045
+      MahjongTilesTransparent_36: 1245800405
+      MahjongTilesTransparent_37: 1670667706
+      MahjongTilesTransparent_38: -116736388
+      MahjongTilesTransparent_39: -696479526
+      MahjongTilesTransparent_4: 1948696538
+      MahjongTilesTransparent_40: -1123727072
+      MahjongTilesTransparent_41: -1231106168
+      MahjongTilesTransparent_42: -2084649598
+      MahjongTilesTransparent_43: 306360366
+      MahjongTilesTransparent_5: 1568934009
+      MahjongTilesTransparent_6: -124324561
+      MahjongTilesTransparent_7: -976970116
+      MahjongTilesTransparent_8: 2094799216
+      MahjongTilesTransparent_9: 109257549
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

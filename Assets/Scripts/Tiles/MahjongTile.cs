@@ -60,8 +60,8 @@ public enum SeasonValue
     Winter
 }
 
-[CreateAssetMenu(fileName = "New Mahjong Tile", menuName = "Mahjong/Tile")]
-public class MahjongTile : ScriptableObject
+//[CreateAssetMenu(fileName = "New Mahjong Tile", menuName = "Mahjong/Tile")]
+public class MahjongTile
 {
     public MahjongTile(string value, string suit)
     {
@@ -97,10 +97,10 @@ public class MahjongTile : ScriptableObject
         {
             windValue = value switch
             {
-                "N" => WindValue.North,
-                "E" => WindValue.East,
-                "S" => WindValue.South,
-                "W" => WindValue.West,
+                "1" => WindValue.North,
+                "2" => WindValue.East,
+                "3" => WindValue.South,
+                "4" => WindValue.West,
                 _ => throw new System.ArgumentException("Invalid wind value")
             };
         }
@@ -108,9 +108,9 @@ public class MahjongTile : ScriptableObject
         {
             dragonValue = value switch
             {
-                "0" => DragonValue.Red,
-                "1" => DragonValue.Green,
-                "2" => DragonValue.White,
+                "1" => DragonValue.Red,
+                "2" => DragonValue.Green,
+                "3" => DragonValue.White,
                 _ => throw new System.ArgumentException("Invalid dragon value")
             };
         }
@@ -118,10 +118,10 @@ public class MahjongTile : ScriptableObject
         {
             flowerValue = value switch
             {
-                "0" => FlowerValue.Plum,
-                "1" => FlowerValue.Orchid,
-                "2" => FlowerValue.Chrysanthemum,
-                "3" => FlowerValue.Bamboo,
+                "1" => FlowerValue.Plum,
+                "2" => FlowerValue.Orchid,
+                "3" => FlowerValue.Chrysanthemum,
+                "4" => FlowerValue.Bamboo,
                 _ => throw new System.ArgumentException("Invalid flower value")
             };
         }
@@ -129,10 +129,10 @@ public class MahjongTile : ScriptableObject
         {
             seasonValue = value switch
             {
-                "0" => SeasonValue.Spring,
-                "1" => SeasonValue.Summer,
-                "2" => SeasonValue.Autumn,
-                "3" => SeasonValue.Winter,
+                "1" => SeasonValue.Spring,
+                "2" => SeasonValue.Summer,
+                "3" => SeasonValue.Autumn,
+                "4" => SeasonValue.Winter,
                 _ => throw new System.ArgumentException("Invalid season value")
             };
         }
@@ -147,7 +147,7 @@ public class MahjongTile : ScriptableObject
         seasonValue = otherTile.SeasonValue;
         sprite = otherTile.Sprite;
     }
-    
+
     [SerializeField]
     private TileType tileType;
 

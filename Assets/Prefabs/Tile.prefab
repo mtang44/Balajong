@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5260499980680504264}
   - component: {fileID: 4064003202246229380}
   - component: {fileID: 2470570508136364587}
+  - component: {fileID: 2782415052650194183}
   m_Layer: 0
   m_Name: Tile
   m_TagString: Untagged
@@ -91,3 +92,15 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &2782415052650194183
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7778919774485718316}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f334f780f024434eb6717e874c671fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TileSelect

@@ -5,6 +5,10 @@ using System.Collections.Generic;
 // This class will manage the deck of tiles during the game, holding what is in the hand and in the wall.
 public class DeckManager : MonoBehaviour
 {
+    //
+    //I am doing the main camera stuff somewhat temporarily
+    //
+    Camera mainCamera;
     [SerializeField] GameObject tilePrefab;
     public int HAND_SIZE = 14;
     public int MAX_DISCARD_SELECTION = 5;
@@ -36,6 +40,7 @@ public class DeckManager : MonoBehaviour
         hand = new List<GameObject>();
         discard = new List<MahjongTile>();
         selectedTiles = new List<GameObject>();
+        mainCamera = Camera.main;
     }
 
     public void drawHand(int count = 0)
@@ -53,6 +58,12 @@ public class DeckManager : MonoBehaviour
     {
         //Here we will sort the hand based on the tile types and values,
         //and update the positions of the gameObjects accordingly.
+        //we'll start with just the positioning
+        for (int i = 0; i < hand.Count; i++)
+        {
+            GameObject tileGO = hand[i];
+            tileGO.transform.localPosition = new Vector3((i * 0.2f) - ((hand.Count - 1) * 0.1f), -0.2f, 1.5f);
+        }
     }   
     public bool drawTile()
     {
@@ -72,7 +83,9 @@ public class DeckManager : MonoBehaviour
     {
         if (hand.Count < HAND_SIZE)
         {
-            //Here we instantiate the tile and add the gameObject to the hand
+            GameObject tileGO = Instantiate(tilePrefab, mainCamera.transform);
+            tileGO.GetComponent<TileSelect>().tileData = tile;
+            hand.Add(tileGO);
         }
         else
             Debug.LogError("Hand is already full!");
@@ -102,7 +115,7 @@ public class DeckManager : MonoBehaviour
         if (hand.Contains(tile))
         {
             hand.Remove(tile);
-            discard.Add(tile.GetComponent<MahjongTile>());
+            discard.Add(tile.GetComponent<TileSelect>().tileData);
         }
         else
             Debug.LogError("Tile not in hand!");

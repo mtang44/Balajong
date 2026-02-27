@@ -4,6 +4,7 @@ using UnityEngine;
 public class TileSelect : MonoBehaviour
 {
     DeckManager deckManager;
+    public MahjongTile tileData;
 
     void Start()
     {

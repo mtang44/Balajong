@@ -29,6 +29,8 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         currentState = GameState.Start;
+        currentState = GameState.Draw;
+        DeckManager.Instance.drawHand();
     }
     void SetState(GameState newState) { currentState = newState; }
 }

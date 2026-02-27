@@ -6,13 +6,13 @@ public class Deck
 {
     private List<MahjongTile> deck;
     
-    void InitializeDeck()
+    public void InitializeDeck()
     {
         deck = new List<MahjongTile>(DeckConstant.CreateDeck());
         Shuffle();
     }
 
-    MahjongTile DrawTile()
+    public MahjongTile DrawTile()
     {
         if (deck.Count == 0)
         {
@@ -24,35 +24,17 @@ public class Deck
         return drawnTile;
     }
 
-    List<MahjongTile> DrawTiles(int count)
-    {
-        List<MahjongTile> drawnTiles = new List<MahjongTile>();
-        for (int i = 0; i < count; i++)
-        {
-            MahjongTile tile = DrawTile();
-            if (tile != null)
-            {
-                drawnTiles.Add(tile);
-            }
-            else
-            {
-                break;
-            }
-        }
-        return drawnTiles;
-    }
-
-    void AddTile(MahjongTile tile)
+    public void AddTile(MahjongTile tile)
     {
         deck.Add(tile);
     }
 
-    void AddTiles(List<MahjongTile> tiles)
+    public void AddTiles(List<MahjongTile> tiles)
     {
         deck.AddRange(tiles);
     }
 
-    void Shuffle()
+    public void Shuffle()
     {
         if (deck == null)
         {

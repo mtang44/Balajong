@@ -2,9 +2,12 @@ using UnityEditor;
 using UnityEngine;
 using System.Linq;
 
-[CustomEditor(typeof(MahjongTile))]
-public class MahjongTileEditor : Editor
+[CustomEditor(typeof(MahjongTileData))]
+public class MahjongTileDataEditor : Editor
 {
+    private const string SpriteSheetPath = "Assets/Art Assets/Tiles/MahjongTilesTransparent.png";
+    private const string SpriteNamePrefix = "MahjongTilesTransparent_";
+
     private SerializedProperty tileTypeProperty;
     private SerializedProperty numberedValueProperty;
     private SerializedProperty windValueProperty;
@@ -63,7 +66,6 @@ public class MahjongTileEditor : Editor
                 break;
         }
 
-        // Auto-update sprite when any value changes
         if (EditorGUI.EndChangeCheck())
         {
             serializedObject.ApplyModifiedProperties();
@@ -102,53 +104,112 @@ public class MahjongTileEditor : Editor
 
     private void UpdateSprite()
     {
-        MahjongTile tile = target as MahjongTile;
-        if (tile == null)
+        MahjongTileData tileData = target as MahjongTileData;
+        if (tileData == null)
             return;
 
-        int spriteIndex = MahjongSpriteMapping.GetSpriteIndex(
-            tile.TileType,
-            tile.NumberedValue,
-            tile.WindValue,
-            tile.DragonValue,
-            tile.FlowerValue,
-            tile.SeasonValue
+        int spriteIndex = GetSpriteIndex(
+            tileData.TileType,
+            tileData.NumberedValue,
+            tileData.WindValue,
+            tileData.DragonValue,
+            tileData.FlowerValue,
+            tileData.SeasonValue
         );
-
-        Debug.Log($"Tile Type: {tile.TileType}, Sprite Index: {spriteIndex}");
 
         if (spriteIndex < 0)
         {
-            Debug.LogWarning("Invalid tile configuration for sprite mapping.", tile);
             spriteProperty.objectReferenceValue = null;
             return;
         }
 
-        string spriteName = MahjongSpriteMapping.GetSpriteName(spriteIndex);
-        Debug.Log($"Looking for sprite: {spriteName}");
-
-        Sprite[] sprites = AssetDatabase.LoadAllAssetsAtPath("Assets/Art Assets/Tiles/MahjongTiles.png")
+        string spriteName = GetSpriteName(spriteIndex);
+        Sprite[] sprites = AssetDatabase.LoadAllAssetsAtPath(SpriteSheetPath)
             .OfType<Sprite>()
             .ToArray();
 
-        Debug.Log($"Found {sprites.Length} sprites in MahjongTiles.png");
-        if (sprites.Length > 0)
-        {
-            Debug.Log($"First 5 sprite names: {string.Join(", ", sprites.Take(5).Select(s => s.name))}");
-        }
-
         Sprite foundSprite = sprites.FirstOrDefault(s => s.name == spriteName);
-
         if (foundSprite != null)
         {
-            Debug.Log($"Successfully found sprite: {spriteName}");
             spriteProperty.objectReferenceValue = foundSprite;
             serializedObject.ApplyModifiedProperties();
-            EditorUtility.SetDirty(tile);
+            EditorUtility.SetDirty(tileData);
         }
-        else
+    }
+
+    private static string GetSpriteName(int spriteIndex)
+    {
+        if (spriteIndex < 0)
+            return null;
+
+        return $"{SpriteNamePrefix}{spriteIndex}";
+    }
+
+    private static int GetSpriteIndex(
+        TileType tileType,
+        NumberedValue numberedValue,
+        WindValue windValue,
+        DragonValue dragonValue,
+        FlowerValue flowerValue,
+        SeasonValue seasonValue)
+    {
+        return tileType switch
         {
-            Debug.LogWarning($"Sprite '{spriteName}' not found in MahjongTiles.png. Available sprites: {string.Join(", ", sprites.Select(s => s.name))}", tile);
-        }
+            TileType.Dots => (int)numberedValue - 1,
+            TileType.Crack => 9 + (int)numberedValue - 1,
+            TileType.Bam => 18 + (int)numberedValue - 1,
+            TileType.Flower => GetFlowerIndex(flowerValue),
+            TileType.Season => GetSeasonIndex(seasonValue),
+            TileType.Dragon => GetDragonIndex(dragonValue),
+            TileType.Wind => GetWindIndex(windValue),
+            _ => -1
+        };
+    }
+
+    private static int GetFlowerIndex(FlowerValue value)
+    {
+        return value switch
+        {
+            FlowerValue.Plum => 27,
+            FlowerValue.Orchid => 28,
+            FlowerValue.Chrysanthemum => 29,
+            FlowerValue.Bamboo => 30,
+            _ => -1
+        };
+    }
+
+    private static int GetSeasonIndex(SeasonValue value)
+    {
+        return value switch
+        {
+            SeasonValue.Spring => 31,
+            SeasonValue.Summer => 32,
+            SeasonValue.Autumn => 33,
+            SeasonValue.Winter => 34,
+            _ => -1
+        };
+    }
+
+    private static int GetDragonIndex(DragonValue value)
+    {
+        return value switch
+        {
+            DragonValue.Red => 36,
+            DragonValue.Green => 37,
+            DragonValue.White => 38,
+            _ => -1
+        };
+    }
+
+    private static int GetWindIndex(WindValue value)
+    {
+        return value switch
+        {
+            WindValue.East => 39,
+            WindValue.South => 40,
+            WindValue.West => 41,
+            WindValue.North => 42,
+            _ => -1
+        };
     }
 }

@@ -55,8 +55,7 @@ public enum SeasonValue
     Winter
 }
 
-[CreateAssetMenu(fileName = "New Mahjong Tile", menuName = "Mahjong/Tile")]
-public class MahjongTile : ScriptableObject
+public class MahjongTileData : MonoBehaviour
 {
     [SerializeField]
     private TileType tileType;
@@ -86,6 +85,11 @@ public class MahjongTile : ScriptableObject
     public FlowerValue FlowerValue => flowerValue;
     public SeasonValue SeasonValue => seasonValue;
     public Sprite Sprite => sprite;
+
+    public void SetSprite(Sprite newSprite)
+    {
+        sprite = newSprite;
+    }
 
     public string GetTileDisplayName()
     {

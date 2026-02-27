@@ -17,7 +17,7 @@ public class DeckManager : MonoBehaviour
     // Our hands! Deck is the wall, then the hand and discard.
     Deck deck;
     List<GameObject> hand;
-    List<MahjongTile> discard;
+    List<GameObject> discard;
     public List<GameObject> selectedTiles;
     
     private void Awake()
@@ -35,10 +35,10 @@ public class DeckManager : MonoBehaviour
 
     void Start()
     {
-        deck = new Deck();
+        deck = new Deck(tilePrefab);
         deck.InitializeDeck();
         hand = new List<GameObject>();
-        discard = new List<MahjongTile>();
+        discard = new List<GameObject>();
         selectedTiles = new List<GameObject>();
         mainCamera = Camera.main;
     }
@@ -69,7 +69,7 @@ public class DeckManager : MonoBehaviour
     {
         if (hand.Count < HAND_SIZE)
         {
-            MahjongTile drawnTile = deck.DrawTile();
+            GameObject drawnTile = deck.DrawTile();
             if (drawnTile != null)
                 tileToHand(drawnTile);
             else
@@ -79,13 +79,14 @@ public class DeckManager : MonoBehaviour
             return false;
         return true;
     }
-    void tileToHand(MahjongTile tile)
+    void tileToHand(GameObject tileObject)
     {
         if (hand.Count < HAND_SIZE)
         {
-            GameObject tileGO = Instantiate(tilePrefab, mainCamera.transform);
-            tileGO.GetComponent<TileSelect>().tileData = tile;
-            hand.Add(tileGO);
+            tileObject.SetActive(true);
+            tileObject.transform.SetParent(mainCamera.transform);
+            tileObject.transform.localPosition = Vector3.zero;
+            hand.Add(tileObject);
         }
         else
             Debug.LogError("Hand is already full!");
@@ -115,7 +116,8 @@ public class DeckManager : MonoBehaviour
         if (hand.Contains(tile))
         {
             hand.Remove(tile);
-            discard.Add(tile.GetComponent<TileSelect>().tileData);
+            tile.SetActive(false); // Deactivate the tile
+            discard.Add(tile);
         }
         else
             Debug.LogError("Tile not in hand!");

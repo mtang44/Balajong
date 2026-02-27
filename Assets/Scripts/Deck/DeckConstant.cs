@@ -4,7 +4,7 @@ using System.Collections.Generic;
 //This class will handle the starting deck state. It is constant.
 public class DeckConstant : MonoBehaviour
 {
-    //the nonmenclature for this I am using is X-Y-Z
+    //the nomenclature for this I am using is X-Y-Z
     // X is the NUMBER in the deck
     // Y is the VALUE (1-9 for numbered, 1-4 are N/E/S/W, 1-4 for Flowers/Seasons, 1-3 to R/G/W for dragons)
     // Z is the SUIT (C for crack, B for bam, O for dots, D for Dragon, W for Wind, F for Flower, S for Season)
@@ -18,21 +18,74 @@ public class DeckConstant : MonoBehaviour
         "11S", "12S", "13S", "14S" //SEASONS
         };
 
-    public static List<MahjongTile> CreateDeck()
+    public static List<GameObject> CreateDeck(GameObject tilePrefab)
     {
-        List<MahjongTile> newDeck = new List<MahjongTile>();
+        List<GameObject> newDeck = new List<GameObject>();
         foreach (string tileString in startingDeckState)
         {
-            
             int count = int.Parse(tileString[0].ToString());
             string value = tileString.Substring(1, tileString.Length - 2);
             string suit = tileString.Substring(tileString.Length - 1, 1);
+            
             for (int i = 0; i < count; i++)
             {
-                MahjongTile tile = new MahjongTile(value, suit);
-                newDeck.Add(tile);
+                GameObject tileObject = Object.Instantiate(tilePrefab);
+                tileObject.SetActive(false); // Keep inactive until drawn
+                MahjongTileData tileData = tileObject.GetComponent<MahjongTileData>();
+                
+                if (tileData != null)
+                {
+                    ConfigureTileData(tileData, value, suit);
+                }
+                
+                newDeck.Add(tileObject);
             }
         }
         return newDeck;
+    }
+
+    private static void ConfigureTileData(MahjongTileData tileData, string value, string suit)
+    {
+        int val = int.Parse(value);
+        
+        // Use reflection to set private fields
+        var tileTypeField = typeof(MahjongTileData).GetField("tileType", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+        var numberedValueField = typeof(MahjongTileData).GetField("numberedValue", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+        var windValueField = typeof(MahjongTileData).GetField("windValue", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+        var dragonValueField = typeof(MahjongTileData).GetField("dragonValue", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+        var flowerValueField = typeof(MahjongTileData).GetField("flowerValue", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+        var seasonValueField = typeof(MahjongTileData).GetField("seasonValue", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+        
+        switch (suit)
+        {
+            case "C": // Crack
+                tileTypeField?.SetValue(tileData, TileType.Crack);
+                numberedValueField?.SetValue(tileData, (NumberedValue)val);
+                break;
+            case "B": // Bam
+                tileTypeField?.SetValue(tileData, TileType.Bam);
+                numberedValueField?.SetValue(tileData, (NumberedValue)val);
+                break;
+            case "O": // Dots (O for dOts)
+                tileTypeField?.SetValue(tileData, TileType.Dots);
+                numberedValueField?.SetValue(tileData, (NumberedValue)val);
+                break;
+            case "W": // Wind
+                tileTypeField?.SetValue(tileData, TileType.Wind);
+                windValueField?.SetValue(tileData, (WindValue)(val - 1)); // 1-4 maps to enum 0-3
+                break;
+            case "D": // Dragon
+                tileTypeField?.SetValue(tileData, TileType.Dragon);
+                dragonValueField?.SetValue(tileData, (DragonValue)(val - 1)); // 1-3 maps to enum 0-2
+                break;
+            case "F": // Flower
+                tileTypeField?.SetValue(tileData, TileType.Flower);
+                flowerValueField?.SetValue(tileData, (FlowerValue)(val - 1)); // 1-4 maps to enum 0-3
+                break;
+            case "S": // Season
+                tileTypeField?.SetValue(tileData, TileType.Season);
+                seasonValueField?.SetValue(tileData, (SeasonValue)(val - 1)); // 1-4 maps to enum 0-3
+                break;
+        }
     }
 }

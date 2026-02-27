@@ -4,11 +4,12 @@ using UnityEngine;
 public class TileSelect : MonoBehaviour
 {
     DeckManager deckManager;
-    public MahjongTile tileData;
+    private MahjongTileData tileData;
 
     void Start()
     {
         deckManager = DeckManager.Instance;
+        tileData = GetComponent<MahjongTileData>();
     }
     void clicked()
     {

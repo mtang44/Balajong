@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b748d672a11efe4c9e8c5be4888a070, type: 3}
   m_Name: Test
   m_EditorClassIdentifier: Assembly-CSharp::MahjongTile
-  tileType: 3
-  numberedValue: 6
+  tileType: 6
+  numberedValue: 2
   windValue: 2
-  dragonValue: 0
-  flowerValue: 0
-  seasonValue: 0
-  sprite: {fileID: 1619690373, guid: bb67e1ebbbc596f4c916179a46433d8d, type: 3}
+  dragonValue: 2
+  flowerValue: 3
+  seasonValue: 3
+  sprite: {fileID: 1234027228, guid: bb67e1ebbbc596f4c916179a46433d8d, type: 3}

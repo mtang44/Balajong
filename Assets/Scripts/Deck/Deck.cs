@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-// This class handles the deck as it is during the game. It is mutable over the course of the run.
+// This class handles the deck as it is during the game. It is mutable over the course of the run, but is controlled by the DeckManager.
 public class Deck
 {
     private List<MahjongTile> deck;

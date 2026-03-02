@@ -115,4 +115,19 @@ public class MahjongTileData : MonoBehaviour
             _ => "Unknown Tile"
         };
     }
+
+    public string GetTileString()
+    {
+        return tileType switch
+        {
+            TileType.Dots => $"{(int)numberedValue}O",
+            TileType.Bam => $"{(int)numberedValue}B",
+            TileType.Crack => $"{(int)numberedValue}C",
+            TileType.Wind => $"{(int)windValue + 1}W",
+            TileType.Dragon => $"{(int)dragonValue + 1}D",
+            TileType.Flower => $"{(int)flowerValue + 1}F",
+            TileType.Season => $"{(int)seasonValue + 1}S",
+            _ => "0X"
+        };
+    }
 }

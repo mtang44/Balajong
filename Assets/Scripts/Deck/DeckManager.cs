@@ -17,7 +17,7 @@ public class DeckManager : MonoBehaviour
     // Our hands! Deck is the wall, then the hand and discard.
     Deck deck;
     List<GameObject> hand;
-    List<GameObject> discard;
+    List<string> discard;
     public List<GameObject> selectedTiles;
     
     private void Awake()
@@ -38,7 +38,7 @@ public class DeckManager : MonoBehaviour
         deck = new Deck(tilePrefab);
         deck.InitializeDeck();
         hand = new List<GameObject>();
-        discard = new List<GameObject>();
+        discard = new List<string>();
         selectedTiles = new List<GameObject>();
         mainCamera = Camera.main;
     }
@@ -83,7 +83,6 @@ public class DeckManager : MonoBehaviour
     {
         if (hand.Count < HAND_SIZE)
         {
-            tileObject.SetActive(true);
             tileObject.transform.SetParent(mainCamera.transform);
             tileObject.transform.localPosition = Vector3.zero;
             hand.Add(tileObject);
@@ -116,8 +115,13 @@ public class DeckManager : MonoBehaviour
         if (hand.Contains(tile))
         {
             hand.Remove(tile);
-            tile.SetActive(false); // Deactivate the tile
-            discard.Add(tile);
+            MahjongTileData tileData = tile.GetComponent<MahjongTileData>();
+            if (tileData != null)
+            {
+                // Store as string format: "value+suit"
+                discard.Add(tileData.GetTileString());
+            }
+            Object.Destroy(tile);
         }
         else
             Debug.LogError("Tile not in hand!");

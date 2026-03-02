@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 [ExecuteAlways]
 public class MahjongTileDisplay : MonoBehaviour
@@ -37,6 +38,12 @@ public class MahjongTileDisplay : MonoBehaviour
     private void Awake()
     {
         InitializeMaterials();
+        StartCoroutine(ApplyTileSpriteDelayed());
+    }
+
+    private IEnumerator ApplyTileSpriteDelayed()
+    {
+        yield return new WaitForEndOfFrame();
         ApplyTileSprite();
     }
 

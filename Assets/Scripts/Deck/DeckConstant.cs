@@ -18,9 +18,9 @@ public class DeckConstant : MonoBehaviour
         "11S", "12S", "13S", "14S" //SEASONS
         };
 
-    public static List<GameObject> CreateDeck(GameObject tilePrefab)
+    public static List<string> CreateDeckData()
     {
-        List<GameObject> newDeck = new List<GameObject>();
+        List<string> newDeckData = new List<string>();
         foreach (string tileString in startingDeckState)
         {
             int count = int.Parse(tileString[0].ToString());
@@ -29,22 +29,13 @@ public class DeckConstant : MonoBehaviour
             
             for (int i = 0; i < count; i++)
             {
-                GameObject tileObject = Object.Instantiate(tilePrefab);
-                tileObject.SetActive(false); // Keep inactive until drawn
-                MahjongTileData tileData = tileObject.GetComponent<MahjongTileData>();
-                
-                if (tileData != null)
-                {
-                    ConfigureTileData(tileData, value, suit);
-                }
-                
-                newDeck.Add(tileObject);
+                newDeckData.Add(value + suit);
             }
         }
-        return newDeck;
+        return newDeckData;
     }
 
-    private static void ConfigureTileData(MahjongTileData tileData, string value, string suit)
+    public static void ConfigureTileData(MahjongTileData tileData, string value, string suit)
     {
         int val = int.Parse(value);
         

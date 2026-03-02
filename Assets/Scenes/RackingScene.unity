@@ -438,10 +438,18 @@ PrefabInstance:
     - target: {fileID: 8196408055424260670, guid: f4ef62aeee9c25144a5c1fe006273c49, type: 3}
       propertyPath: sprite
       value: 
-      objectReference: {fileID: 1245946512, guid: 728422e951c025d44b907401c3a07f88, type: 3}
+      objectReference: {fileID: -52587418, guid: 728422e951c025d44b907401c3a07f88, type: 3}
     - target: {fileID: 8196408055424260670, guid: f4ef62aeee9c25144a5c1fe006273c49, type: 3}
       propertyPath: tileType
-      value: 0
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8196408055424260670, guid: f4ef62aeee9c25144a5c1fe006273c49, type: 3}
+      propertyPath: dragonValue
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8196408055424260670, guid: f4ef62aeee9c25144a5c1fe006273c49, type: 3}
+      propertyPath: numberedValue
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

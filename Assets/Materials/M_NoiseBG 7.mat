@@ -58,7 +58,7 @@ Material:
     - _Seed: 118
     - _Smoothness: 1
     - _Speed: 0.25
-    - _SpinDegPerSec: 0.8
+    - _SpinDegPerSec: 1
     - _SpinEnabled: 1
     - _SwirlDegrees: 0
     - _SwirlEnabled: 1

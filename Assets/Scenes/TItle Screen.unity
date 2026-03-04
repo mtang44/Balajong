@@ -131,6 +131,7 @@ GameObject:
   - component: {fileID: 262355389}
   - component: {fileID: 262355388}
   - component: {fileID: 262355387}
+  - component: {fileID: 262355390}
   m_Layer: 5
   m_Name: RawImage
   m_TagString: Untagged
@@ -170,8 +171,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Shadow
   m_EffectColor: {r: 0, g: 0, b: 0, a: 1}
-  m_EffectDistance: {x: 0, y: -15}
-  m_UseGraphicAlpha: 1
+  m_EffectDistance: {x: 0, y: -10}
+  m_UseGraphicAlpha: 0
 --- !u!114 &262355388
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -207,6 +208,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 262355385}
   m_CullTransparentMesh: 1
+--- !u!114 &262355390
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 262355385}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Outline
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 0.5}
+  m_EffectDistance: {x: 5, y: 5}
+  m_UseGraphicAlpha: 1
 --- !u!1 &450274373
 GameObject:
   m_ObjectHideFlags: 0
@@ -256,7 +272,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
-  m_Material: {fileID: 2100000, guid: 8f640e0f9e3f7a4479003bf389ad22c5, type: 2}
+  m_Material: {fileID: 2100000, guid: d0e07dd8809cfe240a3f0d5c1a3a8dde, type: 2}
   m_Color: {r: 1, g: 1, b: 1, a: 0.392}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}

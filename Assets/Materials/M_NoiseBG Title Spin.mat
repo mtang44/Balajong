@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: M_NoiseBG 2
+  m_Name: M_NoiseBG Title Spin
   m_Shader: {fileID: 4800000, guid: 313ffd24dcb66bb47ab2ccaab7981479, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -47,39 +47,39 @@ Material:
     - _Brightness: 0
     - _Contrast: 1.25
     - _CoordMode: 2
-    - _EmissionStrength: 1
-    - _Gain: 0.5
+    - _EmissionStrength: 1.7
+    - _Gain: 0.4
     - _Lacunarity: 2
     - _Metallic: 0
     - _Octaves: 4
     - _PaletteCount: 4
     - _Scale: 80
     - _ScrollSpeed: 0.0009
-    - _Seed: 24539.8
+    - _Seed: 24680
     - _Smoothness: 0.5
     - _Speed: 0.42
-    - _SpinDegPerSec: 1
+    - _SpinDegPerSec: 4
     - _SpinEnabled: 1
-    - _SwirlDegrees: 250
+    - _SwirlDegrees: 99.22
     - _SwirlEnabled: 1
-    - _SwirlFalloff: 1.6
+    - _SwirlFalloff: 1
     - _T: 0
     - _UseObjectSpace: 0
     - _UsePalette: 1
-    - _WarpAmp: 18
+    - _WarpAmp: 26.9
     - _WarpEnabled: 1
-    - _WarpOctaves: 3
-    - _WarpScale: 55
-    - _WarpSeed: 13579
-    - _WorldCoordScale: 1
+    - _WarpOctaves: 4
+    - _WarpScale: 30.6
+    - _WarpSeed: 11581.5
+    - _WorldCoordScale: 0.9
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
-    - _Palette0: {r: 0.019607844, g: 0.011764707, b: 0.011764707, a: 1}
-    - _Palette1: {r: 0.20000002, g: 0.03137255, b: 0.019607844, a: 1}
-    - _Palette2: {r: 0.6, g: 0.10196079, b: 0.019607844, a: 1}
-    - _Palette3: {r: 0.9490197, g: 0.3803922, b: 0.050980397, a: 1}
-    - _Resolution: {r: 512, g: 288, b: 0, a: 0}
+    - _Palette0: {r: 0.22745098, g: 0.38431373, b: 0.16862746, a: 1}
+    - _Palette1: {r: 0.06666667, g: 0.22745098, b: 0.08627451, a: 1}
+    - _Palette2: {r: 0.29803923, g: 0.49803922, b: 0.2627451, a: 1}
+    - _Palette3: {r: 1, g: 1, b: 1, a: 1}
+    - _Resolution: {r: 800, g: 800, b: 0, a: 0}
     - _ScrollDir: {r: 0.35, g: 1, b: 0, a: 0}
     - _Tiling: {r: 1, g: 1, b: 0, a: 0}
   m_BuildTextureStacks: []

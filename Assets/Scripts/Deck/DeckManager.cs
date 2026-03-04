@@ -95,6 +95,7 @@ public class DeckManager : MonoBehaviour
     {
         discardTiles(hand);
         hand.Clear();
+        selectedTiles.Clear();
     }
 
     void selectedToDiscard()

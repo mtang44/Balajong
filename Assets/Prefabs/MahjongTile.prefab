@@ -86,6 +86,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 770dc0ec5a177d34ea4e48ebf6adcb80, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8196408055424260670}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 770dc0ec5a177d34ea4e48ebf6adcb80, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5263447566789008438}
   m_SourcePrefab: {fileID: 100100000, guid: 770dc0ec5a177d34ea4e48ebf6adcb80, type: 3}
 --- !u!1 &7980480237267112869 stripped
 GameObject:
@@ -130,6 +133,18 @@ MonoBehaviour:
   flowerValue: 0
   seasonValue: 0
   sprite: {fileID: 1245946512, guid: 728422e951c025d44b907401c3a07f88, type: 3}
+--- !u!114 &5263447566789008438
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7980480237267112869}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f334f780f024434eb6717e874c671fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TileSelect
 --- !u!23 &8484957682002522736 stripped
 MeshRenderer:
   m_CorrespondingSourceObject: {fileID: -7511558181221131132, guid: 770dc0ec5a177d34ea4e48ebf6adcb80, type: 3}

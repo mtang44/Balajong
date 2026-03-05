@@ -1809,10 +1809,10 @@ RectTransform:
   - {fileID: 945432370}
   m_Father: {fileID: 1303995499}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -14, y: -425.99994}
-  m_SizeDelta: {x: -1366.868, y: -960.04}
+  m_AnchorMin: {x: 0.5, y: 0}
+  m_AnchorMax: {x: 0.5, y: 0}
+  m_AnchoredPosition: {x: -14, y: 114.00006}
+  m_SizeDelta: {x: 551.13196, y: 119.96002}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &911560933
 MonoBehaviour:
@@ -1863,7 +1863,6 @@ GameObject:
   - component: {fileID: 945432370}
   - component: {fileID: 945432378}
   - component: {fileID: 945432377}
-  - component: {fileID: 945432376}
   - component: {fileID: 945432375}
   - component: {fileID: 945432374}
   - component: {fileID: 945432373}
@@ -1941,18 +1940,6 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 1
           m_CallState: 2
-        - m_Target: {fileID: 945432376}
-          m_TargetAssemblyTypeName: BlindPanelMover, Assembly-CSharp
-          m_MethodName: RaisePanel
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 1
-          m_CallState: 2
   - eventID: 1
     callback:
       m_PersistentCalls:
@@ -1961,18 +1948,6 @@ MonoBehaviour:
           m_TargetAssemblyTypeName: UnityEngine.UI.Outline, UnityEngine.UI
           m_MethodName: set_enabled
           m_Mode: 6
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-        - m_Target: {fileID: 945432376}
-          m_TargetAssemblyTypeName: BlindPanelMover, Assembly-CSharp
-          m_MethodName: LowerPanel
-          m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
             m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -2076,20 +2051,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 350713cafb270c54885107c74cadcc2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SceneChanger
---- !u!114 &945432376
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 945432369}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5a818ef85ac1af1499fd7404f44fbc9b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::BlindPanelMover
-  raisedPosition: {x: 112, y: 15}
-  loweredPosition: {x: 112, y: 0.404}
 --- !u!114 &945432377
 MonoBehaviour:
   m_ObjectHideFlags: 0

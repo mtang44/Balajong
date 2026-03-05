@@ -129,8 +129,9 @@ GameObject:
   m_Component:
   - component: {fileID: 66361470}
   - component: {fileID: 66361476}
-  - component: {fileID: 66361475}
   - component: {fileID: 66361477}
+  - component: {fileID: 66361478}
+  - component: {fileID: 66361475}
   - component: {fileID: 66361474}
   - component: {fileID: 66361473}
   - component: {fileID: 66361472}
@@ -306,14 +307,14 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: BlindPanelMover, Assembly-CSharp
-        m_MethodName: RaisePanel
-        m_Mode: 1
+      - m_Target: {fileID: 66361478}
+        m_TargetAssemblyTypeName: SceneChanger, Assembly-CSharp
+        m_MethodName: ChangeScene
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 1
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -370,6 +371,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BlindPanelMover
   raisedPosition: {x: -202.8791, y: 15}
   loweredPosition: {x: -202.8791, y: 0.404}
+--- !u!114 &66361478
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 66361469}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 350713cafb270c54885107c74cadcc2f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SceneChanger
 --- !u!1 &228215781
 GameObject:
   m_ObjectHideFlags: 0

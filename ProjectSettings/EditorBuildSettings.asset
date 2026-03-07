@@ -14,6 +14,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/GamePlayUI Scene.unity
     guid: f58575989f488604d97ebb0546b31428
+  - enabled: 1
+    path: Assets/Scenes/RackingScene.unity
+    guid: 62a21830dcd8e7a4d8c1ed5e6652447d
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0

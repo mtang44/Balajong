@@ -1,41 +1,25 @@
 ﻿// See https://aka.ms/new-console-template for more information
-using System;
-using System.IO;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;   
-using Unity.VisualScripting;
-using UnityEditorInternal;
-using System.Xml;
-using System.Collections;
 using TMPro;
-using UnityEditorInternal.Profiling.Memory.Experimental;
-using UnityEditor;
 
-public class LootChest : MonoBehaviour
+
+public class Shop : MonoBehaviour
 {
-    [SerializeField]
-    public string LootTableFilePath;
     [SerializeField]
     public GameObject[] Shop_Item_TMPs; // array of TMP objects that will display to shop items. 
     
-    
-    [SerializeField]  
-    public int lootCount = 1;
-    
-    [SerializeField]
-    public string[] Rarities = new string[] {"Common","Uncommon","Rare","Epic","Legendary"};
-    [SerializeField]
-    public int[] Rarity_Weights = new int[] {55,30,15,6,1};
-   
-    public string OutputPath;
-    [SerializeField]
-    public GameObject Chest_OutputUI;
-    private LootChest myChest;
+    // [SerializeField]
+    // public string[] Rarities = new string[] {"Common","Uncommon","Rare","Epic","Legendary"};
+    // [SerializeField]
+    // public int[] Rarity_Weights = new int[] {55,30,15,6,1};   
+    public int lootCount = 5;
+    private Shop myChest;
 
     void Start()
     {
-        myChest = new LootChest();
+        myChest = new Shop();
     }
     void Update()
     {
@@ -44,7 +28,7 @@ public class LootChest : MonoBehaviour
     // call this function to open chest 
     public void RerollShop()
     {
-        //s ome check for if player has enough currency to open chest here
+        //some check for if player has enough currency to open chest here
         //myChest = LootChestGeneration(myChest);
         displayOutput(myChest);
     }
@@ -77,19 +61,19 @@ public class LootChest : MonoBehaviour
 
         
     */
-    public LootChest LootChestGeneration(LootChest chest)
+    public Shop LootChestGeneration(Shop chest)
     {
         chest.lootCount = lootCount;
         
         //TO DO
         //chest.lootTable = some function that reads from already generated Dictionary of Jokers
 
-        //chest.lootRarities = some function that reads from already generateed Dictionary of rarities and weights
-        //chest.drops = chest.GenerateLoot(chest.lootRarities, chest.lootCount);
+        // chest.lootRarities = some function that reads from already generateed Dictionary of rarities and weights
+        // chest.drops = chest.GenerateLoot(chest.lootRarities, chest.lootCount);
         return chest;
     }
 // Takes in a LootChest and displays it's generated loot to the Unity UI 
-    public void displayOutput(LootChest currentChest)
+    public void displayOutput(Shop currentChest)
     {
         
         int dropIndex = 0;
@@ -100,82 +84,22 @@ public class LootChest : MonoBehaviour
             Debug.Log(shopSlot);
             foreach(TMP_Text currentTMP in foundTMPs)
             {
-                // if(currentTMP.name == "Price Tag TMP")
-                // {
-                //     shopSlot.transform.Find("Price Tag TMP").GetComponent<TMP_Text>().text = ""+ currentChest.drops[dropIndex].price;; // set price tmp
-                // }
-                // else if(currentTMP.name == "Title TMP")
-                // {
+                if(currentTMP.name == "Price Tag TMP")
+                {
+                //     shopSlot.transform.Find("Price Tag TMP").GetComponent<TMP_Text>().text = ""+ currentChest.drops[dropIndex].price; // set price tmp
+                }
+                else if(currentTMP.name == "Title TMP")
+                {
                 //     shopSlot.transform.Find("Title TMP").GetComponent<TMP_Text>().text = ""+ currentChest.drops[dropIndex].name; // set Item Name tmp
-                // }
-                // else if(currentTMP.name == "Description TMP")
-                // {
+                }
+                else if(currentTMP.name == "Description TMP")
+                {
                 //     shopSlot.transform.Find("Description TMP").GetComponent<TMP_Text>().text = ""+ currentChest.drops[dropIndex].description; // sets description of item to tmp
-                // }
+                }
             }
             // delete random color later
             shopSlot.GetComponentInChildren<RawImage>(true).color = new Color(UnityEngine.Random.Range(0f, 1f), UnityEngine.Random.Range(0f, 1f), UnityEngine.Random.Range(0f, 1f)); // change later once we figure out joker images
             dropIndex++;
-        }
-    }
-    // This function allows for custom rarities that correspond to the loot table .csv file's rarities, as well as the corresponding weights of each rarity. 
-    public Dictionary<string, int> insertCustomRarities(string[] rarities, int[]weights)
-    {
-        Dictionary<string, int> customRarities = new Dictionary<string, int>();
-        if(rarities.Length != weights.Length)
-        {
-            Debug.LogError("ERROR Rarity Categories and Rarity Weights of unequal size"); // error caused by inspector rarities and rarity weights being mismatched
-            return customRarities;
-        }
-        for(int i = 0; i < rarities.Length; i++)
-        {
-            customRarities.Add(rarities[i],weights[i]);
-        }
-        return customRarities;
-    }
-
-    //Takes in .csv file path and parses it into a custom loot table dictionary
-    // outputs a dictionary storing the string of the rarity category, and a list of objects that exist within that rarity
-    public Dictionary<string, List<ShopItems>> insertCustomLootTable(string filePath)
-    {
-        string path = filePath;
-        StreamReader reader;
-        Dictionary<string, List<ShopItems>> customLootTable = new Dictionary<string, List<ShopItems>>();
-        if(File.Exists(path))
-        {
-            reader = new StreamReader(File.OpenRead(path));
-            if(!reader.EndOfStream)
-            {
-                reader.ReadLine(); // skip header line
-            }
-            while(!reader.EndOfStream)
-            {
-                var line = reader.ReadLine();
-                var values = line.Split(',');
-                string itemRarity = values[0];
-                string itemName = values[1];
-                string itemType = values[2];
-                string itemDescription = values[3];
-                ShopItems newItem = new ShopItems (itemName, itemRarity, itemType, itemDescription);
-
-                // if item rarity key already exists, add newItem to the list, else create new rarity key with a new list of items. 
-                if(customLootTable.ContainsKey(itemRarity))
-                {
-                    customLootTable[itemRarity].Add(newItem);
-                }
-                else
-                {
-                    customLootTable.Add(itemRarity, new List<ShopItems> {newItem});
-                }
-                 
-            }
-            reader.Close();
-            return customLootTable;
-        }
-        else
-        {
-            Debug.LogError("Error: File not found.");
-            return customLootTable;
         }
     }
     

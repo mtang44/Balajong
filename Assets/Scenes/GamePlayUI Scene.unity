@@ -479,13 +479,13 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 35
-  m_fontSizeBase: 35
+  m_fontSize: 24
+  m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 1
+  m_fontStyle: 0
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -518,7 +518,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 7.943405, y: 5.9697027, z: 7.9436646, w: 5.596553}
+  m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -1030,7 +1030,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 47613048}
-  - component: {fileID: 47613055}
   - component: {fileID: 47613051}
   - component: {fileID: 47613050}
   - component: {fileID: 47613049}
@@ -1107,19 +1106,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 47613050}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 47613055}
-        m_TargetAssemblyTypeName: SceneChanger, Assembly-CSharp
-        m_MethodName: ChangeScene
-        m_Mode: 3
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 2
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &47613050
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1233,18 +1220,6 @@ MonoBehaviour:
   m_EffectColor: {r: 1, g: 1, b: 1, a: 1}
   m_EffectDistance: {x: 3, y: 3}
   m_UseGraphicAlpha: 1
---- !u!114 &47613055
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 47613047}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 350713cafb270c54885107c74cadcc2f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SceneChanger
 --- !u!1 &54280068
 GameObject:
   m_ObjectHideFlags: 0
@@ -1484,8 +1459,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 4.1, y: -115.203}
-  m_SizeDelta: {x: 160, y: 36.406}
+  m_AnchoredPosition: {x: 4.1, y: -109.78284}
+  m_SizeDelta: {x: 160, y: 25.5657}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &64088756
 MonoBehaviour:
@@ -1821,8 +1796,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -2.134, y: -115.629}
-  m_SizeDelta: {x: 195.169, y: 37.258}
+  m_AnchoredPosition: {x: 4, y: -109.78287}
+  m_SizeDelta: {x: 160, y: 25.5657}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &76192127
 MonoBehaviour:
@@ -1992,10 +1967,10 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 41.4
+  m_fontSize: 24
   m_fontSizeBase: 24
   m_fontWeight: 400
-  m_enableAutoSizing: 1
+  m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
@@ -2080,7 +2055,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 140, y: -0.18261719}
+  m_AnchoredPosition: {x: 140, y: -0.18260193}
   m_SizeDelta: {x: -337.3352, y: -21.299927}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &97197786
@@ -3947,8 +3922,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 7.75, y: -140.333}
-  m_SizeDelta: {x: 180, y: 36.667}
+  m_AnchoredPosition: {x: 1.5, y: -137}
+  m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &234494395
 MonoBehaviour:
@@ -4066,7 +4041,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 176.53442, y: -0.18261719}
+  m_AnchoredPosition: {x: 176.53442, y: -0.18259811}
   m_SizeDelta: {x: -412.6479, y: -21.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &245801838
@@ -4498,7 +4473,6 @@ GameObject:
   m_Component:
   - component: {fileID: 284345812}
   - component: {fileID: 284345818}
-  - component: {fileID: 284345819}
   - component: {fileID: 284345817}
   - component: {fileID: 284345816}
   - component: {fileID: 284345815}
@@ -4649,19 +4623,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 284345817}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 284345819}
-        m_TargetAssemblyTypeName: SceneChanger, Assembly-CSharp
-        m_MethodName: ChangeScene
-        m_Mode: 3
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 2
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &284345817
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4700,18 +4662,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 284345811}
   m_CullTransparentMesh: 1
---- !u!114 &284345819
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 284345811}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 350713cafb270c54885107c74cadcc2f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SceneChanger
 --- !u!1 &288053133
 GameObject:
   m_ObjectHideFlags: 0
@@ -5113,7 +5063,7 @@ GameObject:
   - component: {fileID: 306756082}
   - component: {fileID: 306756081}
   m_Layer: 5
-  m_Name: Display IMG
+  m_Name: Card IMG
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6541,7 +6491,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 176.53442, y: -0.18261719}
+  m_AnchoredPosition: {x: 176.53442, y: -0.18259811}
   m_SizeDelta: {x: -412.6479, y: -21.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &407215202
@@ -10424,7 +10374,7 @@ GameObject:
   - component: {fileID: 712205413}
   - component: {fileID: 712205412}
   m_Layer: 5
-  m_Name: Display IMG
+  m_Name: Card IMG
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10633,8 +10583,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.097, y: -116.659}
-  m_SizeDelta: {x: 172.488, y: 37.318}
+  m_AnchoredPosition: {x: -1.5664062, y: -110.78284}
+  m_SizeDelta: {x: 160, y: 25.5657}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &734973305
 MonoBehaviour:
@@ -11326,7 +11276,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 176.53442, y: -0.18261719}
+  m_AnchoredPosition: {x: 176.53442, y: -0.18259811}
   m_SizeDelta: {x: -412.6479, y: -21.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &774376884
@@ -12289,7 +12239,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 140, y: -0.18261719}
+  m_AnchoredPosition: {x: 140, y: -0.18260193}
   m_SizeDelta: {x: -337.3352, y: -21.299927}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &813774471
@@ -12416,13 +12366,13 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 45
-  m_fontSizeBase: 45
+  m_fontSize: 24
+  m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 1
+  m_fontStyle: 0
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -12455,7 +12405,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 2.2838879, z: 0, w: 5.709753}
+  m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -13167,7 +13117,7 @@ GameObject:
   - component: {fileID: 901753924}
   - component: {fileID: 901753923}
   m_Layer: 5
-  m_Name: Display IMG
+  m_Name: Pack IMG
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -15205,7 +15155,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 176.53442, y: -0.18261719}
+  m_AnchoredPosition: {x: 176.53442, y: -0.18259811}
   m_SizeDelta: {x: -412.6479, y: -21.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1107442546
@@ -16870,7 +16820,7 @@ GameObject:
   - component: {fileID: 1253877732}
   - component: {fileID: 1253877731}
   m_Layer: 5
-  m_Name: Display IMG
+  m_Name: Pack IMG
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -16964,7 +16914,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 176.53442, y: -0.18261719}
+  m_AnchoredPosition: {x: 176.53442, y: -0.18259811}
   m_SizeDelta: {x: -412.6479, y: -21.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1261692026
@@ -17858,7 +17808,6 @@ GameObject:
   - component: {fileID: 1341240744}
   - component: {fileID: 1341240750}
   - component: {fileID: 1341240749}
-  - component: {fileID: 1341240751}
   - component: {fileID: 1341240748}
   - component: {fileID: 1341240747}
   - component: {fileID: 1341240746}
@@ -18008,19 +17957,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1341240749}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1341240751}
-        m_TargetAssemblyTypeName: SceneChanger, Assembly-CSharp
-        m_MethodName: ChangeScene
-        m_Mode: 3
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 2
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &1341240749
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18059,18 +17996,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1341240743}
   m_CullTransparentMesh: 1
---- !u!114 &1341240751
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1341240743}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 350713cafb270c54885107c74cadcc2f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SceneChanger
 --- !u!1 &1376632052
 GameObject:
   m_ObjectHideFlags: 0
@@ -19576,10 +19501,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1563989749}
-  - component: {fileID: 1563989756}
-  - component: {fileID: 1563989753}
   - component: {fileID: 1563989755}
   - component: {fileID: 1563989754}
+  - component: {fileID: 1563989753}
   - component: {fileID: 1563989752}
   - component: {fileID: 1563989751}
   - component: {fileID: 1563989750}
@@ -19729,19 +19653,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1563989754}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1563989756}
-        m_TargetAssemblyTypeName: LootChest, Assembly-CSharp
-        m_MethodName: RerollShop
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &1563989754
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19780,35 +19692,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1563989748}
   m_CullTransparentMesh: 1
---- !u!114 &1563989756
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1563989748}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 449da257019eb644f82e0508b23da3f5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::LootChest
-  LootTableFilePath: 
-  Shop_Item_TMPs:
-  - {fileID: 2141479397}
-  - {fileID: 296444833}
-  - {fileID: 453824314}
-  - {fileID: 2014731974}
-  - {fileID: 1677016146}
-  lootCount: 5
-  Rarities:
-  - Common
-  - Uncommon
-  - Rare
-  - Epic
-  - Legendary
-  Rarity_Weights: 370000001e0000000f0000000600000001000000
-  OutputPath: 
-  Chest_OutputUI: {fileID: 0}
 --- !u!1 &1566049213
 GameObject:
   m_ObjectHideFlags: 0
@@ -20921,8 +20804,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -145.006}
-  m_SizeDelta: {x: 182.112, y: 46.012}
+  m_AnchoredPosition: {x: 1.3200684, y: -137}
+  m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1618669078
 MonoBehaviour:
@@ -21202,7 +21085,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: BUY
+  m_text: 'BUY
+
+'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 5293248ddbeac9344b20338543629bc0, type: 2}
   m_sharedMaterial: {fileID: -7118985563403138470, guid: 5293248ddbeac9344b20338543629bc0, type: 2}
@@ -21229,10 +21114,10 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 30
+  m_fontSize: 24
+  m_fontSizeBase: 24
   m_fontWeight: 400
-  m_enableAutoSizing: 1
+  m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
@@ -21268,7 +21153,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 2.806244, z: 0, w: 2.8062553}
+  m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -23257,7 +23142,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 176.53442, y: -0.18261719}
+  m_AnchoredPosition: {x: 176.53442, y: -0.18259811}
   m_SizeDelta: {x: -412.6479, y: -21.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1839861281
@@ -24456,13 +24341,13 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 40.3
+  m_fontSize: 24
   m_fontSizeBase: 24
   m_fontWeight: 400
-  m_enableAutoSizing: 1
+  m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -24495,7 +24380,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: -4.2568054, w: 1.8649445}
+  m_margin: {x: 0, y: 0, z: 0, w: 1.8649445}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0

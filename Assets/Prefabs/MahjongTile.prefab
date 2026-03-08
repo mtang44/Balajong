@@ -10,15 +10,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 770dc0ec5a177d34ea4e48ebf6adcb80, type: 3}
       propertyPath: m_LocalScale.x
-      value: 1
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 770dc0ec5a177d34ea4e48ebf6adcb80, type: 3}
       propertyPath: m_LocalScale.y
-      value: 1
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 770dc0ec5a177d34ea4e48ebf6adcb80, type: 3}
       propertyPath: m_LocalScale.z
-      value: 1
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 770dc0ec5a177d34ea4e48ebf6adcb80, type: 3}
       propertyPath: m_LocalPosition.x
@@ -89,6 +89,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 770dc0ec5a177d34ea4e48ebf6adcb80, type: 3}
       insertIndex: -1
       addedObject: {fileID: 5499044278880037646}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 770dc0ec5a177d34ea4e48ebf6adcb80, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 323555887727181619}
   m_SourcePrefab: {fileID: 100100000, guid: 770dc0ec5a177d34ea4e48ebf6adcb80, type: 3}
 --- !u!1 &7980480237267112869 stripped
 GameObject:
@@ -107,14 +110,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 264fcf7bfc762a64abc9ff4853348446, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MahjongTileDisplay
-  tileData:
-    tileType: 0
-    numberedValue: 0
-    windValue: 0
-    dragonValue: 0
-    flowerValue: 0
-    seasonValue: 0
-    sprite: {fileID: 0}
   targetRenderer: {fileID: 8484957682002522736}
   materialIndex: 2
   materialInstance: {fileID: 2100000, guid: e15613742485bf9458fa04b5239314c3, type: 2}
@@ -133,6 +128,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f334f780f024434eb6717e874c671fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TileSelect
+  tileData:
+    tileType: 0
+    numberedValue: 0
+    windValue: 0
+    dragonValue: 0
+    flowerValue: 0
+    seasonValue: 0
+    sprite: {fileID: 0}
 --- !u!114 &5499044278880037646
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -145,6 +148,35 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ef4776056ef70748b615df4730c0f41, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MahjongTileHolder
+  tileData:
+    tileType: 0
+    numberedValue: 0
+    windValue: 0
+    dragonValue: 0
+    flowerValue: 0
+    seasonValue: 0
+    sprite: {fileID: 0}
+--- !u!65 &323555887727181619
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7980480237267112869}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.12, y: 0.16385141, z: 0.058365468}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &8484957682002522736 stripped
 MeshRenderer:
   m_CorrespondingSourceObject: {fileID: -7511558181221131132, guid: 770dc0ec5a177d34ea4e48ebf6adcb80, type: 3}

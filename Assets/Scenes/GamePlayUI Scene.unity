@@ -1031,6 +1031,7 @@ GameObject:
   m_Component:
   - component: {fileID: 47613048}
   - component: {fileID: 47613051}
+  - component: {fileID: 47613055}
   - component: {fileID: 47613050}
   - component: {fileID: 47613049}
   - component: {fileID: 47613054}
@@ -1106,7 +1107,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 47613050}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 47613055}
+        m_TargetAssemblyTypeName: SceneChanger, Assembly-CSharp
+        m_MethodName: ChangeScene
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 2
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &47613050
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1220,6 +1233,18 @@ MonoBehaviour:
   m_EffectColor: {r: 1, g: 1, b: 1, a: 1}
   m_EffectDistance: {x: 3, y: 3}
   m_UseGraphicAlpha: 1
+--- !u!114 &47613055
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 47613047}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 350713cafb270c54885107c74cadcc2f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SceneChanger
 --- !u!1 &54280068
 GameObject:
   m_ObjectHideFlags: 0
@@ -2055,7 +2080,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 140, y: -0.18260193}
+  m_AnchoredPosition: {x: 140, y: -0.18258667}
   m_SizeDelta: {x: -337.3352, y: -21.299927}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &97197786
@@ -4041,7 +4066,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 176.53442, y: -0.18259811}
+  m_AnchoredPosition: {x: 176.53442, y: -0.18258667}
   m_SizeDelta: {x: -412.6479, y: -21.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &245801838
@@ -4472,6 +4497,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 284345812}
+  - component: {fileID: 284345819}
   - component: {fileID: 284345818}
   - component: {fileID: 284345817}
   - component: {fileID: 284345816}
@@ -4623,7 +4649,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 284345817}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 284345819}
+        m_TargetAssemblyTypeName: SceneChanger, Assembly-CSharp
+        m_MethodName: ChangeScene
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 2
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &284345817
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4662,6 +4700,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 284345811}
   m_CullTransparentMesh: 1
+--- !u!114 &284345819
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 284345811}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 350713cafb270c54885107c74cadcc2f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SceneChanger
 --- !u!1 &288053133
 GameObject:
   m_ObjectHideFlags: 0
@@ -6491,7 +6541,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 176.53442, y: -0.18259811}
+  m_AnchoredPosition: {x: 176.53442, y: -0.18258667}
   m_SizeDelta: {x: -412.6479, y: -21.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &407215202
@@ -9800,7 +9850,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 217.45801, y: -26}
+  m_AnchoredPosition: {x: 217.45801, y: -25.999939}
   m_SizeDelta: {x: -1275.4279, y: -982.226}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &629353399
@@ -11276,7 +11326,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 176.53442, y: -0.18259811}
+  m_AnchoredPosition: {x: 176.53442, y: -0.18258667}
   m_SizeDelta: {x: -412.6479, y: -21.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &774376884
@@ -12239,7 +12289,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 140, y: -0.18260193}
+  m_AnchoredPosition: {x: 140, y: -0.18258667}
   m_SizeDelta: {x: -337.3352, y: -21.299927}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &813774471
@@ -15155,7 +15205,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 176.53442, y: -0.18259811}
+  m_AnchoredPosition: {x: 176.53442, y: -0.18258667}
   m_SizeDelta: {x: -412.6479, y: -21.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1107442546
@@ -16914,7 +16964,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 176.53442, y: -0.18259811}
+  m_AnchoredPosition: {x: 176.53442, y: -0.18258667}
   m_SizeDelta: {x: -412.6479, y: -21.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1261692026
@@ -17129,7 +17179,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 217.45801, y: -26}
+  m_AnchoredPosition: {x: 217.45801, y: -25.999939}
   m_SizeDelta: {x: -1275.4279, y: -982.226}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1273589323
@@ -17806,6 +17856,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1341240744}
+  - component: {fileID: 1341240751}
   - component: {fileID: 1341240750}
   - component: {fileID: 1341240749}
   - component: {fileID: 1341240748}
@@ -17957,7 +18008,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1341240749}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1341240751}
+        m_TargetAssemblyTypeName: SceneChanger, Assembly-CSharp
+        m_MethodName: ChangeScene
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 2
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1341240749
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17996,6 +18059,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1341240743}
   m_CullTransparentMesh: 1
+--- !u!114 &1341240751
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1341240743}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 350713cafb270c54885107c74cadcc2f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SceneChanger
 --- !u!1 &1376632052
 GameObject:
   m_ObjectHideFlags: 0
@@ -19501,6 +19576,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1563989749}
+  - component: {fileID: 1563989756}
   - component: {fileID: 1563989755}
   - component: {fileID: 1563989754}
   - component: {fileID: 1563989753}
@@ -19653,7 +19729,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1563989754}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1563989756}
+        m_TargetAssemblyTypeName: Shop, Assembly-CSharp
+        m_MethodName: RerollShop
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1563989754
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19692,6 +19780,25 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1563989748}
   m_CullTransparentMesh: 1
+--- !u!114 &1563989756
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1563989748}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74ef38fa2bb3d974e92e992087b46b14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Shop
+  Shop_Item_TMPs:
+  - {fileID: 2141479397}
+  - {fileID: 296444833}
+  - {fileID: 453824314}
+  - {fileID: 2014731974}
+  - {fileID: 1677016146}
+  lootCount: 5
 --- !u!1 &1566049213
 GameObject:
   m_ObjectHideFlags: 0
@@ -23142,7 +23249,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 176.53442, y: -0.18259811}
+  m_AnchoredPosition: {x: 176.53442, y: -0.18258667}
   m_SizeDelta: {x: -412.6479, y: -21.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1839861281

@@ -1,0 +1,4 @@
+Chest 1: {Apple, Rope, Cloth, Raw Iron Ore, Advanced Health Potion}
+Chest 2: {Empty Potion Flask, Rope, Rope, Leather Armor, Elixir of Agility}
+Chest 3: {Sticks, Mana Potion, Iron Sword, Mana Potion, Ice Wand}
+Chest 4: {Feathers, Empty Potion Flask, Basic Health Potion, Chainmail Armour, Advanced Health Potion}

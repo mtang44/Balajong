@@ -21,6 +21,9 @@ public class DeckManager : MonoBehaviour
     List<MahjongTileData> discard;
     public List<GameObject> selectedTiles;
     
+    // Property to access hand for sorting
+    public List<GameObject> Hand => hand;
+    
     private void Awake()
     {
         if (Instance == null)
@@ -55,7 +58,7 @@ public class DeckManager : MonoBehaviour
         }
         sortHand();
     }
-    void sortHand()
+    public void sortHand()
     {
         //Here we will sort the hand based on the tile types and values,
         //and update the positions of the gameObjects accordingly.
@@ -63,7 +66,15 @@ public class DeckManager : MonoBehaviour
         for (int i = 0; i < hand.Count; i++)
         {
             GameObject tileGO = hand[i];
-            tileGO.transform.localPosition = new Vector3((i * 0.25f) - ((hand.Count - 1) * 0.125f), -0.5f, 1.5f);
+            float baseY = -0.5f;
+            
+            // Preserve Y offset for selected tiles
+            if (selectedTiles.Contains(tileGO))
+            {
+                baseY += 0.125f;
+            }
+            
+            tileGO.transform.localPosition = new Vector3((i * 0.25f) - ((hand.Count - 1) * 0.125f), baseY, 1.5f);
             tileGO.transform.localRotation = Quaternion.Euler(-20, 180, 0);
         }
     }   

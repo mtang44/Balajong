@@ -21,6 +21,9 @@ public class DeckManager : MonoBehaviour
     List<MahjongTileData> discard;
     public List<GameObject> selectedTiles;
     
+    // Property to access hand for sorting
+    public List<GameObject> Hand => hand;
+    
     private void Awake()
     {
         if (Instance == null)
@@ -55,7 +58,7 @@ public class DeckManager : MonoBehaviour
         }
         sortHand();
     }
-    void sortHand()
+    public void sortHand()
     {
         //Here we will sort the hand based on the tile types and values,
         //and update the positions of the gameObjects accordingly.

@@ -11,7 +11,7 @@ public class HandManager : MonoBehaviour
     }
 
     // Sort hand by Type in order: Dots, Bam, Crack, Wind, Dragon, Flower, Season.
-    // Within each type, tiles are sorted by their respective values ascending.
+    // Within each type, tiles are sorted by their respective values descending (high to low).
     [ContextMenu("Sort by Type")]
     public void SortHandByType()
     {
@@ -30,7 +30,7 @@ public class HandManager : MonoBehaviour
 
         hand.Sort((a, b) => CompareByType(a, b));
         deckManager.sortHand(); // Reposition tiles after sorting
-        Debug.Log("Hand sorted by Type");
+        //Debug.Log("Hand sorted by Type");
     }
 
     // Sort hand by Value. High numbered values on the left (descending).
@@ -53,7 +53,7 @@ public class HandManager : MonoBehaviour
 
         hand.Sort((a, b) => CompareByValue(a, b));
         deckManager.sortHand(); // Reposition tiles after sorting
-        Debug.Log("Hand sorted by Value");
+        //Debug.Log("Hand sorted by Value");
     }
 
     // Compare two tiles by Type (Dots, Bam, Crack, Wind, Dragon, Flower, Season).
@@ -134,21 +134,21 @@ public class HandManager : MonoBehaviour
         };
     }
 
-    // Compare values within the same tile type.
+    // Compare values within the same tile type (descending - high values first).
     private int CompareValueWithinType(MahjongTileData dataA, MahjongTileData dataB)
     {
         return dataA.TileType switch
         {
             TileType.Dots or TileType.Bam or TileType.Crack =>
-                ((int)dataA.NumberedValue).CompareTo((int)dataB.NumberedValue),
+                ((int)dataB.NumberedValue).CompareTo((int)dataA.NumberedValue),
             TileType.Wind =>
-                ((int)dataA.WindValue).CompareTo((int)dataB.WindValue),
+                ((int)dataB.WindValue).CompareTo((int)dataA.WindValue),
             TileType.Dragon =>
-                ((int)dataA.DragonValue).CompareTo((int)dataB.DragonValue),
+                ((int)dataB.DragonValue).CompareTo((int)dataA.DragonValue),
             TileType.Flower =>
-                ((int)dataA.FlowerValue).CompareTo((int)dataB.FlowerValue),
+                ((int)dataB.FlowerValue).CompareTo((int)dataA.FlowerValue),
             TileType.Season =>
-                ((int)dataA.SeasonValue).CompareTo((int)dataB.SeasonValue),
+                ((int)dataB.SeasonValue).CompareTo((int)dataA.SeasonValue),
             _ => 0
         };
     }

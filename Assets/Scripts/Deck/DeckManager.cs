@@ -89,6 +89,7 @@ public class DeckManager : MonoBehaviour
             tileObject.transform.localPosition = Vector3.zero;
             hand.Add(tileObject);
             tileObject.GetComponent<MahjongTileHolder>().SetTileData(tileData);
+            tileObject.GetComponent<MahjongTileHolder>().OnValidate();
         }
         else
             Debug.LogError("Hand is already full!");

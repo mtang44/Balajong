@@ -20,7 +20,7 @@ public class MahjongTileHolder : MonoBehaviour
         tileData = newData;
     }
 
-    private void OnValidate()
+    public void OnValidate()
     {
         // Notify display component to update when data changes
         MahjongTileDisplay display = GetComponent<MahjongTileDisplay>();

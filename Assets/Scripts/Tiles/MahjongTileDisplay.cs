@@ -5,9 +5,6 @@ using System.Collections;
 public class MahjongTileDisplay : MonoBehaviour
 {
     [SerializeField]
-    private MahjongTileData tileData;
-
-    [SerializeField]
     private Renderer targetRenderer;
 
     [SerializeField]
@@ -32,7 +29,6 @@ public class MahjongTileDisplay : MonoBehaviour
     private void Reset()
     {
         targetRenderer = GetComponent<Renderer>();
-        tileData = GetComponent<MahjongTileHolder>().TileData;
     }
 
     private void Awake()
@@ -65,10 +61,14 @@ public class MahjongTileDisplay : MonoBehaviour
 
     public void ApplyTileSprite()
     {
-        if (tileData == null || targetRenderer == null)
+        if (targetRenderer == null)
             return;
 
-        Sprite sprite = tileData.Sprite;
+        MahjongTileHolder holder = GetComponent<MahjongTileHolder>();
+        if (holder == null || holder.TileData == null)
+            return;
+
+        Sprite sprite = holder.TileData.Sprite;
         if (sprite == null)
             return;
 

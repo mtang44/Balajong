@@ -1,6 +1,7 @@
 using UnityEngine;
 using Random = UnityEngine.Random;
 using System.Collections.Generic;
+using System.Collections;
 
 // This class will manage the deck of tiles during the game, holding what is in the hand and in the wall.
 public class DeckManager : MonoBehaviour
@@ -126,10 +127,26 @@ public class DeckManager : MonoBehaviour
             {
                 discard.Add(tileData);
             }
-            Destroy(tile);
+            discardTileAnimation(tile);
         }
         else
             Debug.LogError("Tile not in hand!");
+    }
+    public void discardTileAnimation(GameObject tile)
+    {
+        float randomX = Random.Range(-0.5f, 0.5f);
+        float randomY = Random.Range(-0.05f, 0.05f);
+        float randomZ = Random.Range(-0.5f, 0.5f);
+        Vector3 randomDirection = new Vector3(randomX, randomY, randomZ).normalized;
+        tile.AddComponent<Rigidbody>();
+        tile.GetComponent<Rigidbody>().AddForce(randomDirection * 3f, ForceMode.Impulse);
+        StartCoroutine(destroyAfterSeconds(tile, 1f));
+    }
+    IEnumerator destroyAfterSeconds(GameObject tile, float seconds)
+    {
+        // Here we will do the animation for discarding a tile, then destroy
+        yield return new WaitForSeconds(seconds);
+        Destroy(tile);
     }
     public void discardTiles(List<GameObject> tiles)
     {

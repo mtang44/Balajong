@@ -1,7 +1,8 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 // This script is attached to the MahjongTile GameObject. It handles collision interaction, and will add itself to the DeckManager on click
-public class TileSelect : MonoBehaviour
+public class TileSelect : MonoBehaviour, IPointerDownHandler
 {
     DeckManager deckManager;
     public MahjongTileData tileData;
@@ -21,20 +22,19 @@ public class TileSelect : MonoBehaviour
     }
     void clicked()
     {
-        if (deckManager.selectedTiles.Count < deckManager.MAX_DISCARD_SELECTION)
-        {
-            if(!deckManager.selectedTiles.Contains(gameObject))
+        if (deckManager.selectedTiles.Contains(gameObject))
+            removeFromSelection();
+        else {
+            if(deckManager.selectedTiles.Count < deckManager.MAX_DISCARD_SELECTION)
                 addToSelection();
-            else
-                removeFromSelection();
         }
     }
-    public void OnPointerDown()
+    public void OnPointerDown(PointerEventData eventData)
     {
         if (GameManager.Instance.selecting && tileData != null)
         {
             clicked();
-            Debug.Log("Clicked tile: " + tileData.GetTileDisplayName());
+            //Debug.Log("Clicked tile: " + tileData.GetTileDisplayName());
         }
     }
     void addToSelection()

@@ -63,6 +63,7 @@ public class DeckManager : MonoBehaviour
         {
             GameObject tileGO = hand[i];
             tileGO.transform.localPosition = new Vector3((i * 0.2f) - ((hand.Count - 1) * 0.1f), -0.2f, 1.5f);
+            tileGO.transform.localRotation = Quaternion.Euler(0, 180, 0);
         }
     }   
     public bool drawTile()

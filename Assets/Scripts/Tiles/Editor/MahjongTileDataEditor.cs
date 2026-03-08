@@ -2,7 +2,7 @@ using UnityEditor;
 using UnityEngine;
 using System.Linq;
 
-[CustomEditor(typeof(MahjongTileData))]
+[CustomEditor(typeof(MahjongTileHolder))]
 public class MahjongTileDataEditor : Editor
 {
     private const string SpriteSheetPath = "Assets/Art Assets/Tiles/MahjongTilesTransparent.png";
@@ -18,13 +18,13 @@ public class MahjongTileDataEditor : Editor
 
     private void OnEnable()
     {
-        tileTypeProperty = serializedObject.FindProperty("tileType");
-        numberedValueProperty = serializedObject.FindProperty("numberedValue");
-        windValueProperty = serializedObject.FindProperty("windValue");
-        dragonValueProperty = serializedObject.FindProperty("dragonValue");
-        flowerValueProperty = serializedObject.FindProperty("flowerValue");
-        seasonValueProperty = serializedObject.FindProperty("seasonValue");
-        spriteProperty = serializedObject.FindProperty("sprite");
+        tileTypeProperty = serializedObject.FindProperty("tileData.tileType");
+        numberedValueProperty = serializedObject.FindProperty("tileData.numberedValue");
+        windValueProperty = serializedObject.FindProperty("tileData.windValue");
+        dragonValueProperty = serializedObject.FindProperty("tileData.dragonValue");
+        flowerValueProperty = serializedObject.FindProperty("tileData.flowerValue");
+        seasonValueProperty = serializedObject.FindProperty("tileData.seasonValue");
+        spriteProperty = serializedObject.FindProperty("tileData.sprite");
     }
 
     public override void OnInspectorGUI()
@@ -104,7 +104,11 @@ public class MahjongTileDataEditor : Editor
 
     private void UpdateSprite()
     {
-        MahjongTileData tileData = target as MahjongTileData;
+        MahjongTileHolder holder = target as MahjongTileHolder;
+        if (holder == null)
+            return;
+        
+        MahjongTileData tileData = holder.TileData;
         if (tileData == null)
             return;
 
@@ -133,7 +137,7 @@ public class MahjongTileDataEditor : Editor
         {
             spriteProperty.objectReferenceValue = foundSprite;
             serializedObject.ApplyModifiedProperties();
-            EditorUtility.SetDirty(tileData);
+            EditorUtility.SetDirty(holder);
         }
     }
 

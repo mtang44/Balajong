@@ -32,7 +32,7 @@ public class MahjongTileDisplay : MonoBehaviour
     private void Reset()
     {
         targetRenderer = GetComponent<Renderer>();
-        tileData = GetComponent<MahjongTileData>();
+        tileData = GetComponent<MahjongTileHolder>().TileData;
     }
 
     private void Awake()

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 // This class handles the deck as it is during the game. It is mutable over the course of the run, but is controlled by the DeckManager.
 public class Deck
 {
-    private List<string> tileDataStrings;
+    private List<MahjongTileData> tileData;
     private GameObject tilePrefab;
     
     public Deck(GameObject tilePrefab)
@@ -14,59 +14,55 @@ public class Deck
     
     public void InitializeDeck()
     {
-        tileDataStrings = new List<string>(DeckConstant.CreateDeckData());
+        tileData = DeckConstant.CreateDeckData();
         Shuffle();
     }
 
-    public GameObject DrawTile()
+    public MahjongTileData DrawTile()
     {
-        if (tileDataStrings.Count == 0)
+        if (tileData.Count == 0)
         {
             Debug.LogError("Deck is empty!");
             return null;
         }
         
-        string tileDataString = tileDataStrings[0];
-        tileDataStrings.RemoveAt(0);
+        MahjongTileData tileDatum = tileData[0];
+        tileData.RemoveAt(0);
         
-        // Instantiate tile only when drawn
-        GameObject tileObject = Object.Instantiate(tilePrefab);
-        ConfigureTile(tileObject, tileDataString);
-        
-        return tileObject;
+        return tileDatum;
     }
 
-    public void AddTile(string tileDataString)
+    public void AddTile(MahjongTileData newTileData)
     {
-        tileDataStrings.Add(tileDataString);
+        tileData.Add(newTileData);
     }
 
-    public void AddTiles(List<string> tiles)
+    public void AddTiles(List<MahjongTileData> tiles)
     {
-        tileDataStrings.AddRange(tiles);
+        tileData.AddRange(tiles);
     }
 
     public void Shuffle()
     {
-        if (tileDataStrings == null)
+        if (tileData == null)
         {
-            tileDataStrings = new List<string>(DeckConstant.CreateDeckData());
+            tileData = new List<MahjongTileData>(DeckConstant.CreateDeckData());
         }
         
-        List<string> shuffledDeck = new List<string>(tileDataStrings);
+        List<MahjongTileData> shuffledDeck = new List<MahjongTileData>(tileData);
         for (int i = shuffledDeck.Count - 1; i > 0; i--)
         {
             int j = Random.Range(0, i + 1);
-            string temp = shuffledDeck[i];
+            MahjongTileData temp = shuffledDeck[i];
             shuffledDeck[i] = shuffledDeck[j];
             shuffledDeck[j] = temp;
         }
-        tileDataStrings = shuffledDeck;
+        tileData = shuffledDeck;
     }
 
     public int GetDeckCount()
     {
-        return tileDataStrings?.Count ?? 0;
+        return tileData?.Count ?? 0;
     }
     
     private void ConfigureTile(GameObject tileObject, string tileDataString)

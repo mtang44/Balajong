@@ -55,7 +55,8 @@ public enum SeasonValue
     Winter
 }
 
-public class MahjongTileData : MonoBehaviour
+[System.Serializable]
+public class MahjongTileData
 {
     [SerializeField]
     private TileType tileType;
@@ -74,9 +75,9 @@ public class MahjongTileData : MonoBehaviour
 
     [SerializeField]
     private SeasonValue seasonValue;
-
     [SerializeField]
     private Sprite sprite;
+
 
     public TileType TileType => tileType;
     public NumberedValue NumberedValue => numberedValue;
@@ -86,19 +87,32 @@ public class MahjongTileData : MonoBehaviour
     public SeasonValue SeasonValue => seasonValue;
     public Sprite Sprite => sprite;
 
-    public void SetSprite(Sprite newSprite)
+    public MahjongTileData(TileType type, NumberedValue numVal = 0, WindValue windVal = 0, DragonValue dragonVal = 0, FlowerValue flowerVal = 0, SeasonValue seasonVal = 0)
     {
-        sprite = newSprite;
+        tileType = type;
+        numberedValue = numVal;
+        windValue = windVal;
+        dragonValue = dragonVal;
+        flowerValue = flowerVal;
+        seasonValue = seasonVal;
     }
-
-    private void OnValidate()
+    public void SetTileData(TileType type, NumberedValue numVal = 0, WindValue windVal = 0, DragonValue dragonVal = 0, FlowerValue flowerVal = 0, SeasonValue seasonVal = 0)
     {
-        // Notify display component to update when data changes
-        MahjongTileDisplay display = GetComponent<MahjongTileDisplay>();
-        if (display != null)
-        {
-            display.ApplyTileSprite();
-        }
+        tileType = type;
+        numberedValue = numVal;
+        windValue = windVal;
+        dragonValue = dragonVal;
+        flowerValue = flowerVal;
+        seasonValue = seasonVal;
+    }
+    public void SetTileData(MahjongTileData newData)
+    {
+        tileType = newData.tileType;
+        numberedValue = newData.numberedValue;
+        windValue = newData.windValue;
+        dragonValue = newData.dragonValue;
+        flowerValue = newData.flowerValue;
+        seasonValue = newData.seasonValue;
     }
 
     public string GetTileDisplayName()
@@ -129,5 +143,9 @@ public class MahjongTileData : MonoBehaviour
             TileType.Season => $"{(int)seasonValue + 1}S",
             _ => "0X"
         };
+    }
+    public void SetSprite(Sprite newSprite)
+    {
+        sprite = newSprite;
     }
 }

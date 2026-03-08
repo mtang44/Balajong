@@ -322,4 +322,5 @@ public class ScoringManager : MonoBehaviour
             if (m.Tiles != null && m.Tiles.Contains(tile)) return true;
         return false;
     }
+    #endregion
 }

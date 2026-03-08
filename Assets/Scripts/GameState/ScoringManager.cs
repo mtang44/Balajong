@@ -6,7 +6,7 @@ Main functions:
 - HandMeetsThreshold(tiles, checkpointThreshold): True if hand meets or exceeds threshold.
 - CalcDamage(tiles, checkpointThreshold): Amount hand falls short of threshold (0 if passed).
 - CalcReward(tiles, checkpointThreshold): Amount hand beats threshold by (0 if not).
-- DetectMelds(tiles): Returns all chows and pungs as Meld objects (with tile references).
+- DetectMelds(tiles): Returns all chows, pungs, and eyes (pairs) as Meld objects (with tile references).
 - CalcAllMeldsScore(melds): Total score of all melds (uses individual tile values).
 - EvalMeld(meld): Score for a single meld (sum of GetTileScore for each tile).
 
@@ -66,6 +66,10 @@ public class ScoringManager : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
+
+            // Initialize tile scores from the example score table so
+            // all tiles have non-zero values by default.
+            ScoreTable.ApplyDefaultScores(this);
         }
         else
         {
@@ -176,7 +180,7 @@ public class ScoringManager : MonoBehaviour
 
     #region Meld type and detection
 
-    public enum MeldKind { Chow, Pung }
+    public enum MeldKind { Chow, Pung, Eyes }
 
     // Meld struct for storing the kind and tiles of a meld.
     public struct Meld
@@ -274,6 +278,32 @@ public class ScoringManager : MonoBehaviour
             }
         }
 
+        // Extract eyes (pairs): two identical tiles, score = (tile1 + tile2) * 2
+        foreach (var suit in new[] { TileType.Dots, TileType.Bam, TileType.Crack })
+        {
+            for (int v = 1; v <= 9; v++)
+            {
+                var list = suited[suit][v];
+                while (list.Count >= 2)
+                {
+                    var eyesTiles = new List<MahjongTile> { list[0], list[1] };
+                    list.RemoveRange(0, 2);
+                    melds.Add(new Meld(MeldKind.Eyes, eyesTiles));
+                }
+            }
+        }
+
+        foreach (var kvp in honorLists)
+        {
+            var list = kvp.Value;
+            while (list.Count >= 2)
+            {
+                var eyesTiles = new List<MahjongTile> { list[0], list[1] };
+                list.RemoveRange(0, 2);
+                melds.Add(new Meld(MeldKind.Eyes, eyesTiles));
+            }
+        }
+
         return melds;
     }
 
@@ -286,14 +316,31 @@ public class ScoringManager : MonoBehaviour
         return total;
     }
 
-    // Evaluates a single meld using GetTileScore for each tile. 
-    // CAN REPLACED WITH CUSTOM FORMULAS
+    // Pung: X * Y. Chow: X * (Y - 1) with Y = highest in run. Eyes: (tile1 + tile2) * 2.
     public int EvalMeld(Meld meld)
     {
         if (meld.Tiles == null || meld.Tiles.Count == 0) return 0;
-        int sum = 0;
-        foreach (var t in meld.Tiles) sum += GetTileScore(t);
-        return sum;
+
+        int x = meld.Tiles.Count;
+        if (meld.Kind == MeldKind.Pung)
+        {
+            int y = GetTileScore(meld.Tiles[0]);
+            return x * y;
+        }
+        if (meld.Kind == MeldKind.Eyes)
+        {
+            int a = GetTileScore(meld.Tiles[0]);
+            int b = GetTileScore(meld.Tiles[1]);
+            return (a + b) * 2;
+        }
+        // Chow: Y = highest value in the run
+        int yChow = 0;
+        foreach (var t in meld.Tiles)
+        {
+            int s = GetTileScore(t);
+            if (s > yChow) yChow = s;
+        }
+        return x * (yChow - 1);
     }
     
     // Grabs the key for the honor tile.

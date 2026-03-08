@@ -1,32 +1,53 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 // This script is attached to the MahjongTile GameObject. It handles collision interaction, and will add itself to the DeckManager on click
-public class TileSelect : MonoBehaviour
+public class TileSelect : MonoBehaviour, IPointerDownHandler
 {
     DeckManager deckManager;
-    private MahjongTileData tileData;
+    public MahjongTileData tileData;
 
     void Start()
     {
         deckManager = DeckManager.Instance;
-        tileData = GetComponent<MahjongTileHolder>().TileData;
+        MahjongTileHolder holder = GetComponent<MahjongTileHolder>();
+        if (holder != null)
+        {
+            tileData = holder.TileData;
+        }
+        else
+        {
+            Debug.LogError("MahjongTileHolder component not found on " + gameObject.name);
+        }
     }
     void clicked()
     {
-        if (deckManager.selectedTiles.Count < deckManager.MAX_DISCARD_SELECTION)
-        {
-            if(!deckManager.selectedTiles.Contains(gameObject))
+        if (deckManager.selectedTiles.Contains(gameObject))
+            removeFromSelection();
+        else {
+            if(deckManager.selectedTiles.Count < deckManager.MAX_DISCARD_SELECTION)
                 addToSelection();
-            else
-                removeFromSelection();
+        }
+    }
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        if (GameManager.Instance.selecting && tileData != null)
+        {
+            clicked();
+            //Debug.Log("Clicked tile: " + tileData.GetTileDisplayName());
         }
     }
     void addToSelection()
     {
         deckManager.selectedTiles.Add(gameObject);
+
+        //temp move forward to show selection, will replace with actual animation later
+        gameObject.transform.localPosition += new Vector3(0, 0.125f, 0);
     }
     void removeFromSelection()
     {
         deckManager.selectedTiles.Remove(gameObject);
+        //temp move back to show deselection, will replace with actual animation later
+        gameObject.transform.localPosition -= new Vector3(0, 0.125f, 0);
     }
 }

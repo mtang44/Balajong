@@ -81,6 +81,14 @@ public class GameManager : MonoBehaviour
         selecting = true;
 
     }
+    void discardButton()
+    {
+        if (selecting)
+        {
+            selecting = false;
+            SwitchState(GameState.Discard);
+        }
+    }
     void DiscardState()
     {
         DeckManager.Instance.selectedToDiscard();
@@ -104,17 +112,4 @@ public class GameManager : MonoBehaviour
         SwitchState(GameState.Draw);
     }
     void EndState() {}
-
-    void Update()
-    {
-        //THESE ARE TESTS WHILE I WAIT FOR THE BUTTONS
-        if (currentState == GameState.Select)
-        {
-            if (Keyboard.current.enterKey.wasPressedThisFrame)
-            {
-                selecting = false;
-                SwitchState(GameState.Discard);
-            }
-        }
-    }
 }

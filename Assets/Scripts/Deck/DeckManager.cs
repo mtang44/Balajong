@@ -66,7 +66,15 @@ public class DeckManager : MonoBehaviour
         for (int i = 0; i < hand.Count; i++)
         {
             GameObject tileGO = hand[i];
-            tileGO.transform.localPosition = new Vector3((i * 0.25f) - ((hand.Count - 1) * 0.125f), -0.5f, 1.5f);
+            float baseY = -0.5f;
+            
+            // Preserve Y offset for selected tiles
+            if (selectedTiles.Contains(tileGO))
+            {
+                baseY += 0.125f;
+            }
+            
+            tileGO.transform.localPosition = new Vector3((i * 0.25f) - ((hand.Count - 1) * 0.125f), baseY, 1.5f);
             tileGO.transform.localRotation = Quaternion.Euler(-20, 180, 0);
         }
     }   

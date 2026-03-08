@@ -1,13 +1,17 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 using System.Collections.Generic;
+using UnityEngine.UI;
+using TMPro;
 
 // This script is attached to the MahjongTile GameObject. It handles collision interaction, and will add itself to the DeckManager on click
-public class TileSelect : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
+public class TileSelect : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler, IPointerMoveHandler
 {
     DeckManager deckManager;
     public MahjongTileData tileData;
-    
+
+    GameObject tooltip; // Reference to the tooltip GameObject
+    private bool isHoveringOverTile = false;
     private Vector3 originalPosition;
     private int originalIndex;
     private int currentPreviewIndex;
@@ -26,6 +30,67 @@ public class TileSelect : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
         else
         {
             Debug.LogError("MahjongTileHolder component not found on " + gameObject.name);
+        }
+        tooltip = GameObject.FindGameObjectWithTag("Tooltip");
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        //Send in the tooltip
+        if (tooltip != null && tileData != null)
+        {
+            // Make sure tooltip is active
+            GameObject tooltipButton = tooltip.transform.GetChild(0).gameObject;
+            if (!tooltipButton.activeSelf)
+            {
+                tooltipButton.SetActive(true);
+            }
+            
+            TextMeshProUGUI tooltipText = tooltip.GetComponentInChildren<TextMeshProUGUI>(includeInactive: true);
+            if (tooltipText != null)
+            {
+                string displayName = tileData.GetTileDisplayName();
+                tooltipText.text = displayName;
+                Debug.Log("Tooltip text set to: " + displayName);
+            }
+            else
+            {
+                Debug.LogError("TextMeshProUGUI component not found in tooltip!");
+            }
+        }
+        isHoveringOverTile = true;
+    }
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        //Quiet the tooltip
+        isHoveringOverTile = false;
+        if (tooltip != null && tooltip.transform.childCount > 0)
+        {
+            tooltip.transform.GetChild(0).gameObject.SetActive(false);
+        }
+    }
+
+    public void OnPointerMove(PointerEventData eventData)
+    {
+        //Update tooltip position as mouse moves
+        if (isHoveringOverTile && tooltip != null)
+        {
+            RectTransform tooltipRect = tooltip.GetComponent<RectTransform>();
+            if (tooltipRect != null)
+            {
+                // Use RectTransformUtility to properly convert screen position to canvas local position
+                Canvas canvas = tooltip.GetComponentInParent<Canvas>();
+                if (canvas != null)
+                {
+                    RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                        canvas.GetComponent<RectTransform>(),
+                        eventData.position,
+                        canvas.worldCamera,
+                        out Vector2 localPoint
+                    );
+                    tooltipRect.anchoredPosition = localPoint + new Vector2(0f, 35f); // Offset to avoid cursor overlap
+                }
+            }
         }
     }
 

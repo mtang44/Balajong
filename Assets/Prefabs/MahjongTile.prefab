@@ -85,7 +85,10 @@ PrefabInstance:
       addedObject: {fileID: 795762653592268381}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 770dc0ec5a177d34ea4e48ebf6adcb80, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 8196408055424260670}
+      addedObject: {fileID: 5263447566789008438}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 770dc0ec5a177d34ea4e48ebf6adcb80, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5499044278880037646}
   m_SourcePrefab: {fileID: 100100000, guid: 770dc0ec5a177d34ea4e48ebf6adcb80, type: 3}
 --- !u!1 &7980480237267112869 stripped
 GameObject:
@@ -104,14 +107,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 264fcf7bfc762a64abc9ff4853348446, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MahjongTileDisplay
-  tileData: {fileID: 8196408055424260670}
+  tileData:
+    tileType: 0
+    numberedValue: 0
+    windValue: 0
+    dragonValue: 0
+    flowerValue: 0
+    seasonValue: 0
+    sprite: {fileID: 0}
   targetRenderer: {fileID: 8484957682002522736}
   materialIndex: 2
   materialInstance: {fileID: 2100000, guid: e15613742485bf9458fa04b5239314c3, type: 2}
   uvScaleMultiplier: 6
   uvOffset: {x: -0.42, y: -0.345}
   texturePadding: 28
---- !u!114 &8196408055424260670
+--- !u!114 &5263447566789008438
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -120,16 +130,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 7980480237267112869}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8282e2ab87178c3439588c2e313cf4b8, type: 3}
+  m_Script: {fileID: 11500000, guid: 8f334f780f024434eb6717e874c671fb, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::MahjongTileData
-  tileType: 0
-  numberedValue: 1
-  windValue: 0
-  dragonValue: 0
-  flowerValue: 0
-  seasonValue: 0
-  sprite: {fileID: 1245946512, guid: 728422e951c025d44b907401c3a07f88, type: 3}
+  m_EditorClassIdentifier: Assembly-CSharp::TileSelect
+--- !u!114 &5499044278880037646
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7980480237267112869}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ef4776056ef70748b615df4730c0f41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MahjongTileHolder
 --- !u!23 &8484957682002522736 stripped
 MeshRenderer:
   m_CorrespondingSourceObject: {fileID: -7511558181221131132, guid: 770dc0ec5a177d34ea4e48ebf6adcb80, type: 3}

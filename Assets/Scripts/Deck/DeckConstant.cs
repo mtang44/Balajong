@@ -18,9 +18,9 @@ public class DeckConstant : MonoBehaviour
         "11S", "12S", "13S", "14S" //SEASONS
         };
 
-    public static List<string> CreateDeckData()
+    public static List<MahjongTileData> CreateDeckData()
     {
-        List<string> newDeckData = new List<string>();
+        List<MahjongTileData> newDeckData = new List<MahjongTileData>();
         foreach (string tileString in startingDeckState)
         {
             int count = int.Parse(tileString[0].ToString());
@@ -29,7 +29,9 @@ public class DeckConstant : MonoBehaviour
             
             for (int i = 0; i < count; i++)
             {
-                newDeckData.Add(value + suit);
+                MahjongTileData tileData = new MahjongTileData(TileType.Crack); // Default type, will be set correctly in ConfigureTileData
+                ConfigureTileData(tileData, value, suit);
+                newDeckData.Add(tileData);
             }
         }
         return newDeckData;

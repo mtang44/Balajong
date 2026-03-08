@@ -9,7 +9,7 @@ public class TileSelect : MonoBehaviour
     void Start()
     {
         deckManager = DeckManager.Instance;
-        tileData = GetComponent<MahjongTileData>();
+        tileData = GetComponent<MahjongTileHolder>().TileData;
     }
     void clicked()
     {

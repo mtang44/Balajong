@@ -194,6 +194,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
   currentState: 0
+  selecting: 0
 --- !u!1 &1491817425
 GameObject:
   m_ObjectHideFlags: 0

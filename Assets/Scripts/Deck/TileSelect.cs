@@ -4,12 +4,20 @@ using UnityEngine;
 public class TileSelect : MonoBehaviour
 {
     DeckManager deckManager;
-    private MahjongTileData tileData;
+    public MahjongTileData tileData;
 
     void Start()
     {
         deckManager = DeckManager.Instance;
-        tileData = GetComponent<MahjongTileHolder>().TileData;
+        MahjongTileHolder holder = GetComponent<MahjongTileHolder>();
+        if (holder != null)
+        {
+            tileData = holder.TileData;
+        }
+        else
+        {
+            Debug.LogError("MahjongTileHolder component not found on " + gameObject.name);
+        }
     }
     void clicked()
     {
@@ -19,6 +27,14 @@ public class TileSelect : MonoBehaviour
                 addToSelection();
             else
                 removeFromSelection();
+        }
+    }
+    public void OnPointerDown()
+    {
+        if (GameManager.Instance.selecting && tileData != null)
+        {
+            clicked();
+            Debug.Log("Clicked tile: " + tileData.GetTileDisplayName());
         }
     }
     void addToSelection()

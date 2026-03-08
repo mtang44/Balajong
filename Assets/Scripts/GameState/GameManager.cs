@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Diagnostics;
 using UnityEngine;
 
 public enum GameState
@@ -9,10 +11,12 @@ public enum GameState
     Score,
     End
 }
+// This will govern the overall backend of the game.
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
     public GameState currentState;
+    public bool selecting = false;
 
     void Awake()
     {
@@ -29,8 +33,49 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         currentState = GameState.Start;
-        currentState = GameState.Draw;
-        DeckManager.Instance.drawHand();
+        SwitchState(currentState);
     }
     void SetState(GameState newState) { currentState = newState; }
+    void SwitchState(GameState newState)
+    {
+        SetState(newState);
+        switch (currentState)
+        {
+            case GameState.Start:
+                StartState();
+                break;
+            case GameState.Draw:
+                DrawState();
+                break;
+            case GameState.Select:
+                SelectState();
+                break;
+            case GameState.Discard:
+                DiscardState();
+                break;
+            case GameState.Score:
+                ScoreState();
+                break;
+            case GameState.End:
+                EndState();
+                break;
+        }
+    }
+    void StartState()
+    {
+        SwitchState(GameState.Draw);
+    }
+    void DrawState()
+    {
+        DeckManager.Instance.drawHand();
+        SwitchState(GameState.Select);
+    }
+    void SelectState()
+    {
+        selecting = true;
+
+    }
+    void DiscardState() {}
+    void ScoreState() {}
+    void EndState() {}
 }

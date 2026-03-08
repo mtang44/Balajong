@@ -51,7 +51,6 @@ public class TileSelect : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
             {
                 string displayName = tileData.GetTileDisplayName();
                 tooltipText.text = displayName;
-                Debug.Log("Tooltip text set to: " + displayName);
             }
             else
             {

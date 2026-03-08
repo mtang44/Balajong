@@ -105,16 +105,13 @@ public class GameManager : MonoBehaviour
     }
     void EndState() {}
 
-    void Update()
+    // Public method for UI button to trigger discard
+    public void OnDiscardButtonPressed()
     {
-        //THESE ARE TESTS WHILE I WAIT FOR THE BUTTONS
         if (currentState == GameState.Select)
         {
-            if (Keyboard.current.enterKey.wasPressedThisFrame)
-            {
-                selecting = false;
-                SwitchState(GameState.Discard);
-            }
+            selecting = false;
+            SwitchState(GameState.Discard);
         }
     }
 }

@@ -34,13 +34,17 @@ public class MahjongTileDisplay : MonoBehaviour
     private void Awake()
     {
         InitializeMaterials();
-        StartCoroutine(ApplyTileSpriteDelayed());
+        ApplyTileSpriteDelayed();
     }
 
-    private IEnumerator ApplyTileSpriteDelayed()
+    private IEnumerator ApplyTileSpriteDelayedEnumerator()
     {
         yield return new WaitForEndOfFrame();
         ApplyTileSprite();
+    }
+    public void ApplyTileSpriteDelayed()
+    {
+        StartCoroutine(ApplyTileSpriteDelayedEnumerator());
     }
 
     private void OnEnable()
@@ -53,7 +57,7 @@ public class MahjongTileDisplay : MonoBehaviour
 
     private void OnValidate()
     {
-        if (!Application.isPlaying)
+        if (Application.isPlaying)
         {
             ApplyTileSprite();
         }

@@ -18,6 +18,12 @@ public class MahjongTileHolder : MonoBehaviour
     public void SetTileData(MahjongTileData newData)
     {
         tileData = newData;
+        // Sprite Changes
+        MahjongTileDisplay display = GetComponent<MahjongTileDisplay>();
+        if (display != null)
+        {
+            display.ApplyTileSpriteDelayed();
+        }
     }
 
     public void OnValidate()

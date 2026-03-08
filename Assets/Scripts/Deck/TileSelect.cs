@@ -40,9 +40,14 @@ public class TileSelect : MonoBehaviour, IPointerDownHandler
     void addToSelection()
     {
         deckManager.selectedTiles.Add(gameObject);
+
+        //temp move forward to show selection, will replace with actual animation later
+        gameObject.transform.localPosition += new Vector3(0, 0.125f, 0);
     }
     void removeFromSelection()
     {
         deckManager.selectedTiles.Remove(gameObject);
+        //temp move back to show deselection, will replace with actual animation later
+        gameObject.transform.localPosition -= new Vector3(0, 0.125f, 0);
     }
 }

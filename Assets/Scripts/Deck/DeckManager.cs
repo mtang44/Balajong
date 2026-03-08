@@ -62,8 +62,8 @@ public class DeckManager : MonoBehaviour
         for (int i = 0; i < hand.Count; i++)
         {
             GameObject tileGO = hand[i];
-            tileGO.transform.localPosition = new Vector3((i * 0.2f) - ((hand.Count - 1) * 0.1f), -0.2f, 1.5f);
-            tileGO.transform.localRotation = Quaternion.Euler(0, 180, 0);
+            tileGO.transform.localPosition = new Vector3((i * 0.25f) - ((hand.Count - 1) * 0.125f), -0.5f, 1.5f);
+            tileGO.transform.localRotation = Quaternion.Euler(-20, 180, 0);
         }
     }   
     public bool drawTile()
@@ -103,7 +103,7 @@ public class DeckManager : MonoBehaviour
         selectedTiles.Clear();
     }
 
-    void selectedToDiscard()
+    public void selectedToDiscard()
     {
         discardTiles(selectedTiles);
         selectedTiles.Clear();
@@ -121,7 +121,7 @@ public class DeckManager : MonoBehaviour
         if (hand.Contains(tile))
         {
             hand.Remove(tile);
-            MahjongTileData tileData = tile.GetComponent<MahjongTileData>();
+            MahjongTileData tileData = tile.GetComponent<MahjongTileHolder>().TileData;
             if (tileData != null)
             {
                 discard.Add(tileData);

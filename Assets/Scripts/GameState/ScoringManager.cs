@@ -66,6 +66,10 @@ public class ScoringManager : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
+
+            // Initialize tile scores from the example score table so
+            // all tiles have non-zero values by default.
+            ScoreTable.ApplyRandomScores(this);
         }
         else
         {

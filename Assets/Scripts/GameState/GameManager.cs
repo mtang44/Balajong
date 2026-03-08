@@ -94,7 +94,7 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("Scoring Hand...");
         int Score = ScoringManager.Instance.CalcHandScore(DeckManager.Instance.getHandAsMahjongTileData());
-        // Placeholder for scoring logic, will be implemented later.
+        Debug.Log($"ScoreState: Hand scored {Score} points.");
         StatsUpdater.Instance.UpdateScore(Score);
         
         // Here, we decide if the player is alive or not. For now, we will return to the draw state and refill discards.

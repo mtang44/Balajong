@@ -17,9 +17,9 @@ public class DeckManager : MonoBehaviour
 
     // Our hands! Deck is the wall, then the hand and discard.
     Deck deck;
-    List<GameObject> hand;
-    List<MahjongTileData> discard;
-    public List<GameObject> selectedTiles;
+    List<GameObject> hand = new List<GameObject>();
+    List<MahjongTileData> discard = new List<MahjongTileData>();
+    public List<GameObject> selectedTiles = new List<GameObject>();
     
     // Property to access hand for sorting
     public List<GameObject> Hand => hand;
@@ -35,16 +35,14 @@ public class DeckManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+        deck = new Deck(tilePrefab);
+        deck.InitializeDeck();
+        mainCamera = Camera.main;
     }
 
     void Start()
     {
-        deck = new Deck(tilePrefab);
-        deck.InitializeDeck();
-        hand = new List<GameObject>();
-        discard = new List<MahjongTileData>();
-        selectedTiles = new List<GameObject>();
-        mainCamera = Camera.main;
+        
     }
 
     public void drawHand(int count = 0)
@@ -172,5 +170,17 @@ public class DeckManager : MonoBehaviour
         deck.AddTiles(discard);
         discard.Clear();
     }
-
+    public List<MahjongTileData> getHandAsMahjongTileData()
+    {
+        List<MahjongTileData> handData = new List<MahjongTileData>();
+        foreach (GameObject tile in hand)
+        {
+            MahjongTileData tileData = tile.GetComponent<MahjongTileHolder>().TileData;
+            if (tileData != null)
+            {
+                handData.Add(tileData);
+            }
+        }
+        return handData;
+    }
 }

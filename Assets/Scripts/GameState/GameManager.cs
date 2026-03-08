@@ -79,28 +79,27 @@ public class GameManager : MonoBehaviour
     void SelectState()
     {
         selecting = true;
-
     }
     void DiscardState()
     {
         DeckManager.Instance.selectedToDiscard();
         currentDiscards++;
-        if (currentDiscards >= maxDiscards)
-        {
-            SwitchState(GameState.Score);
-        }
-        else
-        {
+        StatsUpdater.Instance.UpdateDiscardCount();
+        if (currentDiscards < maxDiscards)
             SwitchState(GameState.Draw);
-        }
+        else
+            DeckManager.Instance.redrawHand();
     }
     void ScoreState()
     {
         Debug.Log("Scoring Hand...");
+        int Score = ScoringManager.Instance.CalcHandScore(DeckManager.Instance.getHandAsMahjongTileData());
         // Placeholder for scoring logic, will be implemented later.
+        StatsUpdater.Instance.UpdateScore(Score);
         
         // Here, we decide if the player is alive or not. For now, we will return to the draw state and refill discards.
         currentDiscards = 0;
+        StatsUpdater.Instance.UpdateDiscardCount();
         SwitchState(GameState.Draw);
     }
     void EndState() {}
@@ -113,5 +112,9 @@ public class GameManager : MonoBehaviour
             selecting = false;
             SwitchState(GameState.Discard);
         }
+    }
+    public void OnScoreButtonPressed()
+    {
+        SwitchState(GameState.Score);
     }
 }

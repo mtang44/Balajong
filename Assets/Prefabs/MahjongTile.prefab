@@ -116,6 +116,12 @@ MonoBehaviour:
   uvScaleMultiplier: 6
   uvOffset: {x: -0.42, y: -0.345}
   texturePadding: 28
+  editionMaterialIndex: 1
+  editionMaterials:
+  - {fileID: 2100000, guid: 5aaa23ddc9fea964b93b6d7a64159eaf, type: 2}
+  - {fileID: 2100000, guid: 04908087d104a744abcd14dd1b58c3eb, type: 2}
+  - {fileID: 2100000, guid: 5aaa23ddc9fea964b93b6d7a64159eaf, type: 2}
+  - {fileID: 2100000, guid: 5aaa23ddc9fea964b93b6d7a64159eaf, type: 2}
 --- !u!114 &5263447566789008438
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -135,6 +141,7 @@ MonoBehaviour:
     dragonValue: 0
     flowerValue: 0
     seasonValue: 0
+    edition: 0
     sprite: {fileID: 0}
   tooltipHeightOffset: 0.225
 --- !u!114 &5499044278880037646
@@ -156,6 +163,7 @@ MonoBehaviour:
     dragonValue: 0
     flowerValue: 0
     seasonValue: 0
+    edition: 0
     sprite: {fileID: 0}
 --- !u!65 &323555887727181619
 BoxCollider:

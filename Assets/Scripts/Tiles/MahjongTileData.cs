@@ -55,6 +55,14 @@ public enum SeasonValue
     Winter
 }
 
+public enum Edition
+{
+    Base,
+    Foil,
+    Holographic,
+    Polychrome
+}
+
 [System.Serializable]
 public class MahjongTileData
 {
@@ -75,6 +83,10 @@ public class MahjongTileData
 
     [SerializeField]
     private SeasonValue seasonValue;
+
+    [SerializeField]
+    private Edition edition;
+
     [SerializeField]
     private Sprite sprite;
 
@@ -85,9 +97,10 @@ public class MahjongTileData
     public DragonValue DragonValue => dragonValue;
     public FlowerValue FlowerValue => flowerValue;
     public SeasonValue SeasonValue => seasonValue;
+    public Edition Edition => edition;
     public Sprite Sprite => sprite;
 
-    public MahjongTileData(TileType type, NumberedValue numVal = 0, WindValue windVal = 0, DragonValue dragonVal = 0, FlowerValue flowerVal = 0, SeasonValue seasonVal = 0)
+    public MahjongTileData(TileType type, NumberedValue numVal = 0, WindValue windVal = 0, DragonValue dragonVal = 0, FlowerValue flowerVal = 0, SeasonValue seasonVal = 0, Edition editionVal = Edition.Base)
     {
         tileType = type;
         numberedValue = numVal;
@@ -95,8 +108,10 @@ public class MahjongTileData
         dragonValue = dragonVal;
         flowerValue = flowerVal;
         seasonValue = seasonVal;
+        edition = editionVal;
     }
-    public void SetTileData(TileType type, NumberedValue numVal = 0, WindValue windVal = 0, DragonValue dragonVal = 0, FlowerValue flowerVal = 0, SeasonValue seasonVal = 0)
+
+    public void SetTileData(TileType type, NumberedValue numVal = 0, WindValue windVal = 0, DragonValue dragonVal = 0, FlowerValue flowerVal = 0, SeasonValue seasonVal = 0, Edition editionVal = Edition.Base)
     {
         tileType = type;
         numberedValue = numVal;
@@ -104,7 +119,9 @@ public class MahjongTileData
         dragonValue = dragonVal;
         flowerValue = flowerVal;
         seasonValue = seasonVal;
+        edition = editionVal;
     }
+
     public void SetTileData(MahjongTileData newData)
     {
         tileType = newData.tileType;
@@ -113,6 +130,7 @@ public class MahjongTileData
         dragonValue = newData.dragonValue;
         flowerValue = newData.flowerValue;
         seasonValue = newData.seasonValue;
+        edition = newData.edition;
     }
 
     public string GetTileDisplayName()

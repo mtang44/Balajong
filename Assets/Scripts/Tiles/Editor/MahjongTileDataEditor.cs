@@ -14,6 +14,7 @@ public class MahjongTileDataEditor : Editor
     private SerializedProperty dragonValueProperty;
     private SerializedProperty flowerValueProperty;
     private SerializedProperty seasonValueProperty;
+    private SerializedProperty editionProperty;
     private SerializedProperty spriteProperty;
 
     private void OnEnable()
@@ -24,6 +25,7 @@ public class MahjongTileDataEditor : Editor
         dragonValueProperty = serializedObject.FindProperty("tileData.dragonValue");
         flowerValueProperty = serializedObject.FindProperty("tileData.flowerValue");
         seasonValueProperty = serializedObject.FindProperty("tileData.seasonValue");
+        editionProperty = serializedObject.FindProperty("tileData.edition");
         spriteProperty = serializedObject.FindProperty("tileData.sprite");
     }
 
@@ -66,10 +68,14 @@ public class MahjongTileDataEditor : Editor
                 break;
         }
 
+        EditorGUILayout.Space();
+        EditorGUILayout.PropertyField(editionProperty, new GUIContent("Edition"));
+
         if (EditorGUI.EndChangeCheck())
         {
             serializedObject.ApplyModifiedProperties();
             UpdateSprite();
+            RefreshTileVisuals();
             serializedObject.Update();
         }
 
@@ -139,6 +145,22 @@ public class MahjongTileDataEditor : Editor
             serializedObject.ApplyModifiedProperties();
             EditorUtility.SetDirty(holder);
         }
+    }
+
+    private void RefreshTileVisuals()
+    {
+        MahjongTileHolder holder = target as MahjongTileHolder;
+        if (holder == null)
+            return;
+
+        MahjongTileDisplay display = holder.GetComponent<MahjongTileDisplay>();
+        if (display != null)
+        {
+            display.ApplyTileSprite();
+            EditorUtility.SetDirty(display);
+        }
+
+        EditorUtility.SetDirty(holder);
     }
 
     private static string GetSpriteName(int spriteIndex)

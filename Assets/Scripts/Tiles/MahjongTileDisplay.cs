@@ -24,6 +24,14 @@ public class MahjongTileDisplay : MonoBehaviour
     [Min(0)]
     private int texturePadding = 10;
 
+    [Header("Edition Materials")]
+    [SerializeField]
+    [Min(0)]
+    private int editionMaterialIndex = 1;
+
+    [SerializeField]
+    private Material[] editionMaterials = new Material[4];
+
     private const string TextureProperty = "_BaseMap";
 
     private void Reset()
@@ -33,11 +41,13 @@ public class MahjongTileDisplay : MonoBehaviour
 
     private void Awake()
     {
+        EnsureEditionMaterialSlots();
         InitializeMaterials();
     }
 
     private void OnValidate()
     {
+        EnsureEditionMaterialSlots();
         ApplyTileSprite();
     }
 
@@ -50,6 +60,8 @@ public class MahjongTileDisplay : MonoBehaviour
         if (holder == null || holder.TileData == null)
             return;
 
+        ApplyEditionMaterial(holder.TileData);
+
         Sprite sprite = holder.TileData.Sprite;
         if (sprite == null)
             return;
@@ -61,6 +73,80 @@ public class MahjongTileDisplay : MonoBehaviour
         Material instance = GetOrCreateInstance(baseMaterial);
         ApplySpriteToMaterial(instance, sprite);
         AssignMaterial(instance);
+    }
+
+    private void EnsureEditionMaterialSlots()
+    {
+        int editionCount = System.Enum.GetValues(typeof(Edition)).Length;
+        if (editionMaterials == null || editionMaterials.Length != editionCount)
+        {
+            Material[] resized = new Material[editionCount];
+            if (editionMaterials != null)
+            {
+                int copyCount = Mathf.Min(editionMaterials.Length, editionCount);
+                for (int i = 0; i < copyCount; i++)
+                {
+                    resized[i] = editionMaterials[i];
+                }
+            }
+
+            editionMaterials = resized;
+        }
+
+        // Default unset entries to Base material once Base is assigned.
+        Material baseMaterial = editionMaterials[(int)Edition.Base];
+        if (baseMaterial == null)
+            return;
+
+        for (int i = 0; i < editionMaterials.Length; i++)
+        {
+            if (editionMaterials[i] == null)
+            {
+                editionMaterials[i] = baseMaterial;
+            }
+        }
+    }
+
+    private void ApplyEditionMaterial(MahjongTileData tileData)
+    {
+        Material editionMaterial = GetEditionMaterial(tileData);
+        if (editionMaterial == null)
+            return;
+
+        Material[] materials = Application.isPlaying ? targetRenderer.materials : targetRenderer.sharedMaterials;
+        if (materials == null || editionMaterialIndex < 0 || editionMaterialIndex >= materials.Length)
+            return;
+
+        materials[editionMaterialIndex] = editionMaterial;
+
+        if (Application.isPlaying)
+        {
+            targetRenderer.materials = materials;
+        }
+        else
+        {
+            targetRenderer.sharedMaterials = materials;
+        }
+    }
+
+    private Material GetEditionMaterial(MahjongTileData tileData)
+    {
+        if (editionMaterials == null || editionMaterials.Length == 0)
+            return null;
+
+        int editionIndex = (int)tileData.Edition;
+        if (editionIndex >= 0 && editionIndex < editionMaterials.Length && editionMaterials[editionIndex] != null)
+        {
+            return editionMaterials[editionIndex];
+        }
+
+        int baseIndex = (int)Edition.Base;
+        if (baseIndex >= 0 && baseIndex < editionMaterials.Length)
+        {
+            return editionMaterials[baseIndex];
+        }
+
+        return null;
     }
 
     private Material GetBaseMaterial()

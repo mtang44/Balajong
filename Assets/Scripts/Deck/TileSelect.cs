@@ -5,10 +5,12 @@ using UnityEngine.UI;
 using TMPro;
 
 // This script is attached to the MahjongTile GameObject. It handles collision interaction, and will add itself to the DeckManager on click
-public class TileSelect : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler, IPointerMoveHandler
+public class TileSelect : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler
 {
     DeckManager deckManager;
     public MahjongTileData tileData;
+
+    [SerializeField] private float tooltipHeightOffset = 1.5f;
 
     GameObject tooltip; // Reference to the tooltip GameObject
     private bool isHoveringOverTile = false;
@@ -56,6 +58,9 @@ public class TileSelect : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
             {
                 Debug.LogError("TextMeshProUGUI component not found in tooltip!");
             }
+            
+            // Position tooltip above the tile
+            UpdateTooltipPosition();
         }
         isHoveringOverTile = true;
     }
@@ -69,25 +74,33 @@ public class TileSelect : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
         }
     }
 
-    public void OnPointerMove(PointerEventData eventData)
+    private void UpdateTooltipPosition()
     {
-        //Update tooltip position as mouse moves
-        if (isHoveringOverTile && tooltip != null)
+        if (tooltip != null && tooltip.transform.childCount > 0)
         {
-            RectTransform tooltipRect = tooltip.GetComponent<RectTransform>();
+            GameObject tooltipChild = tooltip.transform.GetChild(0).gameObject;
+            if (!tooltipChild.activeSelf) return;
+            
+            RectTransform tooltipRect = tooltipChild.GetComponent<RectTransform>();
             if (tooltipRect != null)
             {
-                // Use RectTransformUtility to properly convert screen position to canvas local position
                 Canvas canvas = tooltip.GetComponentInParent<Canvas>();
-                if (canvas != null)
+                if (canvas != null && canvas.renderMode == RenderMode.ScreenSpaceCamera)
                 {
-                    RectTransformUtility.ScreenPointToLocalPointInRectangle(
-                        canvas.GetComponent<RectTransform>(),
-                        eventData.position,
-                        canvas.worldCamera,
-                        out Vector2 localPoint
-                    );
-                    tooltipRect.anchoredPosition = localPoint + new Vector2(0f, 35f); // Offset to avoid cursor overlap
+                    // Get the tile's position in world space
+                    Vector3 tileWorldPos = transform.position;
+                    
+                    // Add offset above the tile (accounting for tile height + extra space)
+                    Vector3 tooltipWorldPos = tileWorldPos + new Vector3(0f, tooltipHeightOffset, 0f);
+                    
+                    // Convert to screen space
+                    Vector3 screenPos = canvas.worldCamera.WorldToScreenPoint(tooltipWorldPos);
+                    
+                    // Convert screen space to canvas position
+                    Vector3 canvasScreenPoint = new Vector3(screenPos.x, screenPos.y, canvas.planeDistance);
+                    Vector3 canvasWorldPoint = canvas.worldCamera.ScreenToWorldPoint(canvasScreenPoint);
+                    
+                    tooltipRect.position = canvasWorldPoint;
                 }
             }
         }
@@ -145,6 +158,12 @@ public class TileSelect : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
                 currentPreviewIndex = newPreviewIndex;
                 RepositionHandWithGap(currentPreviewIndex);
             }
+
+            // Hide tooltip while dragging
+            if (tooltip != null && tooltip.transform.childCount > 0)
+            {
+                tooltip.transform.GetChild(0).gameObject.SetActive(false);
+            }
         }
     }
 
@@ -164,6 +183,13 @@ public class TileSelect : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
         
         // Reposition all tiles normally
         deckManager.sortHand();
+        
+        // Restore tooltip if still hovering
+        if (isHoveringOverTile && tooltip != null && tooltip.transform.childCount > 0)
+        {
+            tooltip.transform.GetChild(0).gameObject.SetActive(true);
+            UpdateTooltipPosition();
+        }
     }
 
     // Calculate the index where the dragged tile should be inserted
@@ -263,11 +289,23 @@ public class TileSelect : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
 
         //temp move forward to show selection, will replace with actual animation later
         gameObject.transform.localPosition += new Vector3(0, 0.125f, 0);
+        
+        // Update tooltip position if hovering
+        if (isHoveringOverTile)
+        {
+            UpdateTooltipPosition();
+        }
     }
     void removeFromSelection()
     {
         deckManager.selectedTiles.Remove(gameObject);
         //temp move back to show deselection, will replace with actual animation later
         gameObject.transform.localPosition -= new Vector3(0, 0.125f, 0);
+        
+        // Update tooltip position if hovering
+        if (isHoveringOverTile)
+        {
+            UpdateTooltipPosition();
+        }
     }
 }

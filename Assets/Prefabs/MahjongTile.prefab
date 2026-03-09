@@ -136,6 +136,7 @@ MonoBehaviour:
     flowerValue: 0
     seasonValue: 0
     sprite: {fileID: 0}
+  tooltipHeightOffset: 0.225
 --- !u!114 &5499044278880037646
 MonoBehaviour:
   m_ObjectHideFlags: 0

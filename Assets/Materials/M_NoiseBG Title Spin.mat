@@ -53,14 +53,14 @@ Material:
     - _Metallic: 0
     - _Octaves: 4
     - _PaletteCount: 4
-    - _Scale: 80
+    - _Scale: 22
     - _ScrollSpeed: 0.0009
-    - _Seed: 24680
+    - _Seed: 21489
     - _Smoothness: 0.5
-    - _Speed: 0.42
-    - _SpinDegPerSec: 4
+    - _Speed: 0.65
+    - _SpinDegPerSec: 2
     - _SpinEnabled: 1
-    - _SwirlDegrees: 99.22
+    - _SwirlDegrees: 1700
     - _SwirlEnabled: 1
     - _SwirlFalloff: 1
     - _T: 0
@@ -70,7 +70,7 @@ Material:
     - _WarpEnabled: 1
     - _WarpOctaves: 4
     - _WarpScale: 30.6
-    - _WarpSeed: 11581.5
+    - _WarpSeed: 11470.85
     - _WorldCoordScale: 0.9
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
@@ -81,6 +81,6 @@ Material:
     - _Palette3: {r: 1, g: 1, b: 1, a: 1}
     - _Resolution: {r: 800, g: 800, b: 0, a: 0}
     - _ScrollDir: {r: 0.35, g: 1, b: 0, a: 0}
-    - _Tiling: {r: 1, g: 1, b: 0, a: 0}
+    - _Tiling: {r: 1.25, g: 1.25, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

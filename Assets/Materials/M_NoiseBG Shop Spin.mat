@@ -53,14 +53,14 @@ Material:
     - _Metallic: 0
     - _Octaves: 4
     - _PaletteCount: 4
-    - _Scale: 80
-    - _ScrollSpeed: 0.0009
-    - _Seed: 24680
+    - _Scale: 16.75
+    - _ScrollSpeed: 0.0001
+    - _Seed: 24161.99
     - _Smoothness: 0.5
-    - _Speed: 0.42
-    - _SpinDegPerSec: 1
+    - _Speed: 0.3
+    - _SpinDegPerSec: 0.2
     - _SpinEnabled: 1
-    - _SwirlDegrees: 99.22
+    - _SwirlDegrees: 100
     - _SwirlEnabled: 1
     - _SwirlFalloff: 1
     - _T: 0
@@ -75,10 +75,10 @@ Material:
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
-    - _Palette0: {r: 0.22745098, g: 0.38431373, b: 0.16862746, a: 1}
-    - _Palette1: {r: 0.06666667, g: 0.22745098, b: 0.08627451, a: 1}
-    - _Palette2: {r: 0.29803923, g: 0.49803922, b: 0.2627451, a: 1}
-    - _Palette3: {r: 1, g: 1, b: 1, a: 1}
+    - _Palette0: {r: 0.19379672, g: 0.3443267, b: 0.6320754, a: 1}
+    - _Palette1: {r: 0.14391243, g: 0.30633843, b: 0.6226415, a: 1}
+    - _Palette2: {r: 0.09220363, g: 0.2401656, b: 0.5283019, a: 1}
+    - _Palette3: {r: 0.0983001, g: 0.21538633, b: 0.4433962, a: 1}
     - _Resolution: {r: 800, g: 800, b: 0, a: 0}
     - _ScrollDir: {r: 0.35, g: 1, b: 0, a: 0}
     - _Tiling: {r: 1, g: 1, b: 0, a: 0}

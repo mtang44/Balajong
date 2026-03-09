@@ -1,9 +1,23 @@
 using UnityEngine;
-using System.Collections;
+using System.Collections.Generic;
 
 [ExecuteAlways]
 public class MahjongTileDisplay : MonoBehaviour
 {
+    [System.Serializable]
+    private class TileOffsetEntry
+    {
+        public string tileId;
+        public float x;
+        public float y;
+    }
+
+    [System.Serializable]
+    private class TileOffsetConfig
+    {
+        public TileOffsetEntry[] entries;
+    }
+
     [SerializeField]
     private Renderer targetRenderer;
 
@@ -20,6 +34,10 @@ public class MahjongTileDisplay : MonoBehaviour
     [SerializeField]
     private Vector2 uvOffset;
 
+    [Header("Per-Tile Face Offsets")]
+    [SerializeField]
+    private TextAsset tileOffsetConfigJson;
+
     [SerializeField]
     [Min(0)]
     private int texturePadding = 10;
@@ -32,6 +50,9 @@ public class MahjongTileDisplay : MonoBehaviour
     [SerializeField]
     private Material[] editionMaterials = new Material[4];
 
+    private readonly Dictionary<string, Vector2> tileOffsetLookup = new Dictionary<string, Vector2>();
+    private string cachedOffsetJsonText;
+
     private const string TextureProperty = "_BaseMap";
 
     private void Reset()
@@ -42,12 +63,14 @@ public class MahjongTileDisplay : MonoBehaviour
     private void Awake()
     {
         EnsureEditionMaterialSlots();
+        RebuildOffsetLookup();
         InitializeMaterials();
     }
 
     private void OnValidate()
     {
         EnsureEditionMaterialSlots();
+        RebuildOffsetLookup();
         ApplyTileSprite();
     }
 
@@ -71,8 +94,61 @@ public class MahjongTileDisplay : MonoBehaviour
             return;
 
         Material instance = GetOrCreateInstance(baseMaterial);
-        ApplySpriteToMaterial(instance, sprite);
+        ApplySpriteToMaterial(instance, sprite, holder.TileData);
         AssignMaterial(instance);
+    }
+
+    private void RebuildOffsetLookup()
+    {
+        tileOffsetLookup.Clear();
+        cachedOffsetJsonText = tileOffsetConfigJson != null ? tileOffsetConfigJson.text : null;
+
+        if (string.IsNullOrEmpty(cachedOffsetJsonText))
+            return;
+
+        TileOffsetConfig config = JsonUtility.FromJson<TileOffsetConfig>(cachedOffsetJsonText);
+        if (config == null || config.entries == null)
+            return;
+
+        for (int i = 0; i < config.entries.Length; i++)
+        {
+            TileOffsetEntry entry = config.entries[i];
+            if (entry == null || string.IsNullOrEmpty(entry.tileId))
+                continue;
+
+            string key = entry.tileId.Trim().ToUpperInvariant();
+            if (key.Length == 0)
+                continue;
+
+            tileOffsetLookup[key] = new Vector2(entry.x, entry.y);
+        }
+    }
+
+    private void EnsureOffsetLookupIsCurrent()
+    {
+        string currentJson = tileOffsetConfigJson != null ? tileOffsetConfigJson.text : null;
+        if (currentJson == cachedOffsetJsonText)
+            return;
+
+        RebuildOffsetLookup();
+    }
+
+    private Vector2 GetUvOffsetForTile(MahjongTileData tileData)
+    {
+        Vector2 resolvedOffset = uvOffset;
+        if (tileData == null)
+            return resolvedOffset;
+
+        EnsureOffsetLookupIsCurrent();
+
+        string tileId = tileData.GetTileString();
+        if (!string.IsNullOrEmpty(tileId) && tileOffsetLookup.TryGetValue(tileId.ToUpperInvariant(), out Vector2 customOffset))
+        {
+            // Custom entries are delta adjustments on top of the default offset.
+            resolvedOffset += customOffset;
+        }
+
+        return resolvedOffset;
     }
 
     private void EnsureEditionMaterialSlots()
@@ -206,13 +282,13 @@ public class MahjongTileDisplay : MonoBehaviour
         materialInstance = newInstance;
     }
 
-    private void ApplySpriteToMaterial(Material material, Sprite sprite)
+    private void ApplySpriteToMaterial(Material material, Sprite sprite, MahjongTileData tileData)
     {
         Texture2D croppedTexture = CreateTextureFromSprite(sprite);
         
         material.SetTexture(TextureProperty, croppedTexture);
         material.SetTextureScale(TextureProperty, Vector2.one * uvScaleMultiplier);
-        material.SetTextureOffset(TextureProperty, uvOffset);
+        material.SetTextureOffset(TextureProperty, GetUvOffsetForTile(tileData));
     }
 
     private Texture2D CreateTextureFromSprite(Sprite sprite)

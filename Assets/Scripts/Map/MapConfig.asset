@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f8ce4e63b6db04e45861cd2f1fc69edc, type: 3}
+  m_Name: MapConfig
+  m_EditorClassIdentifier: Assembly-CSharp::MapConfig
+  layerCount: 7
+  minNodesPerMiddleLayer: 2
+  maxNodesPerMiddleLayer: 4
+  guaranteedPathCount: 3
+  extraConnectionChance: 0.25
+  maxOutgoingConnections: 3
+  layerSpacing: 2.6
+  nodeSpacing: 2
+  nodeJitter: 0.2
+  nodeTypeWeights:
+  - type: 1
+    weight: 70
+  - type: 2
+    weight: 17
+  - type: 3
+    weight: 13
+  autoLoadEncounterScene: 1
+  completeNodeImmediatelyInMapScene: 0
+  encounterSceneName: RackingScene
+  winSceneName: Win Screen
+  nodeScale: 0.8
+  lineWidth: 0.08
+  inactiveConnectionColor: {r: 0.35, g: 0.35, b: 0.35, a: 0.9}
+  activeConnectionColor: {r: 0.9, g: 0.9, b: 0.9, a: 1}

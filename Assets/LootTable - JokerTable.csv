@@ -1,0 +1,11 @@
+Rarity,Name,Equation Type,Description,Price
+Common,Dotty Joker,,A Joker that applies to dots,3
+Common,Crazy Joker,,A joker adds +1 score,5
+Uncommon,Lazy Joker,,Joker increases score,4
+Uncommon,Bam Joker,,Joker increases Bam Score,5
+Uncommon,Happy Joker,,Joker does 1.5X mult to score,6
+Rare,Cracke Joker,,Applies to cracks,7
+Rare,Windy Joker,,Doubles Winds score,6
+Epic,Floral Joker,,Flowers give + 4,9
+Legendary,Joker,,Why so serious?,12
+Legendary,Mult Joker,,More Joker mult,12

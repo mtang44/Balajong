@@ -7,94 +7,63 @@ using TMPro;
 
 public class Shop : MonoBehaviour
 {
+    
+
     [SerializeField]
     public GameObject[] Shop_Item_TMPs; // array of TMP objects that will display to shop items. 
+    public JokerSpawner jokerSpawner = new JokerSpawner();
     
     // [SerializeField]
     // public string[] Rarities = new string[] {"Common","Uncommon","Rare","Epic","Legendary"};
     // [SerializeField]
     // public int[] Rarity_Weights = new int[] {55,30,15,6,1};   
     public int lootCount = 5;
-    private Shop myChest;
-
     void Start()
     {
-        myChest = new Shop();
     }
     void Update()
     {
     }
-
     // call this function to open chest 
     public void RerollShop()
     {
         //some check for if player has enough currency to open chest here
-        //myChest = LootChestGeneration(myChest);
-        displayOutput(myChest);
+        LootChestGeneration();
+        displayOutput();
     }
-    
-    public class ShopItems 
-    {
-        public string rarity;
-        public string name;
-        public string type;
-        public int price;
-        public string description;
-        public ShopItems(string name, string rarity, string type, string description, int price = 0)
-        {
-            this.name = name;
-            this.rarity = rarity;
-            this.type = type;
-            this.description = description;
-            this.price = price;
-        }
-    }
-    public List<ShopItems> drops = new List<ShopItems>();
+    public List<Jokers> drops = new List<Jokers>();
     Dictionary <string, int> lootRarities = new  Dictionary<string, int>();
-    Dictionary <string, List<ShopItems>> lootTable = new Dictionary<string, List<ShopItems>>();
+    Dictionary <string, List<Jokers>> lootTable = new Dictionary<string, List<Jokers>>();
     
-   
-
-    /* Returns a new chest instance with attached loot table paramaters. 
-        If loot chest has not yet been generated, read from loot table csv and attach corresponding rarity weights.
-       
-
-        
-    */
-    public Shop LootChestGeneration(Shop chest)
-    {
-        chest.lootCount = lootCount;
-        
-        //TO DO
-        //chest.lootTable = some function that reads from already generated Dictionary of Jokers
-
-        // chest.lootRarities = some function that reads from already generateed Dictionary of rarities and weights
-        // chest.drops = chest.GenerateLoot(chest.lootRarities, chest.lootCount);
-        return chest;
+    
+    public void LootChestGeneration()
+    {   
+        lootTable = jokerSpawner.GetLootTable();
+        lootRarities = jokerSpawner.GetLootRarities();
+        drops = GenerateLoot(lootRarities, lootCount);
     }
 // Takes in a LootChest and displays it's generated loot to the Unity UI 
-    public void displayOutput(Shop currentChest)
-    {
-        
+    public void displayOutput()
+    {   
         int dropIndex = 0;
         Debug.Log("Size of shop Item_TMPs:" + Shop_Item_TMPs.Length);
         foreach(GameObject shopSlot in Shop_Item_TMPs)
         {
             TMP_Text[] foundTMPs = shopSlot.GetComponentsInChildren<TMP_Text>(true);
-            Debug.Log(shopSlot);
             foreach(TMP_Text currentTMP in foundTMPs)
             {
+                Debug.Log("Found TMP: " + currentTMP.name);
                 if(currentTMP.name == "Price Tag TMP")
                 {
-                //     shopSlot.transform.Find("Price Tag TMP").GetComponent<TMP_Text>().text = ""+ currentChest.drops[dropIndex].price; // set price tmp
+                    currentTMP.GetComponent<TMP_Text>().text = ""+ drops[dropIndex].price; // set price tmp
                 }
                 else if(currentTMP.name == "Title TMP")
                 {
-                //     shopSlot.transform.Find("Title TMP").GetComponent<TMP_Text>().text = ""+ currentChest.drops[dropIndex].name; // set Item Name tmp
+                    currentTMP.transform.GetComponent<TMP_Text>().text  = ""+ drops[dropIndex].name; // set Item Name tmp
                 }
                 else if(currentTMP.name == "Description TMP")
                 {
-                //     shopSlot.transform.Find("Description TMP").GetComponent<TMP_Text>().text = ""+ currentChest.drops[dropIndex].description; // sets description of item to tmp
+                    currentTMP.transform.GetComponent<TMP_Text>().text  = ""+ drops[dropIndex].description; // sets description of item to tmp
                 }
             }
             // delete random color later
@@ -115,10 +84,10 @@ public class Shop : MonoBehaviour
             5: When a rarity is selected add it to the output dictionary. If already existing increment it's counter. 
             6: With the selected rarities, randomly select items from the loot table based on the number of items per rarity. 
     */
-    public List<ShopItems> GenerateLoot(Dictionary<string, int> myRarity, int lootCount = 1 ) //
+    public List<Jokers> GenerateLoot(Dictionary<string, int> myRarity, int lootCount = 1 ) //
     {
         Dictionary <string, int> selectedRarity = new Dictionary<string, int>();
-        List<ShopItems> selectedItems = new List<ShopItems>();
+        List<Jokers> selectedItems = new List<Jokers>();
         System.Random rand = new System.Random();
         int weightedSum = 0;
 
@@ -162,7 +131,7 @@ public class Shop : MonoBehaviour
             for(int i = 0; i < r.Value; i++)
             {
                 var itemList = lootTable[r.Key]; 
-                ShopItems selectedItem = itemList[rand.Next(0,itemList.Count)];
+                Jokers selectedItem = itemList[rand.Next(0,itemList.Count)];
                 selectedItems.Add(selectedItem);
             }
         }   

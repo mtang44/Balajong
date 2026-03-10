@@ -43,17 +43,4 @@ public class MapConfig : ScriptableObject
     [Min(0.01f)] public float lineWidth = 0.08f;
     public Color inactiveConnectionColor = new Color(0.35f, 0.35f, 0.35f, 0.9f);
     public Color activeConnectionColor = new Color(0.9f, 0.9f, 0.9f, 1f);
-
-    private void OnValidate()
-    {
-        if (maxNodesPerMiddleLayer < minNodesPerMiddleLayer)
-        {
-            maxNodesPerMiddleLayer = minNodesPerMiddleLayer;
-        }
-
-        if (layerCount < 3)
-        {
-            layerCount = 3;
-        }
-    }
 }

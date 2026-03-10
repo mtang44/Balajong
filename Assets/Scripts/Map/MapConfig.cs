@@ -12,6 +12,7 @@ public struct NodeTypeWeight
 [CreateAssetMenu(fileName = "MapConfig", menuName = "Balajong/Map Config")]
 public class MapConfig : ScriptableObject
 {
+    // Map generation settings
     [Header("Generation")]
     [Min(3)] public int layerCount = 8;
     [Min(1)] public int minNodesPerMiddleLayer = 2;

@@ -4,6 +4,7 @@ public class MapRunState : MonoBehaviour
 {
     private static MapRunState instance;
 
+    // Singleton instance of the MapRunState
     public static MapRunState Instance
     {
         get
@@ -34,14 +35,17 @@ public class MapRunState : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
+    // Saves the current map data
     public void SaveMap(NodeMapData mapData) => CurrentMap = mapData;
 
+    // Marks the current node as cleared
     public bool MarkCurrentNodeCleared()
     {
         if (!HasMap || CurrentMap.currentNodeId < 0) return false;
         return MarkNodeCleared(CurrentMap.currentNodeId);
     }
 
+    // Marks the specified node as cleared
     public bool MarkNodeCleared(int nodeId)
     {
         if (!HasMap) return false;

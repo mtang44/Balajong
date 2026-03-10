@@ -10,6 +10,7 @@ public class MapNodeView : MonoBehaviour
 
     public int NodeId => nodeId;
 
+    // Initializes the node view with the given data and settings
     public void Setup(NodeMap mapOwner, MapNodeData nodeData, Sprite defaultSprite, int sortingOrder)
     {
         owner = mapOwner;
@@ -34,6 +35,7 @@ public class MapNodeView : MonoBehaviour
         SetState(nodeData.state);
     }
 
+    // Sets the visual state of the node based on its NodeState
     public void SetState(NodeState state)
     {
         Collider2D nodeCollider = GetComponent<Collider2D>();
@@ -53,6 +55,7 @@ public class MapNodeView : MonoBehaviour
         };
     }
 
+    // Called when the node is clicked by the player
     private void OnMouseUpAsButton()
     {
         if (owner != null)
@@ -61,6 +64,7 @@ public class MapNodeView : MonoBehaviour
         }
     }
 
+    // Returns the color associated with the given node type
     private static Color GetTypeColor(MapNodeType type)
     {
         switch (type)

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+// Node types for the map
 public enum MapNodeType
 {
     Start,
@@ -9,6 +10,8 @@ public enum MapNodeType
     Elite,
     Rest,
     Boss
+
+    // Add any additional node types here, but I'm not sure if we want anymore than these.
 }
 
 public enum NodeState
@@ -18,6 +21,7 @@ public enum NodeState
     Cleared
 }
 
+// Data structure for a single node in the map
 [Serializable]
 public class MapNodeData
 {
@@ -29,6 +33,7 @@ public class MapNodeData
     public List<int> nextNodeIds = new List<int>();
 }
 
+// Data structure for the entire map
 [Serializable]
 public class NodeMapData
 {
@@ -36,6 +41,7 @@ public class NodeMapData
     public int currentNodeId = -1;
     public List<MapNodeData> nodes = new List<MapNodeData>();
 
+    // Find a node by its ID
     public MapNodeData FindNodeById(int nodeId)
     {
         for (int i = 0; i < nodes.Count; i++)

@@ -46,6 +46,7 @@ public class NodeMap : MonoBehaviour
     private readonly Dictionary<int, MapNodeView> viewsById = new Dictionary<int, MapNodeView>();
     private readonly List<ConnectionVisual> connectionVisuals = new List<ConnectionVisual>();
 
+    // Represents a visual connection between two nodes
     private struct ConnectionVisual
     {
         public int fromId;
@@ -70,6 +71,7 @@ public class NodeMap : MonoBehaviour
         {
             mapData = MapRunState.Instance.CurrentMap;
             BuildLookup();
+            UpdateNodeStates();
             RebuildVisuals();
             return;
         }
@@ -105,6 +107,7 @@ public class NodeMap : MonoBehaviour
         OnNodeClicked(clickedNode.NodeId);
     }
 
+    // Generates a new map using the current configuration and a random seed
     [ContextMenu("Generate New Map")]
     public void GenerateNewMap()
     {
@@ -112,6 +115,7 @@ public class NodeMap : MonoBehaviour
         GenerateNewMap(seed);
     }
 
+    // Generates a new map using a specific seed instead
     public void GenerateNewMap(int seed)
     {
         if (config == null)
@@ -140,6 +144,7 @@ public class NodeMap : MonoBehaviour
         SaveRuntimeState();
     }
 
+    // Completes the current node in the map
     [ContextMenu("Complete Current Node")]
     public void CompleteCurrentNode()
     {
@@ -151,6 +156,7 @@ public class NodeMap : MonoBehaviour
         CompleteNode(mapData.currentNodeId);
     }
 
+    // Called when a node is clicked by the player
     public void OnNodeClicked(int nodeId)
     {
         if (!nodesById.TryGetValue(nodeId, out MapNodeData node))
@@ -188,11 +194,12 @@ public class NodeMap : MonoBehaviour
         }
         else
         {
-            UpdateNodeStatesBasedOnCurrentPosition();
+            UpdateNodeStates();
             RefreshVisualState();
         }
     }
 
+    // Completes the specified node in the map
     public void CompleteNode(int nodeId)
     {
         if (!nodesById.TryGetValue(nodeId, out MapNodeData node))
@@ -217,44 +224,43 @@ public class NodeMap : MonoBehaviour
             }
         }
 
-        UpdateNodeStatesBasedOnCurrentPosition();
+        UpdateNodeStates();
         SaveRuntimeState();
         RefreshVisualState();
     }
 
-    private void UpdateNodeStatesBasedOnCurrentPosition()
+    // Updates the states of all nodes based on the current node
+    private void UpdateNodeStates()
     {
         if (!nodesById.TryGetValue(mapData.currentNodeId, out MapNodeData currentNode))
         {
             return;
         }
 
-        // For nodes in previous layers and same layer:
-        // - Keep them Cleared if they were already Cleared (actually completed)
-        // - Otherwise keep them Locked (darkened, unreachable)
+        // Lock all nodes in the current layer and previous layers (except the current node itself)
+        // This ensures nodes in the same row as the player are dimmed/unreachable
         for (int i = 0; i < mapData.nodes.Count; i++)
         {
             MapNodeData node = mapData.nodes[i];
+            
+            // Skip the current node
+            if (node.id == currentNode.id) continue;
 
-            // Only affect nodes in current or previous layers
-            if (node.layer <= currentNode.layer && node.id != currentNode.id)
+            // For nodes in current or previous layers
+            if (node.layer <= currentNode.layer)
             {
-                // If the node isn't already Cleared, make sure it stays Locked
-                // This ensures only completed nodes are faded, while unreached nodes are darkened
-                if (node.state == NodeState.Reachable)
+                // Lock them unless they've been completed (Cleared)
+                if (node.state != NodeState.Cleared)
                 {
                     node.state = NodeState.Locked;
                 }
-                // If already Cleared, leave it as Cleared (faded)
             }
         }
     }
 
-    public NodeMapData GetMapData()
-    {
-        return mapData;
-    }
+    public NodeMapData GetMapData() => mapData;
 
+    // Creates the layers of nodes for the map
     private List<List<MapNodeData>> CreateLayers()
     {
         List<List<MapNodeData>> layers = new List<List<MapNodeData>>(config.layerCount);
@@ -286,6 +292,7 @@ public class NodeMap : MonoBehaviour
         return layers;
     }
 
+    // Determines the number of nodes for a given layer
     private int GetNodeCountForLayer(int layerIndex)
     {
         if (layerIndex == 0 || layerIndex == config.layerCount - 1)
@@ -296,6 +303,7 @@ public class NodeMap : MonoBehaviour
         return random.Next(config.minNodesPerMiddleLayer, config.maxNodesPerMiddleLayer + 1);
     }
 
+    // Builds the guaranteed paths through the map
     private void BuildGuaranteedPaths(List<List<MapNodeData>> layers)
     {
         int pathCount = Mathf.Max(1, config.guaranteedPathCount);
@@ -313,6 +321,7 @@ public class NodeMap : MonoBehaviour
         }
     }
 
+    // Ensures that all nodes have at least one incoming and one outgoing connection
     private void EnsureNodeConnectivity(List<List<MapNodeData>> layers)
     {
         for (int layerIndex = 1; layerIndex < layers.Count - 1; layerIndex++)
@@ -340,6 +349,7 @@ public class NodeMap : MonoBehaviour
         }
     }
 
+    // Checks to make sure that this node has an incoming connection
     private bool HasIncomingConnection(List<MapNodeData> previousLayer, int targetNodeId)
     {
         for (int i = 0; i < previousLayer.Count; i++)
@@ -391,27 +401,13 @@ public class NodeMap : MonoBehaviour
         }
     }
 
+    // Connects two nodes to one another
     private void ConnectNodes(MapNodeData from, MapNodeData to, bool ignoreOutgoingLimit)
     {
-        if (from == null || to == null)
-        {
+        if (from == null || to == null || to.layer != from.layer + 1 || 
+            from.nextNodeIds.Contains(to.id) || 
+            (!ignoreOutgoingLimit && from.nextNodeIds.Count >= config.maxOutgoingConnections))
             return;
-        }
-
-        if (to.layer != from.layer + 1)
-        {
-            return;
-        }
-
-        if (from.nextNodeIds.Contains(to.id))
-        {
-            return;
-        }
-
-        if (!ignoreOutgoingLimit && from.nextNodeIds.Count >= config.maxOutgoingConnections)
-        {
-            return;
-        }
 
         from.nextNodeIds.Add(to.id);
     }
@@ -426,35 +422,25 @@ public class NodeMap : MonoBehaviour
         {
             if (pass % 2 == 0)
             {
-                // Forward pass: order based on predecessors
-                for (int layerIndex = 1; layerIndex < layers.Count; layerIndex++)
-                {
-                    OrderLayerByPredecessors(layers, layerIndex);
-                }
+                for (int i = 1; i < layers.Count; i++)
+                    OrderLayerByNeighbors(layers, i, true);
             }
             else
             {
-                // Backward pass: order based on successors
-                for (int layerIndex = layers.Count - 2; layerIndex >= 0; layerIndex--)
-                {
-                    OrderLayerBySuccessors(layers, layerIndex);
-                }
+                for (int i = layers.Count - 2; i >= 0; i--)
+                    OrderLayerByNeighbors(layers, i, false);
             }
         }
 
         // Final position normalization
-        for (int layerIndex = 0; layerIndex < layers.Count; layerIndex++)
-        {
-            UpdateLayerPositions(layers[layerIndex]);
-        }
+        for (int i = 0; i < layers.Count; i++)
+            UpdateLayerPositions(layers[i]);
     }
 
-    private void OrderLayerByPredecessors(List<List<MapNodeData>> layers, int layerIndex)
+    private void OrderLayerByNeighbors(List<List<MapNodeData>> layers, int layerIndex, bool byPredecessors)
     {
-        if (layerIndex <= 0) return;
-
         List<MapNodeData> currentLayer = layers[layerIndex];
-        List<MapNodeData> prevLayer = layers[layerIndex - 1];
+        List<MapNodeData> neighborLayer = byPredecessors ? layers[layerIndex - 1] : layers[layerIndex + 1];
         List<(MapNodeData node, float barycenter)> nodePositions = new List<(MapNodeData, float)>();
 
         foreach (MapNodeData node in currentLayer)
@@ -462,71 +448,41 @@ public class NodeMap : MonoBehaviour
             float sum = 0f;
             int count = 0;
 
-            for (int i = 0; i < prevLayer.Count; i++)
+            if (byPredecessors)
             {
-                if (prevLayer[i].nextNodeIds.Contains(node.id))
+                for (int i = 0; i < neighborLayer.Count; i++)
                 {
-                    sum += i;
-                    count++;
+                    if (neighborLayer[i].nextNodeIds.Contains(node.id))
+                    {
+                        sum += i;
+                        count++;
+                    }
+                }
+            }
+            else if (node.nextNodeIds.Count > 0)
+            {
+                for (int i = 0; i < neighborLayer.Count; i++)
+                {
+                    if (node.nextNodeIds.Contains(neighborLayer[i].id))
+                    {
+                        sum += i;
+                        count++;
+                    }
                 }
             }
 
-            float barycenter = count > 0 ? sum / count : currentLayer.IndexOf(node);
+            float barycenter = count > 0 ? sum / count : (byPredecessors ? currentLayer.IndexOf(node) : node.position.y);
             nodePositions.Add((node, barycenter));
         }
 
         nodePositions.Sort((a, b) => a.barycenter.CompareTo(b.barycenter));
-
         for (int i = 0; i < nodePositions.Count; i++)
-        {
             currentLayer[i] = nodePositions[i].node;
-        }
 
         UpdateLayerPositions(currentLayer);
     }
 
-    private void OrderLayerBySuccessors(List<List<MapNodeData>> layers, int layerIndex)
-    {
-        if (layerIndex >= layers.Count - 1) return;
-
-        List<MapNodeData> currentLayer = layers[layerIndex];
-        List<MapNodeData> nextLayer = layers[layerIndex + 1];
-        List<(MapNodeData node, float barycenter)> nodePositions = new List<(MapNodeData, float)>();
-
-        foreach (MapNodeData node in currentLayer)
-        {
-            if (node.nextNodeIds.Count == 0)
-            {
-                nodePositions.Add((node, node.position.y));
-                continue;
-            }
-
-            float sum = 0f;
-            int count = 0;
-
-            for (int i = 0; i < nextLayer.Count; i++)
-            {
-                if (node.nextNodeIds.Contains(nextLayer[i].id))
-                {
-                    sum += i;
-                    count++;
-                }
-            }
-
-            float barycenter = count > 0 ? sum / count : node.position.y;
-            nodePositions.Add((node, barycenter));
-        }
-
-        nodePositions.Sort((a, b) => a.barycenter.CompareTo(b.barycenter));
-
-        for (int i = 0; i < nodePositions.Count; i++)
-        {
-            currentLayer[i] = nodePositions[i].node;
-        }
-
-        UpdateLayerPositions(currentLayer);
-    }
-
+    // Changes the position of the layers depending on configuration values
     private void UpdateLayerPositions(List<MapNodeData> layer)
     {
         if (layer.Count == 0) return;
@@ -540,6 +496,7 @@ public class NodeMap : MonoBehaviour
         }
     }
 
+    // Assigns node types based on configuration weights
     private void AssignNodeTypes(List<List<MapNodeData>> layers)
     {
         for (int layerIndex = 0; layerIndex < layers.Count; layerIndex++)
@@ -629,10 +586,7 @@ public class NodeMap : MonoBehaviour
         return Mathf.Max(0, value);
     }
 
-    private bool IsEncounterType(MapNodeType type)
-    {
-        return type != MapNodeType.Start && type != MapNodeType.Boss;
-    }
+    private bool IsEncounterType(MapNodeType type) => type != MapNodeType.Start && type != MapNodeType.Boss;
 
     private void InitializeNodeStates(List<List<MapNodeData>> layers)
     {
@@ -708,21 +662,15 @@ public class NodeMap : MonoBehaviour
 
     private void EnsureMapRoot()
     {
-        if (mapRoot != null)
-        {
-            return;
-        }
+        if (mapRoot != null) return;
 
-        Transform existing = transform.Find("GeneratedNodeMap");
-        if (existing != null)
+        mapRoot = transform.Find("GeneratedNodeMap");
+        if (mapRoot == null)
         {
-            mapRoot = existing;
-            return;
+            GameObject root = new GameObject("GeneratedNodeMap");
+            root.transform.SetParent(transform, false);
+            mapRoot = root.transform;
         }
-
-        GameObject root = new GameObject("GeneratedNodeMap");
-        root.transform.SetParent(transform, false);
-        mapRoot = root.transform;
     }
 
     private void ClearMapRoot()
@@ -801,26 +749,12 @@ public class NodeMap : MonoBehaviour
 
     private Material ResolveLineMaterial()
     {
-        if (lineMaterial != null)
-        {
-            return lineMaterial;
-        }
+        if (lineMaterial != null) return lineMaterial;
+        if (runtimeLineMaterial != null) return runtimeLineMaterial;
 
-        if (runtimeLineMaterial != null)
-        {
-            return runtimeLineMaterial;
-        }
-
-        Shader shader = Shader.Find("Sprites/Default");
-        if (shader == null)
-        {
-            shader = Shader.Find("Universal Render Pipeline/Unlit");
-        }
-
-        if (shader == null)
-        {
-            shader = Shader.Find("Standard");
-        }
+        Shader shader = Shader.Find("Sprites/Default") ?? 
+                        Shader.Find("Universal Render Pipeline/Unlit") ?? 
+                        Shader.Find("Standard");
 
         runtimeLineMaterial = new Material(shader);
         return runtimeLineMaterial;
@@ -856,25 +790,9 @@ public class NodeMap : MonoBehaviour
         RefreshPlayerMarker();
     }
 
-    private Sprite ResolveNodeSprite()
-    {
-        if (defaultNodeSprite != null)
-        {
-            return defaultNodeSprite;
-        }
+    private Sprite ResolveNodeSprite() => defaultNodeSprite != null ? defaultNodeSprite : GetOrCreateCircleSprite();
 
-        return GetOrCreateCircleSprite();
-    }
-
-    private Sprite ResolvePlayerMarkerSprite()
-    {
-        if (playerMarkerSprite != null)
-        {
-            return playerMarkerSprite;
-        }
-
-        return GetOrCreateCircleSprite();
-    }
+    private Sprite ResolvePlayerMarkerSprite() => playerMarkerSprite != null ? playerMarkerSprite : GetOrCreateCircleSprite();
 
     private Sprite GetOrCreateCircleSprite()
     {
@@ -917,15 +835,7 @@ public class NodeMap : MonoBehaviour
 
     private void EnsurePlayerMarker()
     {
-        if (mapRoot == null)
-        {
-            return;
-        }
-
-        if (playerMarkerObject != null && playerMarkerRenderer != null)
-        {
-            return;
-        }
+        if (mapRoot == null || (playerMarkerObject != null && playerMarkerRenderer != null)) return;
 
         playerMarkerObject = new GameObject("PlayerMarker");
         playerMarkerObject.transform.SetParent(mapRoot, false);
@@ -970,15 +880,7 @@ public class NodeMap : MonoBehaviour
         MapRunState.Instance.SaveMap(mapData);
     }
 
-    private Camera ResolveInputCamera()
-    {
-        if (inputCamera != null)
-        {
-            return inputCamera;
-        }
-
-        return Camera.main;
-    }
+    private Camera ResolveInputCamera() => inputCamera != null ? inputCamera : Camera.main;
 
     private MapNodeView RaycastNodeView(Camera cameraToUse, Vector2 screenPosition)
     {
@@ -1013,22 +915,15 @@ public class NodeMap : MonoBehaviour
 
     private bool IsPointerOverUi()
     {
-        if (EventSystem.current == null)
-        {
-            return false;
-        }
+        if (EventSystem.current == null) return false;
 
 #if ENABLE_INPUT_SYSTEM
         if (Touchscreen.current != null && Touchscreen.current.primaryTouch.press.isPressed)
         {
             int touchId = Touchscreen.current.primaryTouch.touchId.ReadValue();
-            if (EventSystem.current.IsPointerOverGameObject(touchId))
-            {
-                return true;
-            }
+            if (EventSystem.current.IsPointerOverGameObject(touchId)) return true;
         }
 #endif
-
         return EventSystem.current.IsPointerOverGameObject();
     }
 
@@ -1037,31 +932,31 @@ public class NodeMap : MonoBehaviour
         screenPosition = default;
 
 #if ENABLE_INPUT_SYSTEM
-        if (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame)
-        {
-            screenPosition = Mouse.current.position.ReadValue();
-            return true;
-        }
+    if (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame)
+    {
+        screenPosition = Mouse.current.position.ReadValue();
+        return true;
+    }
 
-        if (Touchscreen.current != null && Touchscreen.current.primaryTouch.press.wasPressedThisFrame)
-        {
-            screenPosition = Touchscreen.current.primaryTouch.position.ReadValue();
-            return true;
-        }
+    if (Touchscreen.current != null && Touchscreen.current.primaryTouch.press.wasPressedThisFrame)
+    {
+        screenPosition = Touchscreen.current.primaryTouch.position.ReadValue();
+        return true;
+    }
 #endif
 
 #if ENABLE_LEGACY_INPUT_MANAGER
-        if (Input.GetMouseButtonDown(0))
-        {
-            screenPosition = Input.mousePosition;
-            return true;
-        }
+    if (Input.GetMouseButtonDown(0))
+    {
+        screenPosition = Input.mousePosition;
+        return true;
+    }
 
-        if (Input.touchCount > 0 && Input.GetTouch(0).phase == UnityEngine.TouchPhase.Began)
-        {
-            screenPosition = Input.GetTouch(0).position;
-            return true;
-        }
+    if (Input.touchCount > 0 && Input.GetTouch(0).phase == UnityEngine.TouchPhase.Began)
+    {
+        screenPosition = Input.GetTouch(0).position;
+        return true;
+    }
 #endif
 
         return false;

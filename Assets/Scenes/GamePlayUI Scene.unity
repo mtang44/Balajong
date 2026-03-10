@@ -3428,7 +3428,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &170629670
 RectTransform:
   m_ObjectHideFlags: 0
@@ -11454,7 +11454,7 @@ RectTransform:
   m_Father: {fileID: 606905230}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 12.571999, y: 0}
   m_SizeDelta: {x: 3.255, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -16838,7 +16838,7 @@ MonoBehaviour:
   LootTableFilePath: Assets/Art Assets/LootTable - JokerTable.csv
   Rarities:
   - Common
-  Rarity_Weights: 64000000
+  Rarity_Weights: 37000000
 --- !u!4 &975557520
 Transform:
   m_ObjectHideFlags: 0
@@ -22618,18 +22618,18 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1384852883}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 10}
-  m_LocalScale: {x: 0.00185, y: 0.00185, z: 0.00185}
+  m_LocalPosition: {x: 0, y: 0, z: -748.40454}
+  m_LocalScale: {x: 0.017306855, y: 0.017306855, z: 0.017306855}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 498654868}
   - {fileID: 749291884}
   - {fileID: 1015375547}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1538101091}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: -1.3093266, y: 1.2932712}
+  m_AnchoredPosition: {x: -7706.49, y: -4787.0454}
   m_SizeDelta: {x: 460.1, y: 721.2}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1385019642
@@ -24415,6 +24415,7 @@ RectTransform:
   - {fileID: 54280069}
   - {fileID: 533268472}
   - {fileID: 1225673216}
+  - {fileID: 1384852886}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -29986,7 +29987,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1928471515
 RectTransform:
   m_ObjectHideFlags: 0
@@ -33319,7 +33320,6 @@ SceneRoots:
   - {fileID: 2103380448}
   - {fileID: 979334976}
   - {fileID: 1538101091}
-  - {fileID: 1384852886}
   - {fileID: 217418086}
   - {fileID: 1998124780}
   - {fileID: 975557520}

@@ -13,6 +13,10 @@ public class Shop : MonoBehaviour
     public GameObject[] Shop_Item_TMPs; // array of TMP objects that will display to shop items. 
     public JokerSpawner jokerSpawner = new JokerSpawner();
     public int lootCount = 5;
+
+    public List<Jokers> drops = new List<Jokers>();
+    Dictionary <string, int> lootRarities = new  Dictionary<string, int>();
+    Dictionary <string, List<Jokers>> lootTable = new Dictionary<string, List<Jokers>>();
     void Start()
     {
         RerollShop();
@@ -26,9 +30,7 @@ public class Shop : MonoBehaviour
         LootChestGeneration();
         displayOutput();
     }
-    public List<Jokers> drops = new List<Jokers>();
-    Dictionary <string, int> lootRarities = new  Dictionary<string, int>();
-    Dictionary <string, List<Jokers>> lootTable = new Dictionary<string, List<Jokers>>();
+   
     
     
     public void LootChestGeneration()
@@ -47,7 +49,6 @@ public class Shop : MonoBehaviour
             TMP_Text[] foundTMPs = shopSlot.GetComponentsInChildren<TMP_Text>(true);
             foreach(TMP_Text currentTMP in foundTMPs)
             {
-                Debug.Log("Found TMP: " + currentTMP.name);
                 if(currentTMP.name == "Price Tag TMP")
                 {
                     currentTMP.transform.GetComponent<TMP_Text>().text = ""+ drops[dropIndex].price; // set price tmp

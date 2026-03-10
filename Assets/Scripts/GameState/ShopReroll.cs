@@ -12,19 +12,14 @@ public class Shop : MonoBehaviour
     [SerializeField]
     public GameObject[] Shop_Item_TMPs; // array of TMP objects that will display to shop items. 
     public JokerSpawner jokerSpawner = new JokerSpawner();
-    
-    // [SerializeField]
-    // public string[] Rarities = new string[] {"Common","Uncommon","Rare","Epic","Legendary"};
-    // [SerializeField]
-    // public int[] Rarity_Weights = new int[] {55,30,15,6,1};   
     public int lootCount = 5;
     void Start()
     {
+        RerollShop();
     }
     void Update()
     {
     }
-    // call this function to open chest 
     public void RerollShop()
     {
         //some check for if player has enough currency to open chest here
@@ -55,7 +50,7 @@ public class Shop : MonoBehaviour
                 Debug.Log("Found TMP: " + currentTMP.name);
                 if(currentTMP.name == "Price Tag TMP")
                 {
-                    currentTMP.GetComponent<TMP_Text>().text = ""+ drops[dropIndex].price; // set price tmp
+                    currentTMP.transform.GetComponent<TMP_Text>().text = ""+ drops[dropIndex].price; // set price tmp
                 }
                 else if(currentTMP.name == "Title TMP")
                 {

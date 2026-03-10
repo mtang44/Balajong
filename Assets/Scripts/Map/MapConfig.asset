@@ -12,30 +12,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f8ce4e63b6db04e45861cd2f1fc69edc, type: 3}
   m_Name: MapConfig
   m_EditorClassIdentifier: Assembly-CSharp::MapConfig
-  layerCount: 8
+  layerCount: 7
   minNodesPerMiddleLayer: 2
   maxNodesPerMiddleLayer: 4
   guaranteedPathCount: 3
   extraConnectionChance: 0.25
   maxOutgoingConnections: 3
-  layerSpacing: 3
+  layerSpacing: 2.6
   nodeSpacing: 2
   nodeJitter: 0.2
   nodeTypeWeights:
   - type: 1
-    weight: 55
+    weight: 70
   - type: 2
-    weight: 12
+    weight: 17
   - type: 3
-    weight: 10
-  - type: 4
-    weight: 9
-  - type: 5
-    weight: 9
-  - type: 6
-    weight: 5
-  autoLoadEncounterScene: 0
-  completeNodeImmediatelyInMapScene: 1
+    weight: 13
+  autoLoadEncounterScene: 1
+  completeNodeImmediatelyInMapScene: 0
   encounterSceneName: RackingScene
   nodeScale: 0.8
   lineWidth: 0.08

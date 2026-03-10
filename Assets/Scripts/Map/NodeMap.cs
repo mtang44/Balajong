@@ -144,6 +144,7 @@ public class NodeMap : MonoBehaviour
         BuildGuaranteedPaths(layers);
         EnsureNodeConnectivity(layers);
         AddExtraConnections(layers);
+        OptimizeNodePositionsForEdgeCrossing(layers);
         AssignNodeTypes(layers);
         InitializeNodeStates(layers);
 
@@ -251,7 +252,7 @@ public class NodeMap : MonoBehaviour
 
             for (int nodeIndex = 0; nodeIndex < nodeCount; nodeIndex++)
             {
-                float yPosition = (nodeIndex - centerOffset) * config.nodeSpacing + GetJitter();
+                float yPosition = (nodeIndex - centerOffset) * config.nodeSpacing;
                 MapNodeData node = new MapNodeData
                 {
                     id = nextNodeId++,
@@ -407,6 +408,241 @@ public class NodeMap : MonoBehaviour
         }
 
         from.nextNodeIds.Add(to.id);
+    }
+
+    // Avoid edge crossings by optimizing node positions using multi-pass ordering with crossing minimization
+    private void OptimizeNodePositionsForEdgeCrossing(List<List<MapNodeData>> layers)
+    {
+        if (layers.Count <= 1) return;
+
+        // Perform multiple aggressive passes with barycentric positioning and crossing minimization
+        const int maxPasses = 10;
+        const int crossingMinimizationIterations = 3;
+        
+        for (int pass = 0; pass < maxPasses; pass++)
+        {
+            bool isForwardPass = (pass % 2) == 0;
+            
+            if (isForwardPass)
+            {
+                // Left-to-right pass with barycentric positioning
+                for (int layerIndex = 1; layerIndex < layers.Count; layerIndex++)
+                {
+                    OrderLayerByBarycenters(layers, layerIndex);
+                    MinimizeCrossingsInLayer(layers, layerIndex, crossingMinimizationIterations);
+                }
+            }
+            else
+            {
+                // Right-to-left pass with barycentric positioning
+                for (int layerIndex = layers.Count - 2; layerIndex >= 0; layerIndex--)
+                {
+                    OrderLayerByBarycenters(layers, layerIndex);
+                    MinimizeCrossingsInLayer(layers, layerIndex, crossingMinimizationIterations);
+                }
+            }
+        }
+        
+        // Final normalization with jitter applied for visual interest
+        NormalizeNodePositionsWithJitter(layers);
+    }
+
+    private void OrderLayerByBarycenters(List<List<MapNodeData>> layers, int layerIndex)
+    {
+        List<MapNodeData> currentLayer = layers[layerIndex];
+        List<(MapNodeData node, float barycenter)> nodeBarycenters = new List<(MapNodeData, float)>(currentLayer.Count);
+
+        foreach (MapNodeData node in currentLayer)
+        {
+            float barycenterY = GetNodeBarycenter(layers, node);
+            nodeBarycenters.Add((node, barycenterY));
+        }
+
+        // Sort by barycenter position
+        nodeBarycenters.Sort((a, b) => a.barycenter.CompareTo(b.barycenter));
+        ReassignLayerPositions(currentLayer, nodeBarycenters);
+    }
+
+    private float GetNodeBarycenter(List<List<MapNodeData>> layers, MapNodeData node)
+    {
+        List<float> connectedYPositions = new List<float>();
+
+        // Collect Y positions of all connected neighbors (both predecessors and successors)
+        for (int neighborLayerIdx = 0; neighborLayerIdx < layers.Count; neighborLayerIdx++)
+        {
+            if (neighborLayerIdx == node.layer) continue;
+
+            foreach (MapNodeData neighborNode in layers[neighborLayerIdx])
+            {
+                bool isConnected = false;
+                
+                if (neighborLayerIdx < node.layer && neighborNode.nextNodeIds.Contains(node.id))
+                {
+                    isConnected = true;
+                }
+                else if (neighborLayerIdx > node.layer && node.nextNodeIds.Contains(neighborNode.id))
+                {
+                    isConnected = true;
+                }
+
+                if (isConnected)
+                {
+                    connectedYPositions.Add(neighborNode.position.y);
+                }
+            }
+        }
+
+        // Return average of all connected neighbors' Y positions
+        if (connectedYPositions.Count > 0)
+        {
+            float sum = 0f;
+            foreach (float y in connectedYPositions)
+            {
+                sum += y;
+            }
+            return sum / connectedYPositions.Count;
+        }
+
+        return 0f;
+    }
+
+    private void MinimizeCrossingsInLayer(List<List<MapNodeData>> layers, int layerIndex, int iterations)
+    {
+        List<MapNodeData> layer = layers[layerIndex];
+        
+        for (int iter = 0; iter < iterations; iter++)
+        {
+            // Try adjacent swaps and accept if they reduce crossings
+            for (int i = 0; i < layer.Count - 1; i++)
+            {
+                int crossingsBefore = CountLayerCrossings(layers, layerIndex);
+                
+                // Try swapping adjacent nodes
+                MapNodeData temp = layer[i];
+                layer[i] = layer[i + 1];
+                layer[i + 1] = temp;
+                
+                int crossingsAfter = CountLayerCrossings(layers, layerIndex);
+                
+                // If crossings increased, swap back
+                if (crossingsAfter > crossingsBefore)
+                {
+                    temp = layer[i];
+                    layer[i] = layer[i + 1];
+                    layer[i + 1] = temp;
+                }
+            }
+        }
+
+        // Reassign Y positions based on final ordering
+        float centerOffset = (layer.Count - 1) * 0.5f;
+        for (int i = 0; i < layer.Count; i++)
+        {
+            MapNodeData node = layer[i];
+            float newYPosition = (i - centerOffset) * config.nodeSpacing;
+            node.position = new Vector2(node.position.x, newYPosition);
+        }
+    }
+
+    private int CountLayerCrossings(List<List<MapNodeData>> layers, int layerIndex)
+    {
+        List<MapNodeData> currentLayer = layers[layerIndex];
+        int crossingCount = 0;
+
+        // Count edge crossings involving this layer
+        if (layerIndex > 0)
+        {
+            List<MapNodeData> prevLayer = layers[layerIndex - 1];
+            
+            // Check all pairs of edges from previous layer to current layer
+            for (int i = 0; i < prevLayer.Count; i++)
+            {
+                for (int j = i + 1; j < prevLayer.Count; j++)
+                {
+                    MapNodeData node1 = prevLayer[i];
+                    MapNodeData node2 = prevLayer[j];
+                    
+                    // Get indices in current layer
+                    List<int> node1Targets = new List<int>();
+                    List<int> node2Targets = new List<int>();
+                    
+                    foreach (int targetId in node1.nextNodeIds)
+                    {
+                        for (int k = 0; k < currentLayer.Count; k++)
+                        {
+                            if (currentLayer[k].id == targetId)
+                            {
+                                node1Targets.Add(k);
+                                break;
+                            }
+                        }
+                    }
+                    
+                    foreach (int targetId in node2.nextNodeIds)
+                    {
+                        for (int k = 0; k < currentLayer.Count; k++)
+                        {
+                            if (currentLayer[k].id == targetId)
+                            {
+                                node2Targets.Add(k);
+                                break;
+                            }
+                        }
+                    }
+                    
+                    // Check if edges cross (i < j but targets are reversed)
+                    foreach (int idx1 in node1Targets)
+                    {
+                        foreach (int idx2 in node2Targets)
+                        {
+                            if ((i < j && idx1 > idx2) || (i > j && idx1 < idx2))
+                            {
+                                crossingCount++;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return crossingCount;
+    }
+
+    private void NormalizeNodePositionsWithJitter(List<List<MapNodeData>> layers)
+    {
+        // Ensure each layer is properly centered and apply jitter
+        for (int layerIndex = 0; layerIndex < layers.Count; layerIndex++)
+        {
+            List<MapNodeData> layer = layers[layerIndex];
+            if (layer.Count == 0) continue;
+
+            // Sort by current Y position to maintain optimized ordering
+            List<MapNodeData> sortedByY = new List<MapNodeData>(layer);
+            sortedByY.Sort((a, b) => a.position.y.CompareTo(b.position.y));
+
+            // Reassign with proper spacing centered on layer, then apply jitter
+            float centerOffset = (layer.Count - 1) * 0.5f;
+            for (int i = 0; i < sortedByY.Count; i++)
+            {
+                MapNodeData node = sortedByY[i];
+                float baseYPosition = (i - centerOffset) * config.nodeSpacing;
+                float jitter = GetJitter();
+                float finalYPosition = baseYPosition + jitter;
+                node.position = new Vector2(node.position.x, finalYPosition);
+            }
+        }
+    }
+
+    private void ReassignLayerPositions(List<MapNodeData> layer, List<(MapNodeData node, float sortKey)> sortedNodes)
+    {
+        float centerOffset = (layer.Count - 1) * 0.5f;
+        
+        for (int i = 0; i < sortedNodes.Count; i++)
+        {
+            MapNodeData node = sortedNodes[i].node;
+            float newYPosition = (i - centerOffset) * config.nodeSpacing;
+            node.position = new Vector2(node.position.x, newYPosition);
+        }
     }
 
     private void AssignNodeTypes(List<List<MapNodeData>> layers)

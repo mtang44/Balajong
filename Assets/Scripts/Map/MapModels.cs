@@ -7,10 +7,7 @@ public enum MapNodeType
     Start,
     Battle,
     Elite,
-    Shop,
     Rest,
-    Event,
-    Treasure,
     Boss
 }
 

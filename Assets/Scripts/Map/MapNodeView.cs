@@ -102,14 +102,8 @@ public class MapNodeView : MonoBehaviour
                 return new Color(0.9f, 0.35f, 0.35f, 1f);
             case MapNodeType.Elite:
                 return new Color(1f, 0.58f, 0.15f, 1f);
-            case MapNodeType.Shop:
-                return new Color(0.95f, 0.8f, 0.25f, 1f);
             case MapNodeType.Rest:
                 return new Color(0.25f, 0.8f, 0.4f, 1f);
-            case MapNodeType.Event:
-                return new Color(0.6f, 0.5f, 0.95f, 1f);
-            case MapNodeType.Treasure:
-                return new Color(0.95f, 0.9f, 0.45f, 1f);
             case MapNodeType.Boss:
                 return new Color(0.65f, 0.2f, 0.2f, 1f);
             default:

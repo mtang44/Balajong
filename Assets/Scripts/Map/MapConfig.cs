@@ -28,12 +28,9 @@ public class MapConfig : ScriptableObject
     [Header("Encounter Type Weights")]
     public List<NodeTypeWeight> nodeTypeWeights = new List<NodeTypeWeight>
     {
-        new NodeTypeWeight { type = MapNodeType.Battle, weight = 55 },
-        new NodeTypeWeight { type = MapNodeType.Elite, weight = 12 },
-        new NodeTypeWeight { type = MapNodeType.Shop, weight = 10 },
-        new NodeTypeWeight { type = MapNodeType.Rest, weight = 9 },
-        new NodeTypeWeight { type = MapNodeType.Event, weight = 9 },
-        new NodeTypeWeight { type = MapNodeType.Treasure, weight = 5 }
+        new NodeTypeWeight { type = MapNodeType.Battle, weight = 70 },
+        new NodeTypeWeight { type = MapNodeType.Elite, weight = 17 },
+        new NodeTypeWeight { type = MapNodeType.Rest, weight = 13 },
     };
 
     [Header("Flow")]

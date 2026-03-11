@@ -5273,8 +5273,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c349ce8a25394e348a196edb9f4d8705, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MapEncounterResultHandler
-  mapSceneName: MapScene
-  mapSceneBuildIndex: -1
+  mapSceneName: ShopScene
+  mapSceneBuildIndex: 1
   winSceneName: Win Screen
 --- !u!1 &836629900
 GameObject:
@@ -5576,7 +5576,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 140, y: -0.18261719}
+  m_AnchoredPosition: {x: 139.99997, y: -0.18261719}
   m_SizeDelta: {x: -337.3352, y: -21.299927}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &873957380
@@ -7705,7 +7705,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 140, y: -0.18261719}
+  m_AnchoredPosition: {x: 139.99997, y: -0.18261719}
   m_SizeDelta: {x: -337.3352, y: -21.299927}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1169297457

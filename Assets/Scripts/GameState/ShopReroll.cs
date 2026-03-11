@@ -11,8 +11,8 @@ public class Shop : MonoBehaviour
 
     [SerializeField]
     public GameObject[] Shop_Item_TMPs; // array of TMP objects that will display to shop items. 
-    public JokerSpawner jokerSpawner = new JokerSpawner();
-    public int lootCount = 5;
+    public JokerSpawner jokerSpawner;
+    public int jokerCount = 2;
 
     public List<Jokers> drops = new List<Jokers>();
     Dictionary <string, int> lootRarities = new  Dictionary<string, int>();
@@ -37,15 +37,16 @@ public class Shop : MonoBehaviour
     {   
         lootTable = jokerSpawner.GetLootTable();
         lootRarities = jokerSpawner.GetLootRarities();
-        drops = GenerateLoot(lootRarities, lootCount);
+        drops = GenerateLoot(lootRarities, jokerCount);
     }
 // Takes in a LootChest and displays it's generated loot to the Unity UI 
     public void displayOutput()
     {   
         int dropIndex = 0;
         Debug.Log("Size of shop Item_TMPs:" + Shop_Item_TMPs.Length);
-        foreach(GameObject shopSlot in Shop_Item_TMPs)
+        for(int i = 0; i < 2; i++) 
         {
+            GameObject shopSlot = Shop_Item_TMPs[i];
             TMP_Text[] foundTMPs = shopSlot.GetComponentsInChildren<TMP_Text>(true);
             foreach(TMP_Text currentTMP in foundTMPs)
             {

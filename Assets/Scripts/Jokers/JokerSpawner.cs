@@ -83,11 +83,12 @@ public class JokerSpawner : MonoBehaviour
                 var values = line.Split(',');
                 string jokerRarity = values[0];
                 string jokerName = values[1];
-                string jokerEquationType = values[2];
-                string jokerDescription = values[3];
-                int jokerPrice = int.Parse(values[4]);
+                string jokerCode = values[2];
+                string jokerEquationType = values[3];
+                string jokerDescription = values[4];
+                int jokerPrice = int.Parse(values[5]);
 
-                Jokers newJoker = new Jokers (jokerName, jokerRarity, jokerEquationType, jokerDescription, jokerPrice);
+                Jokers newJoker = new Jokers (jokerName, jokerRarity, jokerCode, jokerEquationType, jokerDescription, jokerPrice);
 
                 // if item rarity key already exists, add newItem to the list, else create new rarity key with a new list of items. 
                 if(customLootTable.ContainsKey(jokerRarity))

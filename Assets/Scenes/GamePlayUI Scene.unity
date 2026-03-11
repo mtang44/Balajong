@@ -2540,7 +2540,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 140, y: -0.18261719}
+  m_AnchoredPosition: {x: 139.99997, y: -0.18261719}
   m_SizeDelta: {x: -337.3352, y: -21.299927}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &97197786
@@ -14462,7 +14462,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 140, y: -0.18261719}
+  m_AnchoredPosition: {x: 139.99997, y: -0.18261719}
   m_SizeDelta: {x: -337.3352, y: -21.299927}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &813774471
@@ -16835,10 +16835,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15f34bcb203be084b965def8240681ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::JokerSpawner
-  LootTableFilePath: Assets/Art Assets/LootTable - JokerTable.csv
+  LootTableFilePath: Assets/Art Assets/LootTable - JokerTable (3).csv
   Rarities:
   - Common
-  Rarity_Weights: 37000000
+  - Uncommon
+  - Rare
+  - Epic
+  Rarity_Weights: 370000001e0000000f00000005000000
 --- !u!4 &975557520
 Transform:
   m_ObjectHideFlags: 0
@@ -24649,13 +24652,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Shop
   Shop_Item_TMPs:
-  - {fileID: 2141479397}
   - {fileID: 296444833}
   - {fileID: 453824314}
   - {fileID: 2014731974}
   - {fileID: 1677016146}
+  - {fileID: 2141479397}
   jokerSpawner: {fileID: 975557519}
-  lootCount: 5
+  jokerCount: 2
 --- !u!1 &1566049213
 GameObject:
   m_ObjectHideFlags: 0
@@ -28263,6 +28266,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1799846441}
+  - component: {fileID: 1799846448}
   - component: {fileID: 1799846447}
   - component: {fileID: 1799846446}
   - component: {fileID: 1799846445}
@@ -28335,6 +28339,18 @@ MonoBehaviour:
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
             m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 1
+          m_CallState: 2
+        - m_Target: {fileID: 0}
+          m_TargetAssemblyTypeName: UnityEngine.UI.Outline, UnityEngine.UI
+          m_MethodName: 
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: 
             m_IntArgument: 0
             m_FloatArgument: 0
             m_StringArgument: 
@@ -28415,7 +28431,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 575288510}
+      - m_Target: {fileID: 1520600119}
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
         m_MethodName: SetActive
         m_Mode: 6
@@ -28425,16 +28441,16 @@ MonoBehaviour:
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
-          m_BoolArgument: 1
+          m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1520600119}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
+      - m_Target: {fileID: 1799846448}
+        m_TargetAssemblyTypeName: SceneChanger, Assembly-CSharp
+        m_MethodName: ChangeScene
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 3
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -28477,6 +28493,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1799846440}
   m_CullTransparentMesh: 1
+--- !u!114 &1799846448
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1799846440}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 350713cafb270c54885107c74cadcc2f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SceneChanger
 --- !u!1 &1810729628
 GameObject:
   m_ObjectHideFlags: 0

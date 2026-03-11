@@ -12,41 +12,49 @@ public class Shop : MonoBehaviour
     [SerializeField]
     public GameObject[] Shop_Item_TMPs; // array of TMP objects that will display to shop items. 
     public JokerSpawner jokerSpawner;
+    public ConsumableGenerator consumableGenerator;
     public int jokerCount = 2;
+    public int consumableCount = 1; 
 
-    public List<Jokers> drops = new List<Jokers>();
-    Dictionary <string, int> lootRarities = new  Dictionary<string, int>();
-    Dictionary <string, List<Jokers>> lootTable = new Dictionary<string, List<Jokers>>();
+    public List<Jokers> jokerDrops = new List<Jokers>();
+    public List<Consumable> consumableDrops = new List<Consumable>();
+    Dictionary <string, int> jokerlootRarities = new  Dictionary<string, int>();
+    Dictionary <string, List<Jokers>> jokerLootTable = new Dictionary<string, List<Jokers>>();
+      Dictionary <string, List<Consumable>> consumableLootTable = new Dictionary<string, List<Consumable>>();
+      Dictionary <string, int> consumablelootRarities = new  Dictionary<string, int>();
     void Start()
     {
-        RerollShop();
+        RerollJokers();
+        RerollConsumables();
+        // reroll tiles here later
     }
     void Update()
     {
     }
-    public void RerollShop()
+    public void RerollConsumables()
+    {
+        consumableLootTable = consumableGenerator.GetLootTable();
+        consumablelootRarities = consumableGenerator.GetLootRarities();
+        consumableDrops = GenerateLoot<Consumable>(consumablelootRarities, consumableLootTable, consumableCount);
+        Debug.Log(consumableDrops.Count);
+        displayConsumableOutput(consumableDrops);
+    }
+    public void RerollJokers()
     {
         //some check for if player has enough currency to open chest here
-        LootChestGeneration();
-        displayOutput();
+        jokerLootTable = jokerSpawner.GetLootTable();
+        jokerlootRarities = jokerSpawner.GetLootRarities();
+        jokerDrops = GenerateLoot<Jokers>(jokerlootRarities,jokerLootTable, jokerCount);
+        Debug.Log(jokerDrops.Count);
+        displayJokerOutput(jokerDrops);
     }
    
-    
-    
-    public void LootChestGeneration()
-    {   
-        lootTable = jokerSpawner.GetLootTable();
-        lootRarities = jokerSpawner.GetLootRarities();
-        drops = GenerateLoot(lootRarities, jokerCount);
-    }
 // Takes in a LootChest and displays it's generated loot to the Unity UI 
-    public void displayOutput()
+    public void displayJokerOutput(List<Jokers> drops = null)
     {   
-        int dropIndex = 0;
-        Debug.Log("Size of shop Item_TMPs:" + Shop_Item_TMPs.Length);
-        for(int i = 0; i < 2; i++) 
+        for(int dropIndex = 0; dropIndex < 2; dropIndex++) 
         {
-            GameObject shopSlot = Shop_Item_TMPs[i];
+            GameObject shopSlot = Shop_Item_TMPs[dropIndex];
             TMP_Text[] foundTMPs = shopSlot.GetComponentsInChildren<TMP_Text>(true);
             foreach(TMP_Text currentTMP in foundTMPs)
             {
@@ -65,8 +73,30 @@ public class Shop : MonoBehaviour
             }
             // delete random color later
             shopSlot.GetComponentInChildren<RawImage>(true).color = new Color(UnityEngine.Random.Range(0f, 1f), UnityEngine.Random.Range(0f, 1f), UnityEngine.Random.Range(0f, 1f)); // change later once we figure out joker images
-            dropIndex++;
         }
+    }
+    public void displayConsumableOutput(List<Consumable> drops = null)
+    {   
+       
+        GameObject shopSlot = Shop_Item_TMPs[4];
+        TMP_Text[] foundTMPs = shopSlot.GetComponentsInChildren<TMP_Text>(true);
+        foreach(TMP_Text currentTMP in foundTMPs)
+        {
+            if(currentTMP.name == "Price Tag TMP")
+            {
+                currentTMP.transform.GetComponent<TMP_Text>().text = ""+ drops[0].price; // set price tmp
+            }
+            else if(currentTMP.name == "Title TMP")
+            {
+                currentTMP.transform.GetComponent<TMP_Text>().text  = ""+ drops[0].name; // set Item Name tmp
+            }
+            else if(currentTMP.name == "Description TMP")
+            {
+                currentTMP.transform.GetComponent<TMP_Text>().text  = ""+ drops[0].description; // sets description of item to tmp
+            }
+        }
+        // delete random color later
+        shopSlot.GetComponentInChildren<RawImage>(true).color = new Color(UnityEngine.Random.Range(0f, 1f), UnityEngine.Random.Range(0f, 1f), UnityEngine.Random.Range(0f, 1f)); // change later once we figure out joker images
     }
     
     /* This is the main function that generates the loot from the loot table. 
@@ -81,10 +111,10 @@ public class Shop : MonoBehaviour
             5: When a rarity is selected add it to the output dictionary. If already existing increment it's counter. 
             6: With the selected rarities, randomly select items from the loot table based on the number of items per rarity. 
     */
-    public List<Jokers> GenerateLoot(Dictionary<string, int> myRarity, int lootCount = 1 ) //
+    public List<T> GenerateLoot<T>(Dictionary<string, int> myRarity, Dictionary<string,List<T>>lootTable, int lootCount = 1) //
     {
         Dictionary <string, int> selectedRarity = new Dictionary<string, int>();
-        List<Jokers> selectedItems = new List<Jokers>();
+        List<T> selectedItems = new List<T>();
         System.Random rand = new System.Random();
         int weightedSum = 0;
 
@@ -119,6 +149,7 @@ public class Shop : MonoBehaviour
                     {
                         selectedRarity.Add(rarity.Key,1);
                     }
+                    break;
                 }
             }
         }
@@ -128,7 +159,7 @@ public class Shop : MonoBehaviour
             for(int i = 0; i < r.Value; i++)
             {
                 var itemList = lootTable[r.Key]; 
-                Jokers selectedItem = itemList[rand.Next(0,itemList.Count)];
+                T selectedItem = itemList[rand.Next(0,itemList.Count)];
                 selectedItems.Add(selectedItem);
             }
         }   

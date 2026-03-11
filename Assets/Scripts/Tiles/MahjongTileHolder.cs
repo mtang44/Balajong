@@ -41,6 +41,11 @@ public class MahjongTileHolder : MonoBehaviour
     public void SetTileData(MahjongTileData newData)
     {
         tileData = newData;
+        if (tileData != null && tileData.Sprite == null)
+        {
+            LookupAndSetSprite();
+        }
+
         // Sprite Changes
         MahjongTileDisplay display = GetComponent<MahjongTileDisplay>();
         if (display != null)

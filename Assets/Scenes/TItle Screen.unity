@@ -620,7 +620,7 @@ GameObject:
   - component: {fileID: 379540414}
   m_Layer: 0
   m_Name: Non-PP Camera
-  m_TagString: Untagged
+  m_TagString: CanvasCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3338,6 +3338,34 @@ PrefabInstance:
       propertyPath: transitionAnimator
       value: 
       objectReference: {fileID: 978715861}
+    - target: {fileID: 592823114994531816, guid: 7e926eaf9be67f642b26faf2bf973246, type: 3}
+      propertyPath: randomizeEdition
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 592823114994531816, guid: 7e926eaf9be67f642b26faf2bf973246, type: 3}
+      propertyPath: 'editionWeight.Array.data[0]'
+      value: 70
+      objectReference: {fileID: 0}
+    - target: {fileID: 592823114994531816, guid: 7e926eaf9be67f642b26faf2bf973246, type: 3}
+      propertyPath: 'editionWeight.Array.data[1]'
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 592823114994531816, guid: 7e926eaf9be67f642b26faf2bf973246, type: 3}
+      propertyPath: 'editionWeight.Array.data[2]'
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 592823114994531816, guid: 7e926eaf9be67f642b26faf2bf973246, type: 3}
+      propertyPath: 'editionWeight.Array.data[3]'
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1361192804280909929, guid: 7e926eaf9be67f642b26faf2bf973246, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 379540413}
+    - target: {fileID: 1361192804280909929, guid: 7e926eaf9be67f642b26faf2bf973246, type: 3}
+      propertyPath: m_RenderMode
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5708538422946462074, guid: 7e926eaf9be67f642b26faf2bf973246, type: 3}
       propertyPath: animator
       value: 
@@ -3396,10 +3424,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7861431815383657384, guid: 7e926eaf9be67f642b26faf2bf973246, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 844217099419884127, guid: 7e926eaf9be67f642b26faf2bf973246, type: 3}
+    - {fileID: 4023652707922096467, guid: 7e926eaf9be67f642b26faf2bf973246, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7e926eaf9be67f642b26faf2bf973246, type: 3}

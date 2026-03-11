@@ -11,6 +11,7 @@ public class NodeMap : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] private MapConfig config;
+    [SerializeField] private SceneChanger sceneChanger;
     [SerializeField] private Transform mapRoot;
     [SerializeField] private MapNodeView nodeViewPrefab;
     [SerializeField] private Material lineMaterial;
@@ -184,7 +185,14 @@ public class NodeMap : MonoBehaviour
         if (config.autoLoadEncounterScene && !string.IsNullOrWhiteSpace(config.encounterSceneName))
         {
             SaveRuntimeState();
-            SceneManager.LoadScene(config.encounterSceneName);
+            if (sceneChanger != null)
+            {
+                sceneChanger.ChangeScene(config.encounterSceneName);
+            }
+            else
+            {
+                SceneManager.LoadScene(config.encounterSceneName);
+            }
             return;
         }
 

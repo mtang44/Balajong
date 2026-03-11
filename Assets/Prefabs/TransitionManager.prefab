@@ -258,7 +258,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 350713cafb270c54885107c74cadcc2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SceneChanger
-  animator: {fileID: 0}
-  hasTransition: 0
+  animator: {fileID: 6263296058291745209}
   transitionTime: 1
-  transitionObject: {fileID: 0}
+  transitionObject: {fileID: 7861431815383657384}

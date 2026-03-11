@@ -1,10 +1,9 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class MapEncounterResultHandler : MonoBehaviour
 {
-    [SerializeField] private string mapSceneName = string.Empty;
-    [SerializeField] private int mapSceneBuildIndex = -1;
+    [SerializeField] private SceneChanger sceneChanger;
+    [SerializeField] private string nextSceneName = string.Empty;
     [SerializeField] private string winSceneName = string.Empty;
 
     // Called when the player wins an encounter
@@ -22,7 +21,10 @@ public class MapEncounterResultHandler : MonoBehaviour
             if (currentNode != null && currentNode.type == MapNodeType.Boss && 
                 !string.IsNullOrWhiteSpace(winSceneName))
             {
-                SceneManager.LoadScene(winSceneName);
+                if (sceneChanger != null)
+                    sceneChanger.ChangeScene(winSceneName);
+                else
+                    UnityEngine.SceneManagement.SceneManager.LoadScene(winSceneName);
                 return;
             }
         }
@@ -36,17 +38,16 @@ public class MapEncounterResultHandler : MonoBehaviour
     // Returns the player to the map scenes
     private void ReturnToMap()
     {
-        if (mapSceneBuildIndex >= 0)
+        if (!string.IsNullOrWhiteSpace(nextSceneName))
         {
-            SceneManager.LoadScene(mapSceneBuildIndex);
-        }
-        else if (!string.IsNullOrWhiteSpace(mapSceneName))
-        {
-            SceneManager.LoadScene(mapSceneName);
+            if (sceneChanger != null)
+                sceneChanger.ChangeScene(nextSceneName);
+            else
+                UnityEngine.SceneManagement.SceneManager.LoadScene(nextSceneName);
         }
         else
         {
-            Debug.LogWarning("Set mapSceneName or mapSceneBuildIndex to return to map.");
+            Debug.LogWarning("Please set nextSceneName.");
         }
     }
 }

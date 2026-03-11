@@ -453,6 +453,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NodeMap
   config: {fileID: 11400000, guid: 7539bab7dc9fc8a4fbe0da6639499a18, type: 2}
+  sceneChanger: {fileID: 1529284598}
   mapRoot: {fileID: 0}
   nodeViewPrefab: {fileID: 3885360254055009326, guid: bdcc6f92d462ef349b92e74300370718, type: 3}
   lineMaterial: {fileID: 0}
@@ -487,6 +488,22 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1529284597 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7861431815383657384, guid: 7e926eaf9be67f642b26faf2bf973246, type: 3}
+  m_PrefabInstance: {fileID: 1747867090}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1529284598 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5708538422946462074, guid: 7e926eaf9be67f642b26faf2bf973246, type: 3}
+  m_PrefabInstance: {fileID: 1747867090}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1529284597}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 350713cafb270c54885107c74cadcc2f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SceneChanger
 --- !u!1001 &1747867090
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -503,6 +520,10 @@ PrefabInstance:
       propertyPath: hasTransition
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5708538422946462074, guid: 7e926eaf9be67f642b26faf2bf973246, type: 3}
+      propertyPath: transitionObject
+      value: 
+      objectReference: {fileID: 1529284597}
     - target: {fileID: 5954303415056008252, guid: 7e926eaf9be67f642b26faf2bf973246, type: 3}
       propertyPath: m_LocalPosition.x
       value: 7.9176

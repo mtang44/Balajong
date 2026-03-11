@@ -10,22 +10,20 @@ public class SceneChanger : MonoBehaviour
     private float transitionTime = 1f;
     public GameObject transitionObject;
 
-    public void ChangeScene(int sceneNumber)
+    public void ChangeScene(string sceneName)
     {
         if (animator != null)
-
         {
-            // Make sure transition does not play when the game is starting for the first time
             if (transitionObject != null)
             {
                 transitionObject.SetActive(true);
             }
             animator.SetTrigger("Start");
-            StartCoroutine(LoadSceneAfterTransition(sceneNumber));
+            StartCoroutine(LoadSceneAfterTransition(sceneName));
         }
         else
         {
-            SceneManager.LoadScene(sceneNumber);
+            SceneManager.LoadScene(sceneName);
         }
     }
 
@@ -33,5 +31,11 @@ public class SceneChanger : MonoBehaviour
     {
         yield return new WaitForSeconds(transitionTime);
         SceneManager.LoadScene(sceneNumber);
+    }
+
+    private IEnumerator LoadSceneAfterTransition(string sceneName)
+    {
+        yield return new WaitForSeconds(transitionTime);
+        SceneManager.LoadScene(sceneName);
     }
 }

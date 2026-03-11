@@ -242,6 +242,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TitleAnimation
   tiltAngle: 2
   tiltSpeed: 0.5
+--- !u!1 &210211661 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7861431815383657384, guid: 7e926eaf9be67f642b26faf2bf973246, type: 3}
+  m_PrefabInstance: {fileID: 4138487690329329406}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &256329477
 GameObject:
   m_ObjectHideFlags: 0
@@ -1316,6 +1321,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 350713cafb270c54885107c74cadcc2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SceneChanger
+  animator: {fileID: 0}
+  hasTransition: 0
+  transitionTime: 1
+  transitionObject: {fileID: 0}
 --- !u!114 &685567168
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1604,6 +1613,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 350713cafb270c54885107c74cadcc2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SceneChanger
+  animator: {fileID: 0}
+  hasTransition: 0
+  transitionTime: 1
+  transitionObject: {fileID: 0}
 --- !u!114 &743524939
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1908,6 +1921,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 884897081}
   m_CullTransparentMesh: 1
+--- !u!95 &978715861 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 6263296058291745209, guid: 7e926eaf9be67f642b26faf2bf973246, type: 3}
+  m_PrefabInstance: {fileID: 4138487690329329406}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1001411468
 GameObject:
   m_ObjectHideFlags: 0
@@ -2131,7 +2149,6 @@ GameObject:
   - component: {fileID: 1087078409}
   - component: {fileID: 1087078417}
   - component: {fileID: 1087078416}
-  - component: {fileID: 1087078415}
   - component: {fileID: 1087078414}
   - component: {fileID: 1087078413}
   - component: {fileID: 1087078412}
@@ -2308,7 +2325,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1087078415}
+      - m_Target: {fileID: 4138487690329329407}
         m_TargetAssemblyTypeName: SceneChanger, Assembly-CSharp
         m_MethodName: ChangeScene
         m_Mode: 3
@@ -2316,18 +2333,6 @@ MonoBehaviour:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 1
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: SceneChanger, Assembly-CSharp
-        m_MethodName: 
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
-          m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -2362,18 +2367,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 0.4
---- !u!114 &1087078415
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1087078408}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 350713cafb270c54885107c74cadcc2f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SceneChanger
 --- !u!114 &1087078416
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3335,6 +3328,94 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!1001 &4138487690329329406
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 334289224913646810, guid: 7e926eaf9be67f642b26faf2bf973246, type: 3}
+      propertyPath: transitionAnimator
+      value: 
+      objectReference: {fileID: 978715861}
+    - target: {fileID: 5708538422946462074, guid: 7e926eaf9be67f642b26faf2bf973246, type: 3}
+      propertyPath: animator
+      value: 
+      objectReference: {fileID: 978715861}
+    - target: {fileID: 5708538422946462074, guid: 7e926eaf9be67f642b26faf2bf973246, type: 3}
+      propertyPath: hasTransition
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5708538422946462074, guid: 7e926eaf9be67f642b26faf2bf973246, type: 3}
+      propertyPath: transitionObject
+      value: 
+      objectReference: {fileID: 210211661}
+    - target: {fileID: 5954303415056008252, guid: 7e926eaf9be67f642b26faf2bf973246, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5954303415056008252, guid: 7e926eaf9be67f642b26faf2bf973246, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5954303415056008252, guid: 7e926eaf9be67f642b26faf2bf973246, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5954303415056008252, guid: 7e926eaf9be67f642b26faf2bf973246, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5954303415056008252, guid: 7e926eaf9be67f642b26faf2bf973246, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5954303415056008252, guid: 7e926eaf9be67f642b26faf2bf973246, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5954303415056008252, guid: 7e926eaf9be67f642b26faf2bf973246, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5954303415056008252, guid: 7e926eaf9be67f642b26faf2bf973246, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5954303415056008252, guid: 7e926eaf9be67f642b26faf2bf973246, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5954303415056008252, guid: 7e926eaf9be67f642b26faf2bf973246, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7861431815383657384, guid: 7e926eaf9be67f642b26faf2bf973246, type: 3}
+      propertyPath: m_Name
+      value: TransitionManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 7861431815383657384, guid: 7e926eaf9be67f642b26faf2bf973246, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 7e926eaf9be67f642b26faf2bf973246, type: 3}
+--- !u!114 &4138487690329329407 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5708538422946462074, guid: 7e926eaf9be67f642b26faf2bf973246, type: 3}
+  m_PrefabInstance: {fileID: 4138487690329329406}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 210211661}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 350713cafb270c54885107c74cadcc2f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SceneChanger
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -3344,5 +3425,6 @@ SceneRoots:
   - {fileID: 871299786}
   - {fileID: 1996073201}
   - {fileID: 256329481}
+  - {fileID: 4138487690329329406}
   - {fileID: 1490014583}
   - {fileID: 424081501}

@@ -4,6 +4,18 @@ using System.Collections.Generic;
 public class HandManager : MonoBehaviour
 {
     private DeckManager deckManager;
+    public static HandManager Instance;
+    void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
 
     void Start()
     {

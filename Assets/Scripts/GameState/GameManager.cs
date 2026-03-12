@@ -15,6 +15,8 @@ public enum GameState
 // This will govern the overall backend of the game.
 public class GameManager : MonoBehaviour
 {
+    //THIS IS A TEMP WORKING SOLUTION BUT MAY STAY
+    public GameObject encounterFlowManager;
     public static GameManager Instance;
     //governs state interest
     public GameState currentState;
@@ -47,10 +49,13 @@ public class GameManager : MonoBehaviour
     }
     void BeginGame()
     {
-        SwitchState(GameState.Start);
         StatsUpdater.Instance.UpdateHealth(PlayerStatManager.Instance.currentHealth, PlayerStatManager.Instance.maxHealth);
         StatsUpdater.Instance.UpdateDiscardCount();
         StatsUpdater.Instance.UpdateScore(0);
+        StatsUpdater.Instance.UpdateScoreThreshold(EnemyManager.Instance.returnScoreThreshold());
+        Debug.Log("Game Started. Current State: " + currentState);
+        DeckManager.Instance.forceNewLists();
+        SwitchState(GameState.Start);
     }
     void SetState(GameState newState) { currentState = newState; }
     void SwitchState(GameState newState)
@@ -109,8 +114,13 @@ public class GameManager : MonoBehaviour
         score += Score;
         StatsUpdater.Instance.UpdateScore(score);
         // Here, we decide if the player is alive or not. For now, we will return to the draw state and refill discards.
-        //TEST FOR NOW
-        PlayerDamage();
+
+        if(score >= EnemyManager.Instance.returnScoreThreshold())
+            encounterFlowManager.GetComponent<MapEncounterResultHandler>().ResolveEncounterWin();
+        else
+        {
+            PlayerDamage();
+        }
 
         currentDiscards = 0;
         StatsUpdater.Instance.UpdateDiscardCount();
@@ -131,6 +141,7 @@ public class GameManager : MonoBehaviour
     void Loss()
     {
         Debug.Log("Player has lost the game.");
+        StatsUpdater.Instance.ShowLoseScreen();
     }
 
     // Public method for UI button to trigger discard

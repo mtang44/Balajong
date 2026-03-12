@@ -6,7 +6,7 @@ public class MapEncounterResultHandler : MonoBehaviour
     [SerializeField] private SceneChanger sceneChanger;
     [SerializeField] private string nextSceneName = string.Empty;
     [SerializeField] private string winSceneName = string.Empty;
-    public DeckManager DeckManager;
+
     [SerializeField] private float delayBeforeReturningToMap = 1.0f;
 
     // Called when the player wins an encounter

@@ -17,8 +17,8 @@ public class DeckManager : MonoBehaviour
 
     // Our hands! Deck is the wall, then the hand and discard.
     public Deck deck;
-    List<GameObject> hand = new List<GameObject>();
-    List<MahjongTileData> discard = new List<MahjongTileData>();
+    public List<GameObject> hand = new List<GameObject>();
+    public List<MahjongTileData> discard = new List<MahjongTileData>();
     public List<GameObject> selectedTiles = new List<GameObject>();
     public List<GameObject> flowerTiles = new List<GameObject>();
     public List<GameObject> seasonTiles = new List<GameObject>();
@@ -46,6 +46,14 @@ public class DeckManager : MonoBehaviour
     {
         mainCamera = Camera.main;
     }
+    public void forceNewLists()
+    {
+        hand = new List<GameObject>();
+        selectedTiles = new List<GameObject>();
+        flowerTiles = new List<GameObject>();
+        seasonTiles = new List<GameObject>();
+        discard = new List<MahjongTileData>();
+    }
 
     public void drawHand(int count = 0)
     {
@@ -56,7 +64,13 @@ public class DeckManager : MonoBehaviour
             if (!success)
                 break;
         }
-        sortHand();
+        if(HandManager.Instance != null)
+        {
+            HandManager.Instance.SortHandByValue();
+        } else
+        {
+            sortHand();
+        }
     }
     public void sortHand()
     {
@@ -150,6 +164,25 @@ public class DeckManager : MonoBehaviour
         discardTiles(selectedTiles);
         selectedTiles.Clear();
     }
+    public void fsToDiscard()
+    {
+        foreach (GameObject season in seasonTiles)
+        {
+            MahjongTileData tileData = season.GetComponent<MahjongTileHolder>().TileData;
+            if (tileData != null)
+                discard.Add(tileData);
+            discardTileAnimation(season);
+        }
+        foreach (GameObject flower in flowerTiles)
+        {
+            MahjongTileData tileData = flower.GetComponent<MahjongTileHolder>().TileData;
+            if (tileData != null)
+                discard.Add(tileData);
+            discardTileAnimation(flower);
+        }
+        seasonTiles.Clear();
+        flowerTiles.Clear();
+    }
 
     public void redrawHand()
     {
@@ -200,13 +233,16 @@ public class DeckManager : MonoBehaviour
     public void endRound()
     {
         // Move all hand tiles to discard pile
-        discardTiles(hand);
-        hand.Clear();
-        selectedTiles.Clear();
-        
+        handToDiscard();
+        selectedToDiscard();
+        fsToDiscard();
+
         // Return all tiles (both hand and discard) back to the deck
         deck.AddTiles(discard);
-        discard.Clear();
+        discard = new List<MahjongTileData>();
+
+        Debug.Log("Deck count after endRound: " + deck.GetDeckCount());
+        deck.Shuffle();
     }
 
     public List<MahjongTileData> getHandAsMahjongTileData()

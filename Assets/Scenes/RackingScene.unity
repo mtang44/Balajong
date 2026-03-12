@@ -1090,7 +1090,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::StatsUpdater
   discard: {fileID: 1711777696}
   score: {fileID: 1861463863}
+  scoreThreshold: {fileID: 1741856075}
   healthSlider: {fileID: 1710371400}
+  winScreen: {fileID: 1378343574}
+  loseScreen: {fileID: 1528765344}
 --- !u!1 &150078951
 GameObject:
   m_ObjectHideFlags: 0
@@ -1239,7 +1242,6 @@ GameObject:
   - component: {fileID: 175370141}
   - component: {fileID: 175370140}
   - component: {fileID: 175370139}
-  - component: {fileID: 175370143}
   m_Layer: 0
   m_Name: Dealer
   m_TagString: Untagged
@@ -1274,7 +1276,11 @@ MonoBehaviour:
   tilePrefab: {fileID: 7980480237267112869, guid: f4ef62aeee9c25144a5c1fe006273c49, type: 3}
   HAND_SIZE: 14
   MAX_DISCARD_SELECTION: 5
+  hand: []
+  discard: []
   selectedTiles: []
+  flowerTiles: []
+  seasonTiles: []
 --- !u!4 &175370141
 Transform:
   m_ObjectHideFlags: 0
@@ -1290,18 +1296,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &175370143
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 175370138}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fcace88796ce2c8429094225d441d32a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HandManager
 --- !u!1 &186060128
 GameObject:
   m_ObjectHideFlags: 0
@@ -3129,6 +3123,7 @@ GameObject:
   - component: {fileID: 456265336}
   - component: {fileID: 456265335}
   - component: {fileID: 456265334}
+  - component: {fileID: 456265340}
   m_Layer: 5
   m_Name: Main Menu BTN
   m_TagString: Untagged
@@ -3260,22 +3255,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 456265339}
-        m_TargetAssemblyTypeName: SceneChanger, Assembly-CSharp
-        m_MethodName: ChangeScene
-        m_Mode: 3
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 1528765344}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
+      - m_Target: {fileID: 456265340}
+        m_TargetAssemblyTypeName: EasierToNukeTheGame, Assembly-CSharp
+        m_MethodName: NukeTheGame
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -3341,6 +3324,18 @@ MonoBehaviour:
   transitionCanvas: {fileID: 0}
   transitionCanvasCamera: {fileID: 0}
   autoConfigureTransitionCanvas: 1
+--- !u!114 &456265340
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 456265332}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23df5e0d8e526d94ca13163a03ac512e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EasierToNukeTheGame
 --- !u!1 &460701748
 GameObject:
   m_ObjectHideFlags: 0
@@ -5096,7 +5091,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 175370143}
+      - m_Target: {fileID: 1751623500}
         m_TargetAssemblyTypeName: HandManager, Assembly-CSharp
         m_MethodName: SortHandByValue
         m_Mode: 1
@@ -6113,7 +6108,6 @@ MonoBehaviour:
   sceneChanger: {fileID: 1834608312}
   nextSceneName: GamePlayUI Scene
   winSceneName: Win Screen
-  DeckManager: {fileID: 175370140}
   delayBeforeReturningToMap: 0.5
 --- !u!1 &836629900
 GameObject:
@@ -6130,7 +6124,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &836629901
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7897,7 +7891,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 175370143}
+      - m_Target: {fileID: 1751623500}
         m_TargetAssemblyTypeName: HandManager, Assembly-CSharp
         m_MethodName: SortHandByType
         m_Mode: 1
@@ -11482,6 +11476,50 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1741856075}
   m_CullTransparentMesh: 1
+--- !u!1 &1751623498
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1751623499}
+  - component: {fileID: 1751623500}
+  m_Layer: 0
+  m_Name: HandManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1751623499
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1751623498}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.3167, y: 1.63727, z: 7.00519}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1751623500
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1751623498}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fcace88796ce2c8429094225d441d32a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HandManager
 --- !u!1 &1787190715
 GameObject:
   m_ObjectHideFlags: 0
@@ -12426,6 +12464,7 @@ GameObject:
   - component: {fileID: 1907951510}
   - component: {fileID: 1907951511}
   - component: {fileID: 1907951512}
+  - component: {fileID: 1907951513}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -12460,6 +12499,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f8f39418fce27049a9db577d005a70a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
+  encounterFlowManager: {fileID: 823587678}
   currentState: 0
   selecting: 0
   maxDiscards: 3
@@ -12485,6 +12525,18 @@ MonoBehaviour:
   dragonValues: 000000000000000000000000
   flowerValues: 00000000000000000000000000000000
   seasonValues: 00000000000000000000000000000000
+--- !u!114 &1907951513
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1907951509}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f6ceff80fbccd345ba845d0d2696d58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyManager
 --- !u!1 &1909647468
 GameObject:
   m_ObjectHideFlags: 0
@@ -13613,3 +13665,4 @@ SceneRoots:
   - {fileID: 823587679}
   - {fileID: 1834608310}
   - {fileID: 1203276827}
+  - {fileID: 1751623499}

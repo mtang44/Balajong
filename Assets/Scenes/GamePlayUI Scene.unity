@@ -1427,7 +1427,6 @@ MonoBehaviour:
   transitionCanvas: {fileID: 0}
   transitionCanvasCamera: {fileID: 0}
   autoConfigureTransitionCanvas: 1
-  transitionCanvasPlaneDistance: 1
 --- !u!1 &54280068
 GameObject:
   m_ObjectHideFlags: 0
@@ -5818,7 +5817,6 @@ MonoBehaviour:
   transitionCanvas: {fileID: 0}
   transitionCanvasCamera: {fileID: 0}
   autoConfigureTransitionCanvas: 1
-  transitionCanvasPlaneDistance: 1
 --- !u!1 &288053133
 GameObject:
   m_ObjectHideFlags: 0
@@ -7657,7 +7655,6 @@ MonoBehaviour:
   transitionCanvas: {fileID: 0}
   transitionCanvasCamera: {fileID: 0}
   autoConfigureTransitionCanvas: 1
-  transitionCanvasPlaneDistance: 1
 --- !u!1 &391966048
 GameObject:
   m_ObjectHideFlags: 0
@@ -16949,7 +16946,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15f34bcb203be084b965def8240681ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::JokerSpawner
-  LootTableFilePath: Assets/Art Assets/LootTable - JokerTable.csv
+  LootTableFilePath: Assets/Art Assets/LootTable - ConsumableTable.csv
   Rarities:
   - Common
   Rarity_Weights: 37000000
@@ -22525,7 +22522,6 @@ MonoBehaviour:
   transitionCanvas: {fileID: 0}
   transitionCanvasCamera: {fileID: 0}
   autoConfigureTransitionCanvas: 1
-  transitionCanvasPlaneDistance: 1
 --- !u!1 &1369173446
 GameObject:
   m_ObjectHideFlags: 0
@@ -24777,7 +24773,9 @@ MonoBehaviour:
   - {fileID: 2014731974}
   - {fileID: 1677016146}
   jokerSpawner: {fileID: 975557519}
-  lootCount: 5
+  consumableGenerator: {fileID: 1683083823}
+  jokerCount: 2
+  consumableCount: 1
 --- !u!1 &1566049213
 GameObject:
   m_ObjectHideFlags: 0
@@ -25915,7 +25913,6 @@ MonoBehaviour:
   transitionCanvas: {fileID: 0}
   transitionCanvasCamera: {fileID: 0}
   autoConfigureTransitionCanvas: 1
-  transitionCanvasPlaneDistance: 1
 --- !u!1 &1611491138
 GameObject:
   m_ObjectHideFlags: 0
@@ -27068,6 +27065,58 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 1
           m_CallState: 2
+--- !u!1 &1683083822
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1683083824}
+  - component: {fileID: 1683083823}
+  m_Layer: 0
+  m_Name: Consumable Generator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1683083823
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1683083822}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a5d4f8801570aac439e30bc10324a28d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ConsumableGenerator
+  LootTableFilePath: Assets/Art Assets/LootTable - JokerTable.csv
+  Rarities:
+  - Common
+  - Uncommon
+  - Rare
+  - Epic
+  - Legendary
+  Rarity_Weights: 370000001e0000000f0000000600000001000000
+--- !u!4 &1683083824
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1683083822}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2.94444, y: 0, z: 8.84489}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1700997858
 GameObject:
   m_ObjectHideFlags: 0
@@ -33442,4 +33491,5 @@ SceneRoots:
   - {fileID: 217418086}
   - {fileID: 1998124780}
   - {fileID: 975557520}
+  - {fileID: 1683083824}
   - {fileID: 778435907}

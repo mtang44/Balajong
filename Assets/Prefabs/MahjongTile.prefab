@@ -120,9 +120,9 @@ MonoBehaviour:
   editionMaterialIndex: 1
   editionMaterials:
   - {fileID: 2100000, guid: 5aaa23ddc9fea964b93b6d7a64159eaf, type: 2}
-  - {fileID: 2100000, guid: 04908087d104a744abcd14dd1b58c3eb, type: 2}
-  - {fileID: 2100000, guid: 5aaa23ddc9fea964b93b6d7a64159eaf, type: 2}
-  - {fileID: 2100000, guid: 5aaa23ddc9fea964b93b6d7a64159eaf, type: 2}
+  - {fileID: 2100000, guid: a24e157c94d39c340b9ad1d9c62550fc, type: 2}
+  - {fileID: 2100000, guid: 72ab0d3a987779844ab762a5f16ecc5f, type: 2}
+  - {fileID: 2100000, guid: 71561ef129893804e9d2191d96289b4c, type: 2}
 --- !u!114 &5263447566789008438
 MonoBehaviour:
   m_ObjectHideFlags: 0

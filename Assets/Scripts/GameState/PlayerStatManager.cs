@@ -29,7 +29,6 @@ public class PlayerStatManager : MonoBehaviour
         if (currentHealth <= 0)
         {
             currentHealth = 0;
-            // Handle player death here (e.g., trigger game over, respawn, etc.)
         }
     }
     public void Heal(int amount)

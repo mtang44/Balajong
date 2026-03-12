@@ -24,6 +24,7 @@ public class GameManager : MonoBehaviour
     // Constants will normally be gathered when the game is started. For now, hard coded.
     public int maxDiscards = 3;
     public int currentDiscards = 0;
+    public int score = 0;
 
     void Awake()
     {
@@ -38,12 +39,18 @@ public class GameManager : MonoBehaviour
     }  
     void Start()
     {
-        currentState = GameState.Start;
-        SwitchState(currentState);
+        BeginGame();
     }
     void OnSceneLoaded()
     {
+        BeginGame();
+    }
+    void BeginGame()
+    {
         SwitchState(GameState.Start);
+        StatsUpdater.Instance.UpdateHealth(PlayerStatManager.Instance.currentHealth, PlayerStatManager.Instance.maxHealth);
+        StatsUpdater.Instance.UpdateDiscardCount();
+        StatsUpdater.Instance.UpdateScore(0);
     }
     void SetState(GameState newState) { currentState = newState; }
     void SwitchState(GameState newState)
@@ -99,14 +106,32 @@ public class GameManager : MonoBehaviour
         Debug.Log("Scoring Hand...");
         int Score = ScoringManager.Instance.CalcHandScore(DeckManager.Instance.getHandAsMahjongTileData());
         Debug.Log($"ScoreState: Hand scored {Score} points.");
-        StatsUpdater.Instance.UpdateScore(Score);
-        
+        score += Score;
+        StatsUpdater.Instance.UpdateScore(score);
         // Here, we decide if the player is alive or not. For now, we will return to the draw state and refill discards.
+        //TEST FOR NOW
+        PlayerDamage();
+
         currentDiscards = 0;
         StatsUpdater.Instance.UpdateDiscardCount();
         SwitchState(GameState.Draw);
     }
     void EndState() {}
+
+    void PlayerDamage()
+    {
+        PlayerStatManager.Instance.TakeDamage(1);
+        StatsUpdater.Instance.UpdateHealth(PlayerStatManager.Instance.currentHealth, PlayerStatManager.Instance.maxHealth);
+        if (PlayerStatManager.Instance.currentHealth <= 0)
+        {
+            SwitchState(GameState.End);
+            Loss();
+        }
+    }
+    void Loss()
+    {
+        Debug.Log("Player has lost the game.");
+    }
 
     // Public method for UI button to trigger discard
     public void OnDiscardButtonPressed()

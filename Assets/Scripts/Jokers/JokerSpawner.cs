@@ -9,7 +9,7 @@ public class JokerSpawner : MonoBehaviour
     [SerializeField]
     public string LootTableFilePath;
 
-    public string[] Rarities = new string[] {"Common","Uncommon","Rare","Epic","Legendary"};
+    public string[] Rarities = new string[] {"Common","Uncommon","Rare","Epic"};
     [SerializeField]
     public int[] Rarity_Weights = new int[] {55,30,15,6,1};
 
@@ -69,6 +69,7 @@ public class JokerSpawner : MonoBehaviour
     {
         string path = filePath;
         StreamReader reader;
+        int imageIndexCounter = 0; 
         Dictionary<string, List<Jokers>> customLootTable = new Dictionary<string, List<Jokers>>();
         if(File.Exists(path))
         {
@@ -87,9 +88,10 @@ public class JokerSpawner : MonoBehaviour
                 string jokerEquationType = values[3];
                 string jokerDescription = values[4];
                 int jokerPrice = int.Parse(values[5]);
+                
 
-                Jokers newJoker = new Jokers (jokerName, jokerRarity, jokerCode, jokerEquationType, jokerDescription, jokerPrice);
-
+                Jokers newJoker = new Jokers (jokerName, jokerRarity, jokerCode, jokerEquationType, jokerDescription, jokerPrice,imageIndexCounter);
+                imageIndexCounter++; // increment image index for each joker added to loot table, so that each joker has a unique image in the shop.
                 // if item rarity key already exists, add newItem to the list, else create new rarity key with a new list of items. 
                 if(customLootTable.ContainsKey(jokerRarity))
                 {
@@ -119,7 +121,10 @@ public class JokerSpawner : MonoBehaviour
     }
     public Dictionary<string,int> GetLootRarities()
     {
-        
+        foreach(var r in lootRarities)
+        {
+            Debug.Log(r);
+        }
         return lootRarities;
     }
 }

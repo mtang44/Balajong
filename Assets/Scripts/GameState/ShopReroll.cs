@@ -11,6 +11,8 @@ public class Shop : MonoBehaviour
 
     [SerializeField]
     public GameObject[] Shop_Item_TMPs; // array of TMP objects that will display to shop items. 
+    [SerializeField]
+    public Texture[] imageArray; // array of images to be used for shop items. change later once we have actual images for jokers and consumables.
     public JokerSpawner jokerSpawner;
     public ConsumableGenerator consumableGenerator;
     public int jokerCount = 2;
@@ -20,8 +22,8 @@ public class Shop : MonoBehaviour
     public List<Consumable> consumableDrops = new List<Consumable>();
     Dictionary <string, int> jokerlootRarities = new  Dictionary<string, int>();
     Dictionary <string, List<Jokers>> jokerLootTable = new Dictionary<string, List<Jokers>>();
-      Dictionary <string, List<Consumable>> consumableLootTable = new Dictionary<string, List<Consumable>>();
-      Dictionary <string, int> consumablelootRarities = new  Dictionary<string, int>();
+    Dictionary <string, List<Consumable>> consumableLootTable = new Dictionary<string, List<Consumable>>();
+    Dictionary <string, int> consumablelootRarities = new  Dictionary<string, int>();
     void Start()
     {
         RerollJokers();
@@ -72,7 +74,8 @@ public class Shop : MonoBehaviour
                 }
             }
             // delete random color later
-            shopSlot.GetComponentInChildren<RawImage>(true).color = new Color(UnityEngine.Random.Range(0f, 1f), UnityEngine.Random.Range(0f, 1f), UnityEngine.Random.Range(0f, 1f)); // change later once we figure out joker images
+            shopSlot.GetComponentInChildren<RawImage>(true).texture = imageArray[drops[dropIndex].imageIndex]; // change later once we figure out joker images
+            //shopSlot.GetComponentInChildren<RawImage>(true).color = new Color(UnityEngine.Random.Range(0f, 1f), UnityEngine.Random.Range(0f, 1f), UnityEngine.Random.Range(0f, 1f)); // change later once we figure out joker images
         }
     }
     public void displayConsumableOutput(List<Consumable> drops = null)
@@ -80,7 +83,7 @@ public class Shop : MonoBehaviour
        
         GameObject shopSlot = Shop_Item_TMPs[4];
         TMP_Text[] foundTMPs = shopSlot.GetComponentsInChildren<TMP_Text>(true);
-        foreach(TMP_Text currentTMP in foundTMPs)
+            foreach(var currentTMP in foundTMPs)
         {
             if(currentTMP.name == "Price Tag TMP")
             {
@@ -94,7 +97,7 @@ public class Shop : MonoBehaviour
             {
                 currentTMP.transform.GetComponent<TMP_Text>().text  = ""+ drops[0].description; // sets description of item to tmp
             }
-        }
+        } 
         // delete random color later
         shopSlot.GetComponentInChildren<RawImage>(true).color = new Color(UnityEngine.Random.Range(0f, 1f), UnityEngine.Random.Range(0f, 1f), UnityEngine.Random.Range(0f, 1f)); // change later once we figure out joker images
     }

@@ -1,10 +1,12 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class StatsUpdater : MonoBehaviour
 {
     //We Drag this in
     public GameObject discard;
     public GameObject score;
+    public GameObject healthSlider;
     // We probably want this
     public static StatsUpdater Instance;
     private void Awake()
@@ -42,5 +44,16 @@ public class StatsUpdater : MonoBehaviour
             }
         }
     }
-
+    public void UpdateHealth(int currentHealth, int maxHealth)
+    {
+        if (healthSlider != null)
+        {
+            UnityEngine.UI.Slider sliderComponent = healthSlider.GetComponent<UnityEngine.UI.Slider>();
+            if (sliderComponent != null)
+            {
+                sliderComponent.maxValue = maxHealth;
+                sliderComponent.value = currentHealth;
+            }
+        }
+    }
 }

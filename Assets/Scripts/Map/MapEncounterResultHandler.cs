@@ -1,16 +1,21 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
+using System.Collections;
 
 public class MapEncounterResultHandler : MonoBehaviour
 {
-    [SerializeField] private string mapSceneName = string.Empty;
-    [SerializeField] private int mapSceneBuildIndex = -1;
+    [SerializeField] private SceneChanger sceneChanger;
+    [SerializeField] private string nextSceneName = string.Empty;
     [SerializeField] private string winSceneName = string.Empty;
+    public DeckManager DeckManager;
+    [SerializeField] private float delayBeforeReturningToMap = 1.0f;
 
     // Called when the player wins an encounter
     // This tells the map to continue to the next node
     public void ResolveEncounterWin()
     {
+        // Reset the deck for the next encounter
+        DeckManager.Instance.endRound();
+        
         if (MapRunState.Instance.HasMap)
         {
             MapRunState.Instance.MarkCurrentNodeCleared();
@@ -22,31 +27,34 @@ public class MapEncounterResultHandler : MonoBehaviour
             if (currentNode != null && currentNode.type == MapNodeType.Boss && 
                 !string.IsNullOrWhiteSpace(winSceneName))
             {
-                SceneManager.LoadScene(winSceneName);
+                if (sceneChanger != null)
+                    sceneChanger.ChangeScene(winSceneName);
+                else
+                    UnityEngine.SceneManagement.SceneManager.LoadScene(winSceneName);
                 return;
             }
         }
-        ReturnToMap();
+        StartCoroutine(ReturnToMapAfterDelay());
     }
 
     // Called when the player loses an encounter
     // This returns the player to the map without advancing the node
-    public void ResolveEncounterLoss() => ReturnToMap();
+    public void ResolveEncounterLoss() => StartCoroutine(ReturnToMapAfterDelay());
 
-    // Returns the player to the map scenes
-    private void ReturnToMap()
+    // Returns the player to the map scenes after a delay
+    private IEnumerator ReturnToMapAfterDelay()
     {
-        if (mapSceneBuildIndex >= 0)
+        yield return new WaitForSeconds(delayBeforeReturningToMap);
+        if (!string.IsNullOrWhiteSpace(nextSceneName))
         {
-            SceneManager.LoadScene(mapSceneBuildIndex);
-        }
-        else if (!string.IsNullOrWhiteSpace(mapSceneName))
-        {
-            SceneManager.LoadScene(mapSceneName);
+            if (sceneChanger != null)
+                sceneChanger.ChangeScene(nextSceneName);
+            else
+                UnityEngine.SceneManagement.SceneManager.LoadScene(nextSceneName);
         }
         else
         {
-            Debug.LogWarning("Set mapSceneName or mapSceneBuildIndex to return to map.");
+            Debug.LogWarning("Please set nextSceneName.");
         }
     }
 }

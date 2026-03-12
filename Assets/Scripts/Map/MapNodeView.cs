@@ -1,8 +1,10 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MapNodeView : MonoBehaviour
 {
-    [SerializeField] private SpriteRenderer nodeSpriteRenderer;
+    [SerializeField] private Image nodeImage;
+    [SerializeField] private Button nodeButton;
 
     private NodeMap owner;
     private int nodeId;
@@ -17,18 +19,27 @@ public class MapNodeView : MonoBehaviour
         nodeId = nodeData.id;
         nodeType = nodeData.type;
 
-        nodeSpriteRenderer ??= GetComponentInChildren<SpriteRenderer>() ?? gameObject.AddComponent<SpriteRenderer>();
-        
-        if (nodeSpriteRenderer.sprite == null)
-        {
-            nodeSpriteRenderer.sprite = defaultSprite;
-        }
+        nodeImage ??= GetComponentInChildren<Image>();
+        nodeButton ??= GetComponent<Button>();
 
-        nodeSpriteRenderer.sortingOrder = sortingOrder;
-        
-        if (GetComponent<Collider2D>() == null)
+        if (nodeImage != null)
         {
-            gameObject.AddComponent<CircleCollider2D>();
+            if (nodeImage.sprite == null)
+            {
+                nodeImage.sprite = defaultSprite;
+            }
+
+            nodeImage.raycastTarget = true;
+
+            if (nodeButton == null)
+            {
+                nodeButton = gameObject.AddComponent<Button>();
+            }
+
+            nodeButton.transition = Selectable.Transition.None;
+            nodeButton.targetGraphic = nodeImage;
+            nodeButton.onClick.RemoveListener(OnClicked);
+            nodeButton.onClick.AddListener(OnClicked);
         }
 
         gameObject.name = $"MapNode_{nodeData.id}_{nodeData.type}";
@@ -38,26 +49,47 @@ public class MapNodeView : MonoBehaviour
     // Sets the visual state of the node based on its NodeState
     public void SetState(NodeState state)
     {
+        if (nodeButton != null)
+        {
+            nodeButton.interactable = state != NodeState.Locked;
+        }
+
         Collider2D nodeCollider = GetComponent<Collider2D>();
         if (nodeCollider != null)
         {
             nodeCollider.enabled = state != NodeState.Locked;
         }
 
-        if (nodeSpriteRenderer == null) return;
-
         Color baseColor = GetTypeColor(nodeType);
-        nodeSpriteRenderer.color = state switch
+        Color nodeColor = state switch
         {
             NodeState.Cleared => Color.Lerp(baseColor, Color.white, 0.5f),
             NodeState.Reachable => baseColor,
             _ => Color.Lerp(baseColor, Color.black, 0.65f)
         };
+
+        if (nodeImage != null)
+        {
+            nodeImage.color = nodeColor;
+        }
+    }
+
+    private void OnClicked()
+    {
+        if (owner != null)
+        {
+            owner.OnNodeClicked(nodeId);
+        }
     }
 
     // Called when the node is clicked by the player
     private void OnMouseUpAsButton()
     {
+        if (nodeButton != null)
+        {
+            return;
+        }
+
         if (owner != null)
         {
             owner.OnNodeClicked(nodeId);

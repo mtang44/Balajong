@@ -16,10 +16,12 @@ public class DeckManager : MonoBehaviour
     public static DeckManager Instance;
 
     // Our hands! Deck is the wall, then the hand and discard.
-    Deck deck;
+    public Deck deck;
     List<GameObject> hand = new List<GameObject>();
     List<MahjongTileData> discard = new List<MahjongTileData>();
     public List<GameObject> selectedTiles = new List<GameObject>();
+    public List<GameObject> flowerTiles = new List<GameObject>();
+    public List<GameObject> seasonTiles = new List<GameObject>();
     
     // Property to access hand for sorting
     public List<GameObject> Hand => hand;
@@ -42,7 +44,7 @@ public class DeckManager : MonoBehaviour
 
     void Start()
     {
-        
+        mainCamera = Camera.main;
     }
 
     public void drawHand(int count = 0)
@@ -61,6 +63,7 @@ public class DeckManager : MonoBehaviour
         //Here we will sort the hand based on the tile types and values,
         //and update the positions of the gameObjects accordingly.
         //we'll start with just the positioning
+        mainCamera = Camera.main;
         for (int i = 0; i < hand.Count; i++)
         {
             GameObject tileGO = hand[i];
@@ -75,7 +78,35 @@ public class DeckManager : MonoBehaviour
             tileGO.transform.localPosition = new Vector3((i * 0.25f) - ((hand.Count - 1) * 0.125f), baseY, 1.5f);
             tileGO.transform.localRotation = Quaternion.Euler(-20, 180, 0);
         }
-    }   
+        cornerFlowers();
+    }
+    void cornerFlowers()
+    {
+        int tilesToDraw = 0;
+        // Check for flower tiles in hand and move them to the flower area
+        List<GameObject> flowersInHand = hand.FindAll(tile => tile.GetComponent<MahjongTileHolder>().TileData.TileType == TileType.Flower);
+        List<GameObject> seasonsInHand = hand.FindAll(tile => tile.GetComponent<MahjongTileHolder>().TileData.TileType == TileType.Season);
+        tilesToDraw += flowersInHand.Count;
+        tilesToDraw += seasonsInHand.Count;
+        foreach (GameObject flower in flowersInHand)
+        {
+            hand.Remove(flower);
+            flowerTiles.Add(flower);
+            // Move the flower tile to the designated flower area
+            flower.transform.localPosition = new Vector3(-1.5f, -0.85f, 1.5f);
+            flower.transform.localRotation = Quaternion.Euler(-20, 180, 0);
+        }
+        foreach (GameObject season in seasonsInHand)
+        {
+            hand.Remove(season);
+            seasonTiles.Add(season);
+            // Move the season tile to the designated season area
+            season.transform.localPosition = new Vector3(1.5f, -0.85f, 1.5f);
+            season.transform.localRotation = Quaternion.Euler(-20, 180, 0);
+        }
+        if(tilesToDraw > 0)
+            drawHand(tilesToDraw);
+    }
     public bool drawTile()
     {
         if (hand.Count < HAND_SIZE)
@@ -95,6 +126,7 @@ public class DeckManager : MonoBehaviour
     {
         if (hand.Count < HAND_SIZE)
         {
+            mainCamera = Camera.main;
             GameObject tileObject = Instantiate(tilePrefab);
             tileObject.transform.SetParent(mainCamera.transform);
             tileObject.transform.localPosition = Vector3.zero;
@@ -159,17 +191,24 @@ public class DeckManager : MonoBehaviour
     }
     public void discardTiles(List<GameObject> tiles)
     {
-        foreach (GameObject tile in tiles)
+        // Create a copy to avoid "Collection was modified" error when items are removed during iteration
+        foreach (GameObject tile in new List<GameObject>(tiles))
         {
             discardTile(tile);
         }
     }
     public void endRound()
     {
-        handToDiscard();
+        // Move all hand tiles to discard pile
+        discardTiles(hand);
+        hand.Clear();
+        selectedTiles.Clear();
+        
+        // Return all tiles (both hand and discard) back to the deck
         deck.AddTiles(discard);
         discard.Clear();
     }
+
     public List<MahjongTileData> getHandAsMahjongTileData()
     {
         List<MahjongTileData> handData = new List<MahjongTileData>();

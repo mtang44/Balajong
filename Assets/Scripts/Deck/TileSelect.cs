@@ -20,7 +20,7 @@ public class TileSelect : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
     private bool isDragging = false;
     private float dragStartTime;
     private float originalZOffset = 0.5f; // How far forward to lift the tile
-
+    bool flowerTile = false;
     void Start()
     {
         deckManager = DeckManager.Instance;
@@ -34,6 +34,10 @@ public class TileSelect : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
             Debug.LogError("MahjongTileHolder component not found on " + gameObject.name);
         }
         tooltip = GameObject.FindGameObjectWithTag("Tooltip");
+        if(tileData != null && (tileData.TileType == TileType.Flower || tileData.TileType == TileType.Season))
+        {
+            flowerTile = true;
+        }
     }
 
     public void OnPointerEnter(PointerEventData eventData)
@@ -109,12 +113,14 @@ public class TileSelect : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
     // Pick the tile up - begin drag
     public void OnPointerDown(PointerEventData eventData)
     {
+        if(flowerTile) return; 
         dragStartTime = Time.time;
     }
 
     // Drop the tile - end drag
     public void OnPointerUp(PointerEventData eventData)
     {
+        if(flowerTile) return; 
         // If we didn't drag (quick click), process as selection
         if (!isDragging && Time.time - dragStartTime < 0.2f)
         {
@@ -125,6 +131,7 @@ public class TileSelect : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
     // Begin dragging the tile
     public void OnBeginDrag(PointerEventData eventData)
     {
+        if(flowerTile) return; 
         isDragging = true;
         originalPosition = transform.localPosition;
         originalIndex = deckManager.Hand.IndexOf(gameObject);
@@ -137,6 +144,7 @@ public class TileSelect : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
     // While dragging the tile
     public void OnDrag(PointerEventData eventData)
     {
+        if(flowerTile) return; 
         if (!isDragging) return;
 
         // Move tile with cursor in camera space (on the X axis only)
@@ -170,6 +178,7 @@ public class TileSelect : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
     // End dragging the tile
     public void OnEndDrag(PointerEventData eventData)
     {
+        if(flowerTile) return; 
         if (!isDragging) return;
         isDragging = false;
 
@@ -229,6 +238,7 @@ public class TileSelect : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
     // This creates a dynamic gap to make it easier to tell where the tile will be placed in the hand
     private void RepositionHandWithGap(int gapIndex)
     {
+        if(flowerTile) return; 
         List<GameObject> hand = deckManager.Hand;
         int handCount = hand.Count;
         float tileSpacing = 0.25f;
@@ -271,6 +281,7 @@ public class TileSelect : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
     // Select the tile
     void clicked()
     {
+        if(flowerTile) return; 
         // Only process clicks if not dragging and in selection mode
         if (GameManager.Instance.selecting && tileData != null)
         {
@@ -285,6 +296,7 @@ public class TileSelect : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
     }
     void addToSelection()
     {
+        if(flowerTile) return; 
         deckManager.selectedTiles.Add(gameObject);
 
         //temp move forward to show selection, will replace with actual animation later
@@ -298,6 +310,7 @@ public class TileSelect : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
     }
     void removeFromSelection()
     {
+        if(flowerTile) return; 
         deckManager.selectedTiles.Remove(gameObject);
         //temp move back to show deselection, will replace with actual animation later
         gameObject.transform.localPosition -= new Vector3(0, 0.125f, 0);

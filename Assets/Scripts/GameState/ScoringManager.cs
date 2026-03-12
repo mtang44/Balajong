@@ -65,7 +65,6 @@ public class ScoringManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
 
             // Initialize tile scores from the example score table so
             // all tiles have non-zero values by default.
@@ -143,11 +142,27 @@ public class ScoringManager : MonoBehaviour
         List<Meld> melds = DetectMelds(tiles);
         int meldScore = CalcAllMeldsScore(melds);
         int bonusScore = 0;
-        foreach (var tile in tiles)
+        //commenting this out, as I believe calling the flowersinhandandseasonsinhand are faster
+        // foreach (var tile in tiles)
+        // {
+        //     if (tile == null) continue;
+        //     if (IsBonusTile(tile) && !IsTileInAnyMeld(tile, melds))
+        //         bonusScore += GetTileScore(tile);
+        // }
+        // Add bonus score for any flower or season tiles not in melds
+        foreach (var tile in DeckManager.Instance.flowerTiles)
         {
             if (tile == null) continue;
-            if (IsBonusTile(tile) && !IsTileInAnyMeld(tile, melds))
-                bonusScore += GetTileScore(tile);
+            var tileData = tile.GetComponent<MahjongTileHolder>()?.TileData;
+            if (tileData != null)
+                bonusScore += GetTileScore(tileData);
+        }
+        foreach (var tile in DeckManager.Instance.seasonTiles)
+        {
+            if (tile == null) continue;
+            var tileData = tile.GetComponent<MahjongTileHolder>()?.TileData;
+            if (tileData != null)
+                bonusScore += GetTileScore(tileData);
         }
 
         int total = meldScore + bonusScore;

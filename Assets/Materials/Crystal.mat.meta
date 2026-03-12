@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 71561ef129893804e9d2191d96289b4c
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 2100000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 127277
+  packageName: MixedShaderPack
+  packageVersion: 1.0
+  assetPath: Assets/MixedShaderPack/Materials/WaterMaterial_Flowmap_Circular.mat
+  uploadId: 266740

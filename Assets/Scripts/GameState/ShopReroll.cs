@@ -75,7 +75,7 @@ public class Shop : MonoBehaviour
             }
             // delete random color later
             shopSlot.GetComponentInChildren<RawImage>(true).texture = imageArray[drops[dropIndex].imageIndex]; // change later once we figure out joker images
-            shopSlot.GetComponentInChildren<RawImage>(true).color = new Color(UnityEngine.Random.Range(0f, 1f), UnityEngine.Random.Range(0f, 1f), UnityEngine.Random.Range(0f, 1f)); // change later once we figure out joker images
+            //shopSlot.GetComponentInChildren<RawImage>(true).color = new Color(UnityEngine.Random.Range(0f, 1f), UnityEngine.Random.Range(0f, 1f), UnityEngine.Random.Range(0f, 1f)); // change later once we figure out joker images
         }
     }
     public void displayConsumableOutput(List<Consumable> drops = null)
@@ -83,7 +83,7 @@ public class Shop : MonoBehaviour
        
         GameObject shopSlot = Shop_Item_TMPs[4];
         TMP_Text[] foundTMPs = shopSlot.GetComponentsInChildren<TMP_Text>(true);
-        foreach(TMP_Text currentTMP in foundTMPs)
+            foreach(var currentTMP in foundTMPs)
         {
             if(currentTMP.name == "Price Tag TMP")
             {
@@ -97,7 +97,7 @@ public class Shop : MonoBehaviour
             {
                 currentTMP.transform.GetComponent<TMP_Text>().text  = ""+ drops[0].description; // sets description of item to tmp
             }
-        }
+        } 
         // delete random color later
         shopSlot.GetComponentInChildren<RawImage>(true).color = new Color(UnityEngine.Random.Range(0f, 1f), UnityEngine.Random.Range(0f, 1f), UnityEngine.Random.Range(0f, 1f)); // change later once we figure out joker images
     }

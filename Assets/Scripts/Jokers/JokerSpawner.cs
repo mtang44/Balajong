@@ -9,7 +9,7 @@ public class JokerSpawner : MonoBehaviour
     [SerializeField]
     public string LootTableFilePath;
 
-    public string[] Rarities = new string[] {"Common","Uncommon","Rare","Epic","Legendary"};
+    public string[] Rarities = new string[] {"Common","Uncommon","Rare","Epic"};
     [SerializeField]
     public int[] Rarity_Weights = new int[] {55,30,15,6,1};
 
@@ -121,7 +121,10 @@ public class JokerSpawner : MonoBehaviour
     }
     public Dictionary<string,int> GetLootRarities()
     {
-        
+        foreach(var r in lootRarities)
+        {
+            Debug.Log(r);
+        }
         return lootRarities;
     }
 }

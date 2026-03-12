@@ -7,9 +7,7 @@ public static class ScoreTable
 {
     public const int HonorScore = 5;
 
-    /// <summary>
-    /// Applies default scores: suited tiles = face value (1-9), honors = HonorScore.
-    /// </summary>
+    // Applies default scores: suited tiles = face value (1-9), honors = HonorScore.
     public static void ApplyDefaultScores(ScoringManager scoring)
     {
         if (scoring == null)

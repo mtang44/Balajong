@@ -6,10 +6,10 @@ using System.Collections;
 // This class will manage the deck of tiles during the game, holding what is in the hand and in the wall.
 public class DeckManager : MonoBehaviour
 {
-    //
-    //I am doing the main camera stuff somewhat temporarily
-    //
-    Camera mainCamera;
+    public GameObject TileHolder;
+
+    private bool warnedMissingTileHolder = false;
+
     [SerializeField] GameObject tilePrefab;
     public int HAND_SIZE = 14;
     public int MAX_DISCARD_SELECTION = 5;
@@ -39,13 +39,8 @@ public class DeckManager : MonoBehaviour
         }
         deck = new Deck(tilePrefab);
         deck.InitializeDeck();
-        mainCamera = Camera.main;
     }
 
-    void Start()
-    {
-        mainCamera = Camera.main;
-    }
     public void forceNewLists()
     {
         hand = new List<GameObject>();
@@ -77,7 +72,6 @@ public class DeckManager : MonoBehaviour
         //Here we will sort the hand based on the tile types and values,
         //and update the positions of the gameObjects accordingly.
         //we'll start with just the positioning
-        mainCamera = Camera.main;
         for (int i = 0; i < hand.Count; i++)
         {
             GameObject tileGO = hand[i];
@@ -140,9 +134,8 @@ public class DeckManager : MonoBehaviour
     {
         if (hand.Count < HAND_SIZE)
         {
-            mainCamera = Camera.main;
             GameObject tileObject = Instantiate(tilePrefab);
-            tileObject.transform.SetParent(mainCamera.transform);
+            tileObject.transform.SetParent(GetTileParentTransform(), false);
             tileObject.transform.localPosition = Vector3.zero;
             hand.Add(tileObject);
             tileObject.GetComponent<MahjongTileHolder>().SetTileData(tileData);
@@ -257,5 +250,19 @@ public class DeckManager : MonoBehaviour
             }
         }
         return handData;
+    }
+
+    private Transform GetTileParentTransform()
+    {
+        if (TileHolder != null)
+            return TileHolder.transform;
+
+        if (!warnedMissingTileHolder)
+        {
+            warnedMissingTileHolder = true;
+            Debug.LogWarning("DeckManager: TileHolder is not assigned. Falling back to DeckManager transform.");
+        }
+
+        return transform;
     }
 }

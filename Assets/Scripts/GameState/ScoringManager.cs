@@ -23,6 +23,7 @@ Example usage with deck:
 */
 
 using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 
 // Alias so callers can pass MahjongTileData lists.
@@ -34,6 +35,19 @@ public class ScoringManager : MonoBehaviour
 
     [SerializeField]
     private bool logScoringDetails = false;
+
+    [SerializeField]
+    private GameObject handInfoTextObject;
+
+    [SerializeField]
+    private bool autoUpdateHandInfo = true;
+
+    [SerializeField]
+    private bool showTotal = false;
+
+    private TMPro.TextMeshProUGUI handInfoTmpText;
+    private UnityEngine.UI.Text handInfoLegacyText;
+    private string lastRenderedHandInfo = string.Empty;
 
     #region Tile values by type (all 0; set from a separate file that defines scores per TileType)
     // Assigning scores should look like this:
@@ -74,6 +88,17 @@ public class ScoringManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
+
+    private void Start()
+    {
+        UpdateHandInfoDisplay();
+    }
+
+    private void Update()
+    {
+        if (autoUpdateHandInfo)
+            UpdateHandInfoDisplay();
     }
 
     // Returns the configured score value for this tile (by type). Used for individual tile scoring and meld eval.
@@ -169,6 +194,114 @@ public class ScoringManager : MonoBehaviour
         if (logScoringDetails)
             Debug.Log($"Hand score: total={total}, melds={meldScore}, bonus={bonusScore}");
         return total;
+    }
+
+    // Updates the optional hand-info UI text with the current scoring breakdown.
+    public void UpdateHandInfoDisplay()
+    {
+        if (DeckManager.Instance == null) return;
+        if (!TryResolveHandInfoText()) return;
+
+        string handInfo = BuildCurrentHandInfoText();
+        if (handInfo == lastRenderedHandInfo) return;
+
+        if (handInfoTmpText != null)
+            handInfoTmpText.text = handInfo;
+        else if (handInfoLegacyText != null)
+            handInfoLegacyText.text = handInfo;
+
+        lastRenderedHandInfo = handInfo;
+    }
+
+    private bool TryResolveHandInfoText()
+    {
+        if (handInfoTmpText != null || handInfoLegacyText != null)
+            return true;
+
+        if (handInfoTextObject == null)
+            return false;
+
+        handInfoTmpText = handInfoTextObject.GetComponent<TMPro.TextMeshProUGUI>();
+        if (handInfoTmpText == null)
+            handInfoLegacyText = handInfoTextObject.GetComponent<UnityEngine.UI.Text>();
+
+        return handInfoTmpText != null || handInfoLegacyText != null;
+    }
+
+    private string BuildCurrentHandInfoText()
+    {
+        List<MahjongTile> handTiles = DeckManager.Instance.getHandAsMahjongTileData();
+        List<Meld> melds = DetectMelds(handTiles);
+
+        int eyesCount = 0;
+        int pungCount = 0;
+        int chowCount = 0;
+
+        int meldTotal = 0;
+        foreach (var meld in melds)
+        {
+            int meldScore = EvalMeld(meld);
+            meldTotal += meldScore;
+
+            switch (meld.Kind)
+            {
+                case MeldKind.Eyes:
+                    eyesCount++;
+                    break;
+                case MeldKind.Pung:
+                    pungCount++;
+                    break;
+                case MeldKind.Chow:
+                    chowCount++;
+                    break;
+            }
+        }
+
+        int flowerTotal = AddBonusBreakdown(DeckManager.Instance.flowerTiles, out int flowerCount);
+        int seasonTotal = AddBonusBreakdown(DeckManager.Instance.seasonTiles, out int seasonCount);
+
+        int total = meldTotal + flowerTotal + seasonTotal;
+
+        var sb = new StringBuilder();
+        sb.AppendLine("Hand Info:");
+        AppendTypeCountLine(sb, "Eyes", eyesCount);
+        AppendTypeCountLine(sb, "Pung", pungCount);
+        AppendTypeCountLine(sb, "Chow", chowCount);
+        AppendTypeCountLine(sb, "Flowers", flowerCount);
+        AppendTypeCountLine(sb, "Seasons", seasonCount);
+        if (showTotal)
+            sb.Append($"Total - {total}");
+
+        return sb.ToString().TrimEnd();
+    }
+
+    private int AddBonusBreakdown(List<GameObject> tiles, out int tileCount)
+    {
+        tileCount = 0;
+        if (tiles == null) return 0;
+
+        int total = 0;
+        foreach (var tile in tiles)
+        {
+            if (tile == null) continue;
+
+            MahjongTile tileData = tile.GetComponent<MahjongTileHolder>()?.TileData;
+            if (tileData == null) continue;
+
+            int tileScore = GetTileScore(tileData);
+            total += tileScore;
+            tileCount++;
+        }
+
+        return total;
+    }
+
+    private static void AppendTypeCountLine(StringBuilder sb, string label, int count)
+    {
+        if (count <= 0)
+            return;
+
+        sb.AppendLine($"{label} x{count}");
     }
 
     // Checks if the hand meets the checkpoint threshold.

@@ -42,7 +42,7 @@ public class DeckManager : MonoBehaviour
 
     void Start()
     {
-        
+        mainCamera = Camera.main;
     }
 
     public void drawHand(int count = 0)
@@ -61,6 +61,7 @@ public class DeckManager : MonoBehaviour
         //Here we will sort the hand based on the tile types and values,
         //and update the positions of the gameObjects accordingly.
         //we'll start with just the positioning
+        mainCamera = Camera.main;
         for (int i = 0; i < hand.Count; i++)
         {
             GameObject tileGO = hand[i];
@@ -95,6 +96,7 @@ public class DeckManager : MonoBehaviour
     {
         if (hand.Count < HAND_SIZE)
         {
+            mainCamera = Camera.main;
             GameObject tileObject = Instantiate(tilePrefab);
             tileObject.transform.SetParent(mainCamera.transform);
             tileObject.transform.localPosition = Vector3.zero;

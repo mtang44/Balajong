@@ -65,7 +65,6 @@ public class ScoringManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
 
             // Initialize tile scores from the example score table so
             // all tiles have non-zero values by default.

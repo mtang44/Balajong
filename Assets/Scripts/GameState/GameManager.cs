@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine.InputSystem;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public enum GameState
 {
@@ -29,7 +30,6 @@ public class GameManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
         }
         else
         {
@@ -40,6 +40,10 @@ public class GameManager : MonoBehaviour
     {
         currentState = GameState.Start;
         SwitchState(currentState);
+    }
+    void OnSceneLoaded()
+    {
+        SwitchState(GameState.Start);
     }
     void SetState(GameState newState) { currentState = newState; }
     void SwitchState(GameState newState)

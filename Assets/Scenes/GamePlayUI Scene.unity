@@ -1420,6 +1420,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 350713cafb270c54885107c74cadcc2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SceneChanger
+  animator: {fileID: 0}
+  transitionTime: 1
+  transitionObject: {fileID: 0}
+  tileTransition: {fileID: 0}
+  transitionCanvas: {fileID: 0}
+  transitionCanvasCamera: {fileID: 0}
+  autoConfigureTransitionCanvas: 1
+  transitionCanvasPlaneDistance: 1
 --- !u!1 &54280068
 GameObject:
   m_ObjectHideFlags: 0
@@ -2072,58 +2080,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 69419503}
   m_CullTransparentMesh: 1
---- !u!1 &70280583
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 70280585}
-  - component: {fileID: 70280584}
-  m_Layer: 0
-  m_Name: 'Consumable Item Generator '
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &70280584
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 70280583}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a5d4f8801570aac439e30bc10324a28d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ConsumableGenerator
-  LootTableFilePath: Assets/CSV Files/LootTable - ConsumableTable.csv
-  Rarities:
-  - Common
-  - Uncommon
-  - Rare
-  - Epic
-  - Legendary
-  Rarity_Weights: 370000001e0000000f0000000600000001000000
---- !u!4 &70280585
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 70280583}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.09866, y: -0.47298, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &70597034
 GameObject:
   m_ObjectHideFlags: 0
@@ -5070,7 +5026,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 176.53467, y: -0.18261719}
+  m_AnchoredPosition: {x: 176.53448, y: -0.18261719}
   m_SizeDelta: {x: -412.6479, y: -21.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &245801838
@@ -5855,6 +5811,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 350713cafb270c54885107c74cadcc2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SceneChanger
+  animator: {fileID: 0}
+  transitionTime: 1
+  transitionObject: {fileID: 0}
+  tileTransition: {fileID: 0}
+  transitionCanvas: {fileID: 0}
+  transitionCanvasCamera: {fileID: 0}
+  autoConfigureTransitionCanvas: 1
+  transitionCanvasPlaneDistance: 1
 --- !u!1 &288053133
 GameObject:
   m_ObjectHideFlags: 0
@@ -7149,7 +7113,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -14.611328, y: 0}
+  m_AnchoredPosition: {x: -14.611084, y: 0}
   m_SizeDelta: {x: 176.468, y: 84}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &351898171
@@ -7686,6 +7650,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 350713cafb270c54885107c74cadcc2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SceneChanger
+  animator: {fileID: 0}
+  transitionTime: 1
+  transitionObject: {fileID: 0}
+  tileTransition: {fileID: 0}
+  transitionCanvas: {fileID: 0}
+  transitionCanvasCamera: {fileID: 0}
+  autoConfigureTransitionCanvas: 1
+  transitionCanvasPlaneDistance: 1
 --- !u!1 &391966048
 GameObject:
   m_ObjectHideFlags: 0
@@ -7934,7 +7906,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 176.53467, y: -0.18261719}
+  m_AnchoredPosition: {x: 176.53448, y: -0.18261719}
   m_SizeDelta: {x: -412.6479, y: -21.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &407215202
@@ -11304,7 +11276,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 140.03711, y: -145}
+  m_AnchoredPosition: {x: 140.03735, y: -145}
   m_SizeDelta: {x: -1430.2695, y: -982.226}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &587452164
@@ -12034,7 +12006,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 217.45801, y: -26}
+  m_AnchoredPosition: {x: 217.45801, y: -25.999756}
   m_SizeDelta: {x: -1275.4279, y: -982.226}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &629353399
@@ -13682,7 +13654,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 176.53467, y: -0.18261719}
+  m_AnchoredPosition: {x: 176.53448, y: -0.18261719}
   m_SizeDelta: {x: -412.6479, y: -21.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &774376884
@@ -13801,6 +13773,96 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 775136536}
   m_CullTransparentMesh: 1
+--- !u!1001 &778435907
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1676278459346204054, guid: 1fd3c9ba346c1f942bf498fe1298071c, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 28.41711
+      objectReference: {fileID: 0}
+    - target: {fileID: 1676278459346204054, guid: 1fd3c9ba346c1f942bf498fe1298071c, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1676278459346204054, guid: 1fd3c9ba346c1f942bf498fe1298071c, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -92.50664
+      objectReference: {fileID: 0}
+    - target: {fileID: 1676278459346204054, guid: 1fd3c9ba346c1f942bf498fe1298071c, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1676278459346204054, guid: 1fd3c9ba346c1f942bf498fe1298071c, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1676278459346204054, guid: 1fd3c9ba346c1f942bf498fe1298071c, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1676278459346204054, guid: 1fd3c9ba346c1f942bf498fe1298071c, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1676278459346204054, guid: 1fd3c9ba346c1f942bf498fe1298071c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1676278459346204054, guid: 1fd3c9ba346c1f942bf498fe1298071c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1676278459346204054, guid: 1fd3c9ba346c1f942bf498fe1298071c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2402434644741163700, guid: 1fd3c9ba346c1f942bf498fe1298071c, type: 3}
+      propertyPath: transitionCanvas
+      value: 
+      objectReference: {fileID: 778435910}
+    - target: {fileID: 2402434644741163700, guid: 1fd3c9ba346c1f942bf498fe1298071c, type: 3}
+      propertyPath: transitionCanvasCamera
+      value: 
+      objectReference: {fileID: 2103380447}
+    - target: {fileID: 4215344607048028909, guid: 1fd3c9ba346c1f942bf498fe1298071c, type: 3}
+      propertyPath: m_Camera
+      value: 
+      objectReference: {fileID: 2103380447}
+    - target: {fileID: 4582402837353464211, guid: 1fd3c9ba346c1f942bf498fe1298071c, type: 3}
+      propertyPath: m_Name
+      value: TransitionManager
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 1fd3c9ba346c1f942bf498fe1298071c, type: 3}
+--- !u!20 &778435908 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 7894800897059010009, guid: 1fd3c9ba346c1f942bf498fe1298071c, type: 3}
+  m_PrefabInstance: {fileID: 778435907}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &778435909 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2402434644741163700, guid: 1fd3c9ba346c1f942bf498fe1298071c, type: 3}
+  m_PrefabInstance: {fileID: 778435907}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 350713cafb270c54885107c74cadcc2f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SceneChanger
+--- !u!223 &778435910 stripped
+Canvas:
+  m_CorrespondingSourceObject: {fileID: 4215344607048028909, guid: 1fd3c9ba346c1f942bf498fe1298071c, type: 3}
+  m_PrefabInstance: {fileID: 778435907}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &779538346
 GameObject:
   m_ObjectHideFlags: 0
@@ -14299,7 +14361,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 140.03711, y: -145}
+  m_AnchoredPosition: {x: 140.03735, y: -145}
   m_SizeDelta: {x: -1430.2695, y: -982.226}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &811778301
@@ -16869,7 +16931,7 @@ GameObject:
   - component: {fileID: 975557520}
   - component: {fileID: 975557519}
   m_Layer: 0
-  m_Name: Joker Generator
+  m_Name: Joker Creator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -16887,13 +16949,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15f34bcb203be084b965def8240681ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::JokerSpawner
-  LootTableFilePath: Assets/CSV Files/LootTable - JokerTable.csv
+  LootTableFilePath: Assets/Art Assets/LootTable - JokerTable.csv
   Rarities:
   - Common
-  - Uncommon
-  - Rare
-  - Epic
-  Rarity_Weights: 370000001e0000000f00000005000000
+  Rarity_Weights: 37000000
 --- !u!4 &975557520
 Transform:
   m_ObjectHideFlags: 0
@@ -18423,7 +18482,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 176.53467, y: -0.18261719}
+  m_AnchoredPosition: {x: 176.53448, y: -0.18261719}
   m_SizeDelta: {x: -412.6479, y: -21.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1107442546
@@ -20990,7 +21049,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 176.53467, y: -0.18261719}
+  m_AnchoredPosition: {x: 176.53448, y: -0.18261719}
   m_SizeDelta: {x: -412.6479, y: -21.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1261692026
@@ -21280,7 +21339,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 217.45801, y: -26}
+  m_AnchoredPosition: {x: 217.45801, y: -25.999756}
   m_SizeDelta: {x: -1275.4279, y: -982.226}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1273589323
@@ -22459,6 +22518,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 350713cafb270c54885107c74cadcc2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SceneChanger
+  animator: {fileID: 0}
+  transitionTime: 1
+  transitionObject: {fileID: 0}
+  tileTransition: {fileID: 0}
+  transitionCanvas: {fileID: 0}
+  transitionCanvasCamera: {fileID: 0}
+  autoConfigureTransitionCanvas: 1
+  transitionCanvasPlaneDistance: 1
 --- !u!1 &1369173446
 GameObject:
   m_ObjectHideFlags: 0
@@ -24643,7 +24710,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1563989756}
         m_TargetAssemblyTypeName: Shop, Assembly-CSharp
-        m_MethodName: RerollJokers
+        m_MethodName: RerollShop
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -24704,15 +24771,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Shop
   Shop_Item_TMPs:
+  - {fileID: 2141479397}
   - {fileID: 296444833}
   - {fileID: 453824314}
   - {fileID: 2014731974}
   - {fileID: 1677016146}
-  - {fileID: 2141479397}
   jokerSpawner: {fileID: 975557519}
-  consumableGenerator: {fileID: 70280584}
-  jokerCount: 2
-  consumableCount: 1
+  lootCount: 5
 --- !u!1 &1566049213
 GameObject:
   m_ObjectHideFlags: 0
@@ -25843,6 +25908,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 350713cafb270c54885107c74cadcc2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SceneChanger
+  animator: {fileID: 0}
+  transitionTime: 1
+  transitionObject: {fileID: 0}
+  tileTransition: {fileID: 0}
+  transitionCanvas: {fileID: 0}
+  transitionCanvasCamera: {fileID: 0}
+  autoConfigureTransitionCanvas: 1
+  transitionCanvasPlaneDistance: 1
 --- !u!1 &1611491138
 GameObject:
   m_ObjectHideFlags: 0
@@ -28320,7 +28393,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1799846441}
-  - component: {fileID: 1799846448}
   - component: {fileID: 1799846447}
   - component: {fileID: 1799846446}
   - component: {fileID: 1799846445}
@@ -28393,18 +28465,6 @@ MonoBehaviour:
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
             m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 1
-          m_CallState: 2
-        - m_Target: {fileID: 0}
-          m_TargetAssemblyTypeName: UnityEngine.UI.Outline, UnityEngine.UI
-          m_MethodName: 
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: 
             m_IntArgument: 0
             m_FloatArgument: 0
             m_StringArgument: 
@@ -28485,28 +28545,16 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1520600119}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
+      - m_Target: {fileID: 778435909}
+        m_TargetAssemblyTypeName: SceneChanger, Assembly-CSharp
+        m_MethodName: ChangeScene
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 1799846448}
-        m_TargetAssemblyTypeName: SceneChanger, Assembly-CSharp
-        m_MethodName: ChangeScene
-        m_Mode: 3
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 3
-          m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: MapScene
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &1799846446
@@ -28547,18 +28595,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1799846440}
   m_CullTransparentMesh: 1
---- !u!114 &1799846448
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1799846440}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 350713cafb270c54885107c74cadcc2f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SceneChanger
 --- !u!1 &1810729628
 GameObject:
   m_ObjectHideFlags: 0
@@ -29258,7 +29294,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 176.53467, y: -0.18261719}
+  m_AnchoredPosition: {x: 176.53448, y: -0.18261719}
   m_SizeDelta: {x: -412.6479, y: -21.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1839861281
@@ -32503,7 +32539,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 55
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -32546,7 +32582,8 @@ MonoBehaviour:
   m_RequiresDepthTextureOption: 2
   m_RequiresOpaqueTextureOption: 2
   m_CameraType: 0
-  m_Cameras: []
+  m_Cameras:
+  - {fileID: 778435908}
   m_RendererIndex: -1
   m_VolumeLayerMask:
     serializedVersion: 2
@@ -33405,4 +33442,4 @@ SceneRoots:
   - {fileID: 217418086}
   - {fileID: 1998124780}
   - {fileID: 975557520}
-  - {fileID: 70280585}
+  - {fileID: 778435907}

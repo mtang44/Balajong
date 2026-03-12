@@ -159,17 +159,24 @@ public class DeckManager : MonoBehaviour
     }
     public void discardTiles(List<GameObject> tiles)
     {
-        foreach (GameObject tile in tiles)
+        // Create a copy to avoid "Collection was modified" error when items are removed during iteration
+        foreach (GameObject tile in new List<GameObject>(tiles))
         {
             discardTile(tile);
         }
     }
     public void endRound()
     {
-        handToDiscard();
+        // Move all hand tiles to discard pile
+        discardTiles(hand);
+        hand.Clear();
+        selectedTiles.Clear();
+        
+        // Return all tiles (both hand and discard) back to the deck
         deck.AddTiles(discard);
         discard.Clear();
     }
+
     public List<MahjongTileData> getHandAsMahjongTileData()
     {
         List<MahjongTileData> handData = new List<MahjongTileData>();

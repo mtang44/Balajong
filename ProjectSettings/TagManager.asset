@@ -5,14 +5,15 @@ TagManager:
   serializedVersion: 3
   tags:
   - Tooltip
+  - CanvasCamera
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Map
   - Water
   - UI
-  - 
+  - Transition Tile
   - 
   - 
   - 

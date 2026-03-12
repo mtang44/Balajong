@@ -55,6 +55,39 @@ public class MahjongTileDisplay : MonoBehaviour
 
     private const string TextureProperty = "_BaseMap";
 
+#if UNITY_EDITOR
+    private bool IsEditingPrefab()
+    {
+        return UnityEditor.PrefabUtility.IsPartOfAnyPrefab(gameObject);
+    }
+#else
+    private bool IsEditingPrefab() => false;
+#endif
+
+    private Material[] GetCurrentMaterials()
+    {
+#if UNITY_EDITOR
+        if (IsEditingPrefab())
+            return targetRenderer.sharedMaterials;
+#endif
+        return Application.isPlaying ? targetRenderer.materials : targetRenderer.sharedMaterials;
+    }
+
+    private void SetCurrentMaterials(Material[] materials)
+    {
+#if UNITY_EDITOR
+        if (IsEditingPrefab())
+        {
+            targetRenderer.sharedMaterials = materials;
+            return;
+        }
+#endif
+        if (Application.isPlaying)
+            targetRenderer.materials = materials;
+        else
+            targetRenderer.sharedMaterials = materials;
+    }
+
     private void Reset()
     {
         targetRenderer = GetComponent<Renderer>();
@@ -189,20 +222,12 @@ public class MahjongTileDisplay : MonoBehaviour
         if (editionMaterial == null)
             return;
 
-        Material[] materials = Application.isPlaying ? targetRenderer.materials : targetRenderer.sharedMaterials;
+        Material[] materials = GetCurrentMaterials();
         if (materials == null || editionMaterialIndex < 0 || editionMaterialIndex >= materials.Length)
             return;
 
         materials[editionMaterialIndex] = editionMaterial;
-
-        if (Application.isPlaying)
-        {
-            targetRenderer.materials = materials;
-        }
-        else
-        {
-            targetRenderer.sharedMaterials = materials;
-        }
+        SetCurrentMaterials(materials);
     }
 
     private Material GetEditionMaterial(MahjongTileData tileData)
@@ -227,7 +252,7 @@ public class MahjongTileDisplay : MonoBehaviour
 
     private Material GetBaseMaterial()
     {
-        Material[] materials = Application.isPlaying ? targetRenderer.materials : targetRenderer.sharedMaterials;
+        Material[] materials = GetCurrentMaterials();
         if (materials == null || materialIndex < 0 || materialIndex >= materials.Length)
             return null;
 
@@ -249,20 +274,12 @@ public class MahjongTileDisplay : MonoBehaviour
 
     private void AssignMaterial(Material instance)
     {
-        Material[] materials = Application.isPlaying ? targetRenderer.materials : targetRenderer.sharedMaterials;
+        Material[] materials = GetCurrentMaterials();
         if (materials == null || materialIndex < 0 || materialIndex >= materials.Length)
             return;
 
         materials[materialIndex] = instance;
-        
-        if (Application.isPlaying)
-        {
-            targetRenderer.materials = materials;
-        }
-        else
-        {
-            targetRenderer.sharedMaterials = materials;
-        }
+        SetCurrentMaterials(materials);
     }
 
     private void InitializeMaterials()

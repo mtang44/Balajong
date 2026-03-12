@@ -265,7 +265,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SceneChanger
   animator: {fileID: 2782725384031628350}
-  transitionTime: 0.75
+  transitionTime: 0.5
   transitionObject: {fileID: 4582402837353464211}
   tileTransition: {fileID: 2280001853409125535}
   transitionCanvas: {fileID: 0}

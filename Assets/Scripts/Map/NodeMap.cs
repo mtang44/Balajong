@@ -31,6 +31,8 @@ public class NodeMap : MonoBehaviour
     [SerializeField] private float playerMarkerScale = 0.55f;
     [SerializeField] private Vector2 canvasReferenceResolution = new Vector2(1920f, 1080f);
     [SerializeField] private bool autoCreateCanvasWhenMissing = true;
+    [SerializeField] private float mapDragThreshold = 5f;
+    [SerializeField] private float panOvershoot = 200f;
 
     [Header("Runtime")]
     [SerializeField] private bool generateOnStart = true;
@@ -50,6 +52,18 @@ public class NodeMap : MonoBehaviour
     private readonly Dictionary<int, MapNodeView> viewsById = new Dictionary<int, MapNodeView>();
     private readonly List<ConnectionVisual> connectionVisuals = new List<ConnectionVisual>();
 
+    // Drag panning state
+    private Vector2 dragStartMousePosition;
+    private Vector2 lastDragMousePosition;
+    private bool isDragging;
+    private bool dragThresholdMet;
+    private float panMinX = float.NegativeInfinity;
+    private float panMaxX = float.PositiveInfinity;
+
+    private const float MinUiElementSize = 4f;
+    private const float MinElementScale = 0.05f;
+    private const int EdgeCrossingOptimizationPasses = 8;
+
     // Represents a visual connection between two nodes
     private struct ConnectionVisual
     {
@@ -57,6 +71,92 @@ public class NodeMap : MonoBehaviour
         public int toId;
         public RectTransform rect;
         public Image image;
+    }
+
+    private void Update()
+    {
+        if (mapRoot == null || mapCanvas == null)
+            return;
+
+#if ENABLE_INPUT_SYSTEM
+        var mouse = UnityEngine.InputSystem.Mouse.current;
+        if (mouse == null) return;
+        bool pressedThisFrame  = mouse.leftButton.wasPressedThisFrame;
+        bool releasedThisFrame = mouse.leftButton.wasReleasedThisFrame;
+        bool isPressed         = mouse.leftButton.isPressed;
+        Vector2 mousePos       = mouse.position.ReadValue();
+#else
+        bool pressedThisFrame  = Input.GetMouseButtonDown(0);
+        bool releasedThisFrame = Input.GetMouseButtonUp(0);
+        bool isPressed         = Input.GetMouseButton(0);
+        Vector2 mousePos       = Input.mousePosition;
+#endif
+
+        if (pressedThisFrame)
+        {
+            dragStartMousePosition = mousePos;
+            lastDragMousePosition = mousePos;
+            isDragging = true;
+            dragThresholdMet = false;
+        }
+
+        if (releasedThisFrame)
+        {
+            isDragging = false;
+            dragThresholdMet = false;
+        }
+
+        if (isDragging && isPressed)
+        {
+            if (!dragThresholdMet)
+            {
+                float threshold = Mathf.Max(0f, mapDragThreshold);
+                dragThresholdMet = (mousePos - dragStartMousePosition).sqrMagnitude > threshold * threshold;
+            }
+
+            if (dragThresholdMet)
+            {
+                Vector2 delta = mousePos - lastDragMousePosition;
+                SetMapRootX(mapRoot.anchoredPosition.x + delta.x / GetCanvasScaleFactor());
+            }
+
+            lastDragMousePosition = mousePos;
+        }
+    }
+
+    private void ComputePanBounds()
+    {
+        if (mapCanvas == null || mapRoot == null || mapData == null || mapData.nodes == null || mapData.nodes.Count == 0)
+        {
+            panMinX = float.NegativeInfinity;
+            panMaxX = float.PositiveInfinity;
+            return;
+        }
+
+        float nodeMapMinX = float.PositiveInfinity;
+        float nodeMapMaxX = float.NegativeInfinity;
+        float mapScale = GetMapScale();
+
+        for (int i = 0; i < mapData.nodes.Count; i++)
+        {
+            float x = mapData.nodes[i].position.x * mapScale;
+            if (x < nodeMapMinX) nodeMapMinX = x;
+            if (x > nodeMapMaxX) nodeMapMaxX = x;
+        }
+
+        float canvasWidth = GetCanvasWidth();
+        float baseMargin = nodeUiSize * 0.5f;
+        float halfCanvas = canvasWidth * 0.5f;
+
+        panMinX = -halfCanvas + baseMargin - panOvershoot - nodeMapMaxX;
+        panMaxX = halfCanvas - baseMargin + panOvershoot - nodeMapMinX;
+
+        if (panMinX > panMaxX)
+        {
+            float center = -(nodeMapMinX + nodeMapMaxX) * 0.5f;
+            panMinX = center;
+            panMaxX = center;
+        }
     }
 
     private void Start()
@@ -71,18 +171,10 @@ public class NodeMap : MonoBehaviour
         ResolveSceneChanger();
 
         if (!generateOnStart)
-        {
             return;
-        }
 
-        if (Application.isPlaying && loadFromRunState && MapRunState.Instance.HasMap)
-        {
-            mapData = MapRunState.Instance.CurrentMap;
-            BuildLookup();
-            UpdateNodeStates();
-            RebuildVisuals();
+        if (TryLoadMapFromRunState())
             return;
-        }
 
         GenerateNewMap();
     }
@@ -128,6 +220,8 @@ public class NodeMap : MonoBehaviour
 
         BuildLookup();
         RebuildVisuals();
+        ComputePanBounds();
+        CenterOnCurrentNode();
         SaveRuntimeState();
     }
 
@@ -146,18 +240,14 @@ public class NodeMap : MonoBehaviour
     // Called when a node is clicked by the player
     public void OnNodeClicked(int nodeId)
     {
-        if (!nodesById.TryGetValue(nodeId, out MapNodeData node))
+        if (mapData == null || !nodesById.TryGetValue(nodeId, out MapNodeData node))
         {
             return;
         }
 
-        // Prevent clicking on nodes in the current layer or any previous layers
-        if (nodesById.TryGetValue(mapData.currentNodeId, out MapNodeData currentNode))
+        if (TryGetCurrentNode(out MapNodeData currentNode) && node.layer <= currentNode.layer)
         {
-            if (node.layer <= currentNode.layer)
-            {
-                return;
-            }
+            return;
         }
 
         if (node.state != NodeState.Reachable)
@@ -168,19 +258,8 @@ public class NodeMap : MonoBehaviour
         mapData.currentNodeId = node.id;
         SaveRuntimeState();
 
-        if (config.autoLoadEncounterScene && !string.IsNullOrWhiteSpace(config.encounterSceneName))
+        if (TryLoadEncounterScene())
         {
-            SaveRuntimeState();
-
-            SceneChanger resolvedSceneChanger = ResolveSceneChanger();
-            if (resolvedSceneChanger != null)
-            {
-                resolvedSceneChanger.ChangeScene(config.encounterSceneName);
-            }
-            else
-            {
-                SceneManager.LoadScene(config.encounterSceneName);
-            }
             return;
         }
 
@@ -228,28 +307,17 @@ public class NodeMap : MonoBehaviour
     // Updates the states of all nodes based on the current node
     private void UpdateNodeStates()
     {
-        if (!nodesById.TryGetValue(mapData.currentNodeId, out MapNodeData currentNode))
+        if (mapData == null || mapData.nodes == null || !TryGetCurrentNode(out MapNodeData currentNode))
         {
             return;
         }
 
-        // Lock all nodes in the current layer and previous layers (except the current node itself)
-        // This ensures nodes in the same row as the player are dimmed/unreachable
         for (int i = 0; i < mapData.nodes.Count; i++)
         {
             MapNodeData node = mapData.nodes[i];
-            
-            // Skip the current node
-            if (node.id == currentNode.id) continue;
-
-            // For nodes in current or previous layers
-            if (node.layer <= currentNode.layer)
+            if (node.id != currentNode.id && node.layer <= currentNode.layer && node.state != NodeState.Cleared)
             {
-                // Lock them unless they've been completed (Cleared)
-                if (node.state != NodeState.Cleared)
-                {
-                    node.state = NodeState.Locked;
-                }
+                node.state = NodeState.Locked;
             }
         }
     }
@@ -365,6 +433,7 @@ public class NodeMap : MonoBehaviour
         {
             List<MapNodeData> currentLayer = layers[layerIndex];
             List<MapNodeData> nextLayer = layers[layerIndex + 1];
+            float distanceScale = Mathf.Max(config.nodeSpacing * Mathf.Max(1, nextLayer.Count - 1), 0.0001f);
 
             for (int i = 0; i < currentLayer.Count; i++)
             {
@@ -384,7 +453,6 @@ public class NodeMap : MonoBehaviour
                     }
 
                     float distance = Mathf.Abs(from.position.y - to.position.y);
-                    float distanceScale = Mathf.Max(config.nodeSpacing * Mathf.Max(1, nextLayer.Count - 1), 0.0001f);
                     float normalizedDistance = Mathf.Clamp01(distance / distanceScale);
                     float chance = Mathf.Lerp(config.extraConnectionChance, 0.05f, normalizedDistance);
 
@@ -414,7 +482,7 @@ public class NodeMap : MonoBehaviour
         if (layers.Count <= 1) return;
 
         // Multiple passes alternating between forward and backward
-        for (int pass = 0; pass < 8; pass++)
+        for (int pass = 0; pass < EdgeCrossingOptimizationPasses; pass++)
         {
             if (pass % 2 == 0)
             {
@@ -437,10 +505,11 @@ public class NodeMap : MonoBehaviour
     {
         List<MapNodeData> currentLayer = layers[layerIndex];
         List<MapNodeData> neighborLayer = byPredecessors ? layers[layerIndex - 1] : layers[layerIndex + 1];
-        List<(MapNodeData node, float barycenter)> nodePositions = new List<(MapNodeData, float)>();
+        List<(MapNodeData node, float barycenter)> nodePositions = new List<(MapNodeData, float)>(currentLayer.Count);
 
-        foreach (MapNodeData node in currentLayer)
+        for (int nodeIndex = 0; nodeIndex < currentLayer.Count; nodeIndex++)
         {
+            MapNodeData node = currentLayer[nodeIndex];
             float sum = 0f;
             int count = 0;
 
@@ -467,13 +536,15 @@ public class NodeMap : MonoBehaviour
                 }
             }
 
-            float barycenter = count > 0 ? sum / count : (byPredecessors ? currentLayer.IndexOf(node) : node.position.y);
-            nodePositions.Add((node, barycenter));
+            float fallback = byPredecessors ? nodeIndex : node.position.y;
+            nodePositions.Add((node, count > 0 ? sum / count : fallback));
         }
 
         nodePositions.Sort((a, b) => a.barycenter.CompareTo(b.barycenter));
         for (int i = 0; i < nodePositions.Count; i++)
+        {
             currentLayer[i] = nodePositions[i].node;
+        }
 
         UpdateLayerPositions(currentLayer);
     }
@@ -791,7 +862,7 @@ public class NodeMap : MonoBehaviour
         if (nodeRect != null)
         {
             ConfigureCenteredRect(nodeRect);
-            float size = Mathf.Max(4f, nodeUiSize * Mathf.Max(0.05f, config.nodeScale));
+            float size = ResolveUiElementSize(config.nodeScale);
             nodeRect.sizeDelta = new Vector2(size, size);
             nodeRect.anchoredPosition = MapToUiPosition(node.position);
             nodeRect.localRotation = Quaternion.identity;
@@ -880,14 +951,16 @@ public class NodeMap : MonoBehaviour
             wrapMode = TextureWrapMode.Clamp
         };
 
-        Vector2 center = new Vector2((size - 1) * 0.5f, (size - 1) * 0.5f);
+        float center = (size - 1) * 0.5f;
         float radius = size * 0.46f;
 
         for (int y = 0; y < size; y++)
         {
+            float dy = y - center;
             for (int x = 0; x < size; x++)
             {
-                float distance = Vector2.Distance(new Vector2(x, y), center);
+                float dx = x - center;
+                float distance = Mathf.Sqrt(dx * dx + dy * dy);
                 float alpha = Mathf.Clamp01(radius - distance);
                 texture.SetPixel(x, y, new Color(1f, 1f, 1f, alpha));
             }
@@ -919,11 +992,39 @@ public class NodeMap : MonoBehaviour
         ConfigureCenteredRect(markerRect);
     }
 
-    private Vector2 MapToUiPosition(Vector2 mapPosition)
+    private float GetMapScale() => Mathf.Max(1f, mapUnitsToPixels);
+
+    private float GetCanvasScaleFactor() => mapCanvas != null && mapCanvas.scaleFactor > 0f ? mapCanvas.scaleFactor : 1f;
+
+    private float GetCanvasWidth()
     {
-        float scale = Mathf.Max(1f, mapUnitsToPixels);
-        return mapPosition * scale;
+        if (mapCanvas == null)
+        {
+            return canvasReferenceResolution.x;
+        }
+
+        Canvas.ForceUpdateCanvases();
+        RectTransform canvasRect = mapCanvas.GetComponent<RectTransform>();
+        float width = canvasRect.rect.width;
+        return width > 0f ? width : canvasReferenceResolution.x;
     }
+
+    private float ResolveUiElementSize(float scaleMultiplier) =>
+        Mathf.Max(MinUiElementSize, nodeUiSize * Mathf.Max(MinElementScale, scaleMultiplier));
+
+    private float ClampPanX(float value) => Mathf.Clamp(value, panMinX, panMaxX);
+
+    private void SetMapRootX(float x)
+    {
+        if (mapRoot == null)
+        {
+            return;
+        }
+
+        mapRoot.anchoredPosition = new Vector2(ClampPanX(x), mapRoot.anchoredPosition.y);
+    }
+
+    private Vector2 MapToUiPosition(Vector2 mapPosition) => mapPosition * GetMapScale();
 
     private void PositionConnectionRect(RectTransform rect, Vector2 from, Vector2 to)
     {
@@ -1004,7 +1105,7 @@ public class NodeMap : MonoBehaviour
 
     private void RefreshPlayerMarker()
     {
-        if (mapData == null || !nodesById.TryGetValue(mapData.currentNodeId, out MapNodeData currentNode))
+        if (!TryGetCurrentNode(out MapNodeData currentNode))
         {
             if (playerMarkerImage != null)
             {
@@ -1026,15 +1127,99 @@ public class NodeMap : MonoBehaviour
 
         RectTransform markerRect = playerMarkerObject.GetComponent<RectTransform>();
         ConfigureCenteredRect(markerRect);
-        float markerSize = Mathf.Max(4f, nodeUiSize * Mathf.Max(0.05f, playerMarkerScale));
+        float markerSize = ResolveUiElementSize(playerMarkerScale);
         markerRect.sizeDelta = new Vector2(markerSize, markerSize);
 
-        Vector2 markerOffset = new Vector2(playerMarkerOffset.x, playerMarkerOffset.y) * Mathf.Max(1f, mapUnitsToPixels);
+        Vector2 markerOffset = new Vector2(playerMarkerOffset.x, playerMarkerOffset.y) * GetMapScale();
         markerRect.anchoredPosition = MapToUiPosition(currentNode.position) + markerOffset;
         markerRect.localRotation = Quaternion.identity;
         markerRect.localScale = Vector3.one;
 
         playerMarkerObject.transform.SetAsLastSibling();
+    }
+
+    private void CenterOnCurrentNode()
+    {
+        if (mapCanvas == null || mapRoot == null || mapData == null)
+        {
+            return;
+        }
+
+        float canvasWidth = GetCanvasWidth();
+        MapNodeData targetNode = TryGetCurrentNode(out MapNodeData currentNode)
+            ? currentNode
+            : FindFirstReachableNode();
+
+        if (targetNode == null)
+        {
+            return;
+        }
+
+        float targetX = -canvasWidth / 6f;
+        float panX = targetX - MapToUiPosition(targetNode.position).x;
+        SetMapRootX(panX);
+        mapRoot.anchoredPosition = new Vector2(mapRoot.anchoredPosition.x, 0f);
+    }
+
+    private bool TryLoadMapFromRunState()
+    {
+        if (!Application.isPlaying || !loadFromRunState || !MapRunState.Instance.HasMap)
+        {
+            return false;
+        }
+
+        mapData = MapRunState.Instance.CurrentMap;
+        BuildLookup();
+        UpdateNodeStates();
+        RebuildVisuals();
+        ComputePanBounds();
+        CenterOnCurrentNode();
+        return true;
+    }
+
+    private bool TryLoadEncounterScene()
+    {
+        if (config == null || !config.autoLoadEncounterScene || string.IsNullOrWhiteSpace(config.encounterSceneName))
+        {
+            return false;
+        }
+
+        SceneChanger resolvedSceneChanger = ResolveSceneChanger();
+        if (resolvedSceneChanger != null)
+        {
+            resolvedSceneChanger.ChangeScene(config.encounterSceneName);
+        }
+        else
+        {
+            SceneManager.LoadScene(config.encounterSceneName);
+        }
+
+        return true;
+    }
+
+    private bool TryGetCurrentNode(out MapNodeData currentNode)
+    {
+        currentNode = null;
+        return mapData != null && nodesById.TryGetValue(mapData.currentNodeId, out currentNode);
+    }
+
+    private MapNodeData FindFirstReachableNode()
+    {
+        MapNodeData target = null;
+        foreach (KeyValuePair<int, MapNodeData> entry in nodesById)
+        {
+            if (entry.Value.state != NodeState.Reachable)
+            {
+                continue;
+            }
+
+            if (target == null || entry.Value.layer < target.layer)
+            {
+                target = entry.Value;
+            }
+        }
+
+        return target;
     }
 
     private void SaveRuntimeState()
@@ -1054,7 +1239,7 @@ public class NodeMap : MonoBehaviour
             return sceneChanger;
         }
 
-        sceneChanger = FindObjectOfType<SceneChanger>(true);
+        sceneChanger = FindFirstObjectByType<SceneChanger>(FindObjectsInactive.Include);
         return sceneChanger;
     }
 
@@ -1068,7 +1253,7 @@ public class NodeMap : MonoBehaviour
         EventSystem eventSystem = EventSystem.current;
         if (eventSystem == null)
         {
-            eventSystem = FindObjectOfType<EventSystem>(true);
+            eventSystem = FindFirstObjectByType<EventSystem>(FindObjectsInactive.Include);
         }
 
         if (eventSystem == null)

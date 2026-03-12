@@ -2639,7 +2639,6 @@ MonoBehaviour:
   transitionCanvas: {fileID: 0}
   transitionCanvasCamera: {fileID: 0}
   autoConfigureTransitionCanvas: 1
-  transitionCanvasPlaneDistance: 1
 --- !u!1 &540089337
 GameObject:
   m_ObjectHideFlags: 0
@@ -3143,7 +3142,6 @@ MonoBehaviour:
   transitionCanvas: {fileID: 0}
   transitionCanvasCamera: {fileID: 0}
   autoConfigureTransitionCanvas: 1
-  transitionCanvasPlaneDistance: 1
 --- !u!1 &640782905
 GameObject:
   m_ObjectHideFlags: 0
@@ -5292,6 +5290,8 @@ MonoBehaviour:
   sceneChanger: {fileID: 1834608312}
   nextSceneName: GamePlayUI Scene
   winSceneName: Win Screen
+  DeckManager: {fileID: 175370140}
+  delayBeforeReturningToMap: 0.5
 --- !u!1 &836629900
 GameObject:
   m_ObjectHideFlags: 0

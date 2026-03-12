@@ -114,7 +114,7 @@ MonoBehaviour:
   materialIndex: 2
   materialInstance: {fileID: 2100000, guid: e15613742485bf9458fa04b5239314c3, type: 2}
   uvScaleMultiplier: 6
-  uvOffset: {x: -0.42, y: -0.345}
+  uvOffset: {x: -0.435, y: -0.345}
   tileOffsetConfigJson: {fileID: 4900000, guid: befb84a30c0c23e49bbbbc630a85b455, type: 3}
   texturePadding: 28
   editionMaterialIndex: 1
@@ -159,13 +159,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MahjongTileHolder
   tileData:
     tileType: 0
-    numberedValue: 0
+    numberedValue: 1
     windValue: 0
     dragonValue: 0
     flowerValue: 0
     seasonValue: 0
     edition: 0
-    sprite: {fileID: 0}
+    sprite: {fileID: 1245946512, guid: 728422e951c025d44b907401c3a07f88, type: 3}
 --- !u!65 &323555887727181619
 BoxCollider:
   m_ObjectHideFlags: 0

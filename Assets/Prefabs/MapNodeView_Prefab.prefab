@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 928839833168547672}
   - component: {fileID: 782456198002334112}
   - component: {fileID: 3885360254055009326}
+  - component: {fileID: 5810200918345899459}
   m_Layer: 3
   m_Name: MapNodeView_Prefab
   m_TagString: Untagged
@@ -135,3 +136,35 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MapNodeView
   nodeImage: {fileID: 928839833168547672}
   nodeButton: {fileID: 782456198002334112}
+  hoverTooltip: {fileID: 0}
+  enemyHealthText: ???
+--- !u!114 &5810200918345899459
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 126741392180120844}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d4347b82a2ccd041a72d0a81a0e7018, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MapNodeHoverTooltip
+  hoverScaleMultiplier: 1.15
+  hoverTransitionSpeed: 12
+  hoverBorderColor: {r: 0, g: 0, b: 0, a: 1}
+  hoverBorderThickness: {x: 6, y: 6}
+  hoverOutline: {fileID: 0}
+  showTooltipOnHover: 1
+  tooltipOffset: {x: 0, y: 92}
+  tooltipBackgroundColor: {r: 1, g: 1, b: 1, a: 0.92}
+  tooltipTextColor: {r: 0, g: 0, b: 0, a: 1}
+  tooltipMinWidth: 210
+  tooltipFontSize: 32
+  tooltipPadding: 12
+  tooltipSpacing: 4
+  tooltipFont: {fileID: 12800000, guid: ba47b797d34b7f54ab9fffc633427192, type: 3}
+  enemyHealthText: ???
+  tooltipRoot: {fileID: 0}
+  tooltipTypeText: {fileID: 0}
+  tooltipHealthText: {fileID: 0}

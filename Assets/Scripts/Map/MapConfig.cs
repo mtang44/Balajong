@@ -30,8 +30,7 @@ public class MapConfig : ScriptableObject
     public List<NodeTypeWeight> nodeTypeWeights = new List<NodeTypeWeight>
     {
         new NodeTypeWeight { type = MapNodeType.Battle, weight = 70 },
-        new NodeTypeWeight { type = MapNodeType.Elite, weight = 17 },
-        new NodeTypeWeight { type = MapNodeType.Rest, weight = 13 },
+        new NodeTypeWeight { type = MapNodeType.Elite, weight = 30 },
     };
 
     [Header("Flow")]

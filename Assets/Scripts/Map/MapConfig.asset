@@ -25,9 +25,7 @@ MonoBehaviour:
   - type: 1
     weight: 70
   - type: 2
-    weight: 17
-  - type: 3
-    weight: 13
+    weight: 30
   autoLoadEncounterScene: 1
   completeNodeImmediatelyInMapScene: 0
   encounterSceneName: RackingScene

@@ -252,7 +252,7 @@ public class MahjongTileDisplay : MonoBehaviour
 
     private Material GetBaseMaterial()
     {
-        Material[] materials = Application.isPlaying ? targetRenderer.materials : targetRenderer.sharedMaterials;
+        Material[] materials = GetCurrentMaterials();
         if (materials == null || materialIndex < 0 || materialIndex >= materials.Length)
             return null;
 
@@ -260,7 +260,7 @@ public class MahjongTileDisplay : MonoBehaviour
     }
 
     private Material GetOrCreateInstance(Material baseMaterial)
-    {GetCurrentMaterials();
+    {
         if (materialInstance == null || materialInstance.shader != baseMaterial.shader)
         {
             materialInstance = new Material(baseMaterial)

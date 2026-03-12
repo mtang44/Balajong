@@ -18,22 +18,12 @@ public class SceneChanger : MonoBehaviour
     private Camera transitionCanvasCamera;
     [SerializeField]
     private bool autoConfigureTransitionCanvas = true;
-    [SerializeField]
-    [Min(0.01f)]
-    private float transitionCanvasPlaneDistance = 1f;
-    [SerializeField]
-    private bool forceTransitionCanvasOnTop = true;
-    [SerializeField]
-    private int transitionCanvasSortingOrder = 1000;
-    [SerializeField]
-    private bool forceOpaqueTransitionBackground = true;
-    [SerializeField]
-    private Color transitionBackgroundColor = Color.black;
-    [SerializeField]
-    private Image transitionBackgroundImage;
 
     public void ChangeScene(string sceneName)
     {
+        if (!gameObject.activeInHierarchy)
+            gameObject.SetActive(true);
+
         if (BeginTransition())
         {
             StartCoroutine(LoadSceneAfterTransition(sceneName));
@@ -46,6 +36,9 @@ public class SceneChanger : MonoBehaviour
 
     public void ChangeScene(int sceneNumber)
     {
+        if (!gameObject.activeInHierarchy)
+            gameObject.SetActive(true);
+
         if (BeginTransition())
         {
             StartCoroutine(LoadSceneAfterTransition(sceneNumber));
@@ -113,57 +106,6 @@ public class SceneChanger : MonoBehaviour
         {
             return;
         }
-
-        canvas.planeDistance = Mathf.Clamp(transitionCanvasPlaneDistance, minDistance, maxDistance);
-
-        if (forceTransitionCanvasOnTop)
-        {
-            canvas.overrideSorting = true;
-            canvas.sortingOrder = transitionCanvasSortingOrder;
-        }
-
-        EnsureOpaqueTransitionBackground(canvas);
-    }
-
-    private void EnsureOpaqueTransitionBackground(Canvas canvas)
-    {
-        if (!forceOpaqueTransitionBackground || canvas == null)
-        {
-            return;
-        }
-
-        Image background = transitionBackgroundImage;
-        if (background == null)
-        {
-            Transform existing = canvas.transform.Find("TransitionBackground");
-            if (existing != null)
-            {
-                background = existing.GetComponent<Image>();
-            }
-        }
-
-        if (background == null)
-        {
-            GameObject backgroundObject = new GameObject("TransitionBackground", typeof(RectTransform), typeof(Image));
-            backgroundObject.transform.SetParent(canvas.transform, false);
-            background = backgroundObject.GetComponent<Image>();
-
-            RectTransform rect = background.rectTransform;
-            rect.anchorMin = Vector2.zero;
-            rect.anchorMax = Vector2.one;
-            rect.offsetMin = Vector2.zero;
-            rect.offsetMax = Vector2.zero;
-
-            // Keep this behind transition art so it only acts as an opaque blocker.
-            background.transform.SetAsFirstSibling();
-            transitionBackgroundImage = background;
-        }
-
-        background.raycastTarget = false;
-        Color color = transitionBackgroundColor;
-        color.a = 1f;
-        background.color = color;
-        background.enabled = true;
     }
 
     private IEnumerator LoadSceneAfterTransition(int sceneNumber)

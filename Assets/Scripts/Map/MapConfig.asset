@@ -17,7 +17,7 @@ MonoBehaviour:
   maxNodesPerMiddleLayer: 4
   guaranteedPathCount: 3
   extraConnectionChance: 0.25
-  maxOutgoingConnections: 3
+  maxOutgoingConnections: 2
   layerSpacing: 2.6
   nodeSpacing: 2
   nodeJitter: 0.2
@@ -31,7 +31,6 @@ MonoBehaviour:
   autoLoadEncounterScene: 1
   completeNodeImmediatelyInMapScene: 0
   encounterSceneName: RackingScene
-  winSceneName: Win Screen
   nodeScale: 0.8
   lineWidth: 0.08
   inactiveConnectionColor: {r: 0.35, g: 0.35, b: 0.35, a: 0.9}

@@ -2,9 +2,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 #if ENABLE_INPUT_SYSTEM
-using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.UI;
 #endif
 
 public class NodeMap : MonoBehaviour
@@ -12,24 +13,24 @@ public class NodeMap : MonoBehaviour
     [Header("References")]
     [SerializeField] private MapConfig config;
     [SerializeField] private SceneChanger sceneChanger;
-    [SerializeField] private Transform mapRoot;
+    [SerializeField] private Canvas mapCanvas;
+    [SerializeField] private RectTransform mapRoot;
     [SerializeField] private MapNodeView nodeViewPrefab;
-    [SerializeField] private Material lineMaterial;
 
-    [Header("Interaction")]
-    [SerializeField] private Camera inputCamera;
-    [SerializeField] private LayerMask nodeClickMask = ~0;
-    [SerializeField] private bool ignoreClicksOverUi = true;
+    [Header("Layering")]
+    [SerializeField] private string mapLayerName = "map";
 
-    [Header("2D Visuals")]
+    [Header("UI Visuals")]
     [SerializeField] private Sprite defaultNodeSprite;
-    [SerializeField] private int nodeSortingOrder = 10;
-    [SerializeField] private int lineSortingOrder = 0;
+    [SerializeField] private float mapUnitsToPixels = 120f;
+    [SerializeField] private float nodeUiSize = 96f;
+    [SerializeField] private float lineUiWidth = 10f;
     [SerializeField] private Sprite playerMarkerSprite;
     [SerializeField] private Color playerMarkerColor = new Color(0.2f, 0.95f, 1f, 1f);
     [SerializeField] private Vector3 playerMarkerOffset = new Vector3(0f, 0.9f, 0f);
     [SerializeField] private float playerMarkerScale = 0.55f;
-    [SerializeField] private int playerMarkerSortingOrder = 20;
+    [SerializeField] private Vector2 canvasReferenceResolution = new Vector2(1920f, 1080f);
+    [SerializeField] private bool autoCreateCanvasWhenMissing = true;
 
     [Header("Runtime")]
     [SerializeField] private bool generateOnStart = true;
@@ -38,10 +39,12 @@ public class NodeMap : MonoBehaviour
 
     private NodeMapData mapData;
     private System.Random random;
-    private Material runtimeLineMaterial;
     private Sprite generatedCircleSprite;
     private GameObject playerMarkerObject;
-    private SpriteRenderer playerMarkerRenderer;
+    private Image playerMarkerImage;
+    private bool hasWarnedNonUiNodePrefab;
+    private int cachedMapLayer = int.MinValue;
+    private bool hasWarnedMissingMapLayer;
 
     private readonly Dictionary<int, MapNodeData> nodesById = new Dictionary<int, MapNodeData>();
     private readonly Dictionary<int, MapNodeView> viewsById = new Dictionary<int, MapNodeView>();
@@ -52,7 +55,8 @@ public class NodeMap : MonoBehaviour
     {
         public int fromId;
         public int toId;
-        public LineRenderer line;
+        public RectTransform rect;
+        public Image image;
     }
 
     private void Start()
@@ -62,6 +66,9 @@ public class NodeMap : MonoBehaviour
             Debug.LogError("NodeMap: MapConfig reference is missing.");
             return;
         }
+
+        EnsureEventSystem();
+        ResolveSceneChanger();
 
         if (!generateOnStart)
         {
@@ -80,32 +87,11 @@ public class NodeMap : MonoBehaviour
         GenerateNewMap();
     }
 
-    private void Update()
+    private void OnValidate()
     {
-        if (!Application.isPlaying)
-        {
-            return;
-        }
-
-        if (!TryGetPointerDownThisFrame(out Vector2 screenPosition))
-        {
-            return;
-        }
-
-        if (ignoreClicksOverUi && IsPointerOverUi())
-        {
-            return;
-        }
-
-        Camera cameraToUse = ResolveInputCamera();
-        if (cameraToUse == null) return;
-        MapNodeView clickedNode = RaycastNodeView(cameraToUse, screenPosition);
-        if (clickedNode == null)
-        {
-            return;
-        }
-
-        OnNodeClicked(clickedNode.NodeId);
+        cachedMapLayer = int.MinValue;
+        hasWarnedMissingMapLayer = false;
+        hasWarnedNonUiNodePrefab = false;
     }
 
     // Generates a new map using the current configuration and a random seed
@@ -185,9 +171,11 @@ public class NodeMap : MonoBehaviour
         if (config.autoLoadEncounterScene && !string.IsNullOrWhiteSpace(config.encounterSceneName))
         {
             SaveRuntimeState();
-            if (sceneChanger != null)
+
+            SceneChanger resolvedSceneChanger = ResolveSceneChanger();
+            if (resolvedSceneChanger != null)
             {
-                sceneChanger.ChangeScene(config.encounterSceneName);
+                resolvedSceneChanger.ChangeScene(config.encounterSceneName);
             }
             else
             {
@@ -636,6 +624,11 @@ public class NodeMap : MonoBehaviour
     private void RebuildVisuals()
     {
         EnsureMapRoot();
+        if (mapRoot == null)
+        {
+            return;
+        }
+
         ClearMapRoot();
 
         viewsById.Clear();
@@ -670,15 +663,74 @@ public class NodeMap : MonoBehaviour
 
     private void EnsureMapRoot()
     {
-        if (mapRoot != null) return;
+        if (mapCanvas == null)
+        {
+            mapCanvas = GetComponentInParent<Canvas>();
+        }
 
-        mapRoot = transform.Find("GeneratedNodeMap");
+        if (mapCanvas == null && autoCreateCanvasWhenMissing)
+        {
+            mapCanvas = CreateCanvas();
+        }
+
+        if (mapCanvas != null)
+        {
+            mapCanvas.renderMode = RenderMode.ScreenSpaceCamera;
+            if (mapCanvas.worldCamera == null)
+                mapCanvas.worldCamera = Camera.main;
+        }
+
         if (mapRoot == null)
         {
-            GameObject root = new GameObject("GeneratedNodeMap");
-            root.transform.SetParent(transform, false);
-            mapRoot = root.transform;
+            Transform parent = mapCanvas != null ? mapCanvas.transform : transform;
+            mapRoot = parent.Find("GeneratedNodeMap") as RectTransform;
+            if (mapRoot == null)
+            {
+                GameObject root = new GameObject("GeneratedNodeMap", typeof(RectTransform));
+                root.transform.SetParent(parent, false);
+                mapRoot = root.GetComponent<RectTransform>();
+            }
         }
+
+        if (mapCanvas != null && mapRoot != null && mapRoot.parent != mapCanvas.transform)
+        {
+            mapRoot.SetParent(mapCanvas.transform, false);
+        }
+
+        if (mapRoot == null)
+        {
+            Debug.LogError("NodeMap: Failed to create/find a UI map root.");
+            return;
+        }
+
+        ConfigureCenteredRect(mapRoot);
+        mapRoot.anchoredPosition = Vector2.zero;
+        mapRoot.localScale = Vector3.one;
+
+        ApplyMapLayer(mapRoot.gameObject);
+    }
+
+    private Canvas CreateCanvas()
+    {
+        GameObject canvasObject = new GameObject(
+            "NodeMapCanvas",
+            typeof(RectTransform),
+            typeof(Canvas),
+            typeof(CanvasScaler),
+            typeof(GraphicRaycaster));
+        canvasObject.transform.SetParent(transform, false);
+
+        Canvas canvas = canvasObject.GetComponent<Canvas>();
+        canvas.renderMode = RenderMode.ScreenSpaceCamera;
+        canvas.worldCamera = Camera.main;
+
+        CanvasScaler scaler = canvasObject.GetComponent<CanvasScaler>();
+        scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+        scaler.referenceResolution = canvasReferenceResolution;
+        scaler.screenMatchMode = CanvasScaler.ScreenMatchMode.MatchWidthOrHeight;
+        scaler.matchWidthOrHeight = 0.5f;
+
+        return canvas;
     }
 
     private void ClearMapRoot()
@@ -707,65 +759,72 @@ public class NodeMap : MonoBehaviour
         MapNodeView view;
         Sprite nodeSprite = ResolveNodeSprite();
 
-        if (nodeViewPrefab != null)
+        if (nodeViewPrefab != null && nodeViewPrefab.GetComponent<RectTransform>() != null)
         {
             view = Instantiate(nodeViewPrefab, mapRoot);
         }
         else
         {
-            GameObject spriteNode = new GameObject("MapNode");
-            spriteNode.transform.SetParent(mapRoot, false);
+            if (nodeViewPrefab != null && !hasWarnedNonUiNodePrefab)
+            {
+                hasWarnedNonUiNodePrefab = true;
+                Debug.LogWarning("NodeMap: Node view prefab is not a UI prefab (missing RectTransform). Using generated UI nodes.");
+            }
 
-            SpriteRenderer spriteRenderer = spriteNode.AddComponent<SpriteRenderer>();
-            spriteRenderer.sprite = nodeSprite;
-            spriteRenderer.sortingOrder = nodeSortingOrder;
+            GameObject uiNode = new GameObject("MapNode", typeof(RectTransform), typeof(Image), typeof(Button), typeof(MapNodeView));
+            uiNode.transform.SetParent(mapRoot, false);
 
-            spriteNode.AddComponent<CircleCollider2D>();
-            view = spriteNode.AddComponent<MapNodeView>();
+            Image image = uiNode.GetComponent<Image>();
+            image.sprite = nodeSprite;
+            image.preserveAspect = true;
+            image.raycastTarget = true;
+
+            Button button = uiNode.GetComponent<Button>();
+            button.transition = Selectable.Transition.None;
+
+            view = uiNode.GetComponent<MapNodeView>();
         }
 
-        view.transform.localPosition = new Vector3(node.position.x, node.position.y, 0f);
-        view.transform.localScale = Vector3.one * config.nodeScale;
-        view.Setup(this, node, nodeSprite, nodeSortingOrder);
+        ApplyMapLayer(view.gameObject, recursive: true);
+
+        RectTransform nodeRect = view.GetComponent<RectTransform>();
+        if (nodeRect != null)
+        {
+            ConfigureCenteredRect(nodeRect);
+            float size = Mathf.Max(4f, nodeUiSize * Mathf.Max(0.05f, config.nodeScale));
+            nodeRect.sizeDelta = new Vector2(size, size);
+            nodeRect.anchoredPosition = MapToUiPosition(node.position);
+            nodeRect.localRotation = Quaternion.identity;
+            nodeRect.localScale = Vector3.one;
+        }
+
+        view.Setup(this, node, nodeSprite, 0);
 
         return view;
     }
 
     private void CreateConnectionVisual(MapNodeData from, MapNodeData to)
     {
-        GameObject lineObject = new GameObject($"Edge_{from.id}_{to.id}");
+        GameObject lineObject = new GameObject($"Edge_{from.id}_{to.id}", typeof(RectTransform), typeof(Image));
         lineObject.transform.SetParent(mapRoot, false);
+        lineObject.transform.SetAsFirstSibling();
+        ApplyMapLayer(lineObject);
 
-        LineRenderer line = lineObject.AddComponent<LineRenderer>();
-        line.useWorldSpace = false;
-        line.positionCount = 2;
-        line.numCapVertices = 4;
-        line.startWidth = config.lineWidth;
-        line.endWidth = config.lineWidth;
-        line.sortingOrder = lineSortingOrder;
-        line.material = ResolveLineMaterial();
-        line.SetPosition(0, new Vector3(from.position.x, from.position.y, 0f));
-        line.SetPosition(1, new Vector3(to.position.x, to.position.y, 0f));
+        RectTransform lineRect = lineObject.GetComponent<RectTransform>();
+        ConfigureCenteredRect(lineRect);
+        PositionConnectionRect(lineRect, MapToUiPosition(from.position), MapToUiPosition(to.position));
+
+        Image lineImage = lineObject.GetComponent<Image>();
+        lineImage.raycastTarget = false;
+        lineImage.color = config.inactiveConnectionColor;
 
         connectionVisuals.Add(new ConnectionVisual
         {
             fromId = from.id,
             toId = to.id,
-            line = line
+            rect = lineRect,
+            image = lineImage
         });
-    }
-
-    private Material ResolveLineMaterial()
-    {
-        if (lineMaterial != null) return lineMaterial;
-        if (runtimeLineMaterial != null) return runtimeLineMaterial;
-
-        Shader shader = Shader.Find("Sprites/Default") ?? 
-                        Shader.Find("Universal Render Pipeline/Unlit") ?? 
-                        Shader.Find("Standard");
-
-        runtimeLineMaterial = new Material(shader);
-        return runtimeLineMaterial;
     }
 
     private void RefreshVisualState()
@@ -783,7 +842,7 @@ public class NodeMap : MonoBehaviour
             ConnectionVisual visual = connectionVisuals[i];
             if (!nodesById.TryGetValue(visual.fromId, out MapNodeData fromNode) ||
                 !nodesById.TryGetValue(visual.toId, out MapNodeData toNode) ||
-                visual.line == null)
+                visual.image == null)
             {
                 continue;
             }
@@ -791,8 +850,12 @@ public class NodeMap : MonoBehaviour
             bool isActive = fromNode.state == NodeState.Cleared &&
                             (toNode.state == NodeState.Reachable || toNode.state == NodeState.Cleared);
             Color color = isActive ? config.activeConnectionColor : config.inactiveConnectionColor;
-            visual.line.startColor = color;
-            visual.line.endColor = color;
+            visual.image.color = color;
+
+            if (visual.rect != null)
+            {
+                PositionConnectionRect(visual.rect, MapToUiPosition(fromNode.position), MapToUiPosition(toNode.position));
+            }
         }
 
         RefreshPlayerMarker();
@@ -843,39 +906,135 @@ public class NodeMap : MonoBehaviour
 
     private void EnsurePlayerMarker()
     {
-        if (mapRoot == null || (playerMarkerObject != null && playerMarkerRenderer != null)) return;
+        if (mapRoot == null || (playerMarkerObject != null && playerMarkerImage != null)) return;
 
-        playerMarkerObject = new GameObject("PlayerMarker");
+        playerMarkerObject = new GameObject("PlayerMarker", typeof(RectTransform), typeof(Image));
         playerMarkerObject.transform.SetParent(mapRoot, false);
-        playerMarkerRenderer = playerMarkerObject.AddComponent<SpriteRenderer>();
+        ApplyMapLayer(playerMarkerObject);
+
+        playerMarkerImage = playerMarkerObject.GetComponent<Image>();
+        playerMarkerImage.raycastTarget = false;
+
+        RectTransform markerRect = playerMarkerObject.GetComponent<RectTransform>();
+        ConfigureCenteredRect(markerRect);
+    }
+
+    private Vector2 MapToUiPosition(Vector2 mapPosition)
+    {
+        float scale = Mathf.Max(1f, mapUnitsToPixels);
+        return mapPosition * scale;
+    }
+
+    private void PositionConnectionRect(RectTransform rect, Vector2 from, Vector2 to)
+    {
+        if (rect == null)
+        {
+            return;
+        }
+
+        Vector2 delta = to - from;
+        float length = Mathf.Max(1f, delta.magnitude);
+        float width = Mathf.Max(1f, lineUiWidth);
+
+        rect.sizeDelta = new Vector2(length, width);
+        rect.anchoredPosition = (from + to) * 0.5f;
+        rect.localRotation = Quaternion.Euler(0f, 0f, Mathf.Atan2(delta.y, delta.x) * Mathf.Rad2Deg);
+    }
+
+    private static void ConfigureCenteredRect(RectTransform rect)
+    {
+        if (rect == null)
+        {
+            return;
+        }
+
+        rect.anchorMin = new Vector2(0.5f, 0.5f);
+        rect.anchorMax = new Vector2(0.5f, 0.5f);
+        rect.pivot = new Vector2(0.5f, 0.5f);
+    }
+
+    private void ApplyMapLayer(GameObject target, bool recursive = false)
+    {
+        if (target == null)
+        {
+            return;
+        }
+
+        int layer = ResolveMapLayer();
+        if (layer < 0)
+        {
+            return;
+        }
+
+        if (recursive)
+        {
+            SetLayerRecursively(target.transform, layer);
+            return;
+        }
+
+        target.layer = layer;
+    }
+
+    private int ResolveMapLayer()
+    {
+        if (cachedMapLayer != int.MinValue)
+        {
+            return cachedMapLayer;
+        }
+
+        cachedMapLayer = LayerMask.NameToLayer(mapLayerName);
+        if (cachedMapLayer < 0 && !hasWarnedMissingMapLayer)
+        {
+            hasWarnedMissingMapLayer = true;
+            Debug.LogWarning($"NodeMap: Layer '{mapLayerName}' was not found. Map visuals will keep their current layers.");
+        }
+
+        return cachedMapLayer;
+    }
+
+    private static void SetLayerRecursively(Transform root, int layer)
+    {
+        root.gameObject.layer = layer;
+
+        for (int i = 0; i < root.childCount; i++)
+        {
+            SetLayerRecursively(root.GetChild(i), layer);
+        }
     }
 
     private void RefreshPlayerMarker()
     {
         if (mapData == null || !nodesById.TryGetValue(mapData.currentNodeId, out MapNodeData currentNode))
         {
-            if (playerMarkerRenderer != null)
+            if (playerMarkerImage != null)
             {
-                playerMarkerRenderer.enabled = false;
+                playerMarkerImage.enabled = false;
             }
 
             return;
         }
 
         EnsurePlayerMarker();
-        if (playerMarkerRenderer == null)
+        if (playerMarkerImage == null)
         {
             return;
         }
 
-        playerMarkerRenderer.enabled = true;
-        playerMarkerRenderer.sprite = ResolvePlayerMarkerSprite();
-        playerMarkerRenderer.color = playerMarkerColor;
-        playerMarkerRenderer.sortingOrder = playerMarkerSortingOrder;
+        playerMarkerImage.enabled = true;
+        playerMarkerImage.sprite = ResolvePlayerMarkerSprite();
+        playerMarkerImage.color = playerMarkerColor;
 
-        playerMarkerObject.transform.localScale = Vector3.one * Mathf.Max(0.05f, playerMarkerScale);
-        playerMarkerObject.transform.localPosition =
-            new Vector3(currentNode.position.x, currentNode.position.y, 0f) + playerMarkerOffset;
+        RectTransform markerRect = playerMarkerObject.GetComponent<RectTransform>();
+        ConfigureCenteredRect(markerRect);
+        float markerSize = Mathf.Max(4f, nodeUiSize * Mathf.Max(0.05f, playerMarkerScale));
+        markerRect.sizeDelta = new Vector2(markerSize, markerSize);
+
+        Vector2 markerOffset = new Vector2(playerMarkerOffset.x, playerMarkerOffset.y) * Mathf.Max(1f, mapUnitsToPixels);
+        markerRect.anchoredPosition = MapToUiPosition(currentNode.position) + markerOffset;
+        markerRect.localRotation = Quaternion.identity;
+        markerRect.localScale = Vector3.one;
+
+        playerMarkerObject.transform.SetAsLastSibling();
     }
 
     private void SaveRuntimeState()
@@ -888,85 +1047,52 @@ public class NodeMap : MonoBehaviour
         MapRunState.Instance.SaveMap(mapData);
     }
 
-    private Camera ResolveInputCamera() => inputCamera != null ? inputCamera : Camera.main;
-
-    private MapNodeView RaycastNodeView(Camera cameraToUse, Vector2 screenPosition)
+    private SceneChanger ResolveSceneChanger()
     {
-        Vector3 worldPoint = ScreenToWorldOnMapPlane(cameraToUse, screenPosition);
-        Collider2D hit2D = Physics2D.OverlapPoint(new Vector2(worldPoint.x, worldPoint.y), nodeClickMask.value);
-        if (hit2D != null)
+        if (sceneChanger != null)
         {
-            return hit2D.GetComponentInParent<MapNodeView>();
+            return sceneChanger;
         }
 
-        Ray ray = cameraToUse.ScreenPointToRay(screenPosition);
-        if (Physics.Raycast(ray, out RaycastHit hit3D, 1000f, nodeClickMask.value))
-        {
-            return hit3D.collider.GetComponentInParent<MapNodeView>();
-        }
-
-        return null;
+        sceneChanger = FindObjectOfType<SceneChanger>(true);
+        return sceneChanger;
     }
 
-    private Vector3 ScreenToWorldOnMapPlane(Camera cameraToUse, Vector2 screenPosition)
+    private void EnsureEventSystem()
     {
-        float targetZ = mapRoot != null ? mapRoot.position.z : transform.position.z;
-        float depth = Mathf.Abs(targetZ - cameraToUse.transform.position.z);
-
-        if (cameraToUse.orthographic)
+        if (!Application.isPlaying)
         {
-            depth = cameraToUse.nearClipPlane;
+            return;
         }
 
-        return cameraToUse.ScreenToWorldPoint(new Vector3(screenPosition.x, screenPosition.y, depth));
-    }
+        EventSystem eventSystem = EventSystem.current;
+        if (eventSystem == null)
+        {
+            eventSystem = FindObjectOfType<EventSystem>(true);
+        }
 
-    private bool IsPointerOverUi()
-    {
-        if (EventSystem.current == null) return false;
+        if (eventSystem == null)
+        {
+            GameObject eventSystemObject = new GameObject("EventSystem", typeof(EventSystem));
+            eventSystem = eventSystemObject.GetComponent<EventSystem>();
+        }
 
 #if ENABLE_INPUT_SYSTEM
-        if (Touchscreen.current != null && Touchscreen.current.primaryTouch.press.isPressed)
+        if (eventSystem.GetComponent<InputSystemUIInputModule>() == null)
         {
-            int touchId = Touchscreen.current.primaryTouch.touchId.ReadValue();
-            if (EventSystem.current.IsPointerOverGameObject(touchId)) return true;
+            eventSystem.gameObject.AddComponent<InputSystemUIInputModule>();
+        }
+
+        StandaloneInputModule legacyModule = eventSystem.GetComponent<StandaloneInputModule>();
+        if (legacyModule != null)
+        {
+            legacyModule.enabled = false;
+        }
+#else
+        if (eventSystem.GetComponent<StandaloneInputModule>() == null)
+        {
+            eventSystem.gameObject.AddComponent<StandaloneInputModule>();
         }
 #endif
-        return EventSystem.current.IsPointerOverGameObject();
-    }
-
-    private bool TryGetPointerDownThisFrame(out Vector2 screenPosition)
-    {
-        screenPosition = default;
-
-#if ENABLE_INPUT_SYSTEM
-    if (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame)
-    {
-        screenPosition = Mouse.current.position.ReadValue();
-        return true;
-    }
-
-    if (Touchscreen.current != null && Touchscreen.current.primaryTouch.press.wasPressedThisFrame)
-    {
-        screenPosition = Touchscreen.current.primaryTouch.position.ReadValue();
-        return true;
-    }
-#endif
-
-#if ENABLE_LEGACY_INPUT_MANAGER
-    if (Input.GetMouseButtonDown(0))
-    {
-        screenPosition = Input.mousePosition;
-        return true;
-    }
-
-    if (Input.touchCount > 0 && Input.GetTouch(0).phase == UnityEngine.TouchPhase.Began)
-    {
-        screenPosition = Input.GetTouch(0).position;
-        return true;
-    }
-#endif
-
-        return false;
     }
 }

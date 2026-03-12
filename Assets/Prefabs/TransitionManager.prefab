@@ -140,7 +140,7 @@ GameObject:
   - component: {fileID: 6018441273936293613}
   - component: {fileID: 9197426046481184518}
   - component: {fileID: 2410567832819543721}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -268,11 +268,9 @@ MonoBehaviour:
   transitionTime: 0.75
   transitionObject: {fileID: 4582402837353464211}
   tileTransition: {fileID: 2280001853409125535}
-  tileOverlayCamera: {fileID: 0}
-  enforceOverlayCullingMask: 0
-  overlayCullingMask:
-    serializedVersion: 2
-    m_Bits: 0
+  transitionCanvas: {fileID: 0}
+  transitionCanvasCamera: {fileID: 0}
+  autoConfigureTransitionCanvas: 1
 --- !u!95 &2782725384031628350
 Animator:
   serializedVersion: 7
@@ -307,7 +305,7 @@ GameObject:
   - component: {fileID: 4215344607048028909}
   - component: {fileID: 6463447565197012682}
   - component: {fileID: 1592055971785065964}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: TileTransition
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -128,7 +128,7 @@ public class ConsumableEffectSystem : MonoBehaviour
                 DeckMutationHelpers.RemoveCopiesFromDeck(deckManager, chosenTile, 4);
                 break;
             case "Enhance":
-                DeckMutationHelpers.EnhanceCopiesInDeckAndHand(deckManager, chosenTile, Edition.Foil);
+                DeckMutationHelpers.EnhanceCopiesInDeckAndHand(deckManager, chosenTile, Edition.Ghost);
                 break;
             case "Heal":
                 ApplyHeal();

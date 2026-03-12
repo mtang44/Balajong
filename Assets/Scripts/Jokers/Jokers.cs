@@ -11,8 +11,7 @@ public class Jokers
     public string description;
     public string code;
     public int price;
-    public int imageIndex;
-    public Jokers(string name, string rarity, string code,string equationType, string description, int price, int imageIndex)
+    public Jokers(string name, string rarity, string code,string equationType, string description, int price)
     {
         this.name = name;
         this.rarity = rarity;
@@ -21,6 +20,5 @@ public class Jokers
         
         this.description = description;
         this.price = price;
-        this.imageIndex = imageIndex;
     }
 }

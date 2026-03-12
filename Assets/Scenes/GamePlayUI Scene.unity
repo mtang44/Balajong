@@ -2547,7 +2547,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 140.00003, y: -0.18261719}
+  m_AnchoredPosition: {x: 140, y: -0.18261719}
   m_SizeDelta: {x: -337.3352, y: -21.299927}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &97197786
@@ -5025,7 +5025,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 176.53452, y: -0.18261719}
+  m_AnchoredPosition: {x: 176.53448, y: -0.18261719}
   m_SizeDelta: {x: -412.6479, y: -21.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &245801838
@@ -7903,7 +7903,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 176.53452, y: -0.18261719}
+  m_AnchoredPosition: {x: 176.53448, y: -0.18261719}
   m_SizeDelta: {x: -412.6479, y: -21.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &407215202
@@ -13651,7 +13651,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 176.53452, y: -0.18261719}
+  m_AnchoredPosition: {x: 176.53448, y: -0.18261719}
   m_SizeDelta: {x: -412.6479, y: -21.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &774376884
@@ -14573,7 +14573,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 140.00003, y: -0.18261719}
+  m_AnchoredPosition: {x: 140, y: -0.18261719}
   m_SizeDelta: {x: -337.3352, y: -21.299927}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &813774471
@@ -16949,10 +16949,7 @@ MonoBehaviour:
   LootTableFilePath: Assets/CSV Files/LootTable - JokerTable.csv
   Rarities:
   - Common
-  - Uncommon
-  - Rare
-  - Epic
-  Rarity_Weights: 37000000190000000f00000008000000
+  Rarity_Weights: 37000000
 --- !u!4 &975557520
 Transform:
   m_ObjectHideFlags: 0
@@ -18482,7 +18479,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 176.53452, y: -0.18261719}
+  m_AnchoredPosition: {x: 176.53448, y: -0.18261719}
   m_SizeDelta: {x: -412.6479, y: -21.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1107442546
@@ -21049,7 +21046,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 176.53452, y: -0.18261719}
+  m_AnchoredPosition: {x: 176.53448, y: -0.18261719}
   m_SizeDelta: {x: -412.6479, y: -21.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1261692026
@@ -22750,7 +22747,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: -7706.4907, y: -4787.0454}
+  m_AnchoredPosition: {x: -7706.49, y: -4787.0454}
   m_SizeDelta: {x: 460.1, y: 721.2}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1385019642
@@ -24709,7 +24706,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1563989756}
         m_TargetAssemblyTypeName: Shop, Assembly-CSharp
-        m_MethodName: RerollJokers
+        m_MethodName: RerollShop
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -24770,41 +24767,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Shop
   Shop_Item_TMPs:
+  - {fileID: 2141479397}
   - {fileID: 296444833}
   - {fileID: 453824314}
-  - {fileID: 2141479397}
   - {fileID: 2014731974}
   - {fileID: 1677016146}
-  imageArray:
-  - {fileID: 2800000, guid: bc70f7de7c8ab1344a0a2ed2f9e85d16, type: 3}
-  - {fileID: 2800000, guid: 7d628e3f2cfc72b439a8dbd79d6658a3, type: 3}
-  - {fileID: 2800000, guid: 2ebc1917d93fffe4e8399d167885ea4f, type: 3}
-  - {fileID: 2800000, guid: f6e05f869510aa54e8d3dd77f5da904a, type: 3}
-  - {fileID: 2800000, guid: 1a27896a2f4de794da75e6cbf2510d3b, type: 3}
-  - {fileID: 2800000, guid: dbe0e6ab7477c2549806021a9069e04d, type: 3}
-  - {fileID: 2800000, guid: 4e8a153881c00084ab55fc7ff9e29a01, type: 3}
-  - {fileID: 2800000, guid: 5a218c3ae9218d74c85493f0c3905df9, type: 3}
-  - {fileID: 2800000, guid: 9d60b37626c87b94b9422e9ee2394f4c, type: 3}
-  - {fileID: 2800000, guid: da3479334c69f054aba47f289f4457aa, type: 3}
-  - {fileID: 2800000, guid: 047373d17a5edfb4f8d6dbc16a2f01a3, type: 3}
-  - {fileID: 2800000, guid: 4ddc5b10a93002b44b7532b2a344b26c, type: 3}
-  - {fileID: 2800000, guid: 0d259aed0f1ee044e93f9e40d4ba4925, type: 3}
-  - {fileID: 2800000, guid: 9d08adbc18bd52f4ba45f500f2f66569, type: 3}
-  - {fileID: 2800000, guid: 52bf037c76dcd934b9efde532fe17fff, type: 3}
-  - {fileID: 2800000, guid: 66b7f5e4e23f586478ba170e2a7ebc2e, type: 3}
-  - {fileID: 2800000, guid: 40d0db36e4f36e54197cfa8f3cb4e07b, type: 3}
-  - {fileID: 2800000, guid: 28613cb502ceb2f4ba27295dd717a755, type: 3}
-  - {fileID: 2800000, guid: 8fdd3ff1e733af2408743d982c41e2b6, type: 3}
-  - {fileID: 2800000, guid: c10c50e22613db746b0384f8b7813a42, type: 3}
-  - {fileID: 2800000, guid: 00c92d69c37f9ff488537deae85ecfe1, type: 3}
-  - {fileID: 2800000, guid: 100dc86d3e9f4174a941cefdb3f14255, type: 3}
-  - {fileID: 2800000, guid: 52841c9fb9cfb084795724afd87a76ab, type: 3}
-  - {fileID: 2800000, guid: ac1c67dc949606a4fbbcc34cc13b06fd, type: 3}
-  - {fileID: 2800000, guid: a5fc64fda490d3e47a5d594110238212, type: 3}
-  - {fileID: 2800000, guid: 2ff698a8d9455a34996ecb68d0267d5c, type: 3}
-  - {fileID: 2800000, guid: 5166fbab0dc25ca4e913a66f2ab4a037, type: 3}
-  - {fileID: 2800000, guid: e6e853e7498183d4395b6304518a9611, type: 3}
-  - {fileID: 2800000, guid: 1b623c866a148134abb68e96255fde67, type: 3}
   jokerSpawner: {fileID: 975557519}
   consumableGenerator: {fileID: 1683083823}
   jokerCount: 2
@@ -27133,7 +27100,8 @@ MonoBehaviour:
   - Uncommon
   - Rare
   - Epic
-  Rarity_Weights: 370000001e0000000f00000006000000
+  - Legendary
+  Rarity_Weights: 370000001e0000000f0000000600000001000000
 --- !u!4 &1683083824
 Transform:
   m_ObjectHideFlags: 0
@@ -29375,7 +29343,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 176.53452, y: -0.18261719}
+  m_AnchoredPosition: {x: 176.53448, y: -0.18261719}
   m_SizeDelta: {x: -412.6479, y: -21.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1839861281

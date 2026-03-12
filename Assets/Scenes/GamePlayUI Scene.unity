@@ -24709,6 +24709,8 @@ MonoBehaviour:
   - {fileID: 2014731974}
   - {fileID: 1677016146}
   - {fileID: 2141479397}
+  imageArray:
+  - {fileID: 0}
   jokerSpawner: {fileID: 975557519}
   consumableGenerator: {fileID: 70280584}
   jokerCount: 2

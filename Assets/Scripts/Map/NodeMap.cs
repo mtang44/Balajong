@@ -22,13 +22,27 @@ public class NodeMap : MonoBehaviour
 
     [Header("UI Visuals")]
     [SerializeField] private Sprite defaultNodeSprite;
+    [SerializeField] private Sprite startNodeSprite;
+    [SerializeField] private Sprite battleNodeSprite;
+    [SerializeField] private Sprite eliteNodeSprite;
+    [SerializeField] private Sprite bossNodeSprite;
     [SerializeField] private float mapUnitsToPixels = 120f;
     [SerializeField] private float nodeUiSize = 96f;
-    [SerializeField] private float lineUiWidth = 10f;
+    [SerializeField, Min(0.05f)] private float bossNodeScaleMultiplier = 1.35f;
+    [SerializeField] private string enemyHealthTooltipText = "???";
+    [SerializeField] private MapConnectionVisualSettings connectionVisualSettings = new MapConnectionVisualSettings
+    {
+        lineWidth = 10f,
+        dottedCycleLength = 28f,
+        dottedFillRatio = 0.45f,
+        activeScrollSpeed = 0.75f
+    };
     [SerializeField] private Sprite playerMarkerSprite;
     [SerializeField] private Color playerMarkerColor = new Color(0.2f, 0.95f, 1f, 1f);
     [SerializeField] private Vector3 playerMarkerOffset = new Vector3(0f, 0.9f, 0f);
     [SerializeField] private float playerMarkerScale = 0.55f;
+    [SerializeField, Min(0f)] private float playerMarkerBobAmplitude = 0.08f;
+    [SerializeField, Min(0f)] private float playerMarkerBobFrequency = 1.6f;
     [SerializeField] private Vector2 canvasReferenceResolution = new Vector2(1920f, 1080f);
     [SerializeField] private bool autoCreateCanvasWhenMissing = true;
     [SerializeField] private float mapDragThreshold = 5f;
@@ -69,8 +83,7 @@ public class NodeMap : MonoBehaviour
     {
         public int fromId;
         public int toId;
-        public RectTransform rect;
-        public Image image;
+        public MapConnectionVisual view;
     }
 
     private void Update()
@@ -122,6 +135,8 @@ public class NodeMap : MonoBehaviour
 
             lastDragMousePosition = mousePos;
         }
+
+        RefreshPlayerMarker();
     }
 
     private void ComputePanBounds()
@@ -145,7 +160,7 @@ public class NodeMap : MonoBehaviour
         }
 
         float canvasWidth = GetCanvasWidth();
-        float baseMargin = nodeUiSize * 0.5f;
+        float baseMargin = ResolveLargestNodeUiSize() * 0.5f;
         float halfCanvas = canvasWidth * 0.5f;
 
         panMinX = -halfCanvas + baseMargin - panOvershoot - nodeMapMaxX;
@@ -323,6 +338,11 @@ public class NodeMap : MonoBehaviour
     }
 
     public NodeMapData GetMapData() => mapData;
+
+    public bool IsCurrentNode(int id)
+    {
+        return mapData != null && mapData.currentNodeId == id;
+    }
 
     // Creates the layers of nodes for the map
     private List<List<MapNodeData>> CreateLayers()
@@ -828,7 +848,7 @@ public class NodeMap : MonoBehaviour
     private MapNodeView CreateNodeView(MapNodeData node)
     {
         MapNodeView view;
-        Sprite nodeSprite = ResolveNodeSprite();
+        Sprite nodeSprite = ResolveNodeSprite(node.type);
 
         if (nodeViewPrefab != null && nodeViewPrefab.GetComponent<RectTransform>() != null)
         {
@@ -862,39 +882,38 @@ public class NodeMap : MonoBehaviour
         if (nodeRect != null)
         {
             ConfigureCenteredRect(nodeRect);
-            float size = ResolveUiElementSize(config.nodeScale);
+            float size = ResolveNodeUiSize(node.type);
             nodeRect.sizeDelta = new Vector2(size, size);
             nodeRect.anchoredPosition = MapToUiPosition(node.position);
             nodeRect.localRotation = Quaternion.identity;
             nodeRect.localScale = Vector3.one;
         }
 
-        view.Setup(this, node, nodeSprite, 0);
+        view.Setup(this, node, nodeSprite);
+        view.SetEnemyHealthText(enemyHealthTooltipText);
 
         return view;
     }
 
     private void CreateConnectionVisual(MapNodeData from, MapNodeData to)
     {
-        GameObject lineObject = new GameObject($"Edge_{from.id}_{to.id}", typeof(RectTransform), typeof(Image));
+        GameObject lineObject = new GameObject($"Edge_{from.id}_{to.id}", typeof(RectTransform), typeof(RawImage), typeof(MapConnectionVisual));
         lineObject.transform.SetParent(mapRoot, false);
         lineObject.transform.SetAsFirstSibling();
         ApplyMapLayer(lineObject);
 
-        RectTransform lineRect = lineObject.GetComponent<RectTransform>();
-        ConfigureCenteredRect(lineRect);
-        PositionConnectionRect(lineRect, MapToUiPosition(from.position), MapToUiPosition(to.position));
+        Vector2 fromPosition = MapToUiPosition(from.position);
+        Vector2 toPosition = MapToUiPosition(to.position);
 
-        Image lineImage = lineObject.GetComponent<Image>();
-        lineImage.raycastTarget = false;
-        lineImage.color = config.inactiveConnectionColor;
+        MapConnectionVisual lineView = lineObject.GetComponent<MapConnectionVisual>();
+        lineView.Setup(GetConnectionVisualSettings());
+        lineView.SetConnection(fromPosition, toPosition, config.inactiveConnectionColor, shouldScroll: false);
 
         connectionVisuals.Add(new ConnectionVisual
         {
             fromId = from.id,
             toId = to.id,
-            rect = lineRect,
-            image = lineImage
+            view = lineView
         });
     }
 
@@ -913,26 +932,41 @@ public class NodeMap : MonoBehaviour
             ConnectionVisual visual = connectionVisuals[i];
             if (!nodesById.TryGetValue(visual.fromId, out MapNodeData fromNode) ||
                 !nodesById.TryGetValue(visual.toId, out MapNodeData toNode) ||
-                visual.image == null)
+                visual.view == null)
             {
                 continue;
             }
 
             bool isActive = fromNode.state == NodeState.Cleared &&
                             (toNode.state == NodeState.Reachable || toNode.state == NodeState.Cleared);
+            bool shouldScroll = fromNode.state == NodeState.Cleared && toNode.state == NodeState.Reachable;
             Color color = isActive ? config.activeConnectionColor : config.inactiveConnectionColor;
-            visual.image.color = color;
-
-            if (visual.rect != null)
-            {
-                PositionConnectionRect(visual.rect, MapToUiPosition(fromNode.position), MapToUiPosition(toNode.position));
-            }
+            Vector2 fromPosition = MapToUiPosition(fromNode.position);
+            Vector2 toPosition = MapToUiPosition(toNode.position);
+            visual.view.SetConnection(fromPosition, toPosition, color, shouldScroll);
         }
 
         RefreshPlayerMarker();
     }
 
-    private Sprite ResolveNodeSprite() => defaultNodeSprite != null ? defaultNodeSprite : GetOrCreateCircleSprite();
+    private Sprite ResolveNodeSprite(MapNodeType type)
+    {
+        Sprite sprite = type switch
+        {
+            MapNodeType.Start => startNodeSprite,
+            MapNodeType.Battle => battleNodeSprite,
+            MapNodeType.Elite => eliteNodeSprite,
+            MapNodeType.Boss => bossNodeSprite,
+            _ => defaultNodeSprite
+        };
+
+        if (sprite != null)
+        {
+            return sprite;
+        }
+
+        return defaultNodeSprite != null ? defaultNodeSprite : GetOrCreateCircleSprite();
+    }
 
     private Sprite ResolvePlayerMarkerSprite() => playerMarkerSprite != null ? playerMarkerSprite : GetOrCreateCircleSprite();
 
@@ -1012,6 +1046,29 @@ public class NodeMap : MonoBehaviour
     private float ResolveUiElementSize(float scaleMultiplier) =>
         Mathf.Max(MinUiElementSize, nodeUiSize * Mathf.Max(MinElementScale, scaleMultiplier));
 
+    private float ResolveNodeUiSize(MapNodeType type)
+    {
+        float baseScale = config != null ? config.nodeScale : 1f;
+        return ResolveUiElementSize(baseScale * GetNodeScaleMultiplier(type));
+    }
+
+    private float ResolveLargestNodeUiSize()
+    {
+        float baseScale = config != null ? config.nodeScale : 1f;
+        float largestMultiplier = Mathf.Max(1f, GetNodeScaleMultiplier(MapNodeType.Boss));
+        return ResolveUiElementSize(baseScale * largestMultiplier);
+    }
+
+    private float GetNodeScaleMultiplier(MapNodeType type)
+    {
+        if (type == MapNodeType.Boss)
+        {
+            return Mathf.Max(MinElementScale, bossNodeScaleMultiplier);
+        }
+
+        return 1f;
+    }
+
     private float ClampPanX(float value) => Mathf.Clamp(value, panMinX, panMaxX);
 
     private void SetMapRootX(float x)
@@ -1026,20 +1083,27 @@ public class NodeMap : MonoBehaviour
 
     private Vector2 MapToUiPosition(Vector2 mapPosition) => mapPosition * GetMapScale();
 
-    private void PositionConnectionRect(RectTransform rect, Vector2 from, Vector2 to)
+    private MapConnectionVisualSettings GetConnectionVisualSettings()
     {
-        if (rect == null)
+        MapConnectionVisualSettings settings = connectionVisualSettings;
+        if (settings.lineWidth <= 0f)
         {
-            return;
+            settings.lineWidth = 10f;
         }
 
-        Vector2 delta = to - from;
-        float length = Mathf.Max(1f, delta.magnitude);
-        float width = Mathf.Max(1f, lineUiWidth);
+        if (settings.dottedCycleLength <= 0f)
+        {
+            settings.dottedCycleLength = 28f;
+        }
 
-        rect.sizeDelta = new Vector2(length, width);
-        rect.anchoredPosition = (from + to) * 0.5f;
-        rect.localRotation = Quaternion.Euler(0f, 0f, Mathf.Atan2(delta.y, delta.x) * Mathf.Rad2Deg);
+        if (settings.dottedFillRatio <= 0f)
+        {
+            settings.dottedFillRatio = 0.45f;
+        }
+
+        settings.dottedFillRatio = Mathf.Clamp(settings.dottedFillRatio, 0.05f, 0.95f);
+        settings.activeScrollSpeed = Mathf.Max(0f, settings.activeScrollSpeed);
+        return settings;
     }
 
     private static void ConfigureCenteredRect(RectTransform rect)
@@ -1131,11 +1195,22 @@ public class NodeMap : MonoBehaviour
         markerRect.sizeDelta = new Vector2(markerSize, markerSize);
 
         Vector2 markerOffset = new Vector2(playerMarkerOffset.x, playerMarkerOffset.y) * GetMapScale();
-        markerRect.anchoredPosition = MapToUiPosition(currentNode.position) + markerOffset;
+        markerRect.anchoredPosition = MapToUiPosition(currentNode.position) + markerOffset + new Vector2(0f, GetPlayerMarkerBobOffsetY());
         markerRect.localRotation = Quaternion.identity;
         markerRect.localScale = Vector3.one;
 
         playerMarkerObject.transform.SetAsLastSibling();
+    }
+
+    private float GetPlayerMarkerBobOffsetY()
+    {
+        if (playerMarkerBobAmplitude <= 0f || playerMarkerBobFrequency <= 0f)
+        {
+            return 0f;
+        }
+
+        float bobRadians = Time.unscaledTime * playerMarkerBobFrequency * Mathf.PI * 2f;
+        return Mathf.Sin(bobRadians) * playerMarkerBobAmplitude * GetMapScale();
     }
 
     private void CenterOnCurrentNode()

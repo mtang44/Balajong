@@ -8,7 +8,6 @@ public enum MapNodeType
     Start,
     Battle,
     Elite,
-    Rest,
     Boss
 
     // Add any additional node types here, but I'm not sure if we want anymore than these.

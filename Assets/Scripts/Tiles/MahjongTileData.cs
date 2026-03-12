@@ -58,9 +58,9 @@ public enum SeasonValue
 public enum Edition
 {
     Base,
-    Foil,
-    Holographic,
-    Polychrome
+    Ghost,
+    Enchanted,
+    Crystal
 }
 
 [System.Serializable]

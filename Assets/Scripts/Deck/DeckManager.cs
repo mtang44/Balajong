@@ -6,10 +6,10 @@ using System.Collections;
 // This class will manage the deck of tiles during the game, holding what is in the hand and in the wall.
 public class DeckManager : MonoBehaviour
 {
-    //
-    //I am doing the main camera stuff somewhat temporarily
-    //
-    Camera mainCamera;
+    public GameObject TileHolder;
+
+    private bool warnedMissingTileHolder = false;
+
     [SerializeField] GameObject tilePrefab;
     public int HAND_SIZE = 14;
     public int MAX_DISCARD_SELECTION = 5;
@@ -17,8 +17,8 @@ public class DeckManager : MonoBehaviour
 
     // Our hands! Deck is the wall, then the hand and discard.
     public Deck deck;
-    List<GameObject> hand = new List<GameObject>();
-    List<MahjongTileData> discard = new List<MahjongTileData>();
+    public List<GameObject> hand = new List<GameObject>();
+    public List<MahjongTileData> discard = new List<MahjongTileData>();
     public List<GameObject> selectedTiles = new List<GameObject>();
     public List<GameObject> flowerTiles = new List<GameObject>();
     public List<GameObject> seasonTiles = new List<GameObject>();
@@ -39,12 +39,15 @@ public class DeckManager : MonoBehaviour
         }
         deck = new Deck(tilePrefab);
         deck.InitializeDeck();
-        mainCamera = Camera.main;
     }
 
-    void Start()
+    public void forceNewLists()
     {
-        mainCamera = Camera.main;
+        hand = new List<GameObject>();
+        selectedTiles = new List<GameObject>();
+        flowerTiles = new List<GameObject>();
+        seasonTiles = new List<GameObject>();
+        discard = new List<MahjongTileData>();
     }
 
     public void drawHand(int count = 0)
@@ -56,14 +59,19 @@ public class DeckManager : MonoBehaviour
             if (!success)
                 break;
         }
-        sortHand();
+        if(HandManager.Instance != null)
+        {
+            HandManager.Instance.SortHandByValue();
+        } else
+        {
+            sortHand();
+        }
     }
     public void sortHand()
     {
         //Here we will sort the hand based on the tile types and values,
         //and update the positions of the gameObjects accordingly.
         //we'll start with just the positioning
-        mainCamera = Camera.main;
         for (int i = 0; i < hand.Count; i++)
         {
             GameObject tileGO = hand[i];
@@ -126,9 +134,8 @@ public class DeckManager : MonoBehaviour
     {
         if (hand.Count < HAND_SIZE)
         {
-            mainCamera = Camera.main;
             GameObject tileObject = Instantiate(tilePrefab);
-            tileObject.transform.SetParent(mainCamera.transform);
+            tileObject.transform.SetParent(GetTileParentTransform(), false);
             tileObject.transform.localPosition = Vector3.zero;
             hand.Add(tileObject);
             tileObject.GetComponent<MahjongTileHolder>().SetTileData(tileData);
@@ -149,6 +156,25 @@ public class DeckManager : MonoBehaviour
     {
         discardTiles(selectedTiles);
         selectedTiles.Clear();
+    }
+    public void fsToDiscard()
+    {
+        foreach (GameObject season in seasonTiles)
+        {
+            MahjongTileData tileData = season.GetComponent<MahjongTileHolder>().TileData;
+            if (tileData != null)
+                discard.Add(tileData);
+            discardTileAnimation(season);
+        }
+        foreach (GameObject flower in flowerTiles)
+        {
+            MahjongTileData tileData = flower.GetComponent<MahjongTileHolder>().TileData;
+            if (tileData != null)
+                discard.Add(tileData);
+            discardTileAnimation(flower);
+        }
+        seasonTiles.Clear();
+        flowerTiles.Clear();
     }
 
     public void redrawHand()
@@ -200,13 +226,16 @@ public class DeckManager : MonoBehaviour
     public void endRound()
     {
         // Move all hand tiles to discard pile
-        discardTiles(hand);
-        hand.Clear();
-        selectedTiles.Clear();
-        
+        handToDiscard();
+        selectedToDiscard();
+        fsToDiscard();
+
         // Return all tiles (both hand and discard) back to the deck
         deck.AddTiles(discard);
-        discard.Clear();
+        discard = new List<MahjongTileData>();
+
+        Debug.Log("Deck count after endRound: " + deck.GetDeckCount());
+        deck.Shuffle();
     }
 
     public List<MahjongTileData> getHandAsMahjongTileData()
@@ -221,5 +250,19 @@ public class DeckManager : MonoBehaviour
             }
         }
         return handData;
+    }
+
+    private Transform GetTileParentTransform()
+    {
+        if (TileHolder != null)
+            return TileHolder.transform;
+
+        if (!warnedMissingTileHolder)
+        {
+            warnedMissingTileHolder = true;
+            Debug.LogWarning("DeckManager: TileHolder is not assigned. Falling back to DeckManager transform.");
+        }
+
+        return transform;
     }
 }

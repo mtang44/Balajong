@@ -5,30 +5,31 @@ public class MapNodeView : MonoBehaviour
 {
     [SerializeField] private Image nodeImage;
     [SerializeField] private Button nodeButton;
+    [SerializeField] private MapNodeHoverTooltip hoverTooltip;
+    [SerializeField, Range(0f, 1f)] private float lockedNodeBrightness = 0.4f;
 
     private NodeMap owner;
     private int nodeId;
-    private MapNodeType nodeType;
 
     public int NodeId => nodeId;
 
     // Initializes the node view with the given data and settings
-    public void Setup(NodeMap mapOwner, MapNodeData nodeData, Sprite defaultSprite, int sortingOrder)
+    public void Setup(NodeMap mapOwner, MapNodeData nodeData, Sprite nodeSprite)
     {
         owner = mapOwner;
         nodeId = nodeData.id;
-        nodeType = nodeData.type;
 
-        nodeImage ??= GetComponentInChildren<Image>();
-        nodeButton ??= GetComponent<Button>();
+        CacheComponents();
 
         if (nodeImage != null)
         {
-            if (nodeImage.sprite == null)
+            if (nodeSprite != null)
             {
-                nodeImage.sprite = defaultSprite;
+                nodeImage.sprite = nodeSprite;
             }
 
+            nodeImage.color = Color.white;
+            nodeImage.preserveAspect = true;
             nodeImage.raycastTarget = true;
 
             if (nodeButton == null)
@@ -42,35 +43,50 @@ public class MapNodeView : MonoBehaviour
             nodeButton.onClick.AddListener(OnClicked);
         }
 
+        EnsureHoverTooltip();
+        hoverTooltip.Setup(nodeImage, nodeButton, nodeData.type);
+
         gameObject.name = $"MapNode_{nodeData.id}_{nodeData.type}";
         SetState(nodeData.state);
     }
 
-    // Sets the visual state of the node based on its NodeState
+    public void SetEnemyHealthText(string newText)
+    {
+        EnsureHoverTooltip();
+        if (hoverTooltip != null)
+        {
+            hoverTooltip.SetEnemyHealthText(newText);
+        }
+    }
+
+    // Sets the interaction state of the node based on its NodeState
     public void SetState(NodeState state)
     {
+        bool isUnlocked = state != NodeState.Locked;
+        bool isCleared = state == NodeState.Cleared;
+        bool isCurrentNode = owner != null && owner.IsCurrentNode(nodeId);
+        bool allowHover = isUnlocked && !isCleared && !isCurrentNode;
+
         if (nodeButton != null)
         {
-            nodeButton.interactable = state != NodeState.Locked;
+            nodeButton.interactable = isUnlocked;
         }
 
         Collider2D nodeCollider = GetComponent<Collider2D>();
         if (nodeCollider != null)
         {
-            nodeCollider.enabled = state != NodeState.Locked;
+            nodeCollider.enabled = isUnlocked;
         }
-
-        Color baseColor = GetTypeColor(nodeType);
-        Color nodeColor = state switch
-        {
-            NodeState.Cleared => Color.Lerp(baseColor, Color.white, 0.5f),
-            NodeState.Reachable => baseColor,
-            _ => Color.Lerp(baseColor, Color.black, 0.65f)
-        };
 
         if (nodeImage != null)
         {
-            nodeImage.color = nodeColor;
+            float brightness = state == NodeState.Locked ? Mathf.Clamp01(lockedNodeBrightness) : 1f;
+            nodeImage.color = new Color(brightness, brightness, brightness, 1f);
+        }
+
+        if (hoverTooltip != null)
+        {
+            hoverTooltip.SetHoverEnabled(allowHover);
         }
     }
 
@@ -79,6 +95,11 @@ public class MapNodeView : MonoBehaviour
         if (owner != null)
         {
             owner.OnNodeClicked(nodeId);
+        }
+
+        if (hoverTooltip != null)
+        {
+            hoverTooltip.HideTooltip();
         }
     }
 
@@ -96,23 +117,23 @@ public class MapNodeView : MonoBehaviour
         }
     }
 
-    // Returns the color associated with the given node type
-    private static Color GetTypeColor(MapNodeType type)
+    private void CacheComponents()
     {
-        switch (type)
+        nodeImage ??= GetComponentInChildren<Image>();
+        nodeButton ??= GetComponent<Button>();
+    }
+
+    private void EnsureHoverTooltip()
+    {
+        if (hoverTooltip == null)
         {
-            case MapNodeType.Start:
-                return new Color(0.35f, 0.8f, 0.95f, 1f);
-            case MapNodeType.Battle:
-                return new Color(0.9f, 0.35f, 0.35f, 1f);
-            case MapNodeType.Elite:
-                return new Color(1f, 0.58f, 0.15f, 1f);
-            case MapNodeType.Rest:
-                return new Color(0.25f, 0.8f, 0.4f, 1f);
-            case MapNodeType.Boss:
-                return new Color(0.65f, 0.2f, 0.2f, 1f);
-            default:
-                return Color.white;
+            hoverTooltip = GetComponent<MapNodeHoverTooltip>();
+        }
+
+        if (hoverTooltip == null)
+        {
+            hoverTooltip = gameObject.AddComponent<MapNodeHoverTooltip>();
         }
     }
+
 }

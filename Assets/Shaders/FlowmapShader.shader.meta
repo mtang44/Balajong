@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: a044e96e844bbd54882d97841c61b9fa
+ShaderImporter:
+  externalObjects: {}
+  defaultTextures: []
+  nonModifiableTextures: []
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 127277
+  packageName: MixedShaderPack
+  packageVersion: 1.0
+  assetPath: Assets/MixedShaderPack/Shader/FlowmapShader.shader
+  uploadId: 266740

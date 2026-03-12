@@ -6,7 +6,10 @@ public class StatsUpdater : MonoBehaviour
     //We Drag this in
     public GameObject discard;
     public GameObject score;
+    public GameObject scoreThreshold;
     public GameObject healthSlider;
+    public GameObject winScreen;
+    public GameObject loseScreen;
     // We probably want this
     public static StatsUpdater Instance;
     private void Awake()
@@ -14,7 +17,6 @@ public class StatsUpdater : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
         }
         else
         {
@@ -55,5 +57,26 @@ public class StatsUpdater : MonoBehaviour
                 sliderComponent.value = currentHealth;
             }
         }
+    }
+    public void UpdateScoreThreshold(int scoreThreshold)
+    {
+        if (this.scoreThreshold != null)
+        {
+            TMPro.TextMeshProUGUI textComponent = this.scoreThreshold.GetComponent<TMPro.TextMeshProUGUI>();
+            if (textComponent != null)
+            {
+                textComponent.text = "" + scoreThreshold;
+            }
+        }
+    }
+    public void ShowWinScreen()
+    {
+        if (winScreen != null)
+            winScreen.SetActive(true);
+    }
+    public void ShowLoseScreen()
+    {
+        if (loseScreen != null)
+            loseScreen.SetActive(true);
     }
 }

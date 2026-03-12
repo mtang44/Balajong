@@ -687,13 +687,25 @@ MonoBehaviour:
   nodeViewPrefab: {fileID: 3885360254055009326, guid: bdcc6f92d462ef349b92e74300370718, type: 3}
   mapLayerName: Map
   defaultNodeSprite: {fileID: 0}
+  startNodeSprite: {fileID: 21300000, guid: 1f199ac98db313042b8b4c051151f706, type: 3}
+  battleNodeSprite: {fileID: 21300000, guid: 52df017c21fd29c40a9d339b6cb3a355, type: 3}
+  eliteNodeSprite: {fileID: 21300000, guid: 0d2aaf1c44dd1594596c9ffe2da80303, type: 3}
+  bossNodeSprite: {fileID: 21300000, guid: 6c4daa6b346f66c4b805868e435dc712, type: 3}
   mapUnitsToPixels: 120
-  nodeUiSize: 96
-  lineUiWidth: 10
-  playerMarkerSprite: {fileID: 0}
-  playerMarkerColor: {r: 0.2, g: 0.95, b: 1, a: 1}
-  playerMarkerOffset: {x: 0, y: 0.9, z: 0}
+  nodeUiSize: 125
+  bossNodeScaleMultiplier: 1.75
+  enemyHealthTooltipText: ???
+  connectionVisualSettings:
+    lineWidth: 10
+    dottedCycleLength: 28
+    dottedFillRatio: 0.45
+    activeScrollSpeed: 0.75
+  playerMarkerSprite: {fileID: 21300000, guid: 0053093ed043e8449abc805db4392a6e, type: 3}
+  playerMarkerColor: {r: 1, g: 1, b: 1, a: 1}
+  playerMarkerOffset: {x: 0, y: 1.2, z: 0}
   playerMarkerScale: 0.55
+  playerMarkerBobAmplitude: 0.08
+  playerMarkerBobFrequency: 1
   canvasReferenceResolution: {x: 1920, y: 1080}
   autoCreateCanvasWhenMissing: 1
   mapDragThreshold: 5

@@ -2547,7 +2547,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 140, y: -0.18261719}
+  m_AnchoredPosition: {x: 140.00003, y: -0.18261719}
   m_SizeDelta: {x: -337.3352, y: -21.299927}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &97197786
@@ -5025,7 +5025,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 176.53448, y: -0.18261719}
+  m_AnchoredPosition: {x: 176.53452, y: -0.18261719}
   m_SizeDelta: {x: -412.6479, y: -21.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &245801838
@@ -7903,7 +7903,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 176.53448, y: -0.18261719}
+  m_AnchoredPosition: {x: 176.53452, y: -0.18261719}
   m_SizeDelta: {x: -412.6479, y: -21.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &407215202
@@ -13651,7 +13651,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 176.53448, y: -0.18261719}
+  m_AnchoredPosition: {x: 176.53452, y: -0.18261719}
   m_SizeDelta: {x: -412.6479, y: -21.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &774376884
@@ -14573,7 +14573,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 140, y: -0.18261719}
+  m_AnchoredPosition: {x: 140.00003, y: -0.18261719}
   m_SizeDelta: {x: -337.3352, y: -21.299927}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &813774471
@@ -16949,7 +16949,10 @@ MonoBehaviour:
   LootTableFilePath: Assets/CSV Files/LootTable - JokerTable.csv
   Rarities:
   - Common
-  Rarity_Weights: 37000000
+  - Uncommon
+  - Rare
+  - Epic
+  Rarity_Weights: 37000000190000000f00000006000000
 --- !u!4 &975557520
 Transform:
   m_ObjectHideFlags: 0
@@ -18479,7 +18482,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 176.53448, y: -0.18261719}
+  m_AnchoredPosition: {x: 176.53452, y: -0.18261719}
   m_SizeDelta: {x: -412.6479, y: -21.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1107442546
@@ -21046,7 +21049,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 176.53448, y: -0.18261719}
+  m_AnchoredPosition: {x: 176.53452, y: -0.18261719}
   m_SizeDelta: {x: -412.6479, y: -21.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1261692026
@@ -22747,7 +22750,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: -7706.49, y: -4787.0454}
+  m_AnchoredPosition: {x: -7706.4907, y: -4787.0454}
   m_SizeDelta: {x: 460.1, y: 721.2}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1385019642
@@ -24706,7 +24709,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1563989756}
         m_TargetAssemblyTypeName: Shop, Assembly-CSharp
-        m_MethodName: RerollShop
+        m_MethodName: RerollJokers
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -24767,12 +24770,42 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Shop
   Shop_Item_TMPs:
-  - {fileID: 2141479397}
   - {fileID: 296444833}
   - {fileID: 453824314}
   - {fileID: 2014731974}
   - {fileID: 1677016146}
+  - {fileID: 2141479397}
   jokerSpawner: {fileID: 975557519}
+  imageArray:
+  - {fileID: 2800000, guid: 84d2984686e37f645b68f897af69e54a, type: 3}
+  - {fileID: 2800000, guid: d8cd1b3a2b8affa4e81f6c3c05100445, type: 3}
+  - {fileID: 2800000, guid: aee012a2eeb4fe147b2faae1eb570c35, type: 3}
+  - {fileID: 2800000, guid: 544c0866a21e763468d23be7403c3961, type: 3}
+  - {fileID: 2800000, guid: 8c64a60c6cb243e4585f5f5cf0b5dcd9, type: 3}
+  - {fileID: 2800000, guid: db65e8ffb387ae142bbd13406fc8dc55, type: 3}
+  - {fileID: 2800000, guid: 11d571686f2ac3144b65a3526e221d01, type: 3}
+  - {fileID: 2800000, guid: 5011dd0fca683a147b2ff7ac75631296, type: 3}
+  - {fileID: 2800000, guid: e5703070680791a4086d26a6c72ef297, type: 3}
+  - {fileID: 2800000, guid: 70b5b20f6cb03e94eb60a59bdff63ad9, type: 3}
+  - {fileID: 2800000, guid: 783af8bd28cdcac4e86b488ba1684c87, type: 3}
+  - {fileID: 2800000, guid: 458ee78438e64794d892440f9c0feb5d, type: 3}
+  - {fileID: 2800000, guid: 3628e9afced6b6e4b884099ed12ce521, type: 3}
+  - {fileID: 2800000, guid: e266cae11736ea54d9152b1bc4eea170, type: 3}
+  - {fileID: 2800000, guid: 10862f6837606d24ca19a20fc2aa9358, type: 3}
+  - {fileID: 2800000, guid: 99cdfe21912e1c44bad50f0929e16147, type: 3}
+  - {fileID: 2800000, guid: 670762b76016637499b4b9d81c1c5847, type: 3}
+  - {fileID: 2800000, guid: 4150ba7c398d03843b55f881ada08d02, type: 3}
+  - {fileID: 2800000, guid: a108a10ecea4eee469a09e225f6078a6, type: 3}
+  - {fileID: 2800000, guid: 938398ace776297439dcb57a44e0706f, type: 3}
+  - {fileID: 2800000, guid: 40cb58706c625d544ba75c2ced68f929, type: 3}
+  - {fileID: 2800000, guid: 71634cb7e8d4f844a980366980428059, type: 3}
+  - {fileID: 2800000, guid: d5bd55481a211804687c5a94c2afcba4, type: 3}
+  - {fileID: 2800000, guid: 84b81bb2032e61f4d91ea0eaba573411, type: 3}
+  - {fileID: 2800000, guid: cf45f09aebadbe549af36061c03e29a3, type: 3}
+  - {fileID: 2800000, guid: b4f511635bfbeee489b471482f4e7d26, type: 3}
+  - {fileID: 2800000, guid: a94b5b8b82dc0e245a161a54b405ac0b, type: 3}
+  - {fileID: 2800000, guid: 033625851036ff141a9e9bdb6bc3cece, type: 3}
+  - {fileID: 2800000, guid: 5358a88132a4ca94e89e489b67f5471b, type: 3}
   consumableGenerator: {fileID: 1683083823}
   jokerCount: 2
   consumableCount: 1
@@ -29343,7 +29376,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 176.53448, y: -0.18261719}
+  m_AnchoredPosition: {x: 176.53452, y: -0.18261719}
   m_SizeDelta: {x: -412.6479, y: -21.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1839861281

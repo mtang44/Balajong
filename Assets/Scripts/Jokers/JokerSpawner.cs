@@ -77,6 +77,7 @@ public class JokerSpawner : MonoBehaviour
             {
                 reader.ReadLine(); // skip header line
             }
+            int index = 0;
             while(!reader.EndOfStream)
             {
                 var line = reader.ReadLine();
@@ -88,7 +89,7 @@ public class JokerSpawner : MonoBehaviour
                 string jokerDescription = values[4];
                 int jokerPrice = int.Parse(values[5]);
 
-                Jokers newJoker = new Jokers (jokerName, jokerRarity, jokerCode, jokerEquationType, jokerDescription, jokerPrice);
+                Jokers newJoker = new Jokers (jokerName, jokerRarity, jokerCode, jokerEquationType, jokerDescription, jokerPrice, index);
 
                 // if item rarity key already exists, add newItem to the list, else create new rarity key with a new list of items. 
                 if(customLootTable.ContainsKey(jokerRarity))
@@ -100,6 +101,7 @@ public class JokerSpawner : MonoBehaviour
                     customLootTable.Add(jokerRarity, new List<Jokers> {newJoker});
                 }
                 //Debug.Log("Joker added to loot table: " + newJoker.name + " of rarity " + newJoker.rarity);
+                index++;
             }
             reader.Close();
 

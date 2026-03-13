@@ -32,8 +32,8 @@ public class ConsumableEffectSystem : MonoBehaviour
 
     private void Start()
     {
-        if (shop == null) shop = FindObjectOfType<Shop>();
-        if (deckManager == null) deckManager = DeckManager.Instance ?? FindObjectOfType<DeckManager>();
+        if (shop == null) shop = FindFirstObjectByType<Shop>();
+        if (deckManager == null) deckManager = DeckManager.Instance ?? FindFirstObjectByType<DeckManager>();
 
         if (useButton != null)
         {
@@ -57,7 +57,7 @@ public class ConsumableEffectSystem : MonoBehaviour
     // Wire this from the voucher/consumable slot button's OnClick.
     public void PurchaseAndActivateCurrentShopConsumable()
     {
-        if (shop == null) shop = FindObjectOfType<Shop>();
+        if (shop == null) shop = FindFirstObjectByType<Shop>();
         if (shop == null || shop.consumableDrops == null || shop.consumableDrops.Count == 0)
         {
             Debug.LogWarning("[ConsumableEffectSystem] No consumable available in shop.");
@@ -80,7 +80,7 @@ public class ConsumableEffectSystem : MonoBehaviour
             shopRoot.SetActive(false);
 
         if (deckManager == null)
-            deckManager = DeckManager.Instance ?? FindObjectOfType<DeckManager>();
+            deckManager = DeckManager.Instance ?? FindFirstObjectByType<DeckManager>();
 
         // Ensure a hand is drawn so the player can choose a tile.
         if (deckManager != null)

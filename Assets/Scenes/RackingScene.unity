@@ -3823,8 +3823,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 700, y: 100}
+  m_AnchoredPosition: {x: -0.000030518, y: -0.000045776}
+  m_SizeDelta: {x: 1856.5, y: 1010.1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &415404716
 MonoBehaviour:
@@ -3846,7 +3846,28 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Run Info:'
+  m_text: 'Run Info:
+
+    Each tile has a base value.
+
+    Melds are collections
+    of 2 or more of the same tile.
+
+    If it is part of a meld, each tile''s value
+    is multipied by the tiles in the meld.
+
+    Flowers and Seasons are bonus points.
+
+    Eyes
+    - 2x
+
+    Pung - 3x
+
+    Kong - 4x
+
+    Chow - 5x
+
+    ...so forth.'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 5293248ddbeac9344b20338543629bc0, type: 2}
   m_sharedMaterial: {fileID: -7118985563403138470, guid: 5293248ddbeac9344b20338543629bc0, type: 2}
@@ -3912,7 +3933,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 50.041615, y: 0, z: 49.731415, w: 0}
+  m_margin: {x: 4.58025, y: 0, z: -1.1146547, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -5042,8 +5063,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 704.24, y: 306}
-  m_SizeDelta: {x: 100, y: 100}
+  m_AnchoredPosition: {x: 699.25, y: -114.8}
+  m_SizeDelta: {x: 1856.5, y: 1010.1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &489331546
 GameObject:
@@ -15398,6 +15419,7 @@ GameObject:
   - component: {fileID: 1769542141}
   - component: {fileID: 1769542143}
   - component: {fileID: 1769542142}
+  - component: {fileID: 1769542144}
   m_Layer: 5
   m_Name: Discards TMP
   m_TagString: Untagged
@@ -15524,6 +15546,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1769542140}
   m_CullTransparentMesh: 1
+--- !u!114 &1769542144
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1769542140}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b25eb53a1c624334689685e1298cd02e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UpdateDiscardOnEnable
 --- !u!1 &1787190715
 GameObject:
   m_ObjectHideFlags: 0

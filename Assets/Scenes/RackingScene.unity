@@ -1618,6 +1618,7 @@ MonoBehaviour:
   healthSlider: {fileID: 1710371400}
   winScreen: {fileID: 1378343574}
   loseScreen: {fileID: 1528765344}
+  cash: {fileID: 441378404}
 --- !u!1 &146000553
 GameObject:
   m_ObjectHideFlags: 0

@@ -115,8 +115,11 @@ public class GameManager : MonoBehaviour
         StatsUpdater.Instance.UpdateScore(score);
         // Here, we decide if the player is alive or not. For now, we will return to the draw state and refill discards.
 
-        if(score >= EnemyManager.Instance.returnScoreThreshold())
+        if(score >= EnemyManager.Instance.returnScoreThreshold()) {
+            PlayerStatManager.Instance.cash += 5;
+            StatsUpdater.Instance.UpdateCash(PlayerStatManager.Instance.cash);
             encounterFlowManager.GetComponent<MapEncounterResultHandler>().ResolveEncounterWin();
+        }
         else
         {
             PlayerDamage();

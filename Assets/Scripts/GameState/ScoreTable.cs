@@ -1,13 +1,14 @@
 using UnityEngine;
 
-// Default score table: suited tiles use face value (1-9), honors use a fixed value.
-// Balatro-style: 9 of bam = 9 points.
-
 public static class ScoreTable
 {
-    public const int HonorScore = 5;
+    // Winds and dragons: 10 points each.
+    public const int HonorScore = 10;
 
-    // Applies default scores: suited tiles = face value (1-9), honors = HonorScore.
+    // Flowers and seasons: static 5 points each (bonus).
+    public const int FlowerBonusScore = 5;
+
+    // Applies default scores: suited = face value (1-9), winds/dragons = 10, flowers/seasons = 5.
     public static void ApplyDefaultScores(ScoringManager scoring)
     {
         if (scoring == null)
@@ -27,21 +28,23 @@ public static class ScoreTable
                 scoring.crackValues[v] = v;
         }
 
-        // Winds, Dragons, Flowers, Seasons: fixed value.
+        // Winds and dragons: 10 points each.
         if (scoring.windValues != null)
             for (int i = 0; i < scoring.windValues.Length; i++)
                 scoring.windValues[i] = HonorScore;
         if (scoring.dragonValues != null)
             for (int i = 0; i < scoring.dragonValues.Length; i++)
                 scoring.dragonValues[i] = HonorScore;
+
+        // Flowers and seasons: static 5 points each (bonus).
         if (scoring.flowerValues != null)
             for (int i = 0; i < scoring.flowerValues.Length; i++)
-                scoring.flowerValues[i] = HonorScore;
+                scoring.flowerValues[i] = FlowerBonusScore;
         if (scoring.seasonValues != null)
             for (int i = 0; i < scoring.seasonValues.Length; i++)
-                scoring.seasonValues[i] = HonorScore;
+                scoring.seasonValues[i] = FlowerBonusScore;
 
-        Debug.Log("ScoreTable: Applied default scores (face value for suited, fixed for honors).");
+        Debug.Log("ScoreTable: Applied default scores (face value suited, 10 wind/dragon, 5 flower/season).");
     }
 }
 

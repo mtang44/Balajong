@@ -1,4 +1,5 @@
-/* ScoringManager is a singleton class that will handle the scoring of the game.
+/* ScoringManager is a singleton class that will handle the scoring of the game. 
+- Scores implictly by building its own buckets by suit + value then finds all melds.
 
 Main functions:
 - GetTileScore(tile): Returns the configured score value for a single tile (by type).
@@ -50,14 +51,6 @@ public class ScoringManager : MonoBehaviour
     private string lastRenderedHandInfo = string.Empty;
 
     #region Tile values by type (all 0; set from a separate file that defines scores per TileType)
-    // Assigning scores should look like this:
-    // ScoringManager.Instance.dotsValues[1] = 10;
-    // ScoringManager.Instance.bamValues[2] = 20;
-    // ScoringManager.Instance.crackValues[3] = 30;
-    // ScoringManager.Instance.windValues[0] = 40;
-    // ScoringManager.Instance.dragonValues[1] = 50;
-    // ScoringManager.Instance.flowerValues[2] = 60;
-    // ScoringManager.Instance.seasonValues[3] = 70;
 
     // Suited: Dots, Bam, Crack each 1-9 (index 0 unused, 1-9 used)
     public int[] dotsValues = new int[10];
@@ -235,6 +228,7 @@ public class ScoringManager : MonoBehaviour
 
         int eyesCount = 0;
         int pungCount = 0;
+        int kongCount = 0;
         int chowCount = 0;
 
         int meldTotal = 0;
@@ -251,6 +245,9 @@ public class ScoringManager : MonoBehaviour
                 case MeldKind.Pung:
                     pungCount++;
                     break;
+                case MeldKind.Kong:
+                    kongCount++;
+                    break;
                 case MeldKind.Chow:
                     chowCount++;
                     break;
@@ -266,6 +263,7 @@ public class ScoringManager : MonoBehaviour
         sb.AppendLine("Hand Info:");
         AppendTypeCountLine(sb, "Eyes", eyesCount);
         AppendTypeCountLine(sb, "Pung", pungCount);
+        AppendTypeCountLine(sb, "Kong", kongCount);
         AppendTypeCountLine(sb, "Chow", chowCount);
         AppendTypeCountLine(sb, "Flowers", flowerCount);
         AppendTypeCountLine(sb, "Seasons", seasonCount);
@@ -328,7 +326,7 @@ public class ScoringManager : MonoBehaviour
 
     #region Meld type and detection
 
-    public enum MeldKind { Chow, Pung, Eyes }
+    public enum MeldKind { Chow, Pung, Kong, Eyes }
 
     // Meld struct for storing the kind and tiles of a meld.
     public struct Meld
@@ -384,7 +382,7 @@ public class ScoringManager : MonoBehaviour
             }
         }
 
-        // Extract chows (low to high) then pungs
+        // Chow: 3 consecutive tiles in same suit (1-2-3, 2-3-4, ... 7-8-9). Extract first so tiles aren't double-counted.
         foreach (var suit in new[] { TileType.Dots, TileType.Bam, TileType.Crack })
         {
             for (int v = 1; v <= 7; v++)
@@ -401,11 +399,18 @@ public class ScoringManager : MonoBehaviour
             }
         }
 
+        // Detect from largest to smallest: Kong (4) first, then Pung (3), then Eyes (2). No overlap.
         foreach (var suit in new[] { TileType.Dots, TileType.Bam, TileType.Crack })
         {
             for (int v = 1; v <= 9; v++)
             {
                 var list = suited[suit][v];
+                while (list.Count >= 4)
+                {
+                    var kongTiles = new List<MahjongTile> { list[0], list[1], list[2], list[3] };
+                    list.RemoveRange(0, 4);
+                    melds.Add(new Meld(MeldKind.Kong, kongTiles));
+                }
                 while (list.Count >= 3)
                 {
                     var pungTiles = new List<MahjongTile> { list[0], list[1], list[2] };
@@ -418,6 +423,12 @@ public class ScoringManager : MonoBehaviour
         foreach (var kvp in honorLists)
         {
             var list = kvp.Value;
+            while (list.Count >= 4)
+            {
+                var kongTiles = new List<MahjongTile> { list[0], list[1], list[2], list[3] };
+                list.RemoveRange(0, 4);
+                melds.Add(new Meld(MeldKind.Kong, kongTiles));
+            }
             while (list.Count >= 3)
             {
                 var pungTiles = new List<MahjongTile> { list[0], list[1], list[2] };
@@ -426,7 +437,7 @@ public class ScoringManager : MonoBehaviour
             }
         }
 
-        // Extract eyes (pairs): two identical tiles, score = (tile1 + tile2) * 2
+        // Extract eyes (pairs): two identical tiles; only what's left after kongs/pungs
         foreach (var suit in new[] { TileType.Dots, TileType.Bam, TileType.Crack })
         {
             for (int v = 1; v <= 9; v++)
@@ -464,31 +475,35 @@ public class ScoringManager : MonoBehaviour
         return total;
     }
 
-    // Pung: X * Y. Chow: X * (Y - 1) with Y = highest in run. Eyes: (tile1 + tile2) * 2.
+    // Eyes: (tile1 + tile2) * 2. Pung: (t1+t2+t3)*3. Kong: (t1+t2+t3+t4)*4. Chow: sum of 3 tiles + 20.
     public int EvalMeld(Meld meld)
     {
         if (meld.Tiles == null || meld.Tiles.Count == 0) return 0;
 
-        int x = meld.Tiles.Count;
-        if (meld.Kind == MeldKind.Pung)
-        {
-            int y = GetTileScore(meld.Tiles[0]);
-            return x * y;
-        }
-        if (meld.Kind == MeldKind.Eyes)
+        if (meld.Kind == MeldKind.Eyes && meld.Tiles.Count == 2)
         {
             int a = GetTileScore(meld.Tiles[0]);
             int b = GetTileScore(meld.Tiles[1]);
             return (a + b) * 2;
         }
-        // Chow: Y = highest value in the run
-        int yChow = 0;
-        foreach (var t in meld.Tiles)
+        if (meld.Kind == MeldKind.Pung && meld.Tiles.Count == 3)
         {
-            int s = GetTileScore(t);
-            if (s > yChow) yChow = s;
+            int sum = GetTileScore(meld.Tiles[0]) + GetTileScore(meld.Tiles[1]) + GetTileScore(meld.Tiles[2]);
+            return sum * 3;
         }
-        return x * (yChow - 1);
+        if (meld.Kind == MeldKind.Kong && meld.Tiles.Count == 4)
+        {
+            int sum = GetTileScore(meld.Tiles[0]) + GetTileScore(meld.Tiles[1]) + GetTileScore(meld.Tiles[2]) + GetTileScore(meld.Tiles[3]);
+            return sum * 4;
+        }
+        if (meld.Kind == MeldKind.Chow)
+        {
+            int sum = 0;
+            foreach (var t in meld.Tiles)
+                sum += GetTileScore(t);
+            return sum + 20;
+        }
+        return 0;
     }
     
     // Grabs the key for the honor tile.

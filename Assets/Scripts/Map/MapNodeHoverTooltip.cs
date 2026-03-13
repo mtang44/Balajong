@@ -15,6 +15,8 @@ public class MapNodeHoverTooltip : MonoBehaviour, IPointerEnterHandler, IPointer
     [Header("Tooltip")]
     [SerializeField] private bool showTooltipOnHover = true;
     [SerializeField] private Vector2 tooltipOffset = new Vector2(0f, 92f);
+    [SerializeField, Min(0f)] private float tooltipTopEdgePadding = 16f;
+    [SerializeField, Min(0)] private int tooltipSortingOrder = 500;
     [SerializeField] private Color tooltipBackgroundColor = new Color(0.07f, 0.11f, 0.2f, 0.92f);
     [SerializeField] private Color tooltipTextColor = Color.white;
     [SerializeField, Min(120f)] private float tooltipMinWidth = 210f;
@@ -57,6 +59,11 @@ public class MapNodeHoverTooltip : MonoBehaviour, IPointerEnterHandler, IPointer
         }
 
         ApplyHoverVisuals();
+
+        if (showTooltipOnHover && isPointerOver && tooltipRoot != null && tooltipRoot.gameObject.activeSelf)
+        {
+            ClampTooltipToTopEdge();
+        }
     }
 
     public void Setup(Image image, Button button, MapNodeType type)
@@ -186,6 +193,21 @@ public class MapNodeHoverTooltip : MonoBehaviour, IPointerEnterHandler, IPointer
             tooltipRoot = tooltipObject.GetComponent<RectTransform>();
         }
 
+        Canvas parentCanvas = GetComponentInParent<Canvas>();
+        Canvas tooltipCanvas = tooltipRoot.GetComponent<Canvas>();
+        if (tooltipCanvas == null)
+        {
+            tooltipCanvas = tooltipRoot.gameObject.AddComponent<Canvas>();
+        }
+
+        tooltipCanvas.overrideSorting = true;
+        tooltipCanvas.sortingOrder = tooltipSortingOrder;
+        if (parentCanvas != null)
+        {
+            tooltipCanvas.sortingLayerID = parentCanvas.sortingLayerID;
+            tooltipCanvas.worldCamera = parentCanvas.worldCamera;
+        }
+
         Image background = tooltipRoot.GetComponent<Image>();
         if (background == null)
         {
@@ -298,6 +320,52 @@ public class MapNodeHoverTooltip : MonoBehaviour, IPointerEnterHandler, IPointer
         if (shouldShow)
         {
             tooltipRoot.SetAsLastSibling();
+            ClampTooltipToTopEdge();
+        }
+    }
+
+    private void ClampTooltipToTopEdge()
+    {
+        if (tooltipRoot == null)
+        {
+            return;
+        }
+
+        RectTransform parentRect = tooltipRoot.parent as RectTransform;
+        if (parentRect == null)
+        {
+            return;
+        }
+
+        Canvas canvas = tooltipRoot.GetComponentInParent<Canvas>();
+        Camera uiCamera = canvas != null && canvas.renderMode != RenderMode.ScreenSpaceOverlay ? canvas.worldCamera : null;
+
+        Vector3[] corners = new Vector3[4];
+        tooltipRoot.GetWorldCorners(corners);
+
+        float maxScreenY = float.MinValue;
+        for (int i = 0; i < corners.Length; i++)
+        {
+            Vector2 screenCorner = RectTransformUtility.WorldToScreenPoint(uiCamera, corners[i]);
+            if (screenCorner.y > maxScreenY)
+            {
+                maxScreenY = screenCorner.y;
+            }
+        }
+
+        float topLimit = Screen.height - tooltipTopEdgePadding;
+        float overflow = maxScreenY - topLimit;
+        if (overflow <= 0f)
+        {
+            return;
+        }
+
+        Vector2 pivotScreenPoint = RectTransformUtility.WorldToScreenPoint(uiCamera, tooltipRoot.position);
+        pivotScreenPoint.y -= overflow;
+
+        if (RectTransformUtility.ScreenPointToWorldPointInRectangle(parentRect, pivotScreenPoint, uiCamera, out Vector3 clampedWorldPoint))
+        {
+            tooltipRoot.position = clampedWorldPoint;
         }
     }
 

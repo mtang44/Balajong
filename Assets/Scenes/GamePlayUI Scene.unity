@@ -23432,7 +23432,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ab17291a9c70fb458fc984384f05cd0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ConsumableEffectSystem
-  shop: {fileID: 0}
+  shop: {fileID: 172759715}
   shopRoot: {fileID: 1520600119}
   useButton: {fileID: 1209086560}
 --- !u!1 &1747686401

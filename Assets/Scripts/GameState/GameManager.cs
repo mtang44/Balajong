@@ -108,30 +108,42 @@ public class GameManager : MonoBehaviour
     }
     void ScoreState()
     {
+        StartCoroutine(ScoreStateCoroutine());
+    }
+
+    System.Collections.IEnumerator ScoreStateCoroutine()
+    {
         Debug.Log("Scoring Hand...");
-        int Score = ScoringManager.Instance.CalcHandScore(DeckManager.Instance.getHandAsMahjongTileData());
-        Debug.Log($"ScoreState: Hand scored {Score} points.");
-        score += Score;
+        int handScore = ScoringManager.Instance.CalcHandScore(DeckManager.Instance.getHandAsMahjongTileData());
+        Debug.Log($"ScoreState: Hand scored {handScore} points.");
+
+        // Animate the score rising tile-by-tile before applying the final total
+        if (ScoreVisualization.Instance != null)
+            yield return ScoreVisualization.Instance.AnimateScore(score);
+
+        score += handScore;
         StatsUpdater.Instance.UpdateScore(score);
-        // Here, we decide if the player is alive or not. For now, we will return to the draw state and refill discards.
 
-        // At the end of scoring, move any flowers/seasons that were set aside this round
-        // into the discard pile so they don't accumulate across rounds.
-        DeckManager.Instance.fsToDiscard();
-
-        if(score >= EnemyManager.Instance.returnScoreThreshold()) {
+        bool reachedThreshold = score >= EnemyManager.Instance.returnScoreThreshold();
+        if (reachedThreshold)
+        {
             PlayerStatManager.Instance.cash += 5;
             StatsUpdater.Instance.UpdateCash(PlayerStatManager.Instance.cash);
+
+            // On win, ResolveEncounterWin handles endRound/discard and scene transition.
+            // Do not transition back to Draw here, or a new hand is dealt before leaving.
+            currentDiscards = 0;
+            StatsUpdater.Instance.UpdateDiscardCount();
             encounterFlowManager.GetComponent<MapEncounterResultHandler>().ResolveEncounterWin();
+            yield break;
         }
-        else
-        {
-            PlayerDamage();
-        }
+
+        // On failed check, keep current hand/bonus tiles and continue selecting.
+        PlayerDamage();
 
         currentDiscards = 0;
         StatsUpdater.Instance.UpdateDiscardCount();
-        SwitchState(GameState.Draw);
+        SwitchState(GameState.Select);
     }
     void EndState() {}
 

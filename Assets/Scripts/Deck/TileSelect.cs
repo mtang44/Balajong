@@ -1,19 +1,13 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 using System.Collections.Generic;
-using UnityEngine.UI;
-using TMPro;
 
 // This script is attached to the MahjongTile GameObject. It handles collision interaction, and will add itself to the DeckManager on click
-public class TileSelect : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IBeginDragHandler, IDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler
+public class TileSelect : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     DeckManager deckManager;
     public MahjongTileData tileData;
 
-    [SerializeField] private float tooltipHeightOffset = 1.5f;
-
-    GameObject tooltip; // Reference to the tooltip GameObject
-    private bool isHoveringOverTile = false;
     private Vector3 originalPosition;
     private int originalIndex;
     private int currentPreviewIndex;
@@ -33,80 +27,9 @@ public class TileSelect : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
         {
             Debug.LogError("MahjongTileHolder component not found on " + gameObject.name);
         }
-        tooltip = GameObject.FindGameObjectWithTag("Tooltip");
         if(tileData != null && (tileData.TileType == TileType.Flower || tileData.TileType == TileType.Season))
         {
             flowerTile = true;
-        }
-    }
-
-    public void OnPointerEnter(PointerEventData eventData)
-    {
-        //Send in the tooltip
-        if (tooltip != null && tileData != null)
-        {
-            // Make sure tooltip is active
-            GameObject tooltipButton = tooltip.transform.GetChild(0).gameObject;
-            if (!tooltipButton.activeSelf)
-            {
-                tooltipButton.SetActive(true);
-            }
-            
-            TextMeshProUGUI tooltipText = tooltip.GetComponentInChildren<TextMeshProUGUI>(includeInactive: true);
-            if (tooltipText != null)
-            {
-                string displayName = tileData.GetTileDisplayName();
-                tooltipText.text = displayName;
-            }
-            else
-            {
-                Debug.LogError("TextMeshProUGUI component not found in tooltip!");
-            }
-            
-            // Position tooltip above the tile
-            UpdateTooltipPosition();
-        }
-        isHoveringOverTile = true;
-    }
-    public void OnPointerExit(PointerEventData eventData)
-    {
-        //Quiet the tooltip
-        isHoveringOverTile = false;
-        if (tooltip != null && tooltip.transform.childCount > 0)
-        {
-            tooltip.transform.GetChild(0).gameObject.SetActive(false);
-        }
-    }
-
-    private void UpdateTooltipPosition()
-    {
-        if (tooltip != null && tooltip.transform.childCount > 0)
-        {
-            GameObject tooltipChild = tooltip.transform.GetChild(0).gameObject;
-            if (!tooltipChild.activeSelf) return;
-            
-            RectTransform tooltipRect = tooltipChild.GetComponent<RectTransform>();
-            if (tooltipRect != null)
-            {
-                Canvas canvas = tooltip.GetComponentInParent<Canvas>();
-                if (canvas != null && canvas.renderMode == RenderMode.ScreenSpaceCamera)
-                {
-                    // Get the tile's position in world space
-                    Vector3 tileWorldPos = transform.position;
-                    
-                    // Add offset above the tile (accounting for tile height + extra space)
-                    Vector3 tooltipWorldPos = tileWorldPos + new Vector3(0f, tooltipHeightOffset, 0f);
-                    
-                    // Convert to screen space
-                    Vector3 screenPos = canvas.worldCamera.WorldToScreenPoint(tooltipWorldPos);
-                    
-                    // Convert screen space to canvas position
-                    Vector3 canvasScreenPoint = new Vector3(screenPos.x, screenPos.y, canvas.planeDistance);
-                    Vector3 canvasWorldPoint = canvas.worldCamera.ScreenToWorldPoint(canvasScreenPoint);
-                    
-                    tooltipRect.position = canvasWorldPoint;
-                }
-            }
         }
     }
 
@@ -166,12 +89,6 @@ public class TileSelect : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
                 currentPreviewIndex = newPreviewIndex;
                 RepositionHandWithGap(currentPreviewIndex);
             }
-
-            // Hide tooltip while dragging
-            if (tooltip != null && tooltip.transform.childCount > 0)
-            {
-                tooltip.transform.GetChild(0).gameObject.SetActive(false);
-            }
         }
     }
 
@@ -192,13 +109,6 @@ public class TileSelect : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
         
         // Reposition all tiles normally
         deckManager.sortHand();
-        
-        // Restore tooltip if still hovering
-        if (isHoveringOverTile && tooltip != null && tooltip.transform.childCount > 0)
-        {
-            tooltip.transform.GetChild(0).gameObject.SetActive(true);
-            UpdateTooltipPosition();
-        }
     }
 
     // Calculate the index where the dragged tile should be inserted
@@ -301,12 +211,6 @@ public class TileSelect : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
 
         //temp move forward to show selection, will replace with actual animation later
         gameObject.transform.localPosition += new Vector3(0, 0.125f, 0);
-        
-        // Update tooltip position if hovering
-        if (isHoveringOverTile)
-        {
-            UpdateTooltipPosition();
-        }
     }
     void removeFromSelection()
     {
@@ -314,11 +218,5 @@ public class TileSelect : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
         deckManager.selectedTiles.Remove(gameObject);
         //temp move back to show deselection, will replace with actual animation later
         gameObject.transform.localPosition -= new Vector3(0, 0.125f, 0);
-        
-        // Update tooltip position if hovering
-        if (isHoveringOverTile)
-        {
-            UpdateTooltipPosition();
-        }
     }
 }

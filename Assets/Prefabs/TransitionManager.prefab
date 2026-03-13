@@ -483,7 +483,7 @@ MonoBehaviour:
   preserveAcrossScenes: 1
   randomizeEdition: 1
   typeWeight: 1400000014000000140000000a0000000a0000000a0000000a000000
-  editionWeight: 55000000050000000500000005000000
+  editionWeight: 56000000070000000000000007000000
 --- !u!4 &659488742006160830 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7317096856753047839, guid: f4ef62aeee9c25144a5c1fe006273c49, type: 3}

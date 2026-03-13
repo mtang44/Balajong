@@ -101,6 +101,8 @@ public class ConsumableEffectSystem : MonoBehaviour
         }
 
         // Otherwise we need a tile selection; show the Use button and wait for exactly one tile to be selected.
+        if (GameManager.Instance != null)
+            GameManager.Instance.selecting = true;
         if (useButton != null)
         {
             useButton.gameObject.SetActive(true);
@@ -156,6 +158,9 @@ public class ConsumableEffectSystem : MonoBehaviour
 
     private void FinishConsumable()
     {
+        if (GameManager.Instance != null)
+            GameManager.Instance.selecting = false;
+
         // Clear selection state and hide use button.
         if (deckManager != null && deckManager.selectedTiles != null)
         {
@@ -189,7 +194,7 @@ public static class DeckMutationHelpers
     {
         if (manager == null) return null;
 
-        deckField ??= typeof(DeckManager).GetField("deck", BindingFlags.Instance | BindingFlags.NonPublic);
+        deckField ??= typeof(DeckManager).GetField("deck", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
         return deckField?.GetValue(manager) as Deck;
     }
 

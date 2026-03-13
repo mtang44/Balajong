@@ -10,6 +10,7 @@ public class StatsUpdater : MonoBehaviour
     public GameObject healthSlider;
     public GameObject winScreen;
     public GameObject loseScreen;
+    public GameObject cash;
     // We probably want this
     public static StatsUpdater Instance;
     private void Awake()
@@ -32,6 +33,17 @@ public class StatsUpdater : MonoBehaviour
             if (textComponent != null)
             {
                 textComponent.text = "" + count;
+            }
+        }
+    }
+    public void UpdateCash(int cashValue)
+    {
+        if (cash != null)
+        {
+            TMPro.TextMeshProUGUI textComponent = cash.GetComponent<TMPro.TextMeshProUGUI>();
+            if (textComponent != null)
+            {
+                textComponent.text = "$" + cashValue;
             }
         }
     }

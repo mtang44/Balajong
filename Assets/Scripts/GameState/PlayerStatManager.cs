@@ -6,6 +6,7 @@ public class PlayerStatManager : MonoBehaviour
     public static PlayerStatManager Instance;
     public int maxHealth = 4;
     public int currentHealth;
+    public int cash = 0;
 
     void Awake()
     {

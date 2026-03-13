@@ -91,7 +91,6 @@ public class ConsumableEffectSystem : MonoBehaviour
                 deckManager.drawHand();
             }
         }
-
         // If this is a Heal consumable, we can immediately apply it without a tile choice.
         if (consumable.equationType == "Heal")
         {
@@ -109,6 +108,7 @@ public class ConsumableEffectSystem : MonoBehaviour
 
     private void OnUseButtonClicked()
     {
+        Debug.Log("Use Button Clicked");
         if (activeConsumable == null || deckManager == null) return;
         if (deckManager.selectedTiles == null || deckManager.selectedTiles.Count != 1) return;
 

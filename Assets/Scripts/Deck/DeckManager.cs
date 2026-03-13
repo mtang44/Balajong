@@ -254,6 +254,7 @@ public class DeckManager : MonoBehaviour
 
     private Transform GetTileParentTransform()
     {
+        TileHolder = GameObject.FindWithTag("TileHolder");
         if (TileHolder != null)
             return TileHolder.transform;
 

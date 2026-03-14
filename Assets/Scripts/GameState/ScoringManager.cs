@@ -289,7 +289,7 @@ public class ScoringManager : MonoBehaviour
 
         var sb = new StringBuilder();
         sb.AppendLine("Hand Info:");
-        AppendTypeCountLine(sb, "Single", singleCount);     // Tile not used by any other meld
+        AppendTypeCountLine(sb, "Single", singleCount);     // Single tile (not involved in any meld)
         AppendTypeCountLine(sb, "Eyes", eyesCount);         // Pair
         AppendTypeCountLine(sb, "Pung", pungCount);         // Three of a kind
         AppendTypeCountLine(sb, "Kong", kongCount);         // Four of a kind

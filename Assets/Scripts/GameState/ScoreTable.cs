@@ -5,10 +5,10 @@ public static class ScoreTable
     // Winds and dragons: 10 points each.
     public const int HonorScore = 10;
 
-    // Flowers and seasons: static 5 points each (bonus).
-    public const int FlowerBonusScore = 5;
+    // Flowers and seasons: static 10 points each (bonus).
+    public const int BonusScore = 10;
 
-    // Applies default scores: suited = face value (1-9), winds/dragons = 10, flowers/seasons = 5.
+    // Applies default scores: suited = face value (1-9), winds/dragons = 10, flowers/seasons = 10.
     public static void ApplyDefaultScores(ScoringManager scoring)
     {
         if (scoring == null)
@@ -36,15 +36,15 @@ public static class ScoreTable
             for (int i = 0; i < scoring.dragonValues.Length; i++)
                 scoring.dragonValues[i] = HonorScore;
 
-        // Flowers and seasons: static 5 points each (bonus).
+        // Flowers and seasons: static 10 points each (bonus).
         if (scoring.flowerValues != null)
             for (int i = 0; i < scoring.flowerValues.Length; i++)
-                scoring.flowerValues[i] = FlowerBonusScore;
+                scoring.flowerValues[i] = BonusScore;
         if (scoring.seasonValues != null)
             for (int i = 0; i < scoring.seasonValues.Length; i++)
-                scoring.seasonValues[i] = FlowerBonusScore;
+                scoring.seasonValues[i] = BonusScore;
 
-        Debug.Log("ScoreTable: Applied default scores (face value suited, 10 wind/dragon, 5 flower/season).");
+        Debug.Log("ScoreTable: Applied default scores (face value suited, 10 wind/dragon, 10 flower/season).");
     }
 }
 

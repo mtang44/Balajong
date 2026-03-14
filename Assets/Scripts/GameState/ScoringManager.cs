@@ -629,8 +629,9 @@ public class ScoringManager : MonoBehaviour
 
     // Single: tile face value. Eyes: (tile1 + tile2) * 2. Pung: (t1+t2+t3)*3.
     // Kong: (t1..t4)*4. Quint: (t1..t5)*5. Balajong: (t1+..+tn)*n (n>=6).
-    // Chow: sum of 3 tiles + 20. Jog: ceil(sum of 4 tiles * 3.5).
+    // Chow: sum of 3 tiles * 3. Jog: ceil(sum of 4 tiles * 3.5).
     // Sprint: sum of 5 tiles * 4. Hydra: sum of 3 dragons * 3. NEWS: sum of 4 winds * 4.
+    // BALAJONG: sum of 6 or more tiles * number of tiles.
     public int EvalMeld(Meld meld)
     {
         if (meld.Tiles == null || meld.Tiles.Count == 0) return 0;
@@ -672,7 +673,7 @@ public class ScoringManager : MonoBehaviour
         }
         if (meld.Kind == MeldKind.Chow && meld.Tiles.Count == 3)
         {
-            return sum + 20;
+            return sum * 3;
         }
         if (meld.Kind == MeldKind.Jog && meld.Tiles.Count == 4)
         {

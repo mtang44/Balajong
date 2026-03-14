@@ -22,6 +22,8 @@ public class Tooltip : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 	[Header("Size")]
 	[SerializeField] private Vector2 panelSize = new Vector2(220f, 52f);
 	[SerializeField] private Vector2 panelPadding = new Vector2(12f, 8f);
+	[SerializeField] private bool scalePanelToFitText = true;
+	[SerializeField, Min(0f)] private float maxAutoPanelWidth = 0f;
 
 	[Header("Text")]
 	[SerializeField] private TMP_FontAsset fontAsset;
@@ -112,11 +114,13 @@ public class Tooltip : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 		panelSize.y = Mathf.Max(1f, panelSize.y);
 		panelPadding.x = Mathf.Max(0f, panelPadding.x);
 		panelPadding.y = Mathf.Max(0f, panelPadding.y);
+		maxAutoPanelWidth = Mathf.Max(0f, maxAutoPanelWidth);
 		horizontalEdgePadding = Mathf.Max(0f, horizontalEdgePadding);
 
 		if (activeOwner == this && sharedPanelRect != null)
 		{
 			ApplyVisualSettings();
+			ResizePanelToFitCurrentText();
 			UpdateTooltipPosition();
 		}
 	}
@@ -148,6 +152,7 @@ public class Tooltip : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 
 		ApplyVisualSettings();
 		sharedText.text = displayName;
+		ResizePanelToFitCurrentText();
 		sharedPanelRect.gameObject.SetActive(true);
 		sharedPanelRect.SetAsLastSibling();
 		UpdateTooltipPosition();
@@ -338,6 +343,30 @@ public class Tooltip : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 			sharedText.fontSizeMin = minSize;
 			sharedText.fontSizeMax = maxSize;
 		}
+	}
+
+	private void ResizePanelToFitCurrentText()
+	{
+		if (sharedPanelRect == null || sharedText == null)
+		{
+			return;
+		}
+
+		Vector2 resolvedSize = panelSize;
+		if (scalePanelToFitText)
+		{
+			Vector2 preferredTextSize = sharedText.GetPreferredValues(sharedText.text);
+			resolvedSize.x = Mathf.Max(panelSize.x, preferredTextSize.x + (panelPadding.x * 2f));
+			resolvedSize.y = Mathf.Max(panelSize.y, preferredTextSize.y + (panelPadding.y * 2f));
+
+			if (maxAutoPanelWidth > 0f)
+			{
+				float clampedMaxWidth = Mathf.Max(panelSize.x, maxAutoPanelWidth);
+				resolvedSize.x = Mathf.Min(resolvedSize.x, clampedMaxWidth);
+			}
+		}
+
+		sharedPanelRect.sizeDelta = resolvedSize;
 	}
 
 	private void UpdateTooltipPosition()

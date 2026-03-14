@@ -11,8 +11,8 @@ public class DeckManager : MonoBehaviour
     private bool warnedMissingTileHolder = false;
 
     [SerializeField] GameObject tilePrefab;
-    public int HAND_SIZE = 14 + JokerManager.Instance.numberOfActivations("spider");
-    public int MAX_DISCARD_SELECTION = 5 + (3 * JokerManager.Instance.numberOfActivations("basket"));
+    public int HAND_SIZE = 14;
+    public int MAX_DISCARD_SELECTION = 5;
     public static DeckManager Instance;
 
     // Our hands! Deck is the wall, then the hand and discard.
@@ -39,6 +39,11 @@ public class DeckManager : MonoBehaviour
         }
         deck = new Deck(tilePrefab);
         deck.InitializeDeck();
+    }
+    public void Start()
+    {
+        int HAND_SIZE = 14 + JokerManager.Instance.numberOfActivations("spider");
+        int MAX_DISCARD_SELECTION = 5 + (3 * JokerManager.Instance.numberOfActivations("basket"));
     }
 
     public void forceNewLists()

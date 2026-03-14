@@ -26,7 +26,7 @@ public class GameManager : MonoBehaviour
 
     //governs values of the game, will be used for determining the state to switch to.
     // Constants will normally be gathered when the game is started. For now, hard coded.
-    public int maxDiscards = 3 + JokerManager.Instance.numberOfActivations("trash");
+    public int maxDiscards = 3;
     public int currentDiscards = 0;
     public int score = 0;
 
@@ -172,6 +172,7 @@ public class GameManager : MonoBehaviour
     void BeginGame()
     {
         EnsureActionButtonHoverPreviews();
+        maxDiscards = 3 + JokerManager.Instance.numberOfActivations("trash");
         PlayerStatManager.Instance.updateTheMax();
         StatsUpdater.Instance.UpdateHealth(PlayerStatManager.Instance.currentHealth, PlayerStatManager.Instance.maxHealth);
         StatsUpdater.Instance.UpdateDiscardCount();
@@ -224,6 +225,7 @@ public class GameManager : MonoBehaviour
     }
     void DiscardState()
     {
+        maxDiscards = 3 + JokerManager.Instance.numberOfActivations("trash");
         if(JokerManager.Instance.jokers.Contains("alt-four") && score == 0 && currentDiscards == 0)
             DeckManager.Instance.removeSelectedTiles();
         else if(JokerManager.Instance.jokers.Contains("jackjack") && score == 0 && currentDiscards == 0)

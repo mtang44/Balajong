@@ -30,6 +30,7 @@ public class ScoreVisualization : MonoBehaviour
     [SerializeField, Min(0f)] private float pauseAfterBonus = 0.25f;
     [SerializeField, Min(0f)] private float pauseBetweenSections = 0.5f;
     [SerializeField, Min(0f)] private float singleTimingMultiplier = 0.35f;
+    [SerializeField, Min(0f)] private float scoreLerpDuration = 0.2f;
 
     [Header("Tile Hop")]
     [SerializeField, Min(0f)] private float tileHopHeight = 0.2f;
@@ -156,14 +157,8 @@ public class ScoreVisualization : MonoBehaviour
                 float popupTextSizeMultiplier = hasTriggerKind ? GetMeldPopupTextSizeMultiplier(triggerKind) : 1f;
                 SpawnPopup(spawnPos, handType, slotScore[i], handTypeTextColor, scoreTextColor, popupTextSizeMultiplier);
 
-                runningScore[0] += slotScore[i];
-                StatsUpdater.Instance.UpdateScore(runningScore[0]);
-
                 float pauseDuration = pauseAfterMeld * (isSingleTrigger ? singleTimingMultiplier : 1f);
-                if (pauseDuration > 0f)
-                {
-                    yield return new WaitForSeconds(pauseDuration);
-                }
+                yield return LerpScoreAndWait(runningScore, slotScore[i], pauseDuration);
             }
         }
 
@@ -236,19 +231,61 @@ public class ScoreVisualization : MonoBehaviour
             string handType = GetBonusDisplayName(td);
             SpawnPopup(spawnPos, handType, bonus, handTypeTextColor, scoreTextColor);
 
-            runningScore[0] += bonus;
-            StatsUpdater.Instance.UpdateScore(runningScore[0]);
-
             float waitAfterBonus = pauseAfterBonus;
             if (IsTileHopEnabled())
             {
                 waitAfterBonus = Mathf.Max(waitAfterBonus, tileHopDuration);
             }
 
-            if (waitAfterBonus > 0f)
+            yield return LerpScoreAndWait(runningScore, bonus, waitAfterBonus);
+        }
+    }
+
+    private IEnumerator LerpScoreAndWait(int[] runningScore, int scoreDelta, float totalWaitDuration)
+    {
+        if (runningScore == null || runningScore.Length == 0)
+        {
+            yield break;
+        }
+
+        int startScore = runningScore[0];
+        int targetScore = startScore + scoreDelta;
+        float lerpDuration = Mathf.Max(0f, scoreLerpDuration);
+        if (totalWaitDuration > 0f)
+        {
+            lerpDuration = Mathf.Min(lerpDuration, totalWaitDuration);
+        }
+
+        if (lerpDuration <= 0f || startScore == targetScore)
+        {
+            runningScore[0] = targetScore;
+            StatsUpdater.Instance.UpdateScore(runningScore[0]);
+        }
+        else
+        {
+            float elapsed = 0f;
+            while (elapsed < lerpDuration)
             {
-                yield return new WaitForSeconds(waitAfterBonus);
+                float t = elapsed / lerpDuration;
+                int displayScore = Mathf.RoundToInt(Mathf.Lerp(startScore, targetScore, t));
+                if (displayScore != runningScore[0])
+                {
+                    runningScore[0] = displayScore;
+                    StatsUpdater.Instance.UpdateScore(runningScore[0]);
+                }
+
+                elapsed += Time.deltaTime;
+                yield return null;
             }
+
+            runningScore[0] = targetScore;
+            StatsUpdater.Instance.UpdateScore(runningScore[0]);
+        }
+
+        float remainingWait = totalWaitDuration - lerpDuration;
+        if (remainingWait > 0f)
+        {
+            yield return new WaitForSeconds(remainingWait);
         }
     }
 
@@ -354,8 +391,8 @@ public class ScoreVisualization : MonoBehaviour
 
         TextMeshPro tmp      = go.AddComponent<TextMeshPro>();
         tmp.text             = BuildPopupText(handType, scoreValue, handTypeColor, scoreColor);
-    float resolvedMultiplier = Mathf.Max(0.1f, textSizeMultiplier);
-    tmp.fontSize         = fontSize * resolvedMultiplier;
+        float resolvedMultiplier = Mathf.Max(0.1f, textSizeMultiplier);
+        tmp.fontSize         = fontSize * resolvedMultiplier;
         tmp.color            = Color.white;
         tmp.alignment        = TextAlignmentOptions.Center;
         tmp.textWrappingMode = TextWrappingModes.NoWrap;

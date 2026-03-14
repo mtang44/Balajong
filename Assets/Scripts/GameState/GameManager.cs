@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine.InputSystem;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public enum GameState
 {
@@ -28,6 +29,14 @@ public class GameManager : MonoBehaviour
     public int currentDiscards = 0;
     public int score = 0;
 
+    [Header("Action Buttons")]
+    [SerializeField] private Button discardButton;
+    [SerializeField] private Button checkRackButton;
+    [SerializeField] private CanvasGroup discardButtonCanvasGroup;
+    [SerializeField] private CanvasGroup checkRackButtonCanvasGroup;
+    [SerializeField, Range(0f, 1f)] private float enabledButtonAlpha = 1f;
+    [SerializeField, Range(0f, 1f)] private float disabledButtonAlpha = 0.45f;
+
     void Awake()
     {
         if (Instance == null)
@@ -43,6 +52,81 @@ public class GameManager : MonoBehaviour
     {
         BeginGame();
     }
+
+    void Update()
+    {
+        HandleRightClickDeselect();
+        UpdateActionButtons();
+    }
+
+    private void HandleRightClickDeselect()
+    {
+        if (!selecting || !WasRightClickThisFrame())
+        {
+            return;
+        }
+
+        DeckManager deckManager = DeckManager.Instance;
+        if (deckManager == null || deckManager.selectedTiles == null || deckManager.selectedTiles.Count == 0)
+        {
+            return;
+        }
+
+        deckManager.ClearSelectedTiles();
+    }
+
+    private void UpdateActionButtons()
+    {
+        bool hasSelection = HasAnySelectedTile();
+        bool canUseActions = selecting;
+
+        bool canDiscard = canUseActions && hasSelection;
+        bool canCheckRack = canUseActions && !hasSelection;
+
+        ApplyButtonState(discardButton, ref discardButtonCanvasGroup, canDiscard);
+        ApplyButtonState(checkRackButton, ref checkRackButtonCanvasGroup, canCheckRack);
+    }
+
+    private void ApplyButtonState(Button button, ref CanvasGroup canvasGroup, bool interactable)
+    {
+        if (button == null)
+        {
+            return;
+        }
+
+        button.interactable = interactable;
+
+        if (canvasGroup == null)
+        {
+            canvasGroup = button.GetComponent<CanvasGroup>();
+            if (canvasGroup == null)
+            {
+                canvasGroup = button.gameObject.AddComponent<CanvasGroup>();
+            }
+        }
+
+        float enabledAlpha = Mathf.Clamp01(enabledButtonAlpha);
+        float disabledAlpha = Mathf.Clamp01(disabledButtonAlpha);
+        canvasGroup.alpha = interactable ? enabledAlpha : disabledAlpha;
+        canvasGroup.interactable = interactable;
+        canvasGroup.blocksRaycasts = interactable;
+    }
+
+    private static bool HasAnySelectedTile()
+    {
+        DeckManager deckManager = DeckManager.Instance;
+        return deckManager != null && deckManager.selectedTiles != null && deckManager.selectedTiles.Count > 0;
+    }
+
+    private static bool WasRightClickThisFrame()
+    {
+#if ENABLE_INPUT_SYSTEM
+        return Mouse.current != null && Mouse.current.rightButton.wasPressedThisFrame;
+#else
+        return Input.GetMouseButtonDown(1);
+#endif
+    }
+
     void OnSceneLoaded()
     {
         BeginGame();
@@ -166,7 +250,7 @@ public class GameManager : MonoBehaviour
     // Public method for UI button to trigger discard
     public void OnDiscardButtonPressed()
     {
-        if (selecting)
+        if (selecting && HasAnySelectedTile())
         {
             selecting = false;
             SwitchState(GameState.Discard);
@@ -174,6 +258,9 @@ public class GameManager : MonoBehaviour
     }
     public void OnScoreButtonPressed()
     {
-        SwitchState(GameState.Score);
+        if (selecting && !HasAnySelectedTile())
+        {
+            SwitchState(GameState.Score);
+        }
     }
 }

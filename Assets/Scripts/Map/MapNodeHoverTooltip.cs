@@ -26,7 +26,9 @@ public class MapNodeHoverTooltip : MonoBehaviour, IPointerEnterHandler, IPointer
     [SerializeField] private Font tooltipFont;
     [SerializeField] private RectTransform tooltipRoot;
     [SerializeField] private Text tooltipTypeText;
+    [SerializeField] private Text tooltipEnemyNameText;
     [SerializeField] private Text tooltipHealthText;
+    [SerializeField] private Text tooltipPayoutText;
 
     private Image nodeImage;
     private Button nodeButton;
@@ -36,10 +38,14 @@ public class MapNodeHoverTooltip : MonoBehaviour, IPointerEnterHandler, IPointer
     private bool canHover = true;
     private float hoverAmount;
     private bool isInitialized;
+    private string enemyNameText = DefaultEnemyNameText;
     private string enemyHealthText = DefaultEnemyHealthText;
+    private string battlePayoutText = DefaultBattlePayoutText;
 
     private static Font cachedTooltipFont;
+    private const string DefaultEnemyNameText = "???";
     private const string DefaultEnemyHealthText = "???";
+    private const string DefaultBattlePayoutText = "???";
 
     private void Update()
     {
@@ -87,7 +93,19 @@ public class MapNodeHoverTooltip : MonoBehaviour, IPointerEnterHandler, IPointer
 
     public void SetEnemyHealthText(string newText)
     {
-        enemyHealthText = string.IsNullOrWhiteSpace(newText) ? DefaultEnemyHealthText : newText;
+        enemyHealthText = NormalizeTooltipValue(newText, DefaultEnemyHealthText);
+        RefreshTooltipContent();
+    }
+
+    public void SetEnemyNameText(string newText)
+    {
+        enemyNameText = NormalizeTooltipValue(newText, DefaultEnemyNameText);
+        RefreshTooltipContent();
+    }
+
+    public void SetBattlePayoutText(string newText)
+    {
+        battlePayoutText = NormalizeTooltipValue(newText, DefaultBattlePayoutText);
         RefreshTooltipContent();
     }
 
@@ -251,14 +269,51 @@ public class MapNodeHoverTooltip : MonoBehaviour, IPointerEnterHandler, IPointer
             tooltipTypeText = CreateTooltipText("TypeText");
         }
 
+        if (tooltipEnemyNameText == null)
+        {
+            tooltipEnemyNameText = CreateTooltipText("EnemyNameText");
+        }
+
         if (tooltipHealthText == null)
         {
             tooltipHealthText = CreateTooltipText("EnemyHealthText");
         }
 
+        if (tooltipPayoutText == null)
+        {
+            tooltipPayoutText = CreateTooltipText("BattlePayoutText");
+        }
+
+        ArrangeTooltipLineOrder();
+
         ApplyTooltipTextStyle(tooltipTypeText);
+        ApplyTooltipTextStyle(tooltipEnemyNameText);
         ApplyTooltipTextStyle(tooltipHealthText);
+        ApplyTooltipTextStyle(tooltipPayoutText);
         SetTooltipVisible(false);
+    }
+
+    private void ArrangeTooltipLineOrder()
+    {
+        if (tooltipTypeText != null)
+        {
+            tooltipTypeText.transform.SetSiblingIndex(0);
+        }
+
+        if (tooltipEnemyNameText != null)
+        {
+            tooltipEnemyNameText.transform.SetSiblingIndex(1);
+        }
+
+        if (tooltipHealthText != null)
+        {
+            tooltipHealthText.transform.SetSiblingIndex(2);
+        }
+
+        if (tooltipPayoutText != null)
+        {
+            tooltipPayoutText.transform.SetSiblingIndex(3);
+        }
     }
 
     private Text CreateTooltipText(string objectName)
@@ -298,13 +353,20 @@ public class MapNodeHoverTooltip : MonoBehaviour, IPointerEnterHandler, IPointer
 
     private void RefreshTooltipContent()
     {
-        if (tooltipTypeText == null || tooltipHealthText == null)
+        if (tooltipTypeText == null || tooltipEnemyNameText == null || tooltipHealthText == null || tooltipPayoutText == null)
         {
             return;
         }
 
-        tooltipTypeText.text = $"{GetNodeTypeDisplayName(nodeType)}";
+        tooltipTypeText.text = $"Node Type: {GetNodeTypeDisplayName(nodeType)}";
+        tooltipEnemyNameText.text = $"Enemy Name: {enemyNameText}";
         tooltipHealthText.text = $"Enemy Health: {enemyHealthText}";
+        tooltipPayoutText.text = $"Battle Payout: {battlePayoutText}";
+    }
+
+    private static string NormalizeTooltipValue(string value, string fallback)
+    {
+        return string.IsNullOrWhiteSpace(value) ? fallback : value;
     }
 
     private void SetTooltipVisible(bool visible)

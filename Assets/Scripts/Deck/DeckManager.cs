@@ -157,6 +157,18 @@ public class DeckManager : MonoBehaviour
         discardTiles(selectedTiles);
         selectedTiles.Clear();
     }
+
+    public void ClearSelectedTiles()
+    {
+        if (selectedTiles == null || selectedTiles.Count == 0)
+        {
+            return;
+        }
+
+        selectedTiles.Clear();
+        sortHand();
+    }
+
     public void fsToDiscard()
     {
         foreach (GameObject season in seasonTiles)

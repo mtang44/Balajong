@@ -189,6 +189,8 @@ MonoBehaviour:
   horizontalEdgePadding: 16
   panelSize: {x: 200, y: 50}
   panelPadding: {x: 6, y: 6}
+  scalePanelToFitText: 1
+  maxAutoPanelWidth: 0
   fontAsset: {fileID: 11400000, guid: 5293248ddbeac9344b20338543629bc0, type: 2}
   fontSize: 32
   fontStyle: 1

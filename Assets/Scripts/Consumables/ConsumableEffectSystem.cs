@@ -86,8 +86,8 @@ public class ConsumableEffectSystem : MonoBehaviour
         activeConsumable = consumable;
 
         // Hide shop UI while resolving the consumable.
-        if (shopRoot != null)
-            shopRoot.SetActive(false);
+        //if (shopRoot != null)
+        //    shopRoot.SetActive(false);
 
         if (deckManager == null)
             deckManager = DeckManager.Instance ?? FindFirstObjectByType<DeckManager>();

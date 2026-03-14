@@ -295,6 +295,8 @@ public class ScoreVisualization : MonoBehaviour
             ScoringManager.MeldKind.Chow => "Chow",
             ScoringManager.MeldKind.Pung => "Pung",
             ScoringManager.MeldKind.Kong => "Kong",
+            ScoringManager.MeldKind.Quint => "Quint",
+            ScoringManager.MeldKind.Balajong => "BALAJONG",
             ScoringManager.MeldKind.Eyes => "Eye",
             _ => "Meld"
         };

@@ -91,6 +91,9 @@ PrefabInstance:
       addedObject: {fileID: 5499044278880037646}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 770dc0ec5a177d34ea4e48ebf6adcb80, type: 3}
       insertIndex: -1
+      addedObject: {fileID: 8360231360980700292}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 770dc0ec5a177d34ea4e48ebf6adcb80, type: 3}
+      insertIndex: -1
       addedObject: {fileID: 323555887727181619}
   m_SourcePrefab: {fileID: 100100000, guid: 770dc0ec5a177d34ea4e48ebf6adcb80, type: 3}
 --- !u!1 &7980480237267112869 stripped
@@ -144,7 +147,6 @@ MonoBehaviour:
     seasonValue: 0
     edition: 0
     sprite: {fileID: 0}
-  tooltipHeightOffset: 0.225
 --- !u!114 &5499044278880037646
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -166,6 +168,39 @@ MonoBehaviour:
     seasonValue: 0
     edition: 0
     sprite: {fileID: 1245946512, guid: 728422e951c025d44b907401c3a07f88, type: 3}
+--- !u!114 &8360231360980700292
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7980480237267112869}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89969a2f37cd94741abda60fa5e22493, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Tooltip
+  tileHolder: {fileID: 5499044278880037646}
+  hideWhenTileDataMissing: 1
+  targetCanvas: {fileID: 0}
+  worldCameraOverride: {fileID: 0}
+  worldOffset: {x: 0, y: 0.25, z: -10}
+  screenOffset: {x: 0, y: 0}
+  horizontalEdgePadding: 16
+  panelSize: {x: 200, y: 50}
+  panelPadding: {x: 6, y: 6}
+  fontAsset: {fileID: 11400000, guid: 5293248ddbeac9344b20338543629bc0, type: 2}
+  fontSize: 32
+  fontStyle: 1
+  textAlignment: 514
+  textColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  autoSizeText: 1
+  autoSizeMin: 20
+  autoSizeMax: 32
+  backgroundColor: {r: 1, g: 1, b: 1, a: 1}
+  borderColor: {r: 0, g: 0, b: 0, a: 0.35}
+  borderThickness: 1
+  useMouseHoverFallback: 0
 --- !u!65 &323555887727181619
 BoxCollider:
   m_ObjectHideFlags: 0

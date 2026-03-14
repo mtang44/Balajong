@@ -229,6 +229,8 @@ public class ScoringManager : MonoBehaviour
         int eyesCount = 0;
         int pungCount = 0;
         int kongCount = 0;
+        int quintCount = 0;
+        int balajongCount = 0;
         int chowCount = 0;
 
         int meldTotal = 0;
@@ -248,6 +250,12 @@ public class ScoringManager : MonoBehaviour
                 case MeldKind.Kong:
                     kongCount++;
                     break;
+                case MeldKind.Quint:
+                    quintCount++;
+                    break;
+                case MeldKind.Balajong:
+                    balajongCount++;
+                    break;
                 case MeldKind.Chow:
                     chowCount++;
                     break;
@@ -264,6 +272,8 @@ public class ScoringManager : MonoBehaviour
         AppendTypeCountLine(sb, "Eyes", eyesCount);
         AppendTypeCountLine(sb, "Pung", pungCount);
         AppendTypeCountLine(sb, "Kong", kongCount);
+        AppendTypeCountLine(sb, "Quint", quintCount);
+        AppendTypeCountLine(sb, "BALAJONG", balajongCount);
         AppendTypeCountLine(sb, "Chow", chowCount);
         AppendTypeCountLine(sb, "Flowers", flowerCount);
         AppendTypeCountLine(sb, "Seasons", seasonCount);
@@ -326,7 +336,7 @@ public class ScoringManager : MonoBehaviour
 
     #region Meld type and detection
 
-    public enum MeldKind { Chow, Pung, Kong, Eyes }
+    public enum MeldKind { Chow, Pung, Kong, Quint, Balajong, Eyes }
 
     // Meld struct for storing the kind and tiles of a meld.
     public struct Meld
@@ -399,12 +409,27 @@ public class ScoringManager : MonoBehaviour
             }
         }
 
-        // Detect from largest to smallest: Kong (4) first, then Pung (3), then Eyes (2). No overlap.
+        // Detect from largest to smallest: Balajong (6+), then Quint (5), Kong (4), Pung (3), Eyes (2). No overlap.
         foreach (var suit in new[] { TileType.Dots, TileType.Bam, TileType.Crack })
         {
             for (int v = 1; v <= 9; v++)
             {
                 var list = suited[suit][v];
+                while (list.Count >= 6)
+                {
+                    int n = list.Count;
+                    var balajongTiles = new List<MahjongTile>();
+                    for (int i = 0; i < n; i++)
+                        balajongTiles.Add(list[i]);
+                    list.RemoveRange(0, n);
+                    melds.Add(new Meld(MeldKind.Balajong, balajongTiles));
+                }
+                while (list.Count >= 5)
+                {
+                    var quintTiles = new List<MahjongTile> { list[0], list[1], list[2], list[3], list[4] };
+                    list.RemoveRange(0, 5);
+                    melds.Add(new Meld(MeldKind.Quint, quintTiles));
+                }
                 while (list.Count >= 4)
                 {
                     var kongTiles = new List<MahjongTile> { list[0], list[1], list[2], list[3] };
@@ -423,6 +448,21 @@ public class ScoringManager : MonoBehaviour
         foreach (var kvp in honorLists)
         {
             var list = kvp.Value;
+            while (list.Count >= 6)
+            {
+                int n = list.Count;
+                var balajongTiles = new List<MahjongTile>();
+                for (int i = 0; i < n; i++)
+                    balajongTiles.Add(list[i]);
+                list.RemoveRange(0, n);
+                melds.Add(new Meld(MeldKind.Balajong, balajongTiles));
+            }
+            while (list.Count >= 5)
+            {
+                var quintTiles = new List<MahjongTile> { list[0], list[1], list[2], list[3], list[4] };
+                list.RemoveRange(0, 5);
+                melds.Add(new Meld(MeldKind.Quint, quintTiles));
+            }
             while (list.Count >= 4)
             {
                 var kongTiles = new List<MahjongTile> { list[0], list[1], list[2], list[3] };
@@ -475,7 +515,7 @@ public class ScoringManager : MonoBehaviour
         return total;
     }
 
-    // Eyes: (tile1 + tile2) * 2. Pung: (t1+t2+t3)*3. Kong: (t1+t2+t3+t4)*4. Chow: sum of 3 tiles + 20.
+    // Eyes: (tile1 + tile2) * 2. Pung: (t1+t2+t3)*3. Kong: (t1..t4)*4. Quint: (t1..t5)*5. Balajong: (t1+..+tn)*n (n>=6). Chow: sum of 3 tiles + 20.
     public int EvalMeld(Meld meld)
     {
         if (meld.Tiles == null || meld.Tiles.Count == 0) return 0;
@@ -495,6 +535,18 @@ public class ScoringManager : MonoBehaviour
         {
             int sum = GetTileScore(meld.Tiles[0]) + GetTileScore(meld.Tiles[1]) + GetTileScore(meld.Tiles[2]) + GetTileScore(meld.Tiles[3]);
             return sum * 4;
+        }
+        if (meld.Kind == MeldKind.Quint && meld.Tiles.Count == 5)
+        {
+            int sum = GetTileScore(meld.Tiles[0]) + GetTileScore(meld.Tiles[1]) + GetTileScore(meld.Tiles[2]) + GetTileScore(meld.Tiles[3]) + GetTileScore(meld.Tiles[4]);
+            return sum * 5;
+        }
+        if (meld.Kind == MeldKind.Balajong && meld.Tiles.Count >= 6)
+        {
+            int sum = 0;
+            foreach (var t in meld.Tiles)
+                sum += GetTileScore(t);
+            return sum * meld.Tiles.Count;
         }
         if (meld.Kind == MeldKind.Chow)
         {

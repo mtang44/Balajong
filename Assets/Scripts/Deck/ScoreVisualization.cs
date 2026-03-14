@@ -15,6 +15,8 @@ public class ScoreVisualization : MonoBehaviour
     [Header("Popup Style")]
     [SerializeField] private TMP_FontAsset fontAsset;
     [SerializeField, Min(0.1f)] private float fontSize = 5f;
+    [SerializeField, Min(0.1f)] private float singlePopupTextSizeMultiplier = 0.75f;
+    [SerializeField, Min(0.1f)] private float balajongPopupTextSizeMultiplier = 1.25f;
     [SerializeField] private Color handTypeTextColor = new Color(0.75f, 0.9f, 1f, 1f);
     [SerializeField] private Color scoreTextColor = new Color(1f, 0.85f, 0.1f, 1f);
     [SerializeField] private Vector3 popupWorldOffset = new Vector3(0f, 0.9f, -0.5f);
@@ -27,6 +29,13 @@ public class ScoreVisualization : MonoBehaviour
     [SerializeField, Min(0f)] private float pauseAfterMeld  = 0.35f;
     [SerializeField, Min(0f)] private float pauseAfterBonus = 0.25f;
     [SerializeField, Min(0f)] private float pauseBetweenSections = 0.5f;
+    [SerializeField, Min(0f)] private float singleTimingMultiplier = 0.35f;
+
+    [Header("Tile Hop")]
+    [SerializeField, Min(0f)] private float tileHopHeight = 0.2f;
+    [SerializeField, Min(0.05f)] private float tileHopDuration = 0.22f;
+    [SerializeField, Min(0f)] private float tileHopSquashAmount = 0.05f;
+    [SerializeField, Min(0f)] private float tileHopStretchAmount = 0.06f;
 
     private void Awake()
     {
@@ -90,6 +99,8 @@ public class ScoreVisualization : MonoBehaviour
         // slotScore[i] >  0  -> rightmost tile of a meld; this score pops here
         int[] slotScore = new int[hand.Count];
         string[] slotTypeLabel = new string[hand.Count];
+        Dictionary<int, List<int>> triggerHopIndices = new Dictionary<int, List<int>>();
+        Dictionary<int, ScoringManager.MeldKind> triggerKinds = new Dictionary<int, ScoringManager.MeldKind>();
         for (int i = 0; i < hand.Count; i++) slotScore[i] = -1;
 
         foreach (ScoringManager.Meld meld in melds)
@@ -111,6 +122,8 @@ public class ScoreVisualization : MonoBehaviour
             int triggerIndex = meldIndices[meldIndices.Count - 1];
             slotScore[triggerIndex] = thisMeldScore;
             slotTypeLabel[triggerIndex] = GetMeldDisplayName(meld.Kind);
+            triggerHopIndices[triggerIndex] = new List<int>(meldIndices);
+            triggerKinds[triggerIndex] = meld.Kind;
         }
 
         // Go along the hand left to right, showing popups for melds
@@ -119,18 +132,38 @@ public class ScoreVisualization : MonoBehaviour
             if (slotScore[i] < 0)
                 continue; // not in any meld – no delay needed
 
-            yield return new WaitForSeconds(delayPerTile);
+            bool hasTriggerKind = triggerKinds.TryGetValue(i, out ScoringManager.MeldKind triggerKind);
+            bool isSingleTrigger =
+                slotScore[i] > 0 &&
+                hasTriggerKind &&
+                triggerKind == ScoringManager.MeldKind.Single;
+
+            float stepDelay = delayPerTile * (isSingleTrigger ? singleTimingMultiplier : 1f);
+            if (stepDelay > 0f)
+            {
+                yield return new WaitForSeconds(stepDelay);
+            }
 
             if (slotScore[i] > 0) // trigger tile: fire the popup
             {
+                if (triggerHopIndices.TryGetValue(i, out List<int> hopIndices))
+                {
+                    TriggerMeldHop(hand, hopIndices);
+                }
+
                 Vector3 spawnPos = hand[i].transform.position + popupWorldOffset;
                 string handType = string.IsNullOrEmpty(slotTypeLabel[i]) ? "Meld" : slotTypeLabel[i];
-                SpawnPopup(spawnPos, handType, slotScore[i], handTypeTextColor, scoreTextColor);
+                float popupTextSizeMultiplier = hasTriggerKind ? GetMeldPopupTextSizeMultiplier(triggerKind) : 1f;
+                SpawnPopup(spawnPos, handType, slotScore[i], handTypeTextColor, scoreTextColor, popupTextSizeMultiplier);
 
                 runningScore[0] += slotScore[i];
                 StatsUpdater.Instance.UpdateScore(runningScore[0]);
 
-                yield return new WaitForSeconds(pauseAfterMeld);
+                float pauseDuration = pauseAfterMeld * (isSingleTrigger ? singleTimingMultiplier : 1f);
+                if (pauseDuration > 0f)
+                {
+                    yield return new WaitForSeconds(pauseDuration);
+                }
             }
         }
 
@@ -197,6 +230,8 @@ public class ScoreVisualization : MonoBehaviour
             int bonus = ScoringManager.Instance.GetTileScore(td);
             if (bonus <= 0) continue;
 
+            TriggerTileHop(tile);
+
             Vector3 spawnPos = tile.transform.position + popupWorldOffset;
             string handType = GetBonusDisplayName(td);
             SpawnPopup(spawnPos, handType, bonus, handTypeTextColor, scoreTextColor);
@@ -204,11 +239,110 @@ public class ScoreVisualization : MonoBehaviour
             runningScore[0] += bonus;
             StatsUpdater.Instance.UpdateScore(runningScore[0]);
 
-            yield return new WaitForSeconds(pauseAfterBonus);
+            float waitAfterBonus = pauseAfterBonus;
+            if (IsTileHopEnabled())
+            {
+                waitAfterBonus = Mathf.Max(waitAfterBonus, tileHopDuration);
+            }
+
+            if (waitAfterBonus > 0f)
+            {
+                yield return new WaitForSeconds(waitAfterBonus);
+            }
         }
     }
 
-    private void SpawnPopup(Vector3 worldPos, string handType, int scoreValue, Color handTypeColor, Color scoreColor)
+    private void TriggerMeldHop(List<GameObject> hand, List<int> meldIndices)
+    {
+        if (hand == null || meldIndices == null || meldIndices.Count == 0)
+        {
+            return;
+        }
+
+        HashSet<int> uniqueIndices = new HashSet<int>();
+        foreach (int idx in meldIndices)
+        {
+            if (!uniqueIndices.Add(idx))
+            {
+                continue;
+            }
+
+            if (idx < 0 || idx >= hand.Count)
+            {
+                continue;
+            }
+
+            GameObject tile = hand[idx];
+            if (tile == null)
+            {
+                continue;
+            }
+
+            TriggerTileHop(tile);
+        }
+    }
+
+    private void TriggerTileHop(GameObject tile)
+    {
+        if (tile == null)
+        {
+            return;
+        }
+
+        if (!IsTileHopEnabled())
+        {
+            return;
+        }
+
+        StartCoroutine(AnimateTileHop(tile));
+    }
+
+    private bool IsTileHopEnabled()
+    {
+        return tileHopHeight > 0f && tileHopDuration > 0f;
+    }
+
+    private IEnumerator AnimateTileHop(GameObject tile)
+    {
+        if (tile == null)
+        {
+            yield break;
+        }
+
+        Transform tileTransform = tile.transform;
+        Vector3 startPos = tileTransform.position;
+        Vector3 startScale = tileTransform.localScale;
+        float duration = Mathf.Max(0.01f, tileHopDuration);
+        float elapsed = 0f;
+
+        while (elapsed < duration && tileTransform != null)
+        {
+            float t = elapsed / duration;
+            float arc = Mathf.Sin(t * Mathf.PI);
+            float hop = arc * tileHopHeight;
+            tileTransform.position = startPos + Vector3.up * hop;
+
+            // Keep this subtle for 3D tiles: squash near takeoff/landing, stretch near apex.
+            float edge = 1f - arc;
+            float yScale = 1f + (tileHopStretchAmount * arc) - (tileHopSquashAmount * edge);
+            float xzScale = 1f - (tileHopStretchAmount * 0.5f * arc) + (tileHopSquashAmount * 0.5f * edge);
+
+            yScale = Mathf.Max(0.01f, yScale);
+            xzScale = Mathf.Max(0.01f, xzScale);
+            tileTransform.localScale = new Vector3(startScale.x * xzScale, startScale.y * yScale, startScale.z * xzScale);
+
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        if (tileTransform != null)
+        {
+            tileTransform.position = startPos;
+            tileTransform.localScale = startScale;
+        }
+    }
+
+    private void SpawnPopup(Vector3 worldPos, string handType, int scoreValue, Color handTypeColor, Color scoreColor, float textSizeMultiplier = 1f)
     {
         GameObject go = new GameObject("ScorePopup");
         Camera cam = Camera.main;
@@ -220,7 +354,8 @@ public class ScoreVisualization : MonoBehaviour
 
         TextMeshPro tmp      = go.AddComponent<TextMeshPro>();
         tmp.text             = BuildPopupText(handType, scoreValue, handTypeColor, scoreColor);
-        tmp.fontSize         = fontSize;
+    float resolvedMultiplier = Mathf.Max(0.1f, textSizeMultiplier);
+    tmp.fontSize         = fontSize * resolvedMultiplier;
         tmp.color            = Color.white;
         tmp.alignment        = TextAlignmentOptions.Center;
         tmp.textWrappingMode = TextWrappingModes.NoWrap;
@@ -288,16 +423,31 @@ public class ScoreVisualization : MonoBehaviour
         return cam.ScreenToWorldPoint(screenPos);
     }
 
+    private float GetMeldPopupTextSizeMultiplier(ScoringManager.MeldKind kind)
+    {
+        return kind switch
+        {
+            ScoringManager.MeldKind.Single => singlePopupTextSizeMultiplier,
+            ScoringManager.MeldKind.Balajong => balajongPopupTextSizeMultiplier,
+            _ => 1f
+        };
+    }
+
     private static string GetMeldDisplayName(ScoringManager.MeldKind kind)
     {
         return kind switch
         {
+            ScoringManager.MeldKind.Single => "Single",
             ScoringManager.MeldKind.Chow => "Chow",
+            ScoringManager.MeldKind.Jog => "Jog",
+            ScoringManager.MeldKind.Sprint => "Sprint",
             ScoringManager.MeldKind.Pung => "Pung",
             ScoringManager.MeldKind.Kong => "Kong",
             ScoringManager.MeldKind.Quint => "Quint",
             ScoringManager.MeldKind.Balajong => "BALAJONG",
             ScoringManager.MeldKind.Eyes => "Eye",
+            ScoringManager.MeldKind.Hydra => "Hydra",
+            ScoringManager.MeldKind.News => "NEWS",
             _ => "Meld"
         };
     }

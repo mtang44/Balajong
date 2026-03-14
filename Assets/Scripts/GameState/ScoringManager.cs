@@ -7,7 +7,7 @@ Main functions:
 - HandMeetsThreshold(tiles, checkpointThreshold): True if hand meets or exceeds threshold.
 - CalcDamage(tiles, checkpointThreshold): Amount hand falls short of threshold (0 if passed).
 - CalcReward(tiles, checkpointThreshold): Amount hand beats threshold by (0 if not).
-- DetectMelds(tiles): Returns all chows, pungs, and eyes (pairs) as Meld objects (with tile references).
+- DetectMelds(tiles): Returns all detected melds (single/sequence/set/honor patterns) as Meld objects.
 - CalcAllMeldsScore(melds): Total score of all melds (uses individual tile values).
 - EvalMeld(meld): Score for a single meld (sum of GetTileScore for each tile).
 
@@ -226,12 +226,17 @@ public class ScoringManager : MonoBehaviour
         List<MahjongTile> handTiles = DeckManager.Instance.getHandAsMahjongTileData();
         List<Meld> melds = DetectMelds(handTiles);
 
+        int singleCount = 0;
         int eyesCount = 0;
         int pungCount = 0;
         int kongCount = 0;
         int quintCount = 0;
         int balajongCount = 0;
+        int newsCount = 0;
+        int hydraCount = 0;
         int chowCount = 0;
+        int jogCount = 0;
+        int sprintCount = 0;
 
         int meldTotal = 0;
         foreach (var meld in melds)
@@ -241,6 +246,9 @@ public class ScoringManager : MonoBehaviour
 
             switch (meld.Kind)
             {
+                case MeldKind.Single:
+                    singleCount++;
+                    break;
                 case MeldKind.Eyes:
                     eyesCount++;
                     break;
@@ -256,8 +264,20 @@ public class ScoringManager : MonoBehaviour
                 case MeldKind.Balajong:
                     balajongCount++;
                     break;
+                case MeldKind.News:
+                    newsCount++;
+                    break;
+                case MeldKind.Hydra:
+                    hydraCount++;
+                    break;
                 case MeldKind.Chow:
                     chowCount++;
+                    break;
+                case MeldKind.Jog:
+                    jogCount++;
+                    break;
+                case MeldKind.Sprint:
+                    sprintCount++;
                     break;
             }
         }
@@ -269,14 +289,19 @@ public class ScoringManager : MonoBehaviour
 
         var sb = new StringBuilder();
         sb.AppendLine("Hand Info:");
-        AppendTypeCountLine(sb, "Eyes", eyesCount);
-        AppendTypeCountLine(sb, "Pung", pungCount);
-        AppendTypeCountLine(sb, "Kong", kongCount);
-        AppendTypeCountLine(sb, "Quint", quintCount);
-        AppendTypeCountLine(sb, "BALAJONG", balajongCount);
-        AppendTypeCountLine(sb, "Chow", chowCount);
-        AppendTypeCountLine(sb, "Flowers", flowerCount);
-        AppendTypeCountLine(sb, "Seasons", seasonCount);
+        AppendTypeCountLine(sb, "Single", singleCount);     // Tile not used by any other meld
+        AppendTypeCountLine(sb, "Eyes", eyesCount);         // Pair
+        AppendTypeCountLine(sb, "Pung", pungCount);         // Three of a kind
+        AppendTypeCountLine(sb, "Kong", kongCount);         // Four of a kind
+        AppendTypeCountLine(sb, "Quint", quintCount);       // Five of a kind
+        AppendTypeCountLine(sb, "BALAJONG", balajongCount); // Six of more of a kind
+        AppendTypeCountLine(sb, "NEWS", newsCount);         // One of each wind: N E W S
+        AppendTypeCountLine(sb, "Hydra", hydraCount);       // One each dragon: red, green, white
+        AppendTypeCountLine(sb, "Chow", chowCount);         // Sequence of three consecutive tiles
+        AppendTypeCountLine(sb, "Jog", jogCount);           // Sequence of four consecutive suited tiles
+        AppendTypeCountLine(sb, "Sprint", sprintCount);     // Sequence of five consecutive suited tiles
+        AppendTypeCountLine(sb, "Flowers", flowerCount);    // Flower bonus tiles
+        AppendTypeCountLine(sb, "Seasons", seasonCount);    // Season bonus tiles
         if (showTotal)
             sb.Append($"Total - {total}");
 
@@ -336,13 +361,13 @@ public class ScoringManager : MonoBehaviour
 
     #region Meld type and detection
 
-    public enum MeldKind { Chow, Pung, Kong, Quint, Balajong, Eyes }
+    public enum MeldKind { Single, Eyes, Chow, Jog, Sprint, Pung, Kong, Quint, Balajong, Hydra, News }
 
     // Meld struct for storing the kind and tiles of a meld.
     public struct Meld
     {
         public MeldKind Kind;
-        public List<MahjongTile> Tiles; // typically 3
+        public List<MahjongTile> Tiles; // size depends on kind (single, sequence, set, etc.)
 
         public Meld(MeldKind kind, List<MahjongTile> tiles)
         {
@@ -351,7 +376,7 @@ public class ScoringManager : MonoBehaviour
         }
     }
 
-    // Detects all chows and pungs in the hand. Returns meld objects that reference the actual tiles.
+    // Detects all melds in the hand. Returns meld objects that reference the actual tiles.
     public List<Meld> DetectMelds(IReadOnlyList<MahjongTile> tiles)
     {
         var melds = new List<Meld>();
@@ -369,7 +394,15 @@ public class ScoringManager : MonoBehaviour
             suited[TileType.Bam][i] = new List<MahjongTile>();
             suited[TileType.Crack][i] = new List<MahjongTile>();
         }
+
         var honorLists = new Dictionary<string, List<MahjongTile>>();
+        List<MahjongTile> northWinds = GetOrCreateHonorList(honorLists, $"Wind_{WindValue.North}");
+        List<MahjongTile> eastWinds = GetOrCreateHonorList(honorLists, $"Wind_{WindValue.East}");
+        List<MahjongTile> southWinds = GetOrCreateHonorList(honorLists, $"Wind_{WindValue.South}");
+        List<MahjongTile> westWinds = GetOrCreateHonorList(honorLists, $"Wind_{WindValue.West}");
+        List<MahjongTile> redDragons = GetOrCreateHonorList(honorLists, $"Dragon_{DragonValue.Red}");
+        List<MahjongTile> greenDragons = GetOrCreateHonorList(honorLists, $"Dragon_{DragonValue.Green}");
+        List<MahjongTile> whiteDragons = GetOrCreateHonorList(honorLists, $"Dragon_{DragonValue.White}");
 
         foreach (var tile in tiles)
         {
@@ -386,13 +419,49 @@ public class ScoringManager : MonoBehaviour
                 case TileType.Wind:
                 case TileType.Dragon:
                     string key = GetHonorKey(tile);
-                    if (!honorLists.ContainsKey(key)) honorLists[key] = new List<MahjongTile>();
-                    honorLists[key].Add(tile);
+                    GetOrCreateHonorList(honorLists, key).Add(tile);
                     break;
             }
         }
 
-        // Chow: 3 consecutive tiles in same suit (1-2-3, 2-3-4, ... 7-8-9). Extract first so tiles aren't double-counted.
+        // Sprint: 5 consecutive tiles in same suit (1-2-3-4-5 .. 5-6-7-8-9).
+        foreach (var suit in new[] { TileType.Dots, TileType.Bam, TileType.Crack })
+        {
+            for (int v = 1; v <= 5; v++)
+            {
+                var t1 = suited[suit][v];
+                var t2 = suited[suit][v + 1];
+                var t3 = suited[suit][v + 2];
+                var t4 = suited[suit][v + 3];
+                var t5 = suited[suit][v + 4];
+                while (t1.Count > 0 && t2.Count > 0 && t3.Count > 0 && t4.Count > 0 && t5.Count > 0)
+                {
+                    var sprintTiles = new List<MahjongTile> { t1[0], t2[0], t3[0], t4[0], t5[0] };
+                    t1.RemoveAt(0); t2.RemoveAt(0); t3.RemoveAt(0); t4.RemoveAt(0); t5.RemoveAt(0);
+                    melds.Add(new Meld(MeldKind.Sprint, sprintTiles));
+                }
+            }
+        }
+
+        // Jog: 4 consecutive tiles in same suit (1-2-3-4 .. 6-7-8-9).
+        foreach (var suit in new[] { TileType.Dots, TileType.Bam, TileType.Crack })
+        {
+            for (int v = 1; v <= 6; v++)
+            {
+                var t1 = suited[suit][v];
+                var t2 = suited[suit][v + 1];
+                var t3 = suited[suit][v + 2];
+                var t4 = suited[suit][v + 3];
+                while (t1.Count > 0 && t2.Count > 0 && t3.Count > 0 && t4.Count > 0)
+                {
+                    var jogTiles = new List<MahjongTile> { t1[0], t2[0], t3[0], t4[0] };
+                    t1.RemoveAt(0); t2.RemoveAt(0); t3.RemoveAt(0); t4.RemoveAt(0);
+                    melds.Add(new Meld(MeldKind.Jog, jogTiles));
+                }
+            }
+        }
+
+        // Chow: 3 consecutive tiles in same suit (1-2-3, 2-3-4, ... 7-8-9).
         foreach (var suit in new[] { TileType.Dots, TileType.Bam, TileType.Crack })
         {
             for (int v = 1; v <= 7; v++)
@@ -409,7 +478,7 @@ public class ScoringManager : MonoBehaviour
             }
         }
 
-        // Detect from largest to smallest: Balajong (6+), then Quint (5), Kong (4), Pung (3), Eyes (2). No overlap.
+        // Same-value suited melds from largest to smallest: Balajong (6+), then Quint (5), Kong (4), Pung (3).
         foreach (var suit in new[] { TileType.Dots, TileType.Bam, TileType.Crack })
         {
             for (int v = 1; v <= 9; v++)
@@ -445,6 +514,23 @@ public class ScoringManager : MonoBehaviour
             }
         }
 
+        // NEWS: one of each wind (North, East, West, South).
+        while (northWinds.Count > 0 && eastWinds.Count > 0 && westWinds.Count > 0 && southWinds.Count > 0)
+        {
+            var newsTiles = new List<MahjongTile> { northWinds[0], eastWinds[0], westWinds[0], southWinds[0] };
+            northWinds.RemoveAt(0); eastWinds.RemoveAt(0); westWinds.RemoveAt(0); southWinds.RemoveAt(0);
+            melds.Add(new Meld(MeldKind.News, newsTiles));
+        }
+
+        // Hydra: one of each dragon (Red, Green, White).
+        while (redDragons.Count > 0 && greenDragons.Count > 0 && whiteDragons.Count > 0)
+        {
+            var hydraTiles = new List<MahjongTile> { redDragons[0], greenDragons[0], whiteDragons[0] };
+            redDragons.RemoveAt(0); greenDragons.RemoveAt(0); whiteDragons.RemoveAt(0);
+            melds.Add(new Meld(MeldKind.Hydra, hydraTiles));
+        }
+
+        // Same-value honor melds from largest to smallest: Balajong (6+), then Quint (5), Kong (4), Pung (3).
         foreach (var kvp in honorLists)
         {
             var list = kvp.Value;
@@ -477,7 +563,7 @@ public class ScoringManager : MonoBehaviour
             }
         }
 
-        // Extract eyes (pairs): two identical tiles; only what's left after kongs/pungs
+        // Eyes (pairs): two identical tiles from leftovers.
         foreach (var suit in new[] { TileType.Dots, TileType.Bam, TileType.Crack })
         {
             for (int v = 1; v <= 9; v++)
@@ -503,6 +589,32 @@ public class ScoringManager : MonoBehaviour
             }
         }
 
+        // Singles: any remaining tile not included in another meld.
+        foreach (var suit in new[] { TileType.Dots, TileType.Bam, TileType.Crack })
+        {
+            for (int v = 1; v <= 9; v++)
+            {
+                var list = suited[suit][v];
+                while (list.Count > 0)
+                {
+                    var singleTile = new List<MahjongTile> { list[0] };
+                    list.RemoveAt(0);
+                    melds.Add(new Meld(MeldKind.Single, singleTile));
+                }
+            }
+        }
+
+        foreach (var kvp in honorLists)
+        {
+            var list = kvp.Value;
+            while (list.Count > 0)
+            {
+                var singleTile = new List<MahjongTile> { list[0] };
+                list.RemoveAt(0);
+                melds.Add(new Meld(MeldKind.Single, singleTile));
+            }
+        }
+
         return melds;
     }
 
@@ -515,47 +627,73 @@ public class ScoringManager : MonoBehaviour
         return total;
     }
 
-    // Eyes: (tile1 + tile2) * 2. Pung: (t1+t2+t3)*3. Kong: (t1..t4)*4. Quint: (t1..t5)*5. Balajong: (t1+..+tn)*n (n>=6). Chow: sum of 3 tiles + 20.
+    // Single: tile face value. Eyes: (tile1 + tile2) * 2. Pung: (t1+t2+t3)*3.
+    // Kong: (t1..t4)*4. Quint: (t1..t5)*5. Balajong: (t1+..+tn)*n (n>=6).
+    // Chow: sum of 3 tiles + 20. Jog: ceil(sum of 4 tiles * 3.5).
+    // Sprint: sum of 5 tiles * 4. Hydra: sum of 3 dragons * 3. NEWS: sum of 4 winds * 4.
     public int EvalMeld(Meld meld)
     {
         if (meld.Tiles == null || meld.Tiles.Count == 0) return 0;
 
+        int sum = 0;
+        foreach (var t in meld.Tiles)
+            sum += GetTileScore(t);
+
+        if (meld.Kind == MeldKind.Single && meld.Tiles.Count == 1)
+            return sum;
+
         if (meld.Kind == MeldKind.Eyes && meld.Tiles.Count == 2)
         {
-            int a = GetTileScore(meld.Tiles[0]);
-            int b = GetTileScore(meld.Tiles[1]);
-            return (a + b) * 2;
+            return sum * 2;
         }
         if (meld.Kind == MeldKind.Pung && meld.Tiles.Count == 3)
         {
-            int sum = GetTileScore(meld.Tiles[0]) + GetTileScore(meld.Tiles[1]) + GetTileScore(meld.Tiles[2]);
             return sum * 3;
         }
         if (meld.Kind == MeldKind.Kong && meld.Tiles.Count == 4)
         {
-            int sum = GetTileScore(meld.Tiles[0]) + GetTileScore(meld.Tiles[1]) + GetTileScore(meld.Tiles[2]) + GetTileScore(meld.Tiles[3]);
             return sum * 4;
         }
         if (meld.Kind == MeldKind.Quint && meld.Tiles.Count == 5)
         {
-            int sum = GetTileScore(meld.Tiles[0]) + GetTileScore(meld.Tiles[1]) + GetTileScore(meld.Tiles[2]) + GetTileScore(meld.Tiles[3]) + GetTileScore(meld.Tiles[4]);
             return sum * 5;
         }
         if (meld.Kind == MeldKind.Balajong && meld.Tiles.Count >= 6)
         {
-            int sum = 0;
-            foreach (var t in meld.Tiles)
-                sum += GetTileScore(t);
             return sum * meld.Tiles.Count;
         }
-        if (meld.Kind == MeldKind.Chow)
+        if (meld.Kind == MeldKind.Hydra && meld.Tiles.Count == 3)
         {
-            int sum = 0;
-            foreach (var t in meld.Tiles)
-                sum += GetTileScore(t);
+            return sum * 3;
+        }
+        if (meld.Kind == MeldKind.News && meld.Tiles.Count == 4)
+        {
+            return sum * 4;
+        }
+        if (meld.Kind == MeldKind.Chow && meld.Tiles.Count == 3)
+        {
             return sum + 20;
         }
+        if (meld.Kind == MeldKind.Jog && meld.Tiles.Count == 4)
+        {
+            return Mathf.CeilToInt(sum * 3.5f);
+        }
+        if (meld.Kind == MeldKind.Sprint && meld.Tiles.Count == 5)
+        {
+            return sum * 4;
+        }
         return 0;
+    }
+
+    private static List<MahjongTile> GetOrCreateHonorList(Dictionary<string, List<MahjongTile>> honorLists, string key)
+    {
+        if (!honorLists.TryGetValue(key, out List<MahjongTile> list))
+        {
+            list = new List<MahjongTile>();
+            honorLists[key] = list;
+        }
+
+        return list;
     }
     
     // Grabs the key for the honor tile.

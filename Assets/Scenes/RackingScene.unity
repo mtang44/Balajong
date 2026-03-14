@@ -30658,6 +30658,7 @@ GameObject:
   - component: {fileID: 1804591020}
   - component: {fileID: 1804591022}
   - component: {fileID: 1804591021}
+  - component: {fileID: 1804591023}
   m_Layer: 5
   m_Name: You Lose TMP
   m_TagString: Untagged
@@ -30681,7 +30682,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 221, y: 388}
+  m_AnchoredPosition: {x: 221, y: 361}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1804591021
@@ -30784,6 +30785,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1804591019}
   m_CullTransparentMesh: 1
+--- !u!114 &1804591023
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1804591019}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 227f636743cc3734b9dbeec3e352d1cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TitleAnimation
+  tiltAngle: 3
+  tiltSpeed: 1
 --- !u!1001 &1809766146
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -32613,16 +32628,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ScoreVisualization
   fontAsset: {fileID: 11400000, guid: 5293248ddbeac9344b20338543629bc0, type: 2}
   fontSize: 1.4
-  handTypeTextColor: {r: 0.25872195, g: 0.687443, b: 0.9622642, a: 1}
+  singlePopupTextSizeMultiplier: 0.5
+  balajongPopupTextSizeMultiplier: 1.5
+  handTypeTextColor: {r: 0.8301887, g: 0.16055535, b: 0.46156037, a: 1}
   scoreTextColor: {r: 1, g: 0.85, b: 0.1, a: 1}
   popupWorldOffset: {x: 0, y: 0.3, z: -0.5}
   horizontalEdgePadding: 16
   popupRiseDistance: 1
   popupLifetime: 1
-  delayPerTile: 0.15
-  pauseAfterMeld: 0
-  pauseAfterBonus: 0.15
-  pauseBetweenSections: 0.5
+  delayPerTile: 0
+  pauseAfterMeld: 0.35
+  pauseAfterBonus: 0
+  pauseBetweenSections: 0
+  singleTimingMultiplier: 0.35
+  tileHopHeight: 0.2
+  tileHopDuration: 0.3
+  tileHopSquashAmount: 0.5
+  tileHopStretchAmount: 0.3
 --- !u!1 &1909647468
 GameObject:
   m_ObjectHideFlags: 0

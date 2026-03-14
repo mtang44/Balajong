@@ -37,6 +37,10 @@ public class GameManager : MonoBehaviour
     [SerializeField, Range(0f, 1f)] private float enabledButtonAlpha = 1f;
     [SerializeField, Range(0f, 1f)] private float disabledButtonAlpha = 0.45f;
 
+    [Header("Hover Preview Colors")]
+    [SerializeField] private Color checkRackHoverGlintColor = new Color(1f, 0.96f, 0.82f, 1f);
+    [SerializeField] private Color discardHoverGlintColor = new Color(0.84f, 0.92f, 1f, 1f);
+
     void Awake()
     {
         if (Instance == null)
@@ -78,7 +82,7 @@ public class GameManager : MonoBehaviour
     private void UpdateActionButtons()
     {
         bool hasSelection = HasAnySelectedTile();
-        bool canUseActions = selecting;
+        bool canUseActions = selecting && currentState == GameState.Select;
 
         bool canDiscard = canUseActions && hasSelection;
         bool canCheckRack = canUseActions && !hasSelection;
@@ -112,6 +116,29 @@ public class GameManager : MonoBehaviour
         canvasGroup.blocksRaycasts = interactable;
     }
 
+    private void EnsureActionButtonHoverPreviews()
+    {
+        EnsureHoverPreview(checkRackButton, CheckRackHandHoverPreview.TileSourceMode.FullHandAndBonuses, checkRackHoverGlintColor);
+        EnsureHoverPreview(discardButton, CheckRackHandHoverPreview.TileSourceMode.SelectedOnly, discardHoverGlintColor);
+    }
+
+    private static void EnsureHoverPreview(Button button, CheckRackHandHoverPreview.TileSourceMode sourceMode, Color glintColor)
+    {
+        if (button == null)
+        {
+            return;
+        }
+
+        CheckRackHandHoverPreview hoverPreview = button.GetComponent<CheckRackHandHoverPreview>();
+        if (hoverPreview == null)
+        {
+            hoverPreview = button.gameObject.AddComponent<CheckRackHandHoverPreview>();
+        }
+
+        hoverPreview.Configure(button, sourceMode);
+        hoverPreview.SetGlintColor(glintColor);
+    }
+
     private static bool HasAnySelectedTile()
     {
         DeckManager deckManager = DeckManager.Instance;
@@ -133,6 +160,7 @@ public class GameManager : MonoBehaviour
     }
     void BeginGame()
     {
+        EnsureActionButtonHoverPreviews();
         StatsUpdater.Instance.UpdateHealth(PlayerStatManager.Instance.currentHealth, PlayerStatManager.Instance.maxHealth);
         StatsUpdater.Instance.UpdateDiscardCount();
         StatsUpdater.Instance.UpdateScore(0);
@@ -192,6 +220,7 @@ public class GameManager : MonoBehaviour
     }
     void ScoreState()
     {
+        selecting = false;
         StartCoroutine(ScoreStateCoroutine());
     }
 
@@ -258,8 +287,9 @@ public class GameManager : MonoBehaviour
     }
     public void OnScoreButtonPressed()
     {
-        if (selecting && !HasAnySelectedTile())
+        if (selecting && currentState == GameState.Select && !HasAnySelectedTile())
         {
+            selecting = false;
             SwitchState(GameState.Score);
         }
     }

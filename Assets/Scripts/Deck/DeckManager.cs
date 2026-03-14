@@ -55,6 +55,34 @@ public class DeckManager : MonoBehaviour
         discard = new List<MahjongTileData>();
     }
 
+    public void ResetToDefaultState()
+    {
+        DestroyTrackedTiles(hand);
+        DestroyTrackedTiles(selectedTiles);
+        DestroyTrackedTiles(flowerTiles);
+        DestroyTrackedTiles(seasonTiles);
+
+        forceNewLists();
+        deck = new Deck(tilePrefab);
+        deck.InitializeDeck();
+    }
+
+    private void DestroyTrackedTiles(List<GameObject> tiles)
+    {
+        if (tiles == null)
+        {
+            return;
+        }
+
+        foreach (GameObject tile in tiles)
+        {
+            if (tile != null)
+            {
+                Destroy(tile);
+            }
+        }
+    }
+
     public void drawHand(int count = 0)
     {
         int HAND_SIZE = 14 + JokerManager.Instance.numberOfActivations("spider");

@@ -12,7 +12,8 @@ public enum GameState
     Select,
     Discard,
     Score,
-    End
+    End,
+    Reset
 }
 // This will govern the overall backend of the game.
 public class GameManager : MonoBehaviour
@@ -205,6 +206,9 @@ public class GameManager : MonoBehaviour
             case GameState.Score:
                 ScoreState();
                 break;
+            case GameState.Reset:
+                ResetState();
+                break;
             case GameState.End:
                 EndState();
                 break;
@@ -373,6 +377,46 @@ public class GameManager : MonoBehaviour
         };
     }
 
+    void ResetState()
+    {
+        selecting = false;
+        currentDiscards = 0;
+        score = 0;
+
+        MapRunState.Instance.ClearMap();
+
+        PlayerStatManager playerStats = PlayerStatManager.Instance;
+        if (playerStats != null)
+        {
+            playerStats.ResetRunState();
+        }
+
+        JokerManager jokerManager = JokerManager.Instance;
+        if (jokerManager != null)
+        {
+            jokerManager.ResetRunState();
+        }
+
+        DeckManager deckManager = DeckManager.Instance;
+        if (deckManager != null)
+        {
+            deckManager.ResetToDefaultState();
+        }
+
+        StatsUpdater statsUpdater = StatsUpdater.Instance;
+        if (statsUpdater != null)
+        {
+            if (playerStats != null)
+            {
+                statsUpdater.UpdateHealth(playerStats.currentHealth, playerStats.maxHealth);
+                statsUpdater.UpdateCash(playerStats.cash);
+            }
+
+            statsUpdater.UpdateDiscardCount();
+            statsUpdater.UpdateScore(score);
+        }
+    }
+
     void EndState() {}
 
     void PlayerDamage()
@@ -389,6 +433,11 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("Player has lost the game.");
         StatsUpdater.Instance.ShowLoseScreen();
+    }
+
+    public void EnterResetStateFromAbandon()
+    {
+        SwitchState(GameState.Reset);
     }
 
     // Public method for UI button to trigger discard

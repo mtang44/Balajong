@@ -728,7 +728,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &1386972739
+--- !u!1001 &1290356104
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -738,15 +738,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 608205956180617561, guid: 53852f4d3b9f95a4bbcc77ce96485991, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.85467
+      value: 492.3485
       objectReference: {fileID: 0}
     - target: {fileID: 608205956180617561, guid: 53852f4d3b9f95a4bbcc77ce96485991, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -0.00002
       objectReference: {fileID: 0}
     - target: {fileID: 608205956180617561, guid: 53852f4d3b9f95a4bbcc77ce96485991, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 18.14748
+      value: 15113.296
       objectReference: {fileID: 0}
     - target: {fileID: 608205956180617561, guid: 53852f4d3b9f95a4bbcc77ce96485991, type: 3}
       propertyPath: m_LocalRotation.w
@@ -778,7 +778,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5328187807155830420, guid: 53852f4d3b9f95a4bbcc77ce96485991, type: 3}
       propertyPath: m_Name
-      value: PlayerStatManager
+      value: Player
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -933,4 +933,4 @@ SceneRoots:
   - {fileID: 934469102}
   - {fileID: 632620129}
   - {fileID: 970942236}
-  - {fileID: 1386972739}
+  - {fileID: 1290356104}

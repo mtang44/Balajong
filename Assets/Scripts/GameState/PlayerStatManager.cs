@@ -89,6 +89,10 @@ public class PlayerStatManager : MonoBehaviour
             currentHealth = maxHealth;
         }
     }
+    public void updateTheMax()
+    {
+        maxHealth = 4 + (3 * JokerManager.Instance.numberOfActivations("medic"));
+    }
 }
 
 

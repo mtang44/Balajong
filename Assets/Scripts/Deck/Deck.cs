@@ -37,6 +37,14 @@ public class Deck
         tileData.Add(newTileData);
     }
 
+    // Inserts a tile at the front of the deck (drawn next).
+    public void AddTileAtFront(MahjongTileData newTileData)
+    {
+        if (tileData == null)
+            tileData = new List<MahjongTileData>();
+        tileData.Insert(0, newTileData);
+    }
+
     public void AddTiles(List<MahjongTileData> tiles)
     {
         tileData.AddRange(tiles);

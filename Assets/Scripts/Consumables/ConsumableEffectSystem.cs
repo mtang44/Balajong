@@ -19,6 +19,8 @@ public class ConsumableEffectSystem : MonoBehaviour
 
     private DeckManager deckManager;
     private Consumable activeConsumable;
+    // Add consumable is two-phase: 0 = select tile type (1 tile), 1 = select 4 to discard
+    private int addConsumablePhase;
 
     private void Awake()
     {
@@ -46,10 +48,18 @@ public class ConsumableEffectSystem : MonoBehaviour
     {
         if (useButton == null || deckManager == null) return;
 
-        // Only enable the button when we have an active consumable and exactly one selected tile.
         var hasActive = activeConsumable != null;
-        var hasExactlyOneSelected = deckManager.selectedTiles != null && deckManager.selectedTiles.Count == 1;
-        useButton.interactable = hasActive && hasExactlyOneSelected;
+        var sel = deckManager.selectedTiles;
+        var count = sel != null ? sel.Count : 0;
+        bool buttonOk = false;
+        if (hasActive)
+        {
+            if (activeConsumable.equationType == "Add")
+                buttonOk = (addConsumablePhase == 0 && count == 1) || (addConsumablePhase == 1 && count == 4);
+            else
+                buttonOk = count == 1;
+        }
+        useButton.interactable = buttonOk;
     }
 
 
@@ -100,7 +110,8 @@ public class ConsumableEffectSystem : MonoBehaviour
             return;
         }
 
-        // Otherwise we need a tile selection; show the Use button and wait for exactly one tile to be selected.
+        // Otherwise we need a tile selection; show the Use button and wait for selection (1 tile for type, or 4 for Add discard phase).
+        addConsumablePhase = 0;
         if (GameManager.Instance != null)
             GameManager.Instance.selecting = true;
         if (useButton != null)
@@ -112,25 +123,54 @@ public class ConsumableEffectSystem : MonoBehaviour
     private void OnUseButtonClicked()
     {
         if (activeConsumable == null || deckManager == null) return;
-        if (deckManager.selectedTiles == null || deckManager.selectedTiles.Count != 1) return;
+        var sel = deckManager.selectedTiles;
+        if (sel == null) return;
 
-        var selectedGo = deckManager.selectedTiles[0];
-        if (selectedGo == null) return;
+        if (activeConsumable.equationType == "Add")
+        {
+            if (addConsumablePhase == 0)
+            {
+                if (sel.Count != 1) return;
+                var selectedGo = sel[0];
+                if (selectedGo == null) return;
+                var holder = selectedGo.GetComponent<MahjongTileHolder>();
+                var chosenTile = holder != null ? holder.TileData : null;
+                if (chosenTile == null) return;
 
-        var holder = selectedGo.GetComponent<MahjongTileHolder>();
-        var chosenTile = holder != null ? holder.TileData : null;
-        if (chosenTile == null) return;
+                // Add 4 copies to FRONT of deck so they are drawn next.
+                DeckMutationHelpers.AddCopiesToDeckFront(deckManager, chosenTile, 4);
+                addConsumablePhase = 1;
+                deckManager.selectedTiles.Clear();
+                deckManager.sortHand();
+                return;
+            }
+
+            if (addConsumablePhase == 1)
+            {
+                if (sel.Count != 4) return;
+                // Discard the 4 selected tiles, then draw 4 from deck (the 4 we added at front).
+                deckManager.discardTiles(new List<GameObject>(sel));
+                deckManager.drawHand(4);
+                FinishConsumable();
+                return;
+            }
+        }
+
+        // Non-Add consumables, or single-tile selection (Destroy, Enhance)
+        if (sel.Count != 1) return;
+        var go = sel[0];
+        if (go == null) return;
+        var h = go.GetComponent<MahjongTileHolder>();
+        var chosen = h != null ? h.TileData : null;
+        if (chosen == null) return;
 
         switch (activeConsumable.equationType)
         {
-            case "Add":
-                DeckMutationHelpers.AddCopiesToDeck(deckManager, chosenTile, 4);
-                break;
             case "Destroy":
-                DeckMutationHelpers.RemoveCopiesFromDeck(deckManager, chosenTile, 4);
+                DeckMutationHelpers.RemoveCopiesFromDeck(deckManager, chosen, 4);
                 break;
             case "Enhance":
-                DeckMutationHelpers.EnhanceCopiesInDeckAndHand(deckManager, chosenTile, Edition.Ghost);
+                DeckMutationHelpers.EnhanceCopiesInDeckAndHand(deckManager, chosen, Edition.Ghost);
                 break;
             case "Heal":
                 ApplyHeal();
@@ -180,6 +220,7 @@ public class ConsumableEffectSystem : MonoBehaviour
         }
 
         activeConsumable = null;
+        addConsumablePhase = 0;
     }
 }
 
@@ -234,7 +275,7 @@ public static class DeckMutationHelpers
     }
 
 
-    // Adds 'count' new copies of the specified tile identity to the deck.
+    // Adds 'count' new copies of the specified tile identity to the deck (back of deck, drawn last).
     public static void AddCopiesToDeck(DeckManager manager, MahjongTileData identity, int count)
     {
         if (manager == null || identity == null || count <= 0) return;
@@ -250,6 +291,25 @@ public static class DeckMutationHelpers
         {
             var clone = CloneWithEdition(identity);
             deck.AddTile(clone);
+        }
+    }
+
+    // Adds 'count' new copies at the FRONT of the deck (drawn first). Use for Add consumable so discard-then-draw gives the new tiles.
+    public static void AddCopiesToDeckFront(DeckManager manager, MahjongTileData identity, int count)
+    {
+        if (manager == null || identity == null || count <= 0) return;
+
+        var deck = GetDeck(manager);
+        if (deck == null)
+        {
+            Debug.LogWarning("[DeckMutationHelpers] Could not access deck to add copies at front.");
+            return;
+        }
+
+        for (int i = 0; i < count; i++)
+        {
+            var clone = CloneWithEdition(identity);
+            deck.AddTileAtFront(clone);
         }
     }
 

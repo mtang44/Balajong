@@ -10,8 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 608205956180617561}
   - component: {fileID: 390901563365830465}
+  - component: {fileID: 4327031755066331354}
   m_Layer: 0
-  m_Name: PlayerStatManager
+  m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -46,3 +47,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerStatManager
   maxHealth: 4
   currentHealth: 0
+  cash: 0
+--- !u!114 &4327031755066331354
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5328187807155830420}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30404e51f751a5a42bdb210ce6d9c321, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::JokerManager
+  currentJokers: 0
+  maxJokers: 5

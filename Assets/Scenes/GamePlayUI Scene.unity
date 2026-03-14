@@ -8574,7 +8574,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -130, y: 102}
+  m_AnchoredPosition: {x: -130, y: 102.000015}
   m_SizeDelta: {x: 286.547, y: 445.59}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &431260669
@@ -10008,6 +10008,7 @@ GameObject:
   - component: {fileID: 537163358}
   - component: {fileID: 537163360}
   - component: {fileID: 537163359}
+  - component: {fileID: 537163361}
   m_Layer: 5
   m_Name: Currency TMP
   m_TagString: Untagged
@@ -10134,6 +10135,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 537163357}
   m_CullTransparentMesh: 1
+--- !u!114 &537163361
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 537163357}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a63e465c7aa1074f93f2c28b07833f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UpdateCashOnEnable
 --- !u!1 &537390167
 GameObject:
   m_ObjectHideFlags: 0
@@ -11961,6 +11974,7 @@ GameObject:
   - component: {fileID: 647386697}
   - component: {fileID: 647386699}
   - component: {fileID: 647386698}
+  - component: {fileID: 647386700}
   m_Layer: 5
   m_Name: Discards TMP
   m_TagString: Untagged
@@ -12087,6 +12101,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 647386696}
   m_CullTransparentMesh: 1
+--- !u!114 &647386700
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 647386696}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b25eb53a1c624334689685e1298cd02e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UpdateDiscardOnEnable
 --- !u!1 &664454920
 GameObject:
   m_ObjectHideFlags: 0
@@ -15358,6 +15384,53 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 881099712}
   m_CullTransparentMesh: 1
+--- !u!1 &889560545
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 889560547}
+  - component: {fileID: 889560546}
+  m_Layer: 0
+  m_Name: PlayerStatManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &889560546
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 889560545}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8dc4a2425e3a90f4ababfd821ada5b66, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerStatManager
+  maxHealth: 4
+  currentHealth: 0
+  cash: 0
+--- !u!4 &889560547
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 889560545}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 492.3485, y: -0.00002, z: 15113.296}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &901753921
 GameObject:
   m_ObjectHideFlags: 0
@@ -22419,7 +22492,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 90.91, y: 103.96}
+  m_AnchoredPosition: {x: 90.91, y: 103.96001}
   m_SizeDelta: {x: 278.309, y: 441.659}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1398683109
@@ -24125,9 +24198,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1563989756}
-        m_TargetAssemblyTypeName: Shop, Assembly-CSharp
-        m_MethodName: RerollJokers
+      - m_Target: {fileID: 2001318429}
+        m_TargetAssemblyTypeName: ShopPurchase, Assembly-CSharp
+        m_MethodName: rerollCheck
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -30526,6 +30599,52 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2000466834}
   m_CullTransparentMesh: 1
+--- !u!1 &2001318428
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2001318430}
+  - component: {fileID: 2001318429}
+  m_Layer: 0
+  m_Name: ShopPurchaseManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2001318429
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2001318428}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89b88a34d7bcc4d428488c05f0cb77bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ShopPurchase
+  ShopTextPanel: {fileID: 537163357}
+  ShopRerollBtn: {fileID: 1563989748}
+--- !u!4 &2001318430
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2001318428}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -6153.936, y: -0.00001, z: 290352.7}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2010230824
 GameObject:
   m_ObjectHideFlags: 0
@@ -32939,3 +33058,5 @@ SceneRoots:
   - {fileID: 975557520}
   - {fileID: 1683083824}
   - {fileID: 778435907}
+  - {fileID: 2001318430}
+  - {fileID: 889560547}

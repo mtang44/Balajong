@@ -59,6 +59,24 @@ public class MapNodeView : MonoBehaviour
         }
     }
 
+    public void SetEnemyNameText(string newText)
+    {
+        EnsureHoverTooltip();
+        if (hoverTooltip != null)
+        {
+            hoverTooltip.SetEnemyNameText(newText);
+        }
+    }
+
+    public void SetBattlePayoutText(string newText)
+    {
+        EnsureHoverTooltip();
+        if (hoverTooltip != null)
+        {
+            hoverTooltip.SetBattlePayoutText(newText);
+        }
+    }
+
     // Sets the interaction state of the node based on its NodeState
     public void SetState(NodeState state)
     {

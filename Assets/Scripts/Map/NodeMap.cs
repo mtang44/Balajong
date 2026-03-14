@@ -1263,6 +1263,8 @@ public class NodeMap : MonoBehaviour
             return false;
         }
 
+        DisableNodeHoverTooltipsForTransition();
+
         SceneChanger resolvedSceneChanger = ResolveSceneChanger();
         if (resolvedSceneChanger != null)
         {
@@ -1274,6 +1276,23 @@ public class NodeMap : MonoBehaviour
         }
 
         return true;
+    }
+
+    private void DisableNodeHoverTooltipsForTransition()
+    {
+        foreach (KeyValuePair<int, MapNodeView> pair in viewsById)
+        {
+            if (pair.Value == null)
+            {
+                continue;
+            }
+
+            MapNodeHoverTooltip hoverTooltip = pair.Value.GetComponent<MapNodeHoverTooltip>();
+            if (hoverTooltip != null)
+            {
+                hoverTooltip.SetHoverEnabled(false);
+            }
+        }
     }
 
     private bool TryGetCurrentNode(out MapNodeData currentNode)

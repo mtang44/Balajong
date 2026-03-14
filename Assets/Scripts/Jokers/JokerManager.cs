@@ -9,18 +9,42 @@ public class JokerManager : MonoBehaviour
     public int currentJokers = 0;
     public int maxJokers = 5;
 
+    private List<string> startingJokers = new List<string>();
+    private int startingCurrentJokers;
+    private int startingMaxJokers;
+
     void Awake()
     {
         if (Instance == null)
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
+            startingJokers = new List<string>(jokers);
+            startingCurrentJokers = currentJokers;
+            startingMaxJokers = maxJokers;
         }
         else
         {
             Destroy(gameObject);
         }
     }
+
+    public void ResetRunState()
+    {
+        if (jokers == null)
+        {
+            jokers = new List<string>();
+        }
+        else
+        {
+            jokers.Clear();
+        }
+
+        jokers.AddRange(startingJokers);
+        currentJokers = startingCurrentJokers;
+        maxJokers = startingMaxJokers;
+    }
+
     public int checkJoker(string jokerName)
     {
         if (jokers.Contains(jokerName))

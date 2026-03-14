@@ -53,6 +53,7 @@ public class MapEncounterResultHandler : MonoBehaviour
     private IEnumerator ReturnToMapAfterDelay()
     {
         yield return new WaitForSeconds(delayBeforeReturningToMap);
+
         if (!string.IsNullOrWhiteSpace(nextSceneName))
         {
             if (sceneChanger != null)

@@ -227,6 +227,7 @@ public class GameManager : MonoBehaviour
             SwitchState(GameState.Draw);
         else
             DeckManager.Instance.redrawHand();
+            SwitchState(GameState.Select);
     }
     void ScoreState()
     {

@@ -10,10 +10,13 @@ public class MapEncounterResultHandler : MonoBehaviour
     [Header("Enemy Defeat Animation")]
     [SerializeField] private Animator enemyAnimator;
     [SerializeField] private string enemyDeadBoolParameterName = "EnemyDead";
+    [SerializeField] private string enemyShadedBoolParameterName = "Shaded";
+    [SerializeField] private bool enemyShadedValueOnDefeat = false;
 
     [SerializeField] private float delayBeforeReturningToMap = 1.0f;
 
     private bool warnedMissingEnemyAnimator;
+    private bool warnedMissingShadedParameter;
 
     // Called when the player wins an encounter
     // This tells the map to continue to the next node
@@ -85,6 +88,8 @@ public class MapEncounterResultHandler : MonoBehaviour
             return;
         }
 
+        ApplyEnemyShadedVariant();
+
         if (string.IsNullOrWhiteSpace(enemyDeadBoolParameterName))
         {
             return;
@@ -97,6 +102,26 @@ public class MapEncounterResultHandler : MonoBehaviour
         }
 
         Debug.LogWarning($"MapEncounterResultHandler: Could not find bool parameter '{enemyDeadBoolParameterName}' on enemy animator.");
+    }
+
+    private void ApplyEnemyShadedVariant()
+    {
+        if (string.IsNullOrWhiteSpace(enemyShadedBoolParameterName))
+        {
+            return;
+        }
+
+        if (HasBoolParameter(enemyAnimator, enemyShadedBoolParameterName))
+        {
+            enemyAnimator.SetBool(enemyShadedBoolParameterName, enemyShadedValueOnDefeat);
+            return;
+        }
+
+        if (!warnedMissingShadedParameter)
+        {
+            warnedMissingShadedParameter = true;
+            Debug.LogWarning($"MapEncounterResultHandler: Could not find bool parameter '{enemyShadedBoolParameterName}' on enemy animator.");
+        }
     }
 
     private static bool HasBoolParameter(Animator animator, string parameterName)

@@ -50,6 +50,8 @@ public class ScoringManager : MonoBehaviour
     private UnityEngine.UI.Text handInfoLegacyText;
     private string lastRenderedHandInfo = string.Empty;
 
+    bool winded = false;
+
     #region Tile values by type (all 0; set from a separate file that defines scores per TileType)
 
     // Suited: Dots, Bam, Crack each 1-9 (index 0 unused, 1-9 used)
@@ -98,26 +100,70 @@ public class ScoringManager : MonoBehaviour
     public int GetTileScore(MahjongTile tile) //CHARLES WILL ADD ADDITIONAL JOKER CHECKS
     {
         if (tile == null) return 0;
-
+        int acc = 0;
         switch (tile.TileType)
         {
             case TileType.Dots:
-                return GetSuitedValue(dotsValues, (int)tile.NumberedValue);
+                {
+                    for(int i = 0; i < JokerManager.Instance.numberOfActivations("blue"); i++)
+                    {
+                        acc += 10;
+                    }
+                    acc += GetSuitedValue(dotsValues, (int)tile.NumberedValue);
+                    break;
+                }
             case TileType.Bam:
-                return GetSuitedValue(bamValues, (int)tile.NumberedValue);
+                {
+                    for(int i = 0; i < JokerManager.Instance.numberOfActivations("green"); i++)
+                    {
+                        acc += 10;
+                    }
+                    acc += GetSuitedValue(bamValues, (int)tile.NumberedValue);
+                    break;
+                }
             case TileType.Crack:
-                return GetSuitedValue(crackValues, (int)tile.NumberedValue);
+                {
+                    for(int i = 0; i < JokerManager.Instance.numberOfActivations("red"); i++)
+                    {
+                        acc += 10;
+                    }
+                    acc += GetSuitedValue(crackValues, (int)tile.NumberedValue);
+                    break;
+                }
             case TileType.Wind:
-                return GetWindValue(tile.WindValue);
+                {
+                    winded = true;
+                    if(JokerManager.Instance.jokers.Contains("bagged"))
+                        JokerManager.Instance.baggedJokerBuff++;
+                    acc += GetWindValue(tile.WindValue);
+                    break;
+                }
             case TileType.Dragon:
-                return GetDragonValue(tile.DragonValue);
+                {
+                    acc += GetDragonValue(tile.DragonValue);
+                    break;
+                }
             case TileType.Flower:
-                return GetFlowerValue(tile.FlowerValue);
+                {
+                    acc += GetFlowerValue(tile.FlowerValue);
+                    break;
+                }
             case TileType.Season:
-                return GetSeasonValue(tile.SeasonValue);
+                {
+                    acc += GetSeasonValue(tile.SeasonValue);
+                    break;
+                }
             default:
                 return 0;
         }
+        if(tile.Edition == Edition.Ghost)
+            {
+                if (JokerManager.Instance.numberOfActivations("grave") > 0)
+                    acc += 100;
+                else
+                    acc += 50;
+            }
+        return acc;
     }
 
     private static int GetSuitedValue(int[] arr, int value)
@@ -157,6 +203,7 @@ public class ScoringManager : MonoBehaviour
     {
         if (tiles == null || tiles.Count == 0) return 0;
 
+        winded = false;
         List<Meld> melds = DetectMelds(tiles);
         int meldScore = CalcAllMeldsScore(melds);
         int bonusScore = 0;
@@ -194,9 +241,10 @@ public class ScoringManager : MonoBehaviour
         return newTotal;
     }
 
-    //THIS IS A FUNCTION TO GET THE BUFFS FROM A JOKER
+    //THESE FUNCTIONS TO GET THE POINTS FROM OVERALL BONUS JOKERS
     int JokerPoints()
     {
+        int acc = 0;
         for(int i = 0; i < JokerManager.Instance.numberOfActivations("bagged"); i++) //IMPLEMENT THE DISCARD BONUS
         {
             acc += JokerManager.Instance.baggedJokerBuff * 30;
@@ -209,6 +257,7 @@ public class ScoringManager : MonoBehaviour
         {
             acc += Random.Range(20,80);
         }
+        return acc;
     }
     int jokerMult()
     {
@@ -678,6 +727,67 @@ public class ScoringManager : MonoBehaviour
         return total;
     }
 
+    // Gets the multiplier points from any joker activations that apply to melds.
+    int jokerMeldMultPoints(int og, Meld meld)
+    {
+        int acc = og;
+        bool dot = false;
+        bool bam = false;
+        bool crack = false;
+        foreach(var tile in meld.Tiles)
+        {
+            if(tile.Edition == Edition.Crystal)
+            {
+                if (JokerManager.Instance.numberOfActivations("rainbow") > 0)
+                    acc += 10;
+                else
+                    acc += 5;
+            }
+            if(tile.TileType == TileType.Dots)
+                dot = true;
+            if(tile.TileType == TileType.Bam)
+                bam = true;
+            if(tile.TileType == TileType.Crack)
+                crack = true;
+        }
+        for(int i = 0; i < JokerManager.Instance.numberOfActivations("polar"); i++)
+        {
+            if(dot) acc += 5;
+        }
+        for(int i = 0; i < JokerManager.Instance.numberOfActivations("grizzly"); i++)
+        {
+            if(crack) acc += 5;
+        }
+        for(int i = 0; i < JokerManager.Instance.numberOfActivations("panda"); i++)
+        {
+            if(bam) acc += 5;
+        }
+        return acc;
+    }
+    // Gets the multiplier multiplier points from any joker activations that apply to melds.
+    float jokerMeldMultMaxxingPoints(float og, Meld meld)
+    {
+        float acc = og;
+        foreach(var tile in meld.Tiles)
+        {
+            if(tile.Edition == Edition.Enchanted)
+            {
+                if (JokerManager.Instance.numberOfActivations("unbreaking") > 0)
+                    acc *= 2.0f;
+                else
+                    acc *= 1.5f;
+            }
+            for(int i = 0; i < JokerManager.Instance.numberOfActivations("ancalagon"); i++)
+            {
+                if(tile.TileType == TileType.Dragon && winded)
+                {
+                    acc *= 2.0f;
+                }
+            }
+        }
+        return acc;
+    }
+
     // Single: tile face value. Eyes: (tile1 + tile2) * 2. Pung: (t1+t2+t3)*3.
     // Kong: (t1..t4)*4. Quint: (t1..t5)*5. Balajong: (t1+..+tn)*n (n>=6).
     // Chow: sum of 3 tiles + 20. Jog: ceil(sum of 4 tiles * 3.5).
@@ -687,54 +797,77 @@ public class ScoringManager : MonoBehaviour
         if (meld.Tiles == null || meld.Tiles.Count == 0) return 0;
 
         int sum = 0;
+        int multTotal = 1;
+        float multMultTotal = 1;
         foreach (var t in meld.Tiles)
             sum += GetTileScore(t);
-            //CHARLES GET TILE MULT BONUS
+            multTotal = jokerMeldMultPoints(multTotal, meld);
+            multMultTotal = jokerMeldMultMaxxingPoints(multMultTotal, meld);
 
         if (meld.Kind == MeldKind.Single && meld.Tiles.Count == 1)
             return sum;
 
         if (meld.Kind == MeldKind.Eyes && meld.Tiles.Count == 2)
         {
-            return sum * 2;
+            multTotal += 1;
+            for(int i = 0; i < JokerManager.Instance.numberOfActivations("eyes"); i++)
+            {
+                multMultTotal *= 2.0f;
+            }
         }
         if (meld.Kind == MeldKind.Pung && meld.Tiles.Count == 3)
         {
-            return sum * 3;
+            multTotal += 2;
+            for(int i = 0; i < JokerManager.Instance.numberOfActivations("three"); i++)
+            {
+                multMultTotal *= 3.0f;
+            }
         }
         if (meld.Kind == MeldKind.Kong && meld.Tiles.Count == 4)
         {
-            return sum * 4;
+            multTotal += 3;
+            for(int i = 0; i < JokerManager.Instance.numberOfActivations("clover"); i++)
+            {
+                multMultTotal *= 4.0f;
+            }
         }
         if (meld.Kind == MeldKind.Quint && meld.Tiles.Count == 5)
         {
-            return sum * 5;
+            multTotal += 4;
+            for(int i = 0; i < JokerManager.Instance.numberOfActivations("clover"); i++)
+            {
+                multMultTotal *= 4.0f;
+            }
         }
         if (meld.Kind == MeldKind.Balajong && meld.Tiles.Count >= 6)
         {
-            return sum * meld.Tiles.Count;
+            multTotal += meld.Tiles.Count - 1;
+            for(int i = 0; i < JokerManager.Instance.numberOfActivations("clover"); i++)
+            {
+                multMultTotal *= 4.0f;
+            }
         }
         if (meld.Kind == MeldKind.Hydra && meld.Tiles.Count == 3)
         {
-            return sum * 3;
+            multTotal += 2;
         }
         if (meld.Kind == MeldKind.News && meld.Tiles.Count == 4)
         {
-            return sum * 4;
+            multTotal += 3;
         }
         if (meld.Kind == MeldKind.Chow && meld.Tiles.Count == 3)
         {
-            return sum + 20;
+            sum += 20;
         }
         if (meld.Kind == MeldKind.Jog && meld.Tiles.Count == 4)
         {
-            return Mathf.CeilToInt(sum * 3.5f);
+            multTotal += (Mathf.CeilToInt(sum * 3.5f)) - 1;
         }
         if (meld.Kind == MeldKind.Sprint && meld.Tiles.Count == 5)
         {
-            return sum * 4;
+            multTotal += 3;
         }
-        return 0;
+        return sum * (multTotal * (int)multMultTotal);
     }
 
     private static List<MahjongTile> GetOrCreateHonorList(Dictionary<string, List<MahjongTile>> honorLists, string key)

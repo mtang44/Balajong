@@ -154,9 +154,18 @@ public class DeckManager : MonoBehaviour
         selectedTiles.Clear();
     }
 
-    public void selectedToDiscard()
+    public void selectedToDiscard(bool duplicating = false)
     {
-        discardTiles(selectedTiles);
+        discardTiles(selectedTiles, duplicating);
+        selectedTiles.Clear();
+    }
+    public void removeSelectedTiles()
+    {
+        foreach (GameObject tile in new List<GameObject>(selectedTiles))
+        {
+            hand.Remove(tile);
+            discardTileAnimation(tile);
+        }
         selectedTiles.Clear();
     }
     public void fsToDiscard()
@@ -188,15 +197,27 @@ public class DeckManager : MonoBehaviour
             drawHand(tilesToDraw);
     }
 
-    public void discardTile(GameObject tile)
+    public void discardTile(GameObject tile, bool duplicating = false)
     {
         if (hand.Contains(tile))
         {
+            for(int i = 0; i < JokerManager.Instance.numberOfActivations("knight"); i++)
+            {
+                if(tile.GetComponent<MahjongTileHolder>().TileData.TileType == TileType.Dragon)
+                     JokerManager.Instance.knightJokerBuff++;
+            }
             hand.Remove(tile);
             MahjongTileData tileData = tile.GetComponent<MahjongTileHolder>().TileData;
             if (tileData != null)
             {
                 discard.Add(tileData);
+                if(duplicating)
+                {
+                    for(int i = 0; i < JokerManager.Instance.numberOfActivations("jackjack"); i++)
+                    {
+                        discard.Add(tileData);
+                    }
+                }
             }
             discardTileAnimation(tile);
         }
@@ -219,12 +240,12 @@ public class DeckManager : MonoBehaviour
         yield return new WaitForSeconds(seconds);
         Destroy(tile);
     }
-    public void discardTiles(List<GameObject> tiles)
+    public void discardTiles(List<GameObject> tiles, bool duplicating = false)
     {
         // Create a copy to avoid "Collection was modified" error when items are removed during iteration
         foreach (GameObject tile in new List<GameObject>(tiles))
         {
-            discardTile(tile);
+            discardTile(tile, duplicating);
         }
     }
     public void endRound()

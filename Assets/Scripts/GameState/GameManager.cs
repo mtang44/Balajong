@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine.InputSystem;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System;
 
 public enum GameState
 {
@@ -49,6 +50,7 @@ public class GameManager : MonoBehaviour
     }
     void BeginGame()
     {
+        PlayerStatManager.Instance.updateTheMax();
         StatsUpdater.Instance.UpdateHealth(PlayerStatManager.Instance.currentHealth, PlayerStatManager.Instance.maxHealth);
         StatsUpdater.Instance.UpdateDiscardCount();
         StatsUpdater.Instance.UpdateScore(0);
@@ -99,7 +101,14 @@ public class GameManager : MonoBehaviour
     }
     void DiscardState()
     {
-        DeckManager.Instance.selectedToDiscard();
+        if(JokerManager.Instance.jokers.Contains("alt-four") && score == 0 && currentDiscards == 0)
+            DeckManager.Instance.removeSelectedTiles();
+        else if(JokerManager.Instance.jokers.Contains("jackjack") && score == 0 && currentDiscards == 0)
+        {
+            DeckManager.Instance.selectedToDiscard(true);
+        }
+        else
+            DeckManager.Instance.selectedToDiscard();
         currentDiscards++;
         StatsUpdater.Instance.UpdateDiscardCount();
         if (currentDiscards < maxDiscards)
@@ -129,6 +138,10 @@ public class GameManager : MonoBehaviour
         if (reachedThreshold)
         {
             PlayerStatManager.Instance.cash += (5 + JokerManager.Instance.numberOfActivations("golden")); //REWARD FOR WINNING
+            for(int i = 0; i < JokerManager.Instance.numberOfActivations("banker"); i++)
+            {
+                PlayerStatManager.Instance.cash += Math.Max((int)(PlayerStatManager.Instance.cash / 5), 10);
+            }
             StatsUpdater.Instance.UpdateCash(PlayerStatManager.Instance.cash);
 
             // On win, ResolveEncounterWin handles endRound/discard and scene transition.

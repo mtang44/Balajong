@@ -95,7 +95,7 @@ public class ScoringManager : MonoBehaviour
     }
 
     // Returns the configured score value for this tile (by type). Used for individual tile scoring and meld eval.
-    public int GetTileScore(MahjongTile tile)
+    public int GetTileScore(MahjongTile tile) //CHARLES WILL ADD ADDITIONAL JOKER CHECKS
     {
         if (tile == null) return 0;
 
@@ -638,6 +638,7 @@ public class ScoringManager : MonoBehaviour
         int sum = 0;
         foreach (var t in meld.Tiles)
             sum += GetTileScore(t);
+            //CHARLES GET TILE MULT BONUS
 
         if (meld.Kind == MeldKind.Single && meld.Tiles.Count == 1)
             return sum;

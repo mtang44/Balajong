@@ -53,6 +53,7 @@ public class GameManager : MonoBehaviour
         StatsUpdater.Instance.UpdateDiscardCount();
         StatsUpdater.Instance.UpdateScore(0);
         StatsUpdater.Instance.UpdateScoreThreshold(EnemyManager.Instance.returnScoreThreshold());
+        StatsUpdater.Instance.UpdateCash(PlayerStatManager.Instance.cash);
         Debug.Log("Game Started. Current State: " + currentState);
         DeckManager.Instance.forceNewLists();
         SwitchState(GameState.Start);

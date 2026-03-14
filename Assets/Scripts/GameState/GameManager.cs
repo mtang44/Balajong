@@ -41,6 +41,14 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Color checkRackHoverGlintColor = new Color(1f, 0.96f, 0.82f, 1f);
     [SerializeField] private Color discardHoverGlintColor = new Color(0.84f, 0.92f, 1f, 1f);
 
+    [Header("Enemy Payouts")]
+    [SerializeField, Min(0)] private int normalBattlePayout = 5;
+    [SerializeField, Min(0)] private int eliteBattlePayout = 7;
+    [SerializeField, Min(0)] private int bossBattlePayout = 10;
+
+    [Header("Win Payout Animation")]
+    [SerializeField, Min(0f)] private float cashLerpDuration = 0.5f;
+
     void Awake()
     {
         if (Instance == null)
@@ -163,6 +171,7 @@ public class GameManager : MonoBehaviour
         EnsureActionButtonHoverPreviews();
         StatsUpdater.Instance.UpdateHealth(PlayerStatManager.Instance.currentHealth, PlayerStatManager.Instance.maxHealth);
         StatsUpdater.Instance.UpdateDiscardCount();
+        StatsUpdater.Instance.UpdateCash(PlayerStatManager.Instance.cash);
         StatsUpdater.Instance.UpdateScore(0);
         StatsUpdater.Instance.UpdateScoreThreshold(EnemyManager.Instance.returnScoreThreshold());
         Debug.Log("Game Started. Current State: " + currentState);
@@ -240,8 +249,15 @@ public class GameManager : MonoBehaviour
         bool reachedThreshold = score >= EnemyManager.Instance.returnScoreThreshold();
         if (reachedThreshold)
         {
-            PlayerStatManager.Instance.cash += 5;
+            int battlePayout = ResolveBattlePayout();
+            int startingCash = PlayerStatManager.Instance.cash;
+            int targetCash = startingCash + battlePayout;
+
+            yield return LerpCashAndWait(startingCash, targetCash);
+
+            PlayerStatManager.Instance.cash = targetCash;
             StatsUpdater.Instance.UpdateCash(PlayerStatManager.Instance.cash);
+            Debug.Log($"Encounter win payout: +{battlePayout} ({ResolveEncounterTypeName()})");
 
             // On win, ResolveEncounterWin handles endRound/discard and scene transition.
             // Do not transition back to Draw here, or a new hand is dealt before leaving.
@@ -258,6 +274,80 @@ public class GameManager : MonoBehaviour
         StatsUpdater.Instance.UpdateDiscardCount();
         SwitchState(GameState.Select);
     }
+
+    private IEnumerator LerpCashAndWait(int startCash, int endCash)
+    {
+        StatsUpdater statsUpdater = StatsUpdater.Instance;
+        if (statsUpdater == null)
+        {
+            yield break;
+        }
+
+        float duration = Mathf.Max(0f, cashLerpDuration);
+        if (duration <= 0f || startCash == endCash)
+        {
+            statsUpdater.UpdateCash(endCash);
+            yield break;
+        }
+
+        float elapsed = 0f;
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            float t = Mathf.Clamp01(elapsed / duration);
+            int displayedCash = Mathf.RoundToInt(Mathf.Lerp(startCash, endCash, t));
+            statsUpdater.UpdateCash(displayedCash);
+            yield return null;
+        }
+
+        statsUpdater.UpdateCash(endCash);
+    }
+
+    private int ResolveBattlePayout()
+    {
+        MapNodeType encounterType = ResolveCurrentEncounterType();
+
+        return encounterType switch
+        {
+            MapNodeType.Elite => Mathf.Max(0, eliteBattlePayout),
+            MapNodeType.Boss => Mathf.Max(0, bossBattlePayout),
+            _ => Mathf.Max(0, normalBattlePayout)
+        };
+    }
+
+    private static MapNodeType ResolveCurrentEncounterType()
+    {
+        MapRunState mapRunState = MapRunState.Instance;
+        if (mapRunState == null || !mapRunState.HasMap || mapRunState.CurrentMap == null)
+        {
+            return MapNodeType.Battle;
+        }
+
+        NodeMapData mapData = mapRunState.CurrentMap;
+        if (mapData.currentNodeId < 0)
+        {
+            return MapNodeType.Battle;
+        }
+
+        MapNodeData currentNode = mapData.FindNodeById(mapData.currentNodeId);
+        if (currentNode == null)
+        {
+            return MapNodeType.Battle;
+        }
+
+        return currentNode.type;
+    }
+
+    private static string ResolveEncounterTypeName()
+    {
+        return ResolveCurrentEncounterType() switch
+        {
+            MapNodeType.Elite => "Elite",
+            MapNodeType.Boss => "Boss",
+            _ => "Normal"
+        };
+    }
+
     void EndState() {}
 
     void PlayerDamage()

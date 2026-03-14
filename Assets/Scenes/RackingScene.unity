@@ -15102,6 +15102,104 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 704670609}
   m_CullTransparentMesh: 1
+--- !u!1 &704821291
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 704821292}
+  - component: {fileID: 704821295}
+  - component: {fileID: 704821294}
+  - component: {fileID: 704821293}
+  m_Layer: 5
+  m_Name: Enemy Crossout Animation
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &704821292
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 704821291}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 707243411}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -120, y: 8}
+  m_SizeDelta: {x: 200, y: 200}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!95 &704821293
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 704821291}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: b9efb8c6609ea9c49ae084f6228d4681, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &704821294
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 704821291}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 161077207, guid: 4e6715880036f7b4a96ae69060cb7a57, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &704821295
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 704821291}
+  m_CullTransparentMesh: 1
 --- !u!1 &707243410
 GameObject:
   m_ObjectHideFlags: 0
@@ -15141,6 +15239,7 @@ RectTransform:
   - {fileID: 243704701}
   - {fileID: 2023894591}
   - {fileID: 1410341555}
+  - {fileID: 704821292}
   m_Father: {fileID: 1231405864}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -18117,6 +18216,8 @@ MonoBehaviour:
   sceneChanger: {fileID: 1834608312}
   nextSceneName: GamePlayUI Scene
   winSceneName: Win Screen
+  enemyAnimator: {fileID: 704821293}
+  enemyDeadBoolParameterName: EnemyDead
   delayBeforeReturningToMap: 0.5
 --- !u!1001 &829942549
 PrefabInstance:
@@ -19970,8 +20071,9 @@ GameObject:
   - component: {fileID: 940264990}
   - component: {fileID: 940264989}
   - component: {fileID: 940264988}
+  - component: {fileID: 940264994}
   m_Layer: 5
-  m_Name: Check Hand BTN
+  m_Name: Check Rack BTN
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -20166,6 +20268,26 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 940264986}
   m_CullTransparentMesh: 1
+--- !u!114 &940264994
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 940264986}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dbee00f2792874740abee666151910b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CheckRackHandHoverPreview
+  targetButton: {fileID: 940264991}
+  tileSourceMode: 0
+  glintColor: {r: 1, g: 0.96, b: 0.82, a: 1}
+  tintStrength: 0.2
+  brightnessBoost: 0.14
+  tileGlintDuration: 0.28
+  tileGlintStagger: 0.05
+  loopPause: 0.15
 --- !u!1001 &941819072
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -38729,6 +38851,12 @@ MonoBehaviour:
   checkRackButtonCanvasGroup: {fileID: 0}
   enabledButtonAlpha: 1
   disabledButtonAlpha: 0.7
+  checkRackHoverGlintColor: {r: 1, g: 0.859822, b: 0.28773582, a: 1}
+  discardHoverGlintColor: {r: 1, g: 0.62556523, b: 0.5990566, a: 1}
+  normalBattlePayout: 5
+  eliteBattlePayout: 7
+  bossBattlePayout: 10
+  cashLerpDuration: 0.5
 --- !u!114 &1907951512
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -38791,6 +38919,7 @@ MonoBehaviour:
   pauseAfterBonus: 0
   pauseBetweenSections: 0
   singleTimingMultiplier: 0.35
+  scoreLerpDuration: 0.2
   tileHopHeight: 0.2
   tileHopDuration: 0.3
   tileHopSquashAmount: 0.5

@@ -858,7 +858,7 @@ public class ScoringManager : MonoBehaviour
         }
         if (meld.Kind == MeldKind.Chow && meld.Tiles.Count == 3)
         {
-            return meldTotal += 2;
+            multTotal += 2;
         }
         if (meld.Kind == MeldKind.Jog && meld.Tiles.Count == 4)
         {

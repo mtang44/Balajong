@@ -269,13 +269,13 @@ public class GameManager : MonoBehaviour
             jokerCash += 5 * JokerManager.Instance.numberOfActivations("golden"); //golden joker bonuses
 
             int targetCash = startingCash + battlePayout + jokerCash; //calculating for interest
-            
+
             for(int i = 0; i < JokerManager.Instance.numberOfActivations("banker"); i++)
             {
                 jokerCash += Math.Max((int)(targetCash / 5), 10);
             }
 
-            int targetCash = startingCash + battlePayout + jokerCash; //final target cash
+            targetCash = startingCash + battlePayout + jokerCash; //final target cash
             PlayerStatManager.Instance.cash = targetCash;
             
             yield return LerpCashAndWait(startingCash, targetCash);

@@ -11,8 +11,8 @@ public class DeckManager : MonoBehaviour
     private bool warnedMissingTileHolder = false;
 
     [SerializeField] GameObject tilePrefab;
-    public int HAND_SIZE = 14;
-    public int MAX_DISCARD_SELECTION = 5;
+    public int HAND_SIZE = 14 + JokerManager.Instance.numberOfActivations("spider");
+    public int MAX_DISCARD_SELECTION = 5 + (3 * JokerManager.Instance.numberOfActivations("basket"));
     public static DeckManager Instance;
 
     // Our hands! Deck is the wall, then the hand and discard.
@@ -52,6 +52,8 @@ public class DeckManager : MonoBehaviour
 
     public void drawHand(int count = 0)
     {
+        int HAND_SIZE = 14 + JokerManager.Instance.numberOfActivations("spider");
+        int MAX_DISCARD_SELECTION = 5 + (3 * JokerManager.Instance.numberOfActivations("basket"));
         if(count == 0) count = HAND_SIZE;
         for (int i = 0; i < count; i++)
         {
@@ -152,9 +154,18 @@ public class DeckManager : MonoBehaviour
         selectedTiles.Clear();
     }
 
-    public void selectedToDiscard()
+    public void selectedToDiscard(bool duplicating = false)
     {
-        discardTiles(selectedTiles);
+        discardTiles(selectedTiles, duplicating);
+        selectedTiles.Clear();
+    }
+    public void removeSelectedTiles()
+    {
+        foreach (GameObject tile in new List<GameObject>(selectedTiles))
+        {
+            hand.Remove(tile);
+            discardTileAnimation(tile);
+        }
         selectedTiles.Clear();
     }
 
@@ -191,20 +202,34 @@ public class DeckManager : MonoBehaviour
 
     public void redrawHand()
     {
+        int HAND_SIZE = 14 + JokerManager.Instance.numberOfActivations("spider");
+        int MAX_DISCARD_SELECTION = 5 + (3 * JokerManager.Instance.numberOfActivations("basket"));
         int tilesToDraw = HAND_SIZE - hand.Count;
         if (tilesToDraw > 0)
             drawHand(tilesToDraw);
     }
 
-    public void discardTile(GameObject tile)
+    public void discardTile(GameObject tile, bool duplicating = false)
     {
         if (hand.Contains(tile))
         {
+            for(int i = 0; i < JokerManager.Instance.numberOfActivations("knight"); i++)
+            {
+                if(tile.GetComponent<MahjongTileHolder>().TileData.TileType == TileType.Dragon)
+                     JokerManager.Instance.knightJokerBuff++;
+            }
             hand.Remove(tile);
             MahjongTileData tileData = tile.GetComponent<MahjongTileHolder>().TileData;
             if (tileData != null)
             {
                 discard.Add(tileData);
+                if(duplicating)
+                {
+                    for(int i = 0; i < JokerManager.Instance.numberOfActivations("jackjack"); i++)
+                    {
+                        discard.Add(tileData);
+                    }
+                }
             }
             discardTileAnimation(tile);
         }
@@ -227,12 +252,12 @@ public class DeckManager : MonoBehaviour
         yield return new WaitForSeconds(seconds);
         Destroy(tile);
     }
-    public void discardTiles(List<GameObject> tiles)
+    public void discardTiles(List<GameObject> tiles, bool duplicating = false)
     {
         // Create a copy to avoid "Collection was modified" error when items are removed during iteration
         foreach (GameObject tile in new List<GameObject>(tiles))
         {
-            discardTile(tile);
+            discardTile(tile, duplicating);
         }
     }
     public void endRound()

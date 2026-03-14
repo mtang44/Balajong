@@ -86,8 +86,8 @@ public class ConsumableEffectSystem : MonoBehaviour
         activeConsumable = consumable;
 
         // Hide shop UI while resolving the consumable.
-        if (shopRoot != null)
-            shopRoot.SetActive(false);
+        // if (shopRoot != null)
+        //     // shopRoot.SetActive(false);
 
         if (deckManager == null)
             deckManager = DeckManager.Instance ?? FindFirstObjectByType<DeckManager>();
@@ -115,6 +115,7 @@ public class ConsumableEffectSystem : MonoBehaviour
             GameManager.Instance.selecting = true;
         if (useButton != null)
         {
+            Debug.Log("Setting use button active");
             useButton.gameObject.SetActive(true);
         }
     }
@@ -123,6 +124,7 @@ public class ConsumableEffectSystem : MonoBehaviour
     {
         Debug.Log("Use Button Clicked");
         if (activeConsumable == null || deckManager == null) return;
+        Debug.Log("activeConsumable was not null and deckmanager was not null");
         var sel = deckManager.selectedTiles;
         if (sel == null) return;
 
@@ -130,6 +132,7 @@ public class ConsumableEffectSystem : MonoBehaviour
         {
             if (addConsumablePhase == 0)
             {
+                Debug.Log("inside Add Equation");
                 if (sel.Count != 1) return;
                 var selectedGo = sel[0];
                 if (selectedGo == null) return;

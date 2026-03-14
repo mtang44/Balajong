@@ -25581,7 +25581,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ShopPurchase
   ShopTextPanel: {fileID: 537163357}
-  ShopRerollBtn: {fileID: 1563989748}
+  ShopManager: {fileID: 172759713}
 --- !u!4 &2001318430
 Transform:
   m_ObjectHideFlags: 0

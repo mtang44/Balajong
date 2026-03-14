@@ -7,12 +7,20 @@ public class MapEncounterResultHandler : MonoBehaviour
     [SerializeField] private string nextSceneName = string.Empty;
     [SerializeField] private string winSceneName = string.Empty;
 
+    [Header("Enemy Defeat Animation")]
+    [SerializeField] private Animator enemyAnimator;
+    [SerializeField] private string enemyDeadBoolParameterName = "EnemyDead";
+
     [SerializeField] private float delayBeforeReturningToMap = 1.0f;
+
+    private bool warnedMissingEnemyAnimator;
 
     // Called when the player wins an encounter
     // This tells the map to continue to the next node
     public void ResolveEncounterWin()
     {
+        PlayEnemyDefeatAnimation();
+
         // Reset the deck for the next encounter
         DeckManager.Instance.endRound();
         
@@ -56,5 +64,50 @@ public class MapEncounterResultHandler : MonoBehaviour
         {
             Debug.LogWarning("Please set nextSceneName.");
         }
+    }
+
+    private void PlayEnemyDefeatAnimation()
+    {
+        if (enemyAnimator == null && EnemyManager.Instance != null)
+        {
+            enemyAnimator = EnemyManager.Instance.GetComponentInChildren<Animator>(true);
+        }
+
+        if (enemyAnimator == null)
+        {
+            if (!warnedMissingEnemyAnimator)
+            {
+                warnedMissingEnemyAnimator = true;
+                Debug.LogWarning("MapEncounterResultHandler: Enemy animator is not assigned. Enemy dead animation bool was not set.");
+            }
+
+            return;
+        }
+
+        if (string.IsNullOrWhiteSpace(enemyDeadBoolParameterName))
+        {
+            return;
+        }
+
+        if (HasBoolParameter(enemyAnimator, enemyDeadBoolParameterName))
+        {
+            enemyAnimator.SetBool(enemyDeadBoolParameterName, true);
+            return;
+        }
+
+        Debug.LogWarning($"MapEncounterResultHandler: Could not find bool parameter '{enemyDeadBoolParameterName}' on enemy animator.");
+    }
+
+    private static bool HasBoolParameter(Animator animator, string parameterName)
+    {
+        foreach (AnimatorControllerParameter parameter in animator.parameters)
+        {
+            if (parameter.type == AnimatorControllerParameterType.Bool && parameter.name == parameterName)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

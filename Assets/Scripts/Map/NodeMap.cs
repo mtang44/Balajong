@@ -29,7 +29,9 @@ public class NodeMap : MonoBehaviour
     [SerializeField] private float mapUnitsToPixels = 120f;
     [SerializeField] private float nodeUiSize = 96f;
     [SerializeField, Min(0.05f)] private float bossNodeScaleMultiplier = 1.35f;
+    [SerializeField] private string enemyNameTooltipText = "???";
     [SerializeField] private string enemyHealthTooltipText = "???";
+    [SerializeField] private string battlePayoutTooltipText = "???";
     [SerializeField] private MapConnectionVisualSettings connectionVisualSettings = new MapConnectionVisualSettings
     {
         lineWidth = 10f,
@@ -890,7 +892,9 @@ public class NodeMap : MonoBehaviour
         }
 
         view.Setup(this, node, nodeSprite);
+        view.SetEnemyNameText(enemyNameTooltipText);
         view.SetEnemyHealthText(enemyHealthTooltipText);
+        view.SetBattlePayoutText(battlePayoutTooltipText);
 
         return view;
     }

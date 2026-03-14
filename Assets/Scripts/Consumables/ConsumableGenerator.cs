@@ -38,13 +38,6 @@ public class ConsumableGenerator : MonoBehaviour
     {
         Debug.Log("Reading from csv file");
         lootTable = insertCustomLootTable(LootTableFilePath);
-        foreach(var c in lootTable.Values)
-        {
-            foreach(var consumableItem in c)
-            {
-                Debug.Log("Joker in loot table: " + consumableItem.name);
-            }
-        }
         lootRarities = insertCustomRarities(Rarities, Rarity_Weights); 
     }
     // This function allows for custom rarities that correspond to the loot table .csv file's rarities, as well as the corresponding weights of each rarity. 

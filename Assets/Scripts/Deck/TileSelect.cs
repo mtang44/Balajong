@@ -13,6 +13,7 @@ public class TileSelect : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
     private int currentPreviewIndex;
     private bool isDragging = false;
     private float dragStartTime;
+    private bool leftPointerDown;
     private float originalZOffset = 0.5f; // How far forward to lift the tile
     bool flowerTile = false;
     void Start()
@@ -37,6 +38,14 @@ public class TileSelect : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
     public void OnPointerDown(PointerEventData eventData)
     {
         if(flowerTile) return; 
+
+        if (eventData.button != PointerEventData.InputButton.Left)
+        {
+            leftPointerDown = false;
+            return;
+        }
+
+        leftPointerDown = true;
         dragStartTime = Time.time;
     }
 
@@ -44,6 +53,20 @@ public class TileSelect : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
     public void OnPointerUp(PointerEventData eventData)
     {
         if(flowerTile) return; 
+
+        if (eventData.button != PointerEventData.InputButton.Left)
+        {
+            leftPointerDown = false;
+            return;
+        }
+
+        if (!leftPointerDown)
+        {
+            return;
+        }
+
+        leftPointerDown = false;
+
         // If we didn't drag (quick click), process as selection
         if (!isDragging && Time.time - dragStartTime < 0.2f)
         {
@@ -55,6 +78,7 @@ public class TileSelect : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
     public void OnBeginDrag(PointerEventData eventData)
     {
         if(flowerTile) return; 
+        if (eventData.button != PointerEventData.InputButton.Left) return;
         isDragging = true;
         originalPosition = transform.localPosition;
         originalIndex = deckManager.Hand.IndexOf(gameObject);
@@ -96,8 +120,10 @@ public class TileSelect : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
     public void OnEndDrag(PointerEventData eventData)
     {
         if(flowerTile) return; 
+        if (eventData.button != PointerEventData.InputButton.Left) return;
         if (!isDragging) return;
         isDragging = false;
+        leftPointerDown = false;
 
         // Use the preview index as the final position
         if (currentPreviewIndex != originalIndex && currentPreviewIndex >= 0)

@@ -9,6 +9,9 @@ public class JokerManager : MonoBehaviour
     public int currentJokers = 0;
     public int maxJokers = 5;
 
+    public int knightJokerBuff = 0;
+    public int baggedJokerBuff = 0;
+
     void Awake()
     {
         if (Instance == null)
@@ -21,7 +24,7 @@ public class JokerManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
-    public int checkJoker(string jokerName)
+    public int numberOfActivations(string jokerName)
     {
         if (jokers.Contains(jokerName))
         {

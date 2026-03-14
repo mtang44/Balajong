@@ -11,8 +11,8 @@ public class DeckManager : MonoBehaviour
     private bool warnedMissingTileHolder = false;
 
     [SerializeField] GameObject tilePrefab;
-    public int HAND_SIZE = 14;
-    public int MAX_DISCARD_SELECTION = 5;
+    public int HAND_SIZE = 14 + JokerManager.Instance.numberOfActivations("spider");
+    public int MAX_DISCARD_SELECTION = 5 + (3 * JokerManager.Instance.numberOfActivations("basket"));
     public static DeckManager Instance;
 
     // Our hands! Deck is the wall, then the hand and discard.
@@ -52,6 +52,8 @@ public class DeckManager : MonoBehaviour
 
     public void drawHand(int count = 0)
     {
+        int HAND_SIZE = 14 + JokerManager.Instance.numberOfActivations("spider");
+        int MAX_DISCARD_SELECTION = 5 + (3 * JokerManager.Instance.numberOfActivations("basket"));
         if(count == 0) count = HAND_SIZE;
         for (int i = 0; i < count; i++)
         {
@@ -179,6 +181,8 @@ public class DeckManager : MonoBehaviour
 
     public void redrawHand()
     {
+        int HAND_SIZE = 14 + JokerManager.Instance.numberOfActivations("spider");
+        int MAX_DISCARD_SELECTION = 5 + (3 * JokerManager.Instance.numberOfActivations("basket"));
         int tilesToDraw = HAND_SIZE - hand.Count;
         if (tilesToDraw > 0)
             drawHand(tilesToDraw);

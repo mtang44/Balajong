@@ -4,7 +4,7 @@ public class PlayerStatManager : MonoBehaviour
 {
     //Welcome to the global holder of the player's most important stat: health!
     public static PlayerStatManager Instance;
-    public int maxHealth = 4;
+    public int maxHealth = 4 = + (3 * JokerManager.Instance.numberOfActivations("medic"));
     public int currentHealth;
     public int cash = 0;
 
@@ -47,5 +47,9 @@ public class PlayerStatManager : MonoBehaviour
         {
             currentHealth = maxHealth;
         }
+    }
+    public void updateTheMax()
+    {
+        maxHealth = 4 + (3 * JokerManager.Instance.numberOfActivations("medic"));
     }
 }

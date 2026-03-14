@@ -24,7 +24,7 @@ public class GameManager : MonoBehaviour
 
     //governs values of the game, will be used for determining the state to switch to.
     // Constants will normally be gathered when the game is started. For now, hard coded.
-    public int maxDiscards = 3;
+    public int maxDiscards = 3 + JokerManager.Instance.numberOfActivations("trash");
     public int currentDiscards = 0;
     public int score = 0;
 
@@ -128,7 +128,7 @@ public class GameManager : MonoBehaviour
         bool reachedThreshold = score >= EnemyManager.Instance.returnScoreThreshold();
         if (reachedThreshold)
         {
-            PlayerStatManager.Instance.cash += 5;
+            PlayerStatManager.Instance.cash += (5 + JokerManager.Instance.numberOfActivations("golden")); //REWARD FOR WINNING
             StatsUpdater.Instance.UpdateCash(PlayerStatManager.Instance.cash);
 
             // On win, ResolveEncounterWin handles endRound/discard and scene transition.
@@ -142,6 +142,7 @@ public class GameManager : MonoBehaviour
         // On failed check, keep current hand/bonus tiles and continue selecting.
         PlayerDamage();
 
+        maxDiscards = 3 + JokerManager.Instance.numberOfActivations("trash");
         currentDiscards = 0;
         StatsUpdater.Instance.UpdateDiscardCount();
         SwitchState(GameState.Select);

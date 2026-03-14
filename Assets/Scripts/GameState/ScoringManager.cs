@@ -184,11 +184,62 @@ public class ScoringManager : MonoBehaviour
         }
 
         int total = meldScore + bonusScore;
+
+        int jokerBonusPoints = JokerPoints();
+        int jokerMultiplier = jokerMult();
+        int jokerMultMultiplier = jokerMultMult();
+        int newTotal = ((total + jokerBonusPoints) * jokerMultiplier) * jokerMultMultiplier;
         if (logScoringDetails)
-            Debug.Log($"Hand score: total={total}, melds={meldScore}, bonus={bonusScore}");
-        return total;
+            Debug.Log($"Rack score: total={newTotal}, melds={meldScore}, bonus={bonusScore}, jokerBonus={jokerBonusPoints}, jokerMult={jokerMultiplier}" + (jokerMultMultiplier > 1 ? $", jokerMultMult={jokerMultMultiplier}" : ""));
+        return newTotal;
     }
 
+    //THIS IS A FUNCTION TO GET THE BUFFS FROM A JOKER
+    int JokerPoints()
+    {
+        for(int i = 0; i < JokerManager.Instance.numberOfActivations("bagged"); i++) //IMPLEMENT THE DISCARD BONUS
+        {
+            acc += JokerManager.Instance.baggedJokerBuff * 30;
+        }
+        for(int i = 0; i < JokerManager.Instance.numberOfActivations("fishdish"); i++)
+        {
+            acc += Random.Range(10,50);
+        }
+        for(int i = 0; i < JokerManager.Instance.numberOfActivations("ledger"); i++)
+        {
+            acc += Random.Range(20,80);
+        }
+    }
+    int jokerMult()
+    {
+        int acc = 1;
+        for(int i = 0; i < JokerManager.Instance.numberOfActivations("joker"); i++)
+        {
+            acc += 3;
+        }
+        for(int i = 0; i < JokerManager.Instance.numberOfActivations("hatcat"); i++)
+        {
+            acc += Random.Range(2,10);
+        }
+        for(int i = 0; i < JokerManager.Instance.numberOfActivations("ledger"); i++)
+        {
+            acc += Random.Range(5,15);
+        }
+        for(int i = 0; i < JokerManager.Instance.numberOfActivations("knight"); i++) //IMPLEMENT THE DISCARD BONUS
+        {
+            acc += JokerManager.Instance.knightJokerBuff;
+        }
+        return acc;
+    }
+    int jokerMultMult()
+    {
+        int acc = 1;
+        for(int i = 0; i < JokerManager.Instance.numberOfActivations("secondwind"); i++)
+        {
+            acc *= (PlayerStatManager.Instance.maxHealth - PlayerStatManager.Instance.currentHealth) + 1;
+        }
+        return acc;
+    }
     // Updates the optional hand-info UI text with the current scoring breakdown.
     public void UpdateHandInfoDisplay()
     {

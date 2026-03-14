@@ -90,7 +90,9 @@ public class GameManager : MonoBehaviour
     private void UpdateActionButtons()
     {
         bool hasSelection = HasAnySelectedTile();
-        bool canUseActions = selecting && currentState == GameState.Select;
+        // Disable Discard/Check Rack while consumable tile-selection is active (Remove/Enhance/Add flow) so they don't conflict.
+        bool consumableFlowActive = ConsumableEffectSystem.IsInConsumableTileSelectionPhase;
+        bool canUseActions = selecting && currentState == GameState.Select && !consumableFlowActive;
 
         bool canDiscard = canUseActions && hasSelection;
         bool canCheckRack = canUseActions && !hasSelection;

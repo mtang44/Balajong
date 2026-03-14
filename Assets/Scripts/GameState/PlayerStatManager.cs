@@ -1,12 +1,21 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerStatManager : MonoBehaviour
 {
-    //Welcome to the global holder of the player's most important stat: health!
     public static PlayerStatManager Instance;
+
+    [Header("Health")]
     public int maxHealth = 4;
     public int currentHealth;
     public int cash = 0;
+
+    [Header("Consumable inventory (entire game, limit 2)")]
+    public const int ConsumableInventorySize = 2;
+    private readonly List<Consumable> _consumableSlots = new List<Consumable> { null, null };
+
+    public event Action ConsumableInventoryChanged;
 
     void Awake()
     {
@@ -20,9 +29,41 @@ public class PlayerStatManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
+
     void Start()
     {
         currentHealth = maxHealth;
+    }
+
+    // Get consumable at slot (0 or 1). Returns null if slot empty or out of range.
+    public Consumable GetConsumableAt(int index)
+    {
+        if (index < 0 || index >= ConsumableInventorySize) return null;
+        return _consumableSlots[index];
+    }
+
+    // Add a consumable to the first empty slot. Returns true if added, false if inventory full.
+    public bool AddConsumableToInventory(Consumable consumable)
+    {
+        if (consumable == null) return false;
+        for (int i = 0; i < ConsumableInventorySize; i++)
+        {
+            if (_consumableSlots[i] == null)
+            {
+                _consumableSlots[i] = new Consumable(consumable);
+                ConsumableInventoryChanged?.Invoke();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // Remove consumable at slot (sets to null). Call when item is used.
+    public void RemoveConsumableAt(int index)
+    {
+        if (index < 0 || index >= ConsumableInventorySize) return;
+        _consumableSlots[index] = null;
+        ConsumableInventoryChanged?.Invoke();
     }
     public void TakeDamage(int damage)
     {
@@ -49,3 +90,5 @@ public class PlayerStatManager : MonoBehaviour
         }
     }
 }
+
+

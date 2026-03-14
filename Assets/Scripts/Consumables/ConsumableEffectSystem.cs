@@ -3,11 +3,11 @@ using System.Reflection;
 using UnityEngine;
 using UnityEngine.UI;
 
-// Handles the immediate-activation flow for shop consumables.
-// - When a consumable is purchased, it hides the shop, ensures a hand is drawn,
-//   and exposes a single "Use Consumable" button.
-// - The button only works when exactly one tile is selected in the hand.
-// - Effects are implemented in a reusable, deck-agnostic way via DeckMutationHelpers
+// Backend for consumable use. Teammates add UI (inventory icons, Use button visibility is driven here).
+// - Shop buy adds to PlayerStatManager consumable list (2 slots, entire game).
+// - RackingScene: select item in inventory -> Use button appears; correct tile selection enables click.
+// - Add consumable: 1 tile chosen -> 4 dupes pushed to front of deck -> player selects 4 tiles to remove from rack -> draw 4.
+// - Heal: applies immediately on Use. Destroy/Enhance: apply to single selected tile.
 public class ConsumableEffectSystem : MonoBehaviour
 {
     public static ConsumableEffectSystem Instance { get; private set; }
@@ -21,6 +21,9 @@ public class ConsumableEffectSystem : MonoBehaviour
     private Consumable activeConsumable;
     // Add consumable is two-phase: 0 = select tile type (1 tile), 1 = select 4 to discard
     private int addConsumablePhase;
+
+    // True while the player is in tile-selection phase for a consumable (Remove, Enhance, Add). GameManager uses this to disable Discard/Check Rack during that phase.
+    public static bool IsInConsumableTileSelectionPhase => Instance != null && Instance.activeConsumable != null;
 
     private void Awake()
     {
@@ -46,25 +49,28 @@ public class ConsumableEffectSystem : MonoBehaviour
 
     private void Update()
     {
-        if (useButton == null || deckManager == null) return;
+        if (useButton == null) return;
 
-        var hasActive = activeConsumable != null;
-        var sel = deckManager.selectedTiles;
-        var count = sel != null ? sel.Count : 0;
-        bool buttonOk = false;
-        if (hasActive)
+        // Use button: visible only when an inventory item is selected or an active consumable flow is running.
+        var selectedFromInventory = ConsumableManager.Instance != null && ConsumableManager.Instance.GetSelected() != null;
+        var shouldShow = activeConsumable != null || selectedFromInventory;
+        if (useButton.gameObject.activeSelf != shouldShow)
+            useButton.gameObject.SetActive(shouldShow);
+
+        // Interactable: when flow active, require correct tile count; when only item selected, allow click to start flow (or Heal applies immediately).
+        if (activeConsumable != null && deckManager != null)
         {
-            if (activeConsumable.equationType == "Add")
-                buttonOk = (addConsumablePhase == 0 && count == 1) || (addConsumablePhase == 1 && count == 4);
-            else
-                buttonOk = count == 1;
+            var sel = deckManager.selectedTiles;
+            var count = sel != null ? sel.Count : 0;
+            useButton.interactable = activeConsumable.equationType == "Add"
+                ? (addConsumablePhase == 0 && count == 1) || (addConsumablePhase == 1 && count == 4)
+                : count == 1;
         }
-        useButton.interactable = buttonOk;
+        else if (selectedFromInventory)
+            useButton.interactable = true;
     }
 
-
-    // Entry point for the shop "buy" button: purchase and immediately activate the current shop consumable.
-    // Wire this from the voucher/consumable slot button's OnClick.
+    // Shop buy button: add current shop consumable to player inventory (PlayerStats). Limit 2 for entire game.</summary>
     public void PurchaseAndActivateCurrentShopConsumable()
     {
         if (shop == null) shop = FindFirstObjectByType<Shop>();
@@ -74,7 +80,13 @@ public class ConsumableEffectSystem : MonoBehaviour
             return;
         }
 
-        ActivateConsumable(shop.consumableDrops[0]);
+        if (PlayerStatManager.Instance == null)
+        {
+            Debug.LogWarning("[ConsumableEffectSystem] PlayerStatManager.Instance is null; consumable not added.");
+            return;
+        }
+        if (!PlayerStatManager.Instance.AddConsumableToInventory(shop.consumableDrops[0]))
+            Debug.LogWarning("[ConsumableEffectSystem] Consumable inventory full (limit 2).");
     }
 
 
@@ -114,17 +126,24 @@ public class ConsumableEffectSystem : MonoBehaviour
         if (GameManager.Instance != null)
             GameManager.Instance.selecting = true;
         if (useButton != null)
-        {
-            Debug.Log("Setting use button active");
             useButton.gameObject.SetActive(true);
-        }
     }
 
     private void OnUseButtonClicked()
     {
-        Debug.Log("Use Button Clicked");
-        if (activeConsumable == null || deckManager == null) return;
-        Debug.Log("activeConsumable was not null and deckmanager was not null");
+        // If nothing active yet but an inventory item is selected, start the use flow (from racking scene).
+        if (activeConsumable == null)
+        {
+            var selected = ConsumableManager.Instance?.GetSelected();
+            if (selected != null)
+            {
+                ActivateConsumable(selected);
+                return;
+            }
+            return;
+        }
+
+        if (deckManager == null) return;
         var sel = deckManager.selectedTiles;
         if (sel == null) return;
 
@@ -132,7 +151,6 @@ public class ConsumableEffectSystem : MonoBehaviour
         {
             if (addConsumablePhase == 0)
             {
-                Debug.Log("inside Add Equation");
                 if (sel.Count != 1) return;
                 var selectedGo = sel[0];
                 if (selectedGo == null) return;
@@ -216,11 +234,13 @@ public class ConsumableEffectSystem : MonoBehaviour
             useButton.gameObject.SetActive(false);
         }
 
-        // Show shop again.
+        // Show shop again (if in shop scene).
         if (shopRoot != null)
-        {
             shopRoot.SetActive(true);
-        }
+
+        // Discard used consumable from player stats inventory (at selected slot).
+        if (activeConsumable != null && ConsumableManager.Instance != null)
+            ConsumableManager.Instance.RemoveConsumableAt(ConsumableManager.Instance.SelectedIndex);
 
         activeConsumable = null;
         addConsumablePhase = 0;

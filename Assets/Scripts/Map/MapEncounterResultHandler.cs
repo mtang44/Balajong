@@ -45,6 +45,7 @@ public class MapEncounterResultHandler : MonoBehaviour
                 return;
             }
         }
+
         StartCoroutine(ReturnToMapAfterDelay());
     }
 

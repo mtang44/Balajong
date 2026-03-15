@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class SceneChanger : MonoBehaviour
 {
+    private static bool hasHandledInitialSceneLoad;
+
     [SerializeField]
     private Animator animator;
     [SerializeField]
@@ -18,6 +20,29 @@ public class SceneChanger : MonoBehaviour
     private Camera transitionCanvasCamera;
     [SerializeField]
     private bool autoConfigureTransitionCanvas = true;
+    [SerializeField]
+    private bool suppressTransitionOnInitialSceneLoad = true;
+
+    public float TransitionDuration => Mathf.Max(0f, transitionTime);
+
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+    private static void ResetStaticState()
+    {
+        hasHandledInitialSceneLoad = false;
+    }
+
+    private void Awake()
+    {
+        if (!hasHandledInitialSceneLoad)
+        {
+            hasHandledInitialSceneLoad = true;
+
+            if (suppressTransitionOnInitialSceneLoad && transitionObject != null)
+            {
+                transitionObject.SetActive(false);
+            }
+        }
+    }
 
     public void ChangeScene(string sceneName)
     {

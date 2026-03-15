@@ -32,7 +32,8 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 2822074948705041445}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -137,7 +138,11 @@ MonoBehaviour:
   nodeImage: {fileID: 928839833168547672}
   nodeButton: {fileID: 782456198002334112}
   hoverTooltip: {fileID: 0}
-  enemyHealthText: ???
+  lockedNodeBrightness: 0.4
+  nodeAnimator: {fileID: 1224120319481600075}
+  enemyDeadBoolParameterName: EnemyDead
+  enemyShadedBoolParameterName: Shaded
+  mapDeadBoolParameterName: MapDead
 --- !u!114 &5810200918345899459
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -157,6 +162,8 @@ MonoBehaviour:
   hoverOutline: {fileID: 0}
   showTooltipOnHover: 1
   tooltipOffset: {x: 0, y: 92}
+  tooltipTopEdgePadding: 16
+  tooltipSortingOrder: 500
   tooltipBackgroundColor: {r: 1, g: 1, b: 1, a: 0.92}
   tooltipTextColor: {r: 0, g: 0, b: 0, a: 1}
   tooltipMinWidth: 210
@@ -164,7 +171,106 @@ MonoBehaviour:
   tooltipPadding: 12
   tooltipSpacing: 4
   tooltipFont: {fileID: 12800000, guid: ba47b797d34b7f54ab9fffc633427192, type: 3}
-  enemyHealthText: ???
   tooltipRoot: {fileID: 0}
   tooltipTypeText: {fileID: 0}
+  tooltipEnemyNameText: {fileID: 0}
   tooltipHealthText: {fileID: 0}
+  tooltipPayoutText: {fileID: 0}
+--- !u!1 &8399284374014992101
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2822074948705041445}
+  - component: {fileID: 5328996671157443025}
+  - component: {fileID: 1078800554794997773}
+  - component: {fileID: 1224120319481600075}
+  m_Layer: 3
+  m_Name: CrossOutAnimation
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &2822074948705041445
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8399284374014992101}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1040882947282279472}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: -13.9}
+  m_SizeDelta: {x: 160, y: 160}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &5328996671157443025
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8399284374014992101}
+  m_CullTransparentMesh: 1
+--- !u!114 &1078800554794997773
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8399284374014992101}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.8867924, g: 0.24679601, b: 0.24679601, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 2109887083, guid: bd7faa422e7b5d54f9687718e3c6d641, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!95 &1224120319481600075
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8399284374014992101}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: b9efb8c6609ea9c49ae084f6228d4681, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0

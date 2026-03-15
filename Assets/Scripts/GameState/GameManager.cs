@@ -3,6 +3,7 @@ using UnityEngine.InputSystem;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using System;
 
 public enum GameState
 {
@@ -11,7 +12,8 @@ public enum GameState
     Select,
     Discard,
     Score,
-    End
+    End,
+    Reset
 }
 // This will govern the overall backend of the game.
 public class GameManager : MonoBehaviour
@@ -171,6 +173,8 @@ public class GameManager : MonoBehaviour
     void BeginGame()
     {
         EnsureActionButtonHoverPreviews();
+        maxDiscards = 3 + JokerManager.Instance.numberOfActivations("trash");
+        PlayerStatManager.Instance.updateTheMax();
         StatsUpdater.Instance.UpdateHealth(PlayerStatManager.Instance.currentHealth, PlayerStatManager.Instance.maxHealth);
         StatsUpdater.Instance.UpdateDiscardCount();
         StatsUpdater.Instance.UpdateCash(PlayerStatManager.Instance.cash);
@@ -202,6 +206,9 @@ public class GameManager : MonoBehaviour
             case GameState.Score:
                 ScoreState();
                 break;
+            case GameState.Reset:
+                ResetState();
+                break;
             case GameState.End:
                 EndState();
                 break;
@@ -222,7 +229,15 @@ public class GameManager : MonoBehaviour
     }
     void DiscardState()
     {
-        DeckManager.Instance.selectedToDiscard();
+        maxDiscards = 3 + JokerManager.Instance.numberOfActivations("trash");
+        if(JokerManager.Instance.jokers.Contains("alt-four") && score == 0 && currentDiscards == 0)
+            DeckManager.Instance.removeSelectedTiles();
+        else if(JokerManager.Instance.jokers.Contains("jackjack") && score == 0 && currentDiscards == 0)
+        {
+            DeckManager.Instance.selectedToDiscard(true);
+        }
+        else
+            DeckManager.Instance.selectedToDiscard();
         currentDiscards++;
         StatsUpdater.Instance.UpdateDiscardCount();
         if (currentDiscards < maxDiscards)
@@ -255,12 +270,21 @@ public class GameManager : MonoBehaviour
         {
             int battlePayout = ResolveBattlePayout();
             int startingCash = PlayerStatManager.Instance.cash;
-            int targetCash = startingCash + battlePayout;
+            int jokerCash = 0;
+            
+            jokerCash += 5 * JokerManager.Instance.numberOfActivations("golden"); //golden joker bonuses
 
-            yield return LerpCashAndWait(startingCash, targetCash);
+            int targetCash = startingCash + battlePayout + jokerCash; //calculating for interest
 
+            for(int i = 0; i < JokerManager.Instance.numberOfActivations("banker"); i++)
+            {
+                jokerCash += Math.Max((int)(targetCash / 5), 10);
+            }
+
+            targetCash = startingCash + battlePayout + jokerCash; //final target cash
             PlayerStatManager.Instance.cash = targetCash;
-            StatsUpdater.Instance.UpdateCash(PlayerStatManager.Instance.cash);
+            
+            yield return LerpCashAndWait(startingCash, targetCash);
             Debug.Log($"Encounter win payout: +{battlePayout} ({ResolveEncounterTypeName()})");
 
             // On win, ResolveEncounterWin handles endRound/discard and scene transition.
@@ -274,6 +298,7 @@ public class GameManager : MonoBehaviour
         // On failed check, keep current hand/bonus tiles and continue selecting.
         PlayerDamage();
 
+        maxDiscards = 3 + JokerManager.Instance.numberOfActivations("trash");
         currentDiscards = 0;
         StatsUpdater.Instance.UpdateDiscardCount();
         SwitchState(GameState.Select);
@@ -352,6 +377,46 @@ public class GameManager : MonoBehaviour
         };
     }
 
+    void ResetState()
+    {
+        selecting = false;
+        currentDiscards = 0;
+        score = 0;
+
+        MapRunState.Instance.ClearMap();
+
+        PlayerStatManager playerStats = PlayerStatManager.Instance;
+        if (playerStats != null)
+        {
+            playerStats.ResetRunState();
+        }
+
+        JokerManager jokerManager = JokerManager.Instance;
+        if (jokerManager != null)
+        {
+            jokerManager.ResetRunState();
+        }
+
+        DeckManager deckManager = DeckManager.Instance;
+        if (deckManager != null)
+        {
+            deckManager.ResetToDefaultState();
+        }
+
+        StatsUpdater statsUpdater = StatsUpdater.Instance;
+        if (statsUpdater != null)
+        {
+            if (playerStats != null)
+            {
+                statsUpdater.UpdateHealth(playerStats.currentHealth, playerStats.maxHealth);
+                statsUpdater.UpdateCash(playerStats.cash);
+            }
+
+            statsUpdater.UpdateDiscardCount();
+            statsUpdater.UpdateScore(score);
+        }
+    }
+
     void EndState() {}
 
     void PlayerDamage()
@@ -368,6 +433,11 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("Player has lost the game.");
         StatsUpdater.Instance.ShowLoseScreen();
+    }
+
+    public void EnterResetStateFromAbandon()
+    {
+        SwitchState(GameState.Reset);
     }
 
     // Public method for UI button to trigger discard

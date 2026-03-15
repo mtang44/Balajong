@@ -8,6 +8,12 @@ public class MapNodeView : MonoBehaviour
     [SerializeField] private MapNodeHoverTooltip hoverTooltip;
     [SerializeField, Range(0f, 1f)] private float lockedNodeBrightness = 0.4f;
 
+    [Header("Defeat Animation")]
+    [SerializeField] private Animator nodeAnimator;
+    [SerializeField] private string enemyDeadBoolParameterName = "EnemyDead";
+    [SerializeField] private string enemyShadedBoolParameterName = "Shaded";
+    [SerializeField] private string mapDeadBoolParameterName = "MapDead";
+
     private NodeMap owner;
     private int nodeId;
 
@@ -77,6 +83,21 @@ public class MapNodeView : MonoBehaviour
         }
     }
 
+    public bool SetEnemyAliveVisual()
+    {
+        return ApplyDefeatAnimationState(isMapDead: false, isEnemyDead: false, isShaded: false);
+    }
+
+    public bool SetEnemyAlreadyDefeatedVisual()
+    {
+        return ApplyDefeatAnimationState(isMapDead: true, isEnemyDead: false, isShaded: false);
+    }
+
+    public bool PlayEnemyDefeatVisual(bool shadedValue)
+    {
+        return ApplyDefeatAnimationState(isMapDead: false, isEnemyDead: true, isShaded: shadedValue);
+    }
+
     // Sets the interaction state of the node based on its NodeState
     public void SetState(NodeState state)
     {
@@ -139,6 +160,7 @@ public class MapNodeView : MonoBehaviour
     {
         nodeImage ??= GetComponentInChildren<Image>();
         nodeButton ??= GetComponent<Button>();
+        nodeAnimator ??= GetComponent<Animator>();
     }
 
     private void EnsureHoverTooltip()
@@ -151,6 +173,49 @@ public class MapNodeView : MonoBehaviour
         if (hoverTooltip == null)
         {
             hoverTooltip = gameObject.AddComponent<MapNodeHoverTooltip>();
+        }
+    }
+
+    private bool ApplyDefeatAnimationState(bool isMapDead, bool isEnemyDead, bool isShaded)
+    {
+        Animator resolvedAnimator = ResolveNodeAnimator();
+        if (resolvedAnimator == null)
+        {
+            return false;
+        }
+
+        // Set shaded first so the EnemyDead transition can branch into the right variant in the same frame.
+        SetAnimatorBoolIfPresent(resolvedAnimator, mapDeadBoolParameterName, isMapDead);
+        SetAnimatorBoolIfPresent(resolvedAnimator, enemyShadedBoolParameterName, isShaded);
+        SetAnimatorBoolIfPresent(resolvedAnimator, enemyDeadBoolParameterName, isEnemyDead);
+        return true;
+    }
+
+    private Animator ResolveNodeAnimator()
+    {
+        if (nodeAnimator == null)
+        {
+            nodeAnimator = GetComponent<Animator>();
+        }
+
+        return nodeAnimator;
+    }
+
+    private static void SetAnimatorBoolIfPresent(Animator animator, string parameterName, bool value)
+    {
+        if (animator == null || string.IsNullOrWhiteSpace(parameterName))
+        {
+            return;
+        }
+
+        for (int i = 0; i < animator.parameters.Length; i++)
+        {
+            AnimatorControllerParameter parameter = animator.parameters[i];
+            if (parameter.type == AnimatorControllerParameterType.Bool && parameter.name == parameterName)
+            {
+                animator.SetBool(parameterName, value);
+                return;
+            }
         }
     }
 

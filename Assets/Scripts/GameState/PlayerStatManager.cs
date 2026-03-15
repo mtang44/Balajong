@@ -6,6 +6,9 @@ public class PlayerStatManager : MonoBehaviour
 {
     public static PlayerStatManager Instance;
 
+    private int startingMaxHealth;
+    private int startingCash;
+
     [Header("Health")]
     public int maxHealth = 4;
     public int currentHealth;
@@ -23,6 +26,8 @@ public class PlayerStatManager : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
+            startingMaxHealth = maxHealth;
+            startingCash = cash;
         }
         else if (Instance != this)
         {
@@ -39,6 +44,20 @@ public class PlayerStatManager : MonoBehaviour
     void Start()
     {
         currentHealth = maxHealth;
+    }
+
+    public void ResetRunState()
+    {
+        maxHealth = startingMaxHealth;
+        currentHealth = maxHealth;
+        cash = startingCash;
+
+        for (int i = 0; i < _consumableSlots.Count; i++)
+        {
+            _consumableSlots[i] = null;
+        }
+
+        ConsumableInventoryChanged?.Invoke();
     }
 
     // Get consumable at slot (0 or 1). Returns null if slot empty or out of range.
@@ -94,6 +113,10 @@ public class PlayerStatManager : MonoBehaviour
         {
             currentHealth = maxHealth;
         }
+    }
+    public void updateTheMax()
+    {
+        maxHealth = 4 + (3 * JokerManager.Instance.numberOfActivations("medic"));
     }
 }
 

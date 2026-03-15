@@ -271,6 +271,7 @@ MonoBehaviour:
   transitionCanvas: {fileID: 0}
   transitionCanvasCamera: {fileID: 0}
   autoConfigureTransitionCanvas: 1
+  suppressTransitionOnInitialSceneLoad: 1
 --- !u!95 &2782725384031628350
 Animator:
   serializedVersion: 7

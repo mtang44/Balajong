@@ -15,6 +15,9 @@ public class ConsumableManager : MonoBehaviour
     // Currently selected slot index (0 or 1), or -1 if none.
     public int SelectedIndex { get; private set; } = -1;
 
+    // Cached consumable per slot when Select() was called, so Use button still gets the right consumable even if PlayerStatManager reference differs at click time.
+    private readonly Consumable[] _cachedConsumableBySlot = new Consumable[2];
+
     public event Action InventoryChanged;
     public event Action<int> SelectionChanged;
 
@@ -31,7 +34,10 @@ public class ConsumableManager : MonoBehaviour
     private void Start()
     {
         if (PlayerStatManager.Instance != null)
+        {
             PlayerStatManager.Instance.ConsumableInventoryChanged += OnPlayerStatsInventoryChanged;
+            RefreshCache();
+        }
     }
 
     private void OnDestroy()
@@ -44,34 +50,54 @@ public class ConsumableManager : MonoBehaviour
 
     private void OnPlayerStatsInventoryChanged()
     {
+        RefreshCache();
         InventoryChanged?.Invoke();
     }
 
-    // Select slot by index (0 or 1). Use -1 to clear selection. Only valid indices with a consumable are selectable.
     public void Select(int index)
     {
         if (index < -1 || index >= InventorySize) return;
-        if (index >= 0 && GetAt(index) == null) return;
+        if (index >= 0)
+        {
+            var atSlot = GetAt(index);
+            if (atSlot == null) return;
+            _cachedConsumableBySlot[index] = atSlot;
+        }
         SelectedIndex = index;
+        RefreshCache();
         SelectionChanged?.Invoke(SelectedIndex);
     }
 
-    // Get the currently selected consumable, or null if none selected.
-    public Consumable GetSelected()
+    private void RefreshCache()
     {
-        return GetAt(SelectedIndex);
+        for (int i = 0; i < InventorySize; i++)
+        {
+            var c = GetAtInternal(i);
+            if (c != null)
+                _cachedConsumableBySlot[i] = c;
+        }
     }
 
-    // Get consumable at slot (0 or 1). Returns null if empty or out of range.
-    public Consumable GetAt(int index)
+    private Consumable GetAtInternal(int index)
     {
+        if (index < 0 || index >= InventorySize) return null;
         if (PlayerStatManager.Instance == null) return null;
         return PlayerStatManager.Instance.GetConsumableAt(index);
     }
 
-    // Remove consumable at the given slot (e.g. after use). Call from ConsumableEffectSystem.
-    public void RemoveConsumableAt(int index)
+    // Get consumable at slot (0 or 1). Returns null if empty or out of range. Uses cache if PM returns null so Use click still gets the consumable they selected.
+    public Consumable GetAt(int index)
     {
+        if (index < 0 || index >= InventorySize) return null;
+        var fromStats = GetAtInternal(index);
+        if (fromStats != null) return fromStats;
+        return _cachedConsumableBySlot[index];
+    }
+
+    public void RemoveAt(int index)
+    {
+        if (index >= 0 && index < InventorySize)
+            _cachedConsumableBySlot[index] = null;
         if (PlayerStatManager.Instance == null) return;
         PlayerStatManager.Instance.RemoveConsumableAt(index);
         if (SelectedIndex == index)

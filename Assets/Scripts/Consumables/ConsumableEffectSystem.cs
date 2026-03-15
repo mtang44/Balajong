@@ -3,27 +3,32 @@ using System.Reflection;
 using UnityEngine;
 using UnityEngine.UI;
 
-// Backend for consumable use. Teammates add UI (inventory icons, Use button visibility is driven here).
-// - Shop buy adds to PlayerStatManager consumable list (2 slots, entire game).
-// - RackingScene: select item in inventory -> Use button appears; correct tile selection enables click.
-// - Add consumable: 1 tile chosen -> 4 dupes pushed to front of deck -> player selects 4 tiles to remove from rack -> draw 4.
-// - Heal: applies immediately on Use. Destroy/Enhance: apply to single selected tile.
+// Consumable use: Consumable 1 -> Use BTN 1 (slot 0), Consumable 2 -> Use BTN 2 (slot 1). Buttons stay visible.
+// Inventory lives in PlayerStatManager (2 slots, persists entire game). Shop buy adds there; Use removes after use.
 public class ConsumableEffectSystem : MonoBehaviour
 {
     public static ConsumableEffectSystem Instance { get; private set; }
 
     [Header("Scene References (optional; auto-found if null)")]
     [SerializeField] private Shop shop;
-    [SerializeField] private GameObject shopRoot;   // Root panel to hide while using a consumable
-    [SerializeField] private Button useButton;      // "Use Consumable" button
+    [SerializeField] private GameObject shopRoot;
+    [Tooltip("Use BTN 1: click activates consumable in slot 0 (first consumable).")]
+    [SerializeField] private Button useButtonSlot0;
+    [Tooltip("Use BTN 2: click activates consumable in slot 1 (second consumable).")]
+    [SerializeField] private Button useButtonSlot1;
+    [Tooltip("Copy BTN: shown in Add/Clone flow after selecting 1 tile. Bind OnClick to OnCopy().")]
+    [SerializeField] private Button copyButton;
 
     private DeckManager deckManager;
     private Consumable activeConsumable;
-    // Add consumable is two-phase: 0 = select tile type (1 tile), 1 = select 4 to discard
+    private int _slotIndexInUse = -1;
     private int addConsumablePhase;
 
-    // True while the player is in tile-selection phase for a consumable (Remove, Enhance, Add). GameManager uses this to disable Discard/Check Rack during that phase.
-    public static bool IsInConsumableTileSelectionPhase => Instance != null && Instance.activeConsumable != null;
+    public static bool InTileSelectionPhase => Instance != null && Instance.activeConsumable != null;
+    public static bool InAddDiscardPhase =>
+        Instance != null && Instance.activeConsumable != null && IsAddType(Instance.activeConsumable) && Instance.addConsumablePhase == 1;
+    public static bool HasFourSelected =>
+        DeckManager.Instance != null && DeckManager.Instance.selectedTiles != null && DeckManager.Instance.selectedTiles.Count == 4;
 
     private void Awake()
     {
@@ -40,144 +45,159 @@ public class ConsumableEffectSystem : MonoBehaviour
         if (shop == null) shop = FindFirstObjectByType<Shop>();
         if (deckManager == null) deckManager = DeckManager.Instance ?? FindFirstObjectByType<DeckManager>();
 
-        if (useButton != null)
-        {
-            useButton.onClick.AddListener(OnUseButtonClicked);
-            useButton.gameObject.SetActive(false);
-        }
+        if (useButtonSlot0 != null)
+            useButtonSlot0.onClick.AddListener(() => UseSlot(0));
+        if (useButtonSlot1 != null)
+            useButtonSlot1.onClick.AddListener(() => UseSlot(1));
+        if (copyButton != null)
+            copyButton.onClick.AddListener(OnCopy);
+        if (copyButton != null)
+            copyButton.gameObject.SetActive(false);
+    }
+
+    public void UseSlot0() => UseSlot(0);
+    public void UseSlot1() => UseSlot(1);
+    public void OnCopy()
+    {
+        if (activeConsumable == null || deckManager == null || !IsAddType(activeConsumable) || addConsumablePhase != 0) return;
+        var sel = deckManager.selectedTiles;
+        if (sel == null || sel.Count != 1) return;
+        var selectedGo = sel[0];
+        if (selectedGo == null) return;
+        var holder = selectedGo.GetComponent<MahjongTileHolder>();
+        var chosenTile = holder != null ? holder.TileData : null;
+        if (chosenTile == null) return;
+        DeckMutationHelpers.AddCopiesToDeckFront(deckManager, chosenTile, 4);
+        addConsumablePhase = 1;
+        deckManager.selectedTiles.Clear();
+        deckManager.sortHand();
+    }
+
+    public void ConfirmAddDiscard()
+    {
+        if (activeConsumable == null || deckManager == null || !IsAddType(activeConsumable) || addConsumablePhase != 1) return;
+        var sel = deckManager.selectedTiles;
+        if (sel == null || sel.Count != 4) return;
+        deckManager.discardTiles(new List<GameObject>(sel));
+        deckManager.drawHand(4);
+        Finish();
+    }
+
+    private Button GetUseButton(int slotIndex)
+    {
+        if (slotIndex == 0) return useButtonSlot0;
+        if (slotIndex == 1) return useButtonSlot1;
+        return null;
     }
 
     private void Update()
     {
-        if (useButton == null) return;
+        if (activeConsumable == null) return;
+        if (deckManager == null)
+            deckManager = DeckManager.Instance ?? FindFirstObjectByType<DeckManager>();
+        if (deckManager == null) return;
+        var sel = deckManager.selectedTiles;
+        var count = sel != null ? sel.Count : 0;
 
-        // Use button: visible only when an inventory item is selected or an active consumable flow is running.
-        var selectedFromInventory = ConsumableManager.Instance != null && ConsumableManager.Instance.GetSelected() != null;
-        var shouldShow = activeConsumable != null || selectedFromInventory;
-        if (useButton.gameObject.activeSelf != shouldShow)
-            useButton.gameObject.SetActive(shouldShow);
-
-        // Interactable: when flow active, require correct tile count; when only item selected, allow click to start flow (or Heal applies immediately).
-        if (activeConsumable != null && deckManager != null)
+        if (IsAddType(activeConsumable))
         {
-            var sel = deckManager.selectedTiles;
-            var count = sel != null ? sel.Count : 0;
-            useButton.interactable = activeConsumable.equationType == "Add"
-                ? (addConsumablePhase == 0 && count == 1) || (addConsumablePhase == 1 && count == 4)
-                : count == 1;
+            if (copyButton != null)
+            {
+                bool showCopy = addConsumablePhase == 0;
+                if (copyButton.gameObject.activeSelf != showCopy)
+                    copyButton.gameObject.SetActive(showCopy);
+                if (showCopy)
+                    copyButton.interactable = count == 1;
+            }
+            var useBtn = GetUseButton(_slotIndexInUse);
+            if (useBtn != null)
+                useBtn.interactable = false;
         }
-        else if (selectedFromInventory)
-            useButton.interactable = true;
+        else
+        {
+            if (copyButton != null && copyButton.gameObject.activeSelf)
+                copyButton.gameObject.SetActive(false);
+            bool oneSelected = count == 1;
+            var btn = GetUseButton(_slotIndexInUse);
+            if (btn != null)
+                btn.interactable = oneSelected;
+        }
     }
 
-    // Shop buy button: add current shop consumable to player inventory (PlayerStats). Limit 2 for entire game.</summary>
-    public void PurchaseAndActivateCurrentShopConsumable()
+    public void PurchaseFromShop()
     {
         if (shop == null) shop = FindFirstObjectByType<Shop>();
-        if (shop == null || shop.consumableDrops == null || shop.consumableDrops.Count == 0)
-        {
-            Debug.LogWarning("[ConsumableEffectSystem] No consumable available in shop.");
-            return;
-        }
-
-        if (PlayerStatManager.Instance == null)
-        {
-            Debug.LogWarning("[ConsumableEffectSystem] PlayerStatManager.Instance is null; consumable not added.");
-            return;
-        }
-        if (!PlayerStatManager.Instance.AddConsumableToInventory(shop.consumableDrops[0]))
-            Debug.LogWarning("[ConsumableEffectSystem] Consumable inventory full (limit 2).");
+        if (shop == null || shop.consumableDrops == null || shop.consumableDrops.Count == 0) return;
+        if (PlayerStatManager.Instance == null) return;
+        PlayerStatManager.Instance.AddConsumableToInventory(shop.consumableDrops[0]);
     }
 
 
-    // Starts the immediate-use flow for a given consumable.
-    public void ActivateConsumable(Consumable consumable)
+    private void Activate(Consumable consumable)
     {
         if (consumable == null) return;
-
         activeConsumable = consumable;
-
-        // Hide shop UI while resolving the consumable.
-        // if (shopRoot != null)
-        //     // shopRoot.SetActive(false);
 
         if (deckManager == null)
             deckManager = DeckManager.Instance ?? FindFirstObjectByType<DeckManager>();
 
-        // Ensure a hand is drawn so the player can choose a tile.
-        if (deckManager != null)
-        {
-            var hand = deckManager.Hand;
-            if (hand == null || hand.Count == 0)
-            {
-                deckManager.drawHand();
-            }
-        }
-        // If this is a Heal consumable, we can immediately apply it without a tile choice.
-        if (consumable.equationType == "Heal")
+        if (deckManager != null && (deckManager.Hand == null || deckManager.Hand.Count == 0))
+            deckManager.drawHand();
+
+        if (IsEquationType(consumable, "Heal"))
         {
             ApplyHeal();
-            FinishConsumable();
+            Finish();
             return;
         }
 
-        // Otherwise we need a tile selection; show the Use button and wait for selection (1 tile for type, or 4 for Add discard phase).
         addConsumablePhase = 0;
         if (GameManager.Instance != null)
             GameManager.Instance.selecting = true;
-        if (useButton != null)
-            useButton.gameObject.SetActive(true);
     }
 
-    private void OnUseButtonClicked()
+    private static bool IsEquationType(Consumable c, string type)
     {
-        // If nothing active yet but an inventory item is selected, start the use flow (from racking scene).
+        return c != null && string.Equals(c.equationType, type, System.StringComparison.OrdinalIgnoreCase);
+    }
+
+    // Add-type consumables: pick 1 tile -> add 4 to front of deck -> pick 4 to discard -> draw 4 (Clone Machine, etc.).
+    private static bool IsAddType(Consumable c)
+    {
+        if (c == null || string.IsNullOrEmpty(c.equationType)) return false;
+        var eq = c.equationType.Trim();
+        return string.Equals(eq, "Add", System.StringComparison.OrdinalIgnoreCase)
+            || string.Equals(eq, "Clone", System.StringComparison.OrdinalIgnoreCase)
+            || string.Equals(eq, "Duplicate", System.StringComparison.OrdinalIgnoreCase);
+    }
+
+    private void UseSlot(int slotIndex)
+    {
+        var consumableAtSlot = ConsumableManager.Instance != null
+            ? ConsumableManager.Instance.GetAt(slotIndex)
+            : PlayerStatManager.Instance?.GetConsumableAt(slotIndex);
+
         if (activeConsumable == null)
         {
-            var selected = ConsumableManager.Instance?.GetSelected();
-            if (selected != null)
+            if (consumableAtSlot != null)
             {
-                ActivateConsumable(selected);
-                return;
+                _slotIndexInUse = slotIndex;
+                Activate(consumableAtSlot);
             }
             return;
         }
+        ConfirmTileSelection();
+    }
 
+    private void ConfirmTileSelection()
+    {
         if (deckManager == null) return;
         var sel = deckManager.selectedTiles;
         if (sel == null) return;
+        // Add/Clone flow uses Copy BTN (phase 0) and Discard button (phase 1), not Use.
+        if (IsAddType(activeConsumable)) return;
 
-        if (activeConsumable.equationType == "Add")
-        {
-            if (addConsumablePhase == 0)
-            {
-                if (sel.Count != 1) return;
-                var selectedGo = sel[0];
-                if (selectedGo == null) return;
-                var holder = selectedGo.GetComponent<MahjongTileHolder>();
-                var chosenTile = holder != null ? holder.TileData : null;
-                if (chosenTile == null) return;
-
-                // Add 4 copies to FRONT of deck so they are drawn next.
-                DeckMutationHelpers.AddCopiesToDeckFront(deckManager, chosenTile, 4);
-                addConsumablePhase = 1;
-                deckManager.selectedTiles.Clear();
-                deckManager.sortHand();
-                return;
-            }
-
-            if (addConsumablePhase == 1)
-            {
-                if (sel.Count != 4) return;
-                // Discard the 4 selected tiles, then draw 4 from deck (the 4 we added at front).
-                deckManager.discardTiles(new List<GameObject>(sel));
-                deckManager.drawHand(4);
-                FinishConsumable();
-                return;
-            }
-        }
-
-        // Non-Add consumables, or single-tile selection (Destroy, Enhance)
+        // Non-Add consumables: single-tile selection (Destroy, Enhance)
         if (sel.Count != 1) return;
         var go = sel[0];
         if (go == null) return;
@@ -185,65 +205,53 @@ public class ConsumableEffectSystem : MonoBehaviour
         var chosen = h != null ? h.TileData : null;
         if (chosen == null) return;
 
-        switch (activeConsumable.equationType)
-        {
-            case "Destroy":
-                DeckMutationHelpers.RemoveCopiesFromDeck(deckManager, chosen, 4);
-                break;
-            case "Enhance":
-                DeckMutationHelpers.EnhanceCopiesInDeckAndHand(deckManager, chosen, Edition.Ghost);
-                break;
-            case "Heal":
-                ApplyHeal();
-                break;
-            default:
-                Debug.LogWarning($"[ConsumableEffectSystem] Unknown equationType '{activeConsumable.equationType}'.");
-                break;
-        }
+        var eq = (activeConsumable.equationType ?? "").Trim();
+        if (string.Equals(eq, "Destroy", System.StringComparison.OrdinalIgnoreCase))
+            DeckMutationHelpers.RemoveCopiesFromDeck(deckManager, chosen, 4);
+        else if (string.Equals(eq, "Remove", System.StringComparison.OrdinalIgnoreCase))
+            DeckMutationHelpers.RemoveCopiesFromDeck(deckManager, chosen, int.MaxValue);
+        else if (string.Equals(eq, "Enhance", System.StringComparison.OrdinalIgnoreCase))
+            DeckMutationHelpers.EnhanceCopiesInDeckAndHand(deckManager, chosen, Edition.Ghost);
+        else if (string.Equals(eq, "Heal", System.StringComparison.OrdinalIgnoreCase))
+            ApplyHeal();
 
-        FinishConsumable();
+        Finish();
     }
 
     private void ApplyHeal()
     {
-        var stats = PlayerStatManager.Instance;
-        if (stats == null)
-        {
-            Debug.LogWarning("[ConsumableEffectSystem] Heal consumable used but PlayerStatManager.Instance was null.");
-            return;
-        }
-
-        // Healing by maxHealth will always clamp to full because Heal() enforces maxHealth.
-        stats.Heal(stats.maxHealth);
+        if (PlayerStatManager.Instance == null) return;
+        PlayerStatManager.Instance.Heal(PlayerStatManager.Instance.maxHealth);
     }
 
-    private void FinishConsumable()
+    private void Finish()
     {
         if (GameManager.Instance != null)
-            GameManager.Instance.selecting = false;
+            GameManager.Instance.selecting = true;
 
-        // Clear selection state and hide use button.
         if (deckManager != null && deckManager.selectedTiles != null)
         {
             deckManager.selectedTiles.Clear();
             deckManager.sortHand();
         }
 
-        if (useButton != null)
-        {
-            useButton.gameObject.SetActive(false);
-        }
-
-        // Show shop again (if in shop scene).
         if (shopRoot != null)
             shopRoot.SetActive(true);
+        if (copyButton != null)
+            copyButton.gameObject.SetActive(false);
 
-        // Discard used consumable from player stats inventory (at selected slot).
-        if (activeConsumable != null && ConsumableManager.Instance != null)
-            ConsumableManager.Instance.RemoveConsumableAt(ConsumableManager.Instance.SelectedIndex);
+        int slotToRemove = _slotIndexInUse >= 0 ? _slotIndexInUse : (ConsumableManager.Instance != null ? ConsumableManager.Instance.SelectedIndex : -1);
+        if (activeConsumable != null && slotToRemove >= 0)
+        {
+            if (ConsumableManager.Instance != null)
+                ConsumableManager.Instance.RemoveAt(slotToRemove);
+            else if (PlayerStatManager.Instance != null)
+                PlayerStatManager.Instance.RemoveConsumableAt(slotToRemove);
+        }
 
         activeConsumable = null;
         addConsumablePhase = 0;
+        _slotIndexInUse = -1;
     }
 }
 
@@ -304,11 +312,7 @@ public static class DeckMutationHelpers
         if (manager == null || identity == null || count <= 0) return;
 
         var deck = GetDeck(manager);
-        if (deck == null)
-        {
-            Debug.LogWarning("[DeckMutationHelpers] Could not access deck to add copies.");
-            return;
-        }
+        if (deck == null) return;
 
         for (int i = 0; i < count; i++)
         {
@@ -323,11 +327,7 @@ public static class DeckMutationHelpers
         if (manager == null || identity == null || count <= 0) return;
 
         var deck = GetDeck(manager);
-        if (deck == null)
-        {
-            Debug.LogWarning("[DeckMutationHelpers] Could not access deck to add copies at front.");
-            return;
-        }
+        if (deck == null) return;
 
         for (int i = 0; i < count; i++)
         {
@@ -343,11 +343,7 @@ public static class DeckMutationHelpers
         if (manager == null || identity == null || maxCount <= 0) return 0;
 
         var tiles = GetDeckTileList(manager);
-        if (tiles == null)
-        {
-            Debug.LogWarning("[DeckMutationHelpers] Could not access deck tile list to remove copies.");
-            return 0;
-        }
+        if (tiles == null) return 0;
 
         int removed = 0;
         for (int i = tiles.Count - 1; i >= 0 && removed < maxCount; i--)

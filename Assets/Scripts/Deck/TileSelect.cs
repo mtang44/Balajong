@@ -214,21 +214,19 @@ public class TileSelect : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
         }
     }
 
-    // Select the tile
+    // Select the tile (normal discard/check-rack selection, or consumable flow e.g. Add: pick 1 tile, then pick 4 to discard)
     void clicked()
     {
-        if(flowerTile) return; 
-        // Only process clicks if not dragging and in selection mode
-        if (GameManager.Instance.selecting && tileData != null)
-        {
-            if (deckManager.selectedTiles.Contains(gameObject))
-                removeFromSelection();
-            else
-            {
-                if (deckManager.selectedTiles.Count < deckManager.MAX_DISCARD_SELECTION)
-                    addToSelection();
-            }
-        }
+        if (flowerTile) return;
+        if (tileData == null) return;
+        bool inSelectionMode = (GameManager.Instance != null && GameManager.Instance.selecting)
+            || ConsumableEffectSystem.InTileSelectionPhase;
+        if (!inSelectionMode) return;
+
+        if (deckManager.selectedTiles.Contains(gameObject))
+            removeFromSelection();
+        else if (deckManager.selectedTiles.Count < deckManager.MAX_DISCARD_SELECTION)
+            addToSelection();
     }
     void addToSelection()
     {

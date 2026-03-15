@@ -7,6 +7,7 @@ public class JokerManager : MonoBehaviour
 {
     public static JokerManager Instance { get; private set; }
     public GameObject JokerUIPrefab;
+    GameObject JokerUIContainer;
     public List<string> jokers = new List<string>();
     public int currentJokers = 0;
     public int maxJokers = 5;
@@ -32,6 +33,10 @@ public class JokerManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
+    public void Start()
+    {
+        JokerUIContainer = JokerHolderUI.Instance.gameObject.transform.GetChild(0).gameObject;
     }
 
     public int numberOfActivations(string jokerName)

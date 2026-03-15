@@ -13,8 +13,8 @@ public class JokerManager : MonoBehaviour
     public int maxJokers = 5;
 
     private List<string> startingJokers = new List<string>();
-    private int startingCurrentJokers;
-    private int startingMaxJokers;
+    public int startingCurrentJokers;
+    public int startingMaxJokers;
 
     public int knightJokerBuff = 0;
     public int baggedJokerBuff = 0;

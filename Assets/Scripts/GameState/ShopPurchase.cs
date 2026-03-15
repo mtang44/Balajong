@@ -33,6 +33,7 @@ public class ShopPurchase : MonoBehaviour
     }
     public void purchaseJoker(int index)
     {
+        if(JokerManager.Instance.jokers.Count >= JokerManager.Instance.startingMaxJokers) return;
         if(checkForCash(ShopManager.GetComponent<Shop>().jokerDrops[index].price))
         {
             Debug.Log("Added Joker code: " + ShopManager.GetComponent<Shop>().jokerDrops[index].code);

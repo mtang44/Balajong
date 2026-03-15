@@ -42,8 +42,8 @@ public class DeckManager : MonoBehaviour
     }
     public void Start()
     {
-        int HAND_SIZE = 14 + JokerManager.Instance.numberOfActivations("spider");
-        int MAX_DISCARD_SELECTION = 5 + (3 * JokerManager.Instance.numberOfActivations("basket"));
+        HAND_SIZE = 14 + JokerManager.Instance.numberOfActivations("spider");
+        MAX_DISCARD_SELECTION = 5 + (3 * JokerManager.Instance.numberOfActivations("basket"));
     }
 
     public void forceNewLists()
@@ -85,8 +85,8 @@ public class DeckManager : MonoBehaviour
 
     public void drawHand(int count = 0)
     {
-        int HAND_SIZE = 14 + JokerManager.Instance.numberOfActivations("spider");
-        int MAX_DISCARD_SELECTION = 5 + (3 * JokerManager.Instance.numberOfActivations("basket"));
+        HAND_SIZE = 14 + JokerManager.Instance.numberOfActivations("spider");
+        MAX_DISCARD_SELECTION = 5 + (3 * JokerManager.Instance.numberOfActivations("basket"));
         if(count == 0) count = HAND_SIZE;
         for (int i = 0; i < count; i++)
         {

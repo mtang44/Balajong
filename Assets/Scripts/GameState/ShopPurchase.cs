@@ -1,3 +1,4 @@
+using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -6,10 +7,7 @@ public class ShopPurchase : MonoBehaviour
     public GameObject ShopTextPanel;
     public GameObject ShopManager;
     public GameObject Player;
-    public GameObject leftJokerBuyButton;
-    public GameObject rightJokerBuyButton;
-
-  
+ 
     public bool checkForCash(int cost)
     {
         if (PlayerStatManager.Instance.cash >= cost)
@@ -37,7 +35,8 @@ public class ShopPurchase : MonoBehaviour
     {
         if(checkForCash(ShopManager.GetComponent<Shop>().jokerDrops[index].price))
         {
-            Player.GetComponent<JokerManager>().jokers.Add(ShopManager.GetComponent<Shop>().jokerDrops[index].code);
+            Debug.Log("Added Joker code: " + ShopManager.GetComponent<Shop>().jokerDrops[index].code);
+            JokerManager.Instance.jokers.Add(ShopManager.GetComponent<Shop>().jokerDrops[index].code);
         }
 
     }

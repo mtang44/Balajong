@@ -728,9 +728,9 @@ public class ScoringManager : MonoBehaviour
     }
 
     // Gets the multiplier points from any joker activations that apply to melds.
-    int jokerMeldMultPoints(int og, Meld meld)
+    float jokerMeldMultPoints(float og, Meld meld)
     {
-        int acc = og;
+        float acc = og;
         bool dot = false;
         bool bam = false;
         bool crack = false;
@@ -798,12 +798,14 @@ public class ScoringManager : MonoBehaviour
         if (meld.Tiles == null || meld.Tiles.Count == 0) return 0;
 
         int sum = 0;
-        int multTotal = 1;
+        float multTotal = 1;
         float multMultTotal = 1;
         foreach (var t in meld.Tiles)
+        {
             sum += GetTileScore(t);
             multTotal = jokerMeldMultPoints(multTotal, meld);
             multMultTotal = jokerMeldMultMaxxingPoints(multMultTotal, meld);
+        }
 
         if (meld.Kind == MeldKind.Single && meld.Tiles.Count == 1)
             return sum;
@@ -858,17 +860,17 @@ public class ScoringManager : MonoBehaviour
         }
         if (meld.Kind == MeldKind.Chow && meld.Tiles.Count == 3)
         {
-            multTotal += 2;
+            multTotal += 3;
         }
         if (meld.Kind == MeldKind.Jog && meld.Tiles.Count == 4)
         {
-            multTotal += (Mathf.CeilToInt(sum * 3.5f)) - 1;
+            multTotal += 3.5f;
         }
         if (meld.Kind == MeldKind.Sprint && meld.Tiles.Count == 5)
         {
-            multTotal += 3;
+            multTotal += 4;
         }
-        return sum * (multTotal * (int)multMultTotal);
+        return sum * (int)(multTotal * multMultTotal);
     }
 
     private static List<MahjongTile> GetOrCreateHonorList(Dictionary<string, List<MahjongTile>> honorLists, string key)

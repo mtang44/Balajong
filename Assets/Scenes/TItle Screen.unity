@@ -21465,7 +21465,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 2.253357, y: 5.5474243}
+  m_AnchoredPosition: {x: 2.253296, y: 5.5474243}
   m_SizeDelta: {x: -340.27, y: -293.79382}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1466385368
@@ -29980,6 +29980,14 @@ PrefabInstance:
     - target: {fileID: 608205956180617561, guid: 53852f4d3b9f95a4bbcc77ce96485991, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4327031755066331354, guid: 53852f4d3b9f95a4bbcc77ce96485991, type: 3}
+      propertyPath: jokers.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4327031755066331354, guid: 53852f4d3b9f95a4bbcc77ce96485991, type: 3}
+      propertyPath: 'jokers.Array.data[0]'
+      value: green
       objectReference: {fileID: 0}
     - target: {fileID: 5328187807155830420, guid: 53852f4d3b9f95a4bbcc77ce96485991, type: 3}
       propertyPath: m_Name

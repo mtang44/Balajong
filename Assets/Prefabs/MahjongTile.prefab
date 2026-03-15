@@ -184,24 +184,88 @@ MonoBehaviour:
   hideWhenTileDataMissing: 1
   targetCanvas: {fileID: 0}
   worldCameraOverride: {fileID: 0}
-  worldOffset: {x: 0, y: 0.25, z: -10}
+  worldOffset: {x: 0, y: 0.33, z: -10}
   screenOffset: {x: 0, y: 0}
+  editionActiveScreenOffset: {x: 0, y: 92}
   horizontalEdgePadding: 16
-  panelSize: {x: 200, y: 50}
-  panelPadding: {x: 6, y: 6}
-  scalePanelToFitText: 1
-  maxAutoPanelWidth: 0
-  fontAsset: {fileID: 11400000, guid: 5293248ddbeac9344b20338543629bc0, type: 2}
-  fontSize: 32
-  fontStyle: 1
-  textAlignment: 514
-  textColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
-  autoSizeText: 1
-  autoSizeMin: 20
-  autoSizeMax: 32
-  backgroundColor: {r: 1, g: 1, b: 1, a: 1}
-  borderColor: {r: 0, g: 0, b: 0, a: 0.35}
-  borderThickness: 1
+  mainTooltipStyle:
+    panelSize: {x: 220, y: 52}
+    panelPadding: {x: 12, y: 8}
+    scalePanelToFitText: 1
+    maxAutoPanelWidth: 0
+    fontAsset: {fileID: 11400000, guid: 5293248ddbeac9344b20338543629bc0, type: 2}
+    fontSize: 24
+    fontStyle: 1
+    textAlignment: 514
+    textColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+    autoSizeText: 0
+    autoSizeMin: 14
+    autoSizeMax: 32
+    backgroundColor: {r: 1, g: 1, b: 1, a: 1}
+    borderColor: {r: 0, g: 0, b: 0, a: 0.35}
+    borderThickness: 3
+  faceValueTooltip:
+    isEnabled: 1
+    offsetFromMain: {x: 0, y: -64}
+    panelStyle:
+      panelSize: {x: 220, y: 52}
+      panelPadding: {x: 12, y: 8}
+      scalePanelToFitText: 1
+      maxAutoPanelWidth: 0
+      fontAsset: {fileID: 0}
+      fontSize: 24
+      fontStyle: 1
+      textAlignment: 514
+      textColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+      autoSizeText: 0
+      autoSizeMin: 14
+      autoSizeMax: 32
+      backgroundColor: {r: 1, g: 1, b: 1, a: 1}
+      borderColor: {r: 0, g: 0, b: 0, a: 0.35}
+      borderThickness: 1
+    showConnector: 0
+    connectorColor: {r: 0.27450982, g: 0.27450982, b: 0.27450982, a: 0.8}
+    connectorThickness: 80
+    connectorStartOffset: {x: 0, y: -26}
+    connectorEndOffset: {x: 0, y: 22}
+  faceValueTextFormat: +{0} Points
+  avoidSubTooltipOverlap: 1
+  subTooltipVerticalGap: 5
+  tooltipCornerRadius: 0
+  editionTooltip:
+    isEnabled: 1
+    offsetFromMain: {x: 0, y: -64}
+    panelStyle:
+      panelSize: {x: 220, y: 52}
+      panelPadding: {x: 12, y: 8}
+      scalePanelToFitText: 1
+      maxAutoPanelWidth: 0
+      fontAsset: {fileID: 11400000, guid: 5293248ddbeac9344b20338543629bc0, type: 2}
+      fontSize: 24
+      fontStyle: 1
+      textAlignment: 514
+      textColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+      autoSizeText: 0
+      autoSizeMin: 14
+      autoSizeMax: 32
+      backgroundColor: {r: 1, g: 1, b: 1, a: 1}
+      borderColor: {r: 0, g: 0, b: 0, a: 0.35}
+      borderThickness: 3
+    showConnector: 0
+    connectorColor: {r: 0.2735849, g: 0.2735849, b: 0.2735849, a: 0.8}
+    connectorThickness: 80
+    connectorStartOffset: {x: 0, y: -26}
+    connectorEndOffset: {x: 0, y: 22}
+  editionNameFontMultiplier: 1.3
+  hideEditionTooltipForBase: 1
+  useDefaultEditionDescriptionsWhenEmpty: 1
+  editionNameBadgePadding: {x: 10, y: 4}
+  editionNameDescriptionGap: 6
+  ghostEditionBgColor: {r: 0.12677999, g: 0.7264151, b: 0.5711104, a: 1}
+  enchantedEditionBgColor: {r: 0.39, g: 0.19, b: 0.58, a: 1}
+  crystalEditionBgColor: {r: 0.11, g: 0.37, b: 0.63, a: 1}
+  baseEditionBgColor: {r: 0, g: 0, b: 0, a: 0}
+  editionDescriptions: []
   useMouseHoverFallback: 0
 --- !u!65 &323555887727181619
 BoxCollider:

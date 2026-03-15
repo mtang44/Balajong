@@ -27260,6 +27260,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1085773698}
   m_CullTransparentMesh: 1
+--- !u!1 &1089051419
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1089051420}
+  m_Layer: 0
+  m_Name: Draw Origin
+  m_TagString: Untagged
+  m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1089051420
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1089051419}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2.868, y: 0.549, z: 19.574}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1089640149
 GameObject:
   m_ObjectHideFlags: 0
@@ -45905,6 +45936,7 @@ GameObject:
   - component: {fileID: 1907951512}
   - component: {fileID: 1907951513}
   - component: {fileID: 1907951514}
+  - component: {fileID: 1907951515}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -46008,7 +46040,9 @@ MonoBehaviour:
   fontSize: 1.4
   singlePopupTextSizeMultiplier: 0.5
   balajongPopupTextSizeMultiplier: 1.5
+  editionTextSizeMultiplier: 0.4
   handTypeTextColor: {r: 0.8301887, g: 0.16055535, b: 0.46156037, a: 1}
+  editionTextColor: {r: 0.8, g: 0.55, b: 1, a: 1}
   scoreTextColor: {r: 1, g: 0.85, b: 0.1, a: 1}
   popupWorldOffset: {x: 0, y: 0.3, z: -0.5}
   horizontalEdgePadding: 16
@@ -46020,10 +46054,52 @@ MonoBehaviour:
   pauseBetweenSections: 0
   singleTimingMultiplier: 0.35
   scoreLerpDuration: 0.2
+  pauseAfterEditionPopup: 0.1
+  pauseBeforeScore: 0.15
   tileHopHeight: 0.2
   tileHopDuration: 0.3
   tileHopSquashAmount: 0.5
   tileHopStretchAmount: 0.3
+--- !u!114 &1907951515
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1907951509}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da27aea99af5dff40990eab70e826bd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DrawVisualization
+  drawOrigin: {fileID: 1089051420}
+  dealDelay: 0.07
+  dealDuration: 0.25
+  arcHeight: 0.2
+  dealCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &1909647468
 GameObject:
   m_ObjectHideFlags: 0
@@ -50451,3 +50527,4 @@ SceneRoots:
   - {fileID: 175370141}
   - {fileID: 1907951510}
   - {fileID: 1282167544}
+  - {fileID: 1089051420}

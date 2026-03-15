@@ -166,6 +166,32 @@ public class ScoringManager : MonoBehaviour
         return acc;
     }
 
+    // Returns base tile face value only (no joker or edition modifiers).
+    public int GetTileFaceValue(MahjongTile tile)
+    {
+        if (tile == null) return 0;
+
+        switch (tile.TileType)
+        {
+            case TileType.Dots:
+                return GetSuitedValue(dotsValues, (int)tile.NumberedValue);
+            case TileType.Bam:
+                return GetSuitedValue(bamValues, (int)tile.NumberedValue);
+            case TileType.Crack:
+                return GetSuitedValue(crackValues, (int)tile.NumberedValue);
+            case TileType.Wind:
+                return GetWindValue(tile.WindValue);
+            case TileType.Dragon:
+                return GetDragonValue(tile.DragonValue);
+            case TileType.Flower:
+                return GetFlowerValue(tile.FlowerValue);
+            case TileType.Season:
+                return GetSeasonValue(tile.SeasonValue);
+            default:
+                return 0;
+        }
+    }
+
     private static int GetSuitedValue(int[] arr, int value)
     {
         if (value >= 1 && value <= 9 && arr != null && arr.Length > value) return arr[value];

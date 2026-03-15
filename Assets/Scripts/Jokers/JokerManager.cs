@@ -2,6 +2,7 @@ using UnityEngine;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine.UI;
 
 public class JokerManager : MonoBehaviour
 {
@@ -67,13 +68,13 @@ public class JokerManager : MonoBehaviour
         currentJokers = startingCurrentJokers;
         maxJokers = startingMaxJokers;
     }
-    public void AddJoker(string jokerName, string jokerCode, string jokerDescription, int price, Sprite jokerSprite)
+    public void AddJoker(string jokerName, string jokerCode, string jokerDescription, int price, Texture jokerTexture)
     {
         jokers.Add(jokerCode);
-        GameObject jokerUI = Instantiate(JokerUIPrefab, transform);
-        jokerUI.GetComponent<SpriteRenderer>().sprite = jokerSprite;
+        GameObject jokerUI = Instantiate(JokerUIPrefab, JokerUIContainer.transform);
+        jokerUI.GetComponentInChildren<RawImage>(true).texture = jokerTexture;
         JokerSelect jokerSelect = jokerUI.GetComponent<JokerSelect>();
         jokerSelect.Initialize(jokerCode, jokerName, jokerDescription, price);
     }
-    
+
 }

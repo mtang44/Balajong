@@ -36,8 +36,14 @@ public class ShopPurchase : MonoBehaviour
         if(JokerManager.Instance.jokers.Count >= JokerManager.Instance.startingMaxJokers) return;
         if(checkForCash(ShopManager.GetComponent<Shop>().jokerDrops[index].price))
         {
+            Jokers boughtJoker = ShopManager.GetComponent<Shop>().jokerDrops[index];
             Debug.Log("Added Joker code: " + ShopManager.GetComponent<Shop>().jokerDrops[index].code);
-            JokerManager.Instance.jokers.Add(ShopManager.GetComponent<Shop>().jokerDrops[index].code);
+            string name = boughtJoker.name;
+            string code = boughtJoker.code;
+            string description = boughtJoker.description;
+            int price =  boughtJoker.price;
+            Texture img = ShopManager.GetComponent<Shop>().imageArray[boughtJoker.imageIndex];
+            JokerManager.Instance.AddJoker(name, code, description,price, img);
         }
 
     }

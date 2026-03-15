@@ -13,7 +13,7 @@ public class Shop : MonoBehaviour
     public GameObject[] Shop_Item_TMPs; // array of TMP objects that will display to shop items. 
     public JokerSpawner jokerSpawner;
     [SerializeField]
-    Texture[] imageArray;
+    public Texture[] imageArray;
     public ConsumableGenerator consumableGenerator;
     public int jokerCount = 2;
     public int consumableCount = 1; 
@@ -38,7 +38,6 @@ public class Shop : MonoBehaviour
         consumableLootTable = consumableGenerator.GetLootTable();
         consumablelootRarities = consumableGenerator.GetLootRarities();
         consumableDrops = GenerateLoot<Consumable>(consumablelootRarities, consumableLootTable, consumableCount);
-        Debug.Log(consumableDrops.Count);
         displayConsumableOutput(consumableDrops);
     }
     public void RerollJokers()
@@ -47,7 +46,6 @@ public class Shop : MonoBehaviour
         jokerLootTable = jokerSpawner.GetLootTable();
         jokerlootRarities = jokerSpawner.GetLootRarities();
         jokerDrops = GenerateLoot<Jokers>(jokerlootRarities,jokerLootTable, jokerCount);
-        Debug.Log(jokerDrops.Count);
         displayJokerOutput(jokerDrops);
     }
    

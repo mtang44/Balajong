@@ -15,6 +15,7 @@ public class JokerHolderUI : MonoBehaviour
             Destroy(gameObject);
         }
     }
+    
     public void RemoveJoker(int index)
     {
         if (index < JokerManager.Instance.JokerUIContainer.transform.childCount)

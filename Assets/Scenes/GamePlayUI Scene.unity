@@ -2298,7 +2298,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 140.00003, y: -0.18261719}
+  m_AnchoredPosition: {x: 140, y: -0.18261719}
   m_SizeDelta: {x: -337.3352, y: -21.299927}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &97197786
@@ -4651,7 +4651,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 176.53452, y: -0.18261719}
+  m_AnchoredPosition: {x: 176.53448, y: -0.18261719}
   m_SizeDelta: {x: -412.6479, y: -21.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &245801838
@@ -4728,7 +4728,9 @@ MonoBehaviour:
   fontSize: 1.4
   singlePopupTextSizeMultiplier: 0.5
   balajongPopupTextSizeMultiplier: 1.5
+  editionTextSizeMultiplier: 0.65
   handTypeTextColor: {r: 0.8301887, g: 0.16055535, b: 0.46156037, a: 1}
+  editionTextColor: {r: 0.8, g: 0.55, b: 1, a: 1}
   scoreTextColor: {r: 1, g: 0.85, b: 0.1, a: 1}
   popupWorldOffset: {x: 0, y: 0.3, z: -0.5}
   horizontalEdgePadding: 16
@@ -4740,6 +4742,8 @@ MonoBehaviour:
   pauseBetweenSections: 0
   singleTimingMultiplier: 0.35
   scoreLerpDuration: 0.2
+  pauseAfterEditionPopup: 0.18
+  pauseBeforeScore: 0.15
   tileHopHeight: 0.2
   tileHopDuration: 0.3
   tileHopSquashAmount: 0.5
@@ -7097,7 +7101,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 176.53452, y: -0.18261719}
+  m_AnchoredPosition: {x: 176.53448, y: -0.18261719}
   m_SizeDelta: {x: -412.6479, y: -21.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &407215202
@@ -9866,6 +9870,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4327031755066331354, guid: 53852f4d3b9f95a4bbcc77ce96485991, type: 3}
+      propertyPath: JokerUIPrefab
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4327031755066331354, guid: 53852f4d3b9f95a4bbcc77ce96485991, type: 3}
+      propertyPath: JokerUIContainer
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 5328187807155830420, guid: 53852f4d3b9f95a4bbcc77ce96485991, type: 3}
       propertyPath: m_Name
       value: Player
@@ -11899,7 +11911,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 176.53452, y: -0.18261719}
+  m_AnchoredPosition: {x: 176.53448, y: -0.18261719}
   m_SizeDelta: {x: -412.6479, y: -21.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &774376884
@@ -12821,7 +12833,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 140.00003, y: -0.18261719}
+  m_AnchoredPosition: {x: 140, y: -0.18261719}
   m_SizeDelta: {x: -337.3352, y: -21.299927}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &813774471
@@ -15447,7 +15459,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 176.53452, y: -0.18261719}
+  m_AnchoredPosition: {x: 176.53448, y: -0.18261719}
   m_SizeDelta: {x: -412.6479, y: -21.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1107442546
@@ -17678,7 +17690,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 176.53452, y: -0.18261719}
+  m_AnchoredPosition: {x: 176.53448, y: -0.18261719}
   m_SizeDelta: {x: -412.6479, y: -21.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1261692026
@@ -18039,8 +18051,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 267.89, y: 335.33}
-  m_SizeDelta: {x: -673.94, y: -793.332}
+  m_AnchoredPosition: {x: 187.25, y: 352.009}
+  m_SizeDelta: {x: -835.22, y: -826.691}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1288015593
 GameObject:
@@ -24322,7 +24334,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 176.53452, y: -0.18261719}
+  m_AnchoredPosition: {x: 176.53448, y: -0.18261719}
   m_SizeDelta: {x: -412.6479, y: -21.3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1839861281

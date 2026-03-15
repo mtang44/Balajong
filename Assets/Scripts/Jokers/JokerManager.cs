@@ -7,7 +7,7 @@ public class JokerManager : MonoBehaviour
 {
     public static JokerManager Instance { get; private set; }
     public GameObject JokerUIPrefab;
-    GameObject JokerUIContainer;
+    public GameObject JokerUIContainer;
     public List<string> jokers = new List<string>();
     public int currentJokers = 0;
     public int maxJokers = 5;
@@ -67,12 +67,13 @@ public class JokerManager : MonoBehaviour
         currentJokers = startingCurrentJokers;
         maxJokers = startingMaxJokers;
     }
-    public void AddJoker(string jokerName, string jokerCode, string jokerDescription, Sprite jokerSprite)
+    public void AddJoker(string jokerName, string jokerCode, string jokerDescription, int price, Sprite jokerSprite)
     {
+        jokers.Add(jokerCode);
         GameObject jokerUI = Instantiate(JokerUIPrefab, transform);
         jokerUI.GetComponent<SpriteRenderer>().sprite = jokerSprite;
         JokerSelect jokerSelect = jokerUI.GetComponent<JokerSelect>();
-        jokerSelect.Initialize(jokerCode, jokerName, jokerDescription);
+        jokerSelect.Initialize(jokerCode, jokerName, jokerDescription, price);
     }
     
 }

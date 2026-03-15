@@ -23,6 +23,8 @@ public class SceneChanger : MonoBehaviour
     [SerializeField]
     private bool suppressTransitionOnInitialSceneLoad = true;
 
+    public float TransitionDuration => Mathf.Max(0f, transitionTime);
+
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
     private static void ResetStaticState()
     {

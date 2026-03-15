@@ -9,6 +9,10 @@ public class JokerManager : MonoBehaviour
     public int currentJokers = 0;
     public int maxJokers = 5;
 
+    private List<string> startingJokers = new List<string>();
+    private int startingCurrentJokers;
+    private int startingMaxJokers;
+
     public int knightJokerBuff = 0;
     public int baggedJokerBuff = 0;
 
@@ -18,12 +22,16 @@ public class JokerManager : MonoBehaviour
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
+            startingJokers = new List<string>(jokers);
+            startingCurrentJokers = currentJokers;
+            startingMaxJokers = maxJokers;
         }
         else
         {
             Destroy(gameObject);
         }
     }
+
     public int numberOfActivations(string jokerName)
     {
         if (jokers.Contains(jokerName))
@@ -35,5 +43,21 @@ public class JokerManager : MonoBehaviour
             return 1;
         }
         return 0;
+    }
+
+    public void ResetRunState()
+    {
+        if (jokers == null)
+        {
+            jokers = new List<string>();
+        }
+        else
+        {
+            jokers.Clear();
+        }
+
+        jokers.AddRange(startingJokers);
+        currentJokers = startingCurrentJokers;
+        maxJokers = startingMaxJokers;
     }
 }

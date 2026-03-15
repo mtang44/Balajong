@@ -18,7 +18,7 @@ public class CheckRackHandHoverPreview : MonoBehaviour, IPointerEnterHandler, IP
 
     [Header("Glint")]
     [SerializeField] private Color glintColor = new Color(1f, 0.96f, 0.82f, 1f);
-    [SerializeField, Range(0f, 1f)] private float tintStrength = 0.75f;
+    [SerializeField, Range(0f, 1f)] private float tintStrength = .9f;
     [SerializeField, Range(0f, 1f)] private float brightnessBoost = 0.14f;
     [SerializeField, Min(0.01f)] private float tileGlintDuration = 0.28f;
     [SerializeField, Min(0f)] private float tileGlintStagger = 0.05f;

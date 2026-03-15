@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
@@ -54,6 +55,10 @@ public class NodeMap : MonoBehaviour
     [SerializeField] private bool generateOnStart = true;
     [SerializeField] private bool loadFromRunState = true;
     [SerializeField] private int fixedSeed = -1;
+    [SerializeField] private bool animateRecentlyDefeatedNodeOnMapEntry = true;
+    [SerializeField] private bool recentlyDefeatedNodeUsesShadedVariant = true;
+    [SerializeField, Min(0f)] private float mapEntryDefeatAnimationDelay = 0f;
+    [SerializeField] private bool useSceneChangerTransitionTimeForMapEntryDelay = true;
 
     private NodeMapData mapData;
     private System.Random random;
@@ -63,6 +68,9 @@ public class NodeMap : MonoBehaviour
     private bool hasWarnedNonUiNodePrefab;
     private int cachedMapLayer = int.MinValue;
     private bool hasWarnedMissingMapLayer;
+    private bool hasWarnedMissingNodeDefeatAnimator;
+    private int pendingMapEntryDefeatAnimationNodeId = -1;
+    private Coroutine pendingMapEntryDefeatAnimationCoroutine;
 
     private readonly Dictionary<int, MapNodeData> nodesById = new Dictionary<int, MapNodeData>();
     private readonly Dictionary<int, MapNodeView> viewsById = new Dictionary<int, MapNodeView>();
@@ -196,11 +204,17 @@ public class NodeMap : MonoBehaviour
         GenerateNewMap();
     }
 
+    private void OnDisable()
+    {
+        StopPendingMapEntryDefeatAnimation();
+    }
+
     private void OnValidate()
     {
         cachedMapLayer = int.MinValue;
         hasWarnedMissingMapLayer = false;
         hasWarnedNonUiNodePrefab = false;
+        hasWarnedMissingNodeDefeatAnimator = false;
     }
 
     // Generates a new map using the current configuration and a random seed
@@ -219,6 +233,9 @@ public class NodeMap : MonoBehaviour
             Debug.LogError("NodeMap: Cannot generate map because config is missing.");
             return;
         }
+
+        pendingMapEntryDefeatAnimationNodeId = -1;
+        StopPendingMapEntryDefeatAnimation();
 
         random = new System.Random(seed);
         mapData = new NodeMapData
@@ -925,10 +942,13 @@ public class NodeMap : MonoBehaviour
     {
         foreach (KeyValuePair<int, MapNodeView> pair in viewsById)
         {
-            if (nodesById.TryGetValue(pair.Key, out MapNodeData node))
+            if (pair.Value == null || !nodesById.TryGetValue(pair.Key, out MapNodeData node))
             {
-                pair.Value.SetState(node.state);
+                continue;
             }
+
+            pair.Value.SetState(node.state);
+            ApplyNodeDefeatVisualState(node, pair.Value);
         }
 
         for (int i = 0; i < connectionVisuals.Count; i++)
@@ -951,6 +971,42 @@ public class NodeMap : MonoBehaviour
         }
 
         RefreshPlayerMarker();
+    }
+
+    private void ApplyNodeDefeatVisualState(MapNodeData node, MapNodeView view)
+    {
+        if (node == null || view == null)
+        {
+            return;
+        }
+
+        if (ShouldShowMapDeadVisual(node))
+        {
+            if (!view.SetEnemyAlreadyDefeatedVisual() && !hasWarnedMissingNodeDefeatAnimator)
+            {
+                hasWarnedMissingNodeDefeatAnimator = true;
+                Debug.LogWarning("NodeMap: Cleared map enemies need an Animator with MapDead/EnemyDead/Shaded bools to display defeat visuals.");
+            }
+
+            return;
+        }
+
+        view.SetEnemyAliveVisual();
+    }
+
+    private bool ShouldShowMapDeadVisual(MapNodeData node)
+    {
+        if (!IsEnemyNode(node) || node.state != NodeState.Cleared)
+        {
+            return false;
+        }
+
+        return node.id != pendingMapEntryDefeatAnimationNodeId;
+    }
+
+    private static bool IsEnemyNode(MapNodeData node)
+    {
+        return node != null && node.type != MapNodeType.Start;
     }
 
     private Sprite ResolveNodeSprite(MapNodeType type)
@@ -1244,16 +1300,116 @@ public class NodeMap : MonoBehaviour
     {
         if (!Application.isPlaying || !loadFromRunState || !MapRunState.Instance.HasMap)
         {
+            pendingMapEntryDefeatAnimationNodeId = -1;
             return false;
         }
 
-        mapData = MapRunState.Instance.CurrentMap;
+        MapRunState runState = MapRunState.Instance;
+        mapData = runState.CurrentMap;
+        pendingMapEntryDefeatAnimationNodeId = ResolveCurrentMapEntryDefeatAnimationNodeId();
+        if (!animateRecentlyDefeatedNodeOnMapEntry)
+        {
+            pendingMapEntryDefeatAnimationNodeId = -1;
+        }
+
         BuildLookup();
         UpdateNodeStates();
         RebuildVisuals();
         ComputePanBounds();
         CenterOnCurrentNode();
+        TryQueuePendingMapEntryDefeatAnimation();
         return true;
+    }
+
+    private int ResolveCurrentMapEntryDefeatAnimationNodeId()
+    {
+        if (mapData == null || mapData.currentNodeId < 0)
+        {
+            return -1;
+        }
+
+        MapNodeData currentNode = mapData.FindNodeById(mapData.currentNodeId);
+        if (!IsEnemyNode(currentNode) || currentNode.state != NodeState.Cleared)
+        {
+            return -1;
+        }
+
+        return currentNode.id;
+    }
+
+    private void TryQueuePendingMapEntryDefeatAnimation()
+    {
+        StopPendingMapEntryDefeatAnimation();
+
+        if (!Application.isPlaying || pendingMapEntryDefeatAnimationNodeId < 0)
+        {
+            return;
+        }
+
+        if (!nodesById.TryGetValue(pendingMapEntryDefeatAnimationNodeId, out MapNodeData node) ||
+            !IsEnemyNode(node) ||
+            node.state != NodeState.Cleared ||
+            !viewsById.ContainsKey(pendingMapEntryDefeatAnimationNodeId))
+        {
+            pendingMapEntryDefeatAnimationNodeId = -1;
+            return;
+        }
+
+        pendingMapEntryDefeatAnimationCoroutine = StartCoroutine(PlayPendingMapEntryDefeatAnimationAfterDelay());
+    }
+
+    private IEnumerator PlayPendingMapEntryDefeatAnimationAfterDelay()
+    {
+        float delay = ResolveMapEntryDefeatAnimationDelay();
+        if (delay > 0f)
+        {
+            yield return new WaitForSeconds(delay);
+        }
+
+        int nodeId = pendingMapEntryDefeatAnimationNodeId;
+        pendingMapEntryDefeatAnimationNodeId = -1;
+        pendingMapEntryDefeatAnimationCoroutine = null;
+
+        if (!nodesById.TryGetValue(nodeId, out MapNodeData node) ||
+            !IsEnemyNode(node) ||
+            node.state != NodeState.Cleared ||
+            !viewsById.TryGetValue(nodeId, out MapNodeView view) ||
+            view == null)
+        {
+            yield break;
+        }
+
+        if (!view.PlayEnemyDefeatVisual(recentlyDefeatedNodeUsesShadedVariant) && !hasWarnedMissingNodeDefeatAnimator)
+        {
+            hasWarnedMissingNodeDefeatAnimator = true;
+            Debug.LogWarning("NodeMap: Pending map-entry defeat animation could not play because the node view has no Animator.");
+        }
+    }
+
+    private float ResolveMapEntryDefeatAnimationDelay()
+    {
+        float delay = Mathf.Max(0f, mapEntryDefeatAnimationDelay);
+        if (!useSceneChangerTransitionTimeForMapEntryDelay)
+        {
+            return delay;
+        }
+
+        SceneChanger resolvedSceneChanger = ResolveSceneChanger();
+        if (resolvedSceneChanger == null)
+        {
+            return delay;
+        }
+
+        return Mathf.Max(delay, resolvedSceneChanger.TransitionDuration);
+    }
+
+    private void StopPendingMapEntryDefeatAnimation()
+    {
+        if (pendingMapEntryDefeatAnimationCoroutine != null)
+        {
+            StopCoroutine(pendingMapEntryDefeatAnimationCoroutine);
+            pendingMapEntryDefeatAnimationCoroutine = null;
+        }
     }
 
     private bool TryLoadEncounterScene()

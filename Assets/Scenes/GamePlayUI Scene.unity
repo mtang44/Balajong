@@ -1386,6 +1386,7 @@ MonoBehaviour:
   transitionCanvas: {fileID: 0}
   transitionCanvasCamera: {fileID: 0}
   autoConfigureTransitionCanvas: 1
+  suppressTransitionOnInitialSceneLoad: 1
 --- !u!1 &54280068
 GameObject:
   m_ObjectHideFlags: 0
@@ -5419,6 +5420,7 @@ MonoBehaviour:
   transitionCanvas: {fileID: 0}
   transitionCanvasCamera: {fileID: 0}
   autoConfigureTransitionCanvas: 1
+  suppressTransitionOnInitialSceneLoad: 1
 --- !u!1 &288053133
 GameObject:
   m_ObjectHideFlags: 0
@@ -6691,6 +6693,7 @@ MonoBehaviour:
   transitionCanvas: {fileID: 0}
   transitionCanvasCamera: {fileID: 0}
   autoConfigureTransitionCanvas: 1
+  suppressTransitionOnInitialSceneLoad: 1
 --- !u!1 &391966048
 GameObject:
   m_ObjectHideFlags: 0
@@ -19029,6 +19032,7 @@ MonoBehaviour:
   transitionCanvas: {fileID: 0}
   transitionCanvasCamera: {fileID: 0}
   autoConfigureTransitionCanvas: 1
+  suppressTransitionOnInitialSceneLoad: 1
 --- !u!1 &1369173446
 GameObject:
   m_ObjectHideFlags: 0
@@ -19776,6 +19780,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1426862218}
   m_CullTransparentMesh: 1
+--- !u!1 &1451844521 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5328187807155830420, guid: 53852f4d3b9f95a4bbcc77ce96485991, type: 3}
+  m_PrefabInstance: {fileID: 603724878}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1457366328
 GameObject:
   m_ObjectHideFlags: 0
@@ -21711,6 +21720,7 @@ MonoBehaviour:
   transitionCanvas: {fileID: 0}
   transitionCanvasCamera: {fileID: 0}
   autoConfigureTransitionCanvas: 1
+  suppressTransitionOnInitialSceneLoad: 1
 --- !u!1 &1611491138
 GameObject:
   m_ObjectHideFlags: 0
@@ -23187,7 +23197,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ConsumableEffectSystem
   shop: {fileID: 172759715}
   shopRoot: {fileID: 1520600119}
-  useButton: {fileID: 1209086560}
+  useButtonSlot0: {fileID: 0}
+  useButtonSlot1: {fileID: 0}
+  copyButton: {fileID: 0}
 --- !u!1 &1747686401
 GameObject:
   m_ObjectHideFlags: 0
@@ -25971,6 +25983,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ShopPurchase
   ShopTextPanel: {fileID: 537163357}
   ShopManager: {fileID: 172759713}
+  Player: {fileID: 1451844521}
+  leftJokerBuyButton: {fileID: 0}
+  rightJokerBuyButton: {fileID: 0}
 --- !u!4 &2001318430
 Transform:
   m_ObjectHideFlags: 0
@@ -28605,7 +28620,7 @@ SceneRoots:
   - {fileID: 172759714}
   - {fileID: 778435907}
   - {fileID: 2001318430}
-  - {fileID: 889560547}
   - {fileID: 664454921}
   - {fileID: 881099713}
   - {fileID: 2000466835}
+  - {fileID: 603724878}

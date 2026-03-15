@@ -6,42 +6,29 @@ using UnityEngine;
 
 public class ConsumableGenerator : MonoBehaviour
 {
-    [SerializeField]
-    public string LootTableFilePath;
+    [SerializeField] private string LootTableFilePath;
+    [SerializeField] private string[] Rarities = new string[] { "Common", "Uncommon", "Rare", "Epic", "Legendary" };
+    [SerializeField] private int[] Rarity_Weights = new int[] { 55, 30, 15, 6, 1 };
 
-    public string[] Rarities = new string[] {"Common","Uncommon","Rare","Epic","Legendary"};
-    [SerializeField]
-    public int[] Rarity_Weights = new int[] {55,30,15,6,1};
-
-    void Awake()
-    {  
-        Debug.Log("awake called in joker spawner");
-       LootChestGeneration();
-    }
-    void Update()
+    private void Awake()
     {
+        LoadLoot();
     }
 
-    // call this function to open chest 
-    // public void Open(){
-     
-	// }
-    // c# object that stores data about object created in csv file
+    // Loot table: rarity -> list of consumables. Rarities and weights for roll.
     
-    Dictionary <string, int> lootRarities = new  Dictionary<string, int>();
-    Dictionary <string, List<Consumable>> lootTable = new Dictionary<string, List<Consumable>>();
+    private Dictionary<string, int> lootRarities = new Dictionary<string, int>();
+    private Dictionary<string, List<Consumable>> lootTable = new Dictionary<string, List<Consumable>>();
     
    
 
     // at start of game read from joker csv file and creates a list of Joker Objects to use later for loot generation.   
-    public void LootChestGeneration()
+    private void LoadLoot()
     {
-        Debug.Log("Reading from csv file");
-        lootTable = insertCustomLootTable(LootTableFilePath);
-        lootRarities = insertCustomRarities(Rarities, Rarity_Weights); 
+        lootTable = LoadLootTable(LootTableFilePath);
+        lootRarities = LoadRarities(Rarities, Rarity_Weights);
     }
-    // This function allows for custom rarities that correspond to the loot table .csv file's rarities, as well as the corresponding weights of each rarity. 
-    public Dictionary<string, int> insertCustomRarities(string[] rarities, int[]weights)
+    private Dictionary<string, int> LoadRarities(string[] rarities, int[] weights)
     {
         Dictionary<string, int> customRarities = new Dictionary<string, int>();
         if(rarities.Length != weights.Length)
@@ -56,9 +43,7 @@ public class ConsumableGenerator : MonoBehaviour
         return customRarities;
     }
 
-    //Takes in .csv file path and parses it into a custom loot table dictionary
-    // outputs a dictionary storing the string of the rarity category, and a list of objects that exist within that rarity
-    public Dictionary<string, List<Consumable>> insertCustomLootTable(string filePath)
+    private Dictionary<string, List<Consumable>> LoadLootTable(string filePath)
     {
         string path = filePath;
         StreamReader reader;
@@ -105,9 +90,8 @@ public class ConsumableGenerator : MonoBehaviour
         }
     }
 
-    public Dictionary<string, List<Consumable>>  GetLootTable()
+    public Dictionary<string, List<Consumable>> GetLootTable()
     {
-        Debug.Log(lootTable);
         return lootTable;
     }
     public Dictionary<string,int> GetLootRarities()

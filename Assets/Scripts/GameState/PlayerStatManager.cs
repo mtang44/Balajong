@@ -29,10 +29,16 @@ public class PlayerStatManager : MonoBehaviour
             startingMaxHealth = maxHealth;
             startingCash = cash;
         }
-        else
+        else if (Instance != this)
         {
             Destroy(gameObject);
         }
+    }
+
+    void OnDestroy()
+    {
+        if (Instance == this)
+            Instance = null;
     }
 
     void Start()

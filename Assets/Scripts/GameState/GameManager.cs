@@ -92,11 +92,11 @@ public class GameManager : MonoBehaviour
     private void UpdateActionButtons()
     {
         bool hasSelection = HasAnySelectedTile();
-        // Disable Discard/Check Rack while consumable tile-selection is active (Remove/Enhance/Add flow) so they don't conflict.
-        bool consumableFlowActive = ConsumableEffectSystem.IsInConsumableTileSelectionPhase;
+        bool consumableFlowActive = ConsumableEffectSystem.InTileSelectionPhase;
         bool canUseActions = selecting && currentState == GameState.Select && !consumableFlowActive;
+        bool consumableDiscardPhase = ConsumableEffectSystem.InAddDiscardPhase && ConsumableEffectSystem.HasFourSelected;
 
-        bool canDiscard = canUseActions && hasSelection;
+        bool canDiscard = (canUseActions && hasSelection) || consumableDiscardPhase;
         bool canCheckRack = canUseActions && !hasSelection;
 
         ApplyButtonState(discardButton, ref discardButtonCanvasGroup, canDiscard);
@@ -443,6 +443,11 @@ public class GameManager : MonoBehaviour
     // Public method for UI button to trigger discard
     public void OnDiscardButtonPressed()
     {
+        if (ConsumableEffectSystem.InAddDiscardPhase && ConsumableEffectSystem.HasFourSelected && ConsumableEffectSystem.Instance != null)
+        {
+            ConsumableEffectSystem.Instance.ConfirmAddDiscard();
+            return;
+        }
         if (selecting && HasAnySelectedTile())
         {
             selecting = false;

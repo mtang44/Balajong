@@ -19,11 +19,7 @@ public class ConsumableInventoryUI : MonoBehaviour
 
     private void Start()
     {
-        if (ConsumableManager.Instance == null)
-        {
-            Debug.LogWarning("[ConsumableInventoryUI] ConsumableManager.Instance is null; add ConsumableManager to RackingScene.");
-            return;
-        }
+        if (ConsumableManager.Instance == null) return;
 
         ConsumableManager.Instance.InventoryChanged += Refresh;
         ConsumableManager.Instance.SelectionChanged += OnSelectionChanged;

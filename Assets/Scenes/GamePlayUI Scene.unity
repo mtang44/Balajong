@@ -1386,6 +1386,7 @@ MonoBehaviour:
   transitionCanvas: {fileID: 0}
   transitionCanvasCamera: {fileID: 0}
   autoConfigureTransitionCanvas: 1
+  suppressTransitionOnInitialSceneLoad: 1
 --- !u!1 &54280068
 GameObject:
   m_ObjectHideFlags: 0
@@ -4668,6 +4669,138 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 245801836}
   m_CullTransparentMesh: 1
+--- !u!1 &250075004
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 250075009}
+  - component: {fileID: 250075008}
+  - component: {fileID: 250075007}
+  - component: {fileID: 250075006}
+  - component: {fileID: 250075005}
+  m_Layer: 0
+  m_Name: GameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &250075005
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 250075004}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a4e20d97d563794ca8a40a97e4a296d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ScoreVisualization
+  fontAsset: {fileID: 11400000, guid: 5293248ddbeac9344b20338543629bc0, type: 2}
+  fontSize: 1.4
+  singlePopupTextSizeMultiplier: 0.5
+  balajongPopupTextSizeMultiplier: 1.5
+  handTypeTextColor: {r: 0.8301887, g: 0.16055535, b: 0.46156037, a: 1}
+  scoreTextColor: {r: 1, g: 0.85, b: 0.1, a: 1}
+  popupWorldOffset: {x: 0, y: 0.3, z: -0.5}
+  horizontalEdgePadding: 16
+  popupRiseDistance: 1
+  popupLifetime: 1
+  delayPerTile: 0
+  pauseAfterMeld: 0.35
+  pauseAfterBonus: 0
+  pauseBetweenSections: 0
+  singleTimingMultiplier: 0.35
+  scoreLerpDuration: 0.2
+  tileHopHeight: 0.2
+  tileHopDuration: 0.3
+  tileHopSquashAmount: 0.5
+  tileHopStretchAmount: 0.3
+--- !u!114 &250075006
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 250075004}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f6ceff80fbccd345ba845d0d2696d58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyManager
+--- !u!114 &250075007
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 250075004}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed579a0fd6a92b041b60ec799defb00c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ScoringManager
+  logScoringDetails: 0
+  handInfoTextObject: {fileID: 0}
+  autoUpdateHandInfo: 1
+  showTotal: 1
+  dotsValues: 00000000000000000000000000000000000000000000000000000000000000000000000000000000
+  bamValues: 00000000000000000000000000000000000000000000000000000000000000000000000000000000
+  crackValues: 00000000000000000000000000000000000000000000000000000000000000000000000000000000
+  windValues: 00000000000000000000000000000000
+  dragonValues: 000000000000000000000000
+  flowerValues: 00000000000000000000000000000000
+  seasonValues: 00000000000000000000000000000000
+--- !u!114 &250075008
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 250075004}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f8f39418fce27049a9db577d005a70a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GameManager
+  encounterFlowManager: {fileID: 0}
+  currentState: 0
+  selecting: 0
+  maxDiscards: 3
+  currentDiscards: 0
+  score: 0
+  discardButton: {fileID: 0}
+  checkRackButton: {fileID: 0}
+  discardButtonCanvasGroup: {fileID: 0}
+  checkRackButtonCanvasGroup: {fileID: 0}
+  enabledButtonAlpha: 1
+  disabledButtonAlpha: 0.7
+  checkRackHoverGlintColor: {r: 1, g: 0.9111947, b: 0.6, a: 1}
+  discardHoverGlintColor: {r: 1, g: 0.6009095, b: 0.5613208, a: 1}
+  normalBattlePayout: 5
+  eliteBattlePayout: 7
+  bossBattlePayout: 10
+  cashLerpDuration: 0.5
+--- !u!4 &250075009
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 250075004}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &261221931
 GameObject:
   m_ObjectHideFlags: 0
@@ -5419,6 +5552,7 @@ MonoBehaviour:
   transitionCanvas: {fileID: 0}
   transitionCanvasCamera: {fileID: 0}
   autoConfigureTransitionCanvas: 1
+  suppressTransitionOnInitialSceneLoad: 1
 --- !u!1 &288053133
 GameObject:
   m_ObjectHideFlags: 0
@@ -6691,6 +6825,7 @@ MonoBehaviour:
   transitionCanvas: {fileID: 0}
   transitionCanvasCamera: {fileID: 0}
   autoConfigureTransitionCanvas: 1
+  suppressTransitionOnInitialSceneLoad: 1
 --- !u!1 &391966048
 GameObject:
   m_ObjectHideFlags: 0
@@ -19029,6 +19164,7 @@ MonoBehaviour:
   transitionCanvas: {fileID: 0}
   transitionCanvasCamera: {fileID: 0}
   autoConfigureTransitionCanvas: 1
+  suppressTransitionOnInitialSceneLoad: 1
 --- !u!1 &1369173446
 GameObject:
   m_ObjectHideFlags: 0
@@ -21711,6 +21847,7 @@ MonoBehaviour:
   transitionCanvas: {fileID: 0}
   transitionCanvasCamera: {fileID: 0}
   autoConfigureTransitionCanvas: 1
+  suppressTransitionOnInitialSceneLoad: 1
 --- !u!1 &1611491138
 GameObject:
   m_ObjectHideFlags: 0
@@ -23187,7 +23324,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ConsumableEffectSystem
   shop: {fileID: 172759715}
   shopRoot: {fileID: 1520600119}
-  useButton: {fileID: 1209086560}
+  useButtonSlot0: {fileID: 0}
+  useButtonSlot1: {fileID: 0}
+  copyButton: {fileID: 0}
 --- !u!1 &1747686401
 GameObject:
   m_ObjectHideFlags: 0
@@ -28605,7 +28744,8 @@ SceneRoots:
   - {fileID: 172759714}
   - {fileID: 778435907}
   - {fileID: 2001318430}
-  - {fileID: 889560547}
   - {fileID: 664454921}
   - {fileID: 881099713}
   - {fileID: 2000466835}
+  - {fileID: 603724878}
+  - {fileID: 250075009}

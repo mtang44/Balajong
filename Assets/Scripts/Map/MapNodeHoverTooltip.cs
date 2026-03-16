@@ -358,7 +358,7 @@ public class MapNodeHoverTooltip : MonoBehaviour, IPointerEnterHandler, IPointer
             return;
         }
 
-        tooltipTypeText.text = $"Node Type: {GetNodeTypeDisplayName(nodeType)}";
+        tooltipTypeText.text = $"{GetNodeTypeDisplayName(nodeType)}";
         tooltipEnemyNameText.text = $"Enemy Name: {enemyNameText}";
         tooltipHealthText.text = $"Enemy Health: {enemyHealthText}";
         tooltipPayoutText.text = $"Battle Payout: {battlePayoutText}";

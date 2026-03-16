@@ -12,11 +12,9 @@ public class JokerManager : MonoBehaviour
     public GameObject JokerUIPrefab;
     public GameObject JokerUIContainer;
     public List<string> jokers = new List<string>();
-    public int currentJokers = 0;
     public int maxJokers = 5;
 
     private List<string> startingJokers = new List<string>();
-    public int startingCurrentJokers;
     public int startingMaxJokers;
 
     public int knightJokerBuff = 0;
@@ -29,7 +27,6 @@ public class JokerManager : MonoBehaviour
             Instance = this;
             DontDestroyOnLoad(gameObject);
             startingJokers = new List<string>(jokers);
-            startingCurrentJokers = currentJokers;
             startingMaxJokers = maxJokers;
         }
         else
@@ -67,7 +64,6 @@ public class JokerManager : MonoBehaviour
         }
 
         jokers.AddRange(startingJokers);
-        currentJokers = startingCurrentJokers;
         maxJokers = startingMaxJokers;
     }
     public void AddJoker(string jokerName, string jokerCode, string jokerDescription, int price, Texture jokerTexture)

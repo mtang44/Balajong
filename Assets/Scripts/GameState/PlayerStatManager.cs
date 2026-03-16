@@ -116,7 +116,13 @@ public class PlayerStatManager : MonoBehaviour
     }
     public void updateTheMax()
     {
+        int prevHealth = maxHealth;
         maxHealth = 4 + (3 * JokerManager.Instance.numberOfActivations("medic"));
+        if(maxHealth != prevHealth)
+        {
+            currentHealth = currentHealth + (3 * JokerManager.Instance.numberOfActivations("medic"));
+        }
+        
     }
 }
 

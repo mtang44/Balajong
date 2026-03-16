@@ -4352,18 +4352,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 453824314}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!114 &234494396
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4813,6 +4801,7 @@ MonoBehaviour:
   eliteBattlePayout: 7
   bossBattlePayout: 10
   cashLerpDuration: 0.5
+  skipTileDraws: 1
 --- !u!4 &250075009
 Transform:
   m_ObjectHideFlags: 0
@@ -8734,7 +8723,6 @@ GameObject:
   - component: {fileID: 537163358}
   - component: {fileID: 537163360}
   - component: {fileID: 537163359}
-  - component: {fileID: 537163361}
   m_Layer: 5
   m_Name: Currency TMP
   m_TagString: Untagged
@@ -8861,18 +8849,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 537163357}
   m_CullTransparentMesh: 1
---- !u!114 &537163361
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 537163357}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1a63e465c7aa1074f93f2c28b07833f1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::UpdateCashOnEnable
 --- !u!1 &537390167
 GameObject:
   m_ObjectHideFlags: 0
@@ -16206,6 +16182,57 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1143309577}
   m_CullTransparentMesh: 1
+--- !u!1 &1156448484
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1156448486}
+  - component: {fileID: 1156448485}
+  m_Layer: 0
+  m_Name: StatsUpdater
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1156448485
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1156448484}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78cab8e4349e0fe45b812229ee6cd13d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::StatsUpdater
+  discard: {fileID: 0}
+  score: {fileID: 0}
+  scoreThreshold: {fileID: 0}
+  healthSlider: {fileID: 205769285}
+  winScreen: {fileID: 0}
+  loseScreen: {fileID: 0}
+  cash: {fileID: 537163357}
+--- !u!4 &1156448486
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1156448484}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.26133, y: -0, z: 35.55808}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1163412648
 GameObject:
   m_ObjectHideFlags: 0
@@ -26084,6 +26111,9 @@ MonoBehaviour:
   ShopTextPanel: {fileID: 537163357}
   ShopManager: {fileID: 172759713}
   Player: {fileID: 0}
+  jokerPanels:
+  - {fileID: 296444833}
+  - {fileID: 453824314}
 --- !u!4 &2001318430
 Transform:
   m_ObjectHideFlags: 0
@@ -28683,7 +28713,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2163456058674238463, guid: 2c55e2a91a23ea0449d70d0ab8c59146, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2163456058674238463, guid: 2c55e2a91a23ea0449d70d0ab8c59146, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
@@ -28775,3 +28805,4 @@ SceneRoots:
   - {fileID: 2000466835}
   - {fileID: 603724878}
   - {fileID: 250075009}
+  - {fileID: 1156448486}

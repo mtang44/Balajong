@@ -101,7 +101,7 @@ public class GameManager : MonoBehaviour
         bool canUseActions = selecting && currentState == GameState.Select && !consumableFlowActive;
         bool consumableDiscardPhase = ConsumableEffectSystem.InAddDiscardPhase && ConsumableEffectSystem.HasFourSelected;
 
-        bool canDiscard = (canUseActions && hasSelection) || consumableDiscardPhase;
+        bool canDiscard = ((canUseActions && hasSelection) || consumableDiscardPhase) && maxDiscards > currentDiscards;
         bool canCheckRack = canUseActions && !hasSelection;
 
         ApplyButtonState(discardButton, ref discardButtonCanvasGroup, canDiscard);

@@ -1,12 +1,14 @@
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class ShopPurchase : MonoBehaviour
 {
     public GameObject ShopTextPanel;
     public GameObject ShopManager;
     public GameObject Player;
+    public List<GameObject> jokerPanels = new List<GameObject>();
  
     public bool checkForCash(int cost)
     {
@@ -14,6 +16,7 @@ public class ShopPurchase : MonoBehaviour
         {
             PlayerStatManager.Instance.cash -= cost;
             Debug.Log("Purchase successful! Remaining cash: $" + PlayerStatManager.Instance.cash);
+            StatsUpdater.Instance.UpdateCash(PlayerStatManager.Instance.cash);
             return true;
         }
         else
@@ -27,6 +30,10 @@ public class ShopPurchase : MonoBehaviour
         int rerollCost = 5;
         if(checkForCash(rerollCost))
         {
+            foreach(GameObject panel in jokerPanels)
+            {
+                panel.SetActive(true);
+            }
             ShopManager.GetComponent<Shop>().RerollJokers();
         }
     }
@@ -35,6 +42,7 @@ public class ShopPurchase : MonoBehaviour
         if(JokerManager.Instance.jokers.Count >= JokerManager.Instance.startingMaxJokers) return;
         if(checkForCash(ShopManager.GetComponent<Shop>().jokerDrops[index].price))
         {
+            disableIndex(index);
             Jokers boughtJoker = ShopManager.GetComponent<Shop>().jokerDrops[index];
             Debug.Log("Added Joker code: " + ShopManager.GetComponent<Shop>().jokerDrops[index].code);
             string name = boughtJoker.name;
@@ -45,5 +53,9 @@ public class ShopPurchase : MonoBehaviour
             JokerManager.Instance.AddJoker(name, code, description,price, img);
         }
 
+    }
+    public void disableIndex(int index)
+    {
+        jokerPanels[index].SetActive(false);
     }
 }

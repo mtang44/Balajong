@@ -8,6 +8,9 @@ TagManager:
   - CanvasCamera
   - TileHolder
   - UICanvas
+  - Info
+  - StatsUpdater
+  - TransitionManager
   layers:
   - Default
   - TransparentFX
@@ -16,7 +19,7 @@ TagManager:
   - Water
   - UI
   - Transition Tile
-  - 
+  - Joker
   - 
   - 
   - 

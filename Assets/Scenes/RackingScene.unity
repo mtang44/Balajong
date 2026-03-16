@@ -23659,7 +23659,7 @@ GameObject:
   - component: {fileID: 933034593}
   m_Layer: 5
   m_Name: Hand Info Container
-  m_TagString: Untagged
+  m_TagString: Info
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -31907,7 +31907,7 @@ GameObject:
   - component: {fileID: 1244693142}
   m_Layer: 5
   m_Name: Run Info Container
-  m_TagString: Untagged
+  m_TagString: Info
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -44274,6 +44274,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: TransitionManager
       objectReference: {fileID: 0}
+    - target: {fileID: 4582402837353464211, guid: 1fd3c9ba346c1f942bf498fe1298071c, type: 3}
+      propertyPath: m_TagString
+      value: TransitionManager
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -46097,6 +46101,7 @@ MonoBehaviour:
   eliteBattlePayout: 7
   bossBattlePayout: 10
   cashLerpDuration: 0.5
+  skipTileDraws: 0
 --- !u!114 &1907951512
 MonoBehaviour:
   m_ObjectHideFlags: 0

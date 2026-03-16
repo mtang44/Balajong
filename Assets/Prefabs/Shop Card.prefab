@@ -654,7 +654,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1024222829880254743
 RectTransform:
   m_ObjectHideFlags: 0
@@ -675,7 +675,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -207, y: -9}
+  m_AnchoredPosition: {x: 224.8, y: -9}
   m_SizeDelta: {x: 135.3359, y: 23.56601}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8853981064485052923
@@ -923,7 +923,7 @@ GameObject:
   - component: {fileID: 708616891620641032}
   - component: {fileID: 3075651298870472658}
   m_Layer: 5
-  m_Name: Card Slot 1
+  m_Name: Shop Card
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

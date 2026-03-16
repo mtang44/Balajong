@@ -4290,7 +4290,8 @@ GameObject:
   m_Component:
   - component: {fileID: 685837124}
   - component: {fileID: 685837125}
-  m_Layer: 5
+  - component: {fileID: 685837126}
+  m_Layer: 7
   m_Name: JokerHolder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4342,6 +4343,20 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &685837126
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 685837123}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 344a92b0ff5897b4aa1b36d97e282cc8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DeactivateOnObjectActivate
+  watchedTags:
+  - Info
 --- !u!1 &714763451
 GameObject:
   m_ObjectHideFlags: 0
@@ -10607,7 +10622,8 @@ GameObject:
   - component: {fileID: 1795479457}
   - component: {fileID: 1795479461}
   - component: {fileID: 1795479462}
-  m_Layer: 5
+  - component: {fileID: 1795479463}
+  m_Layer: 7
   m_Name: JokerCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10717,6 +10733,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1795479456}
   m_CullTransparentMesh: 1
+--- !u!114 &1795479463
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1795479456}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c202e7342e94194483143b6c71533bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DeactivateOnScene
+  excludedSceneNames:
+  - MapScene
 --- !u!1 &1800983333
 GameObject:
   m_ObjectHideFlags: 0
@@ -12837,6 +12867,10 @@ PrefabInstance:
     - target: {fileID: 4582402837353464211, guid: 1fd3c9ba346c1f942bf498fe1298071c, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4582402837353464211, guid: 1fd3c9ba346c1f942bf498fe1298071c, type: 3}
+      propertyPath: m_TagString
+      value: TransitionManager
       objectReference: {fileID: 0}
     - target: {fileID: 6785085114308686253, guid: 1fd3c9ba346c1f942bf498fe1298071c, type: 3}
       propertyPath: m_Layer

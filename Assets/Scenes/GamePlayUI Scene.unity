@@ -12082,6 +12082,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: TransitionManager
       objectReference: {fileID: 0}
+    - target: {fileID: 4582402837353464211, guid: 1fd3c9ba346c1f942bf498fe1298071c, type: 3}
+      propertyPath: m_TagString
+      value: TransitionManager
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -16206,7 +16210,7 @@ GameObject:
   - component: {fileID: 1156448485}
   m_Layer: 0
   m_Name: StatsUpdater
-  m_TagString: Untagged
+  m_TagString: StatsUpdater
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -27387,7 +27391,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -201.23499, y: 8.229996}
+  m_AnchoredPosition: {x: -214.79999, y: 8.229996}
   m_SizeDelta: {x: 148.87, y: 63.593}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2089748905
@@ -28698,7 +28702,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1024222829880254743, guid: 2c55e2a91a23ea0449d70d0ab8c59146, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -205.87201
+      value: -219.43707
       objectReference: {fileID: 0}
     - target: {fileID: 1024222829880254743, guid: 2c55e2a91a23ea0449d70d0ab8c59146, type: 3}
       propertyPath: m_AnchoredPosition.y

@@ -131,7 +131,7 @@ GameObject:
   - component: {fileID: 58361565}
   m_Layer: 0
   m_Name: StatsUpdater
-  m_TagString: Untagged
+  m_TagString: StatsUpdater
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1249,6 +1249,10 @@ PrefabInstance:
     - target: {fileID: 4582402837353464211, guid: 1fd3c9ba346c1f942bf498fe1298071c, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4582402837353464211, guid: 1fd3c9ba346c1f942bf498fe1298071c, type: 3}
+      propertyPath: m_TagString
+      value: TransitionManager
       objectReference: {fileID: 0}
     - target: {fileID: 6785085114308686253, guid: 1fd3c9ba346c1f942bf498fe1298071c, type: 3}
       propertyPath: m_Layer

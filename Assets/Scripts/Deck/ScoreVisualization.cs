@@ -145,7 +145,20 @@ public class ScoreVisualization : MonoBehaviour
                 hasTriggerKind &&
                 triggerKind == ScoringManager.MeldKind.Single;
 
-            float stepDelay = delayPerTile * (isSingleTrigger ? singleTimingMultiplier : 1f);
+            List<Edition> triggerEditions = null;
+            bool hasNonBaseEditions = false;
+            if (slotScore[i] > 0 && triggerMelds.TryGetValue(i, out ScoringManager.Meld triggerMeld))
+            {
+                triggerEditions = GetNonBaseEditions(triggerMeld);
+                hasNonBaseEditions = triggerEditions.Count > 0;
+            }
+
+            float triggerTimingMultiplier =
+                (isSingleTrigger && !hasNonBaseEditions)
+                    ? singleTimingMultiplier
+                    : 1f;
+
+            float stepDelay = delayPerTile * triggerTimingMultiplier;
             if (stepDelay > 0f)
             {
                 yield return new WaitForSeconds(stepDelay);
@@ -166,10 +179,9 @@ public class ScoreVisualization : MonoBehaviour
                 SpawnRawTextPopup(spawnPos, handType, handTypeTextColor, popupTextSizeMultiplier);
 
                 // 2. Non-base edition labels, one after another
-                if (triggerMelds.TryGetValue(i, out ScoringManager.Meld thisMeld))
+                if (triggerEditions != null)
                 {
-                    List<Edition> editions = GetNonBaseEditions(thisMeld);
-                    foreach (Edition ed in editions)
+                    foreach (Edition ed in triggerEditions)
                     {
                         yield return new WaitForSeconds(pauseAfterEditionPopup);
                         SpawnRawTextPopup(spawnPos, GetEditionDisplayName(ed), editionTextColor, editionTextSizeMultiplier);
@@ -177,15 +189,16 @@ public class ScoreVisualization : MonoBehaviour
                 }
 
                 // Always leave a beat before score so type/score never overlap.
-                if (pauseBeforeScore > 0f)
+                float preScorePause = pauseBeforeScore * triggerTimingMultiplier;
+                if (preScorePause > 0f)
                 {
-                    yield return new WaitForSeconds(pauseBeforeScore);
+                    yield return new WaitForSeconds(preScorePause);
                 }
 
                 // 3. Score popup
                 SpawnRawTextPopup(spawnPos, $"+{slotScore[i]}", scoreTextColor, popupTextSizeMultiplier);
 
-                float pauseDuration = pauseAfterMeld * (isSingleTrigger ? singleTimingMultiplier : 1f);
+                float pauseDuration = pauseAfterMeld * triggerTimingMultiplier;
                 yield return LerpScoreAndWait(runningScore, slotScore[i], pauseDuration);
             }
         }

@@ -55,6 +55,7 @@ public class ConsumableGenerator : MonoBehaviour
             {
                 reader.ReadLine(); // skip header line
             }
+            int imageIndex = 0;
             while(!reader.EndOfStream)
             {
                 var line = reader.ReadLine();
@@ -65,8 +66,9 @@ public class ConsumableGenerator : MonoBehaviour
                 string consumableEquationType = values[3];
                 string consumableDescription = values[4];
                 int consumablePrice = int.Parse(values[5]);
+                
 
-                Consumable newConsumableItem = new Consumable (consumableName, consumableRarity, consumableCode, consumableEquationType, consumableDescription, consumablePrice);
+                Consumable newConsumableItem = new Consumable (consumableName, consumableRarity, consumableCode, consumableEquationType, consumableDescription, consumablePrice,imageIndex);
 
                 // if item rarity key already exists, add newItem to the list, else create new rarity key with a new list of items. 
                 if(customLootTable.ContainsKey(consumableRarity))
@@ -78,6 +80,7 @@ public class ConsumableGenerator : MonoBehaviour
                     customLootTable.Add(consumableRarity, new List<Consumable> {newConsumableItem});
                 }
                 //Debug.Log("Joker added to loot table: " + newJoker.name + " of rarity " + newJoker.rarity);
+                imageIndex++;
             }
             reader.Close();
 

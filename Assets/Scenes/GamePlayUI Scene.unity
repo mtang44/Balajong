@@ -3416,6 +3416,15 @@ MonoBehaviour:
   - {fileID: 2800000, guid: a94b5b8b82dc0e245a161a54b405ac0b, type: 3}
   - {fileID: 2800000, guid: 033625851036ff141a9e9bdb6bc3cece, type: 3}
   - {fileID: 2800000, guid: 5358a88132a4ca94e89e489b67f5471b, type: 3}
+  consumableImageArray:
+  - {fileID: 2800000, guid: 5c2c5f90767adb2409e51b582ee21391, type: 3}
+  - {fileID: 2800000, guid: e0f490ccc3f0d3545b82836b8980866c, type: 3}
+  - {fileID: 2800000, guid: 97bd00a9e9557ab4fa239560a19f0de6, type: 3}
+  - {fileID: 2800000, guid: e322ed07ecb1ac94dbbef7c150fe489b, type: 3}
+  - {fileID: 2800000, guid: cf918d6e755871145a7aec426b6b4ee0, type: 3}
+  - {fileID: 2800000, guid: 9216464cbe736f840a519a775b5b1691, type: 3}
+  - {fileID: 2800000, guid: 841bd28df585a3a4dac4f9070b068f5d, type: 3}
+  - {fileID: 2800000, guid: 3b3a25f8eec79d7439981f7a88cc8f0b, type: 3}
   consumableGenerator: {fileID: 1683083823}
   jokerCount: 2
   consumableCount: 1
@@ -23357,6 +23366,7 @@ MonoBehaviour:
   useButtonSlot0: {fileID: 0}
   useButtonSlot1: {fileID: 0}
   copyButton: {fileID: 0}
+  CloneToolTip: {fileID: 0}
 --- !u!1 &1747686401
 GameObject:
   m_ObjectHideFlags: 0

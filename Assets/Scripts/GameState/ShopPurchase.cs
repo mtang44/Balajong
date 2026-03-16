@@ -8,13 +8,20 @@ public class ShopPurchase : MonoBehaviour
     public GameObject ShopTextPanel;
     public GameObject ShopManager;
     public GameObject Player;
+    private StatsUpdater statsUpdater;
+    private void Start()
+    {
+        statsUpdater = GameObject.FindWithTag("StatsUpdater")?.GetComponent<StatsUpdater>();
+    }
     public List<GameObject> jokerPanels = new List<GameObject>();
- 
+
     public bool checkForCash(int cost)
     {
         if (PlayerStatManager.Instance.cash >= cost)
         {
             PlayerStatManager.Instance.cash -= cost;
+            statsUpdater?.UpdateCash(PlayerStatManager.Instance.cash);
+
             Debug.Log("Purchase successful! Remaining cash: $" + PlayerStatManager.Instance.cash);
             StatsUpdater.Instance.UpdateCash(PlayerStatManager.Instance.cash);
             return true;

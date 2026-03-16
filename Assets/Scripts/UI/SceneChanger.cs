@@ -1,11 +1,22 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections;
+using System;
 using UnityEngine.UI;
 
 public class SceneChanger : MonoBehaviour
 {
+    public event Action TransitionStarted;
+    public event Action TransitionEnded;
+
+    public static bool IsTransitionInProgress { get; private set; }
+
+    private const string TransitionManagerTag = "TransitionManager";
+
     private static bool hasHandledInitialSceneLoad;
+    private static bool hasPendingTransitionEnd;
+    private static bool sceneLoadedHookRegistered;
+    private static SceneChanger pendingTransitionSource;
 
     [SerializeField]
     private Animator animator;
@@ -29,6 +40,75 @@ public class SceneChanger : MonoBehaviour
     private static void ResetStaticState()
     {
         hasHandledInitialSceneLoad = false;
+        hasPendingTransitionEnd = false;
+        pendingTransitionSource = null;
+        IsTransitionInProgress = false;
+
+        if (sceneLoadedHookRegistered)
+        {
+            SceneManager.sceneLoaded -= HandleSceneLoaded;
+            sceneLoadedHookRegistered = false;
+        }
+    }
+
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+    private static void RegisterSceneLoadedHook()
+    {
+        if (sceneLoadedHookRegistered)
+        {
+            return;
+        }
+
+        SceneManager.sceneLoaded += HandleSceneLoaded;
+        sceneLoadedHookRegistered = true;
+    }
+
+    private static void HandleSceneLoaded(Scene loadedScene, LoadSceneMode loadSceneMode)
+    {
+        if (!hasPendingTransitionEnd)
+        {
+            return;
+        }
+
+        hasPendingTransitionEnd = false;
+
+        SceneChanger transitionSource = pendingTransitionSource;
+        pendingTransitionSource = null;
+
+        if (transitionSource == null)
+        {
+            try
+            {
+                GameObject transitionManagerObject = GameObject.FindWithTag(TransitionManagerTag);
+                if (transitionManagerObject != null)
+                {
+                    transitionSource = transitionManagerObject.GetComponent<SceneChanger>();
+                }
+            }
+            catch (UnityException)
+            {
+            }
+        }
+
+        if (transitionSource == null)
+        {
+            IsTransitionInProgress = false;
+            return;
+        }
+
+        transitionSource.StartCoroutine(transitionSource.InvokeTransitionEndedAfterDelay());
+    }
+
+    private IEnumerator InvokeTransitionEndedAfterDelay()
+    {
+        float delay = TransitionDuration;
+        if (delay > 0f)
+        {
+            yield return new WaitForSeconds(delay);
+        }
+
+        IsTransitionInProgress = false;
+        TransitionEnded?.Invoke();
     }
 
     private void Awake()
@@ -96,6 +176,10 @@ public class SceneChanger : MonoBehaviour
             tileTransition.RandomizeAndSave();
         }
 
+        hasPendingTransitionEnd = true;
+        IsTransitionInProgress = true;
+        pendingTransitionSource = this;
+        TransitionStarted?.Invoke();
         animator.SetTrigger("Start");
         return true;
     }

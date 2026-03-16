@@ -526,6 +526,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: TransitionManager
       objectReference: {fileID: 0}
+    - target: {fileID: 4582402837353464211, guid: 1fd3c9ba346c1f942bf498fe1298071c, type: 3}
+      propertyPath: m_TagString
+      value: TransitionManager
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

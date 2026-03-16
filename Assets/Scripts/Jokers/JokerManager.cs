@@ -37,6 +37,7 @@ public class JokerManager : MonoBehaviour
     public void Start()
     {
         JokerUIContainer = JokerHolderUI.Instance.gameObject.transform.GetChild(0).gameObject;
+        StatsUpdater.Instance?.UpdateJokerCount();
     }
 
     public int numberOfActivations(string jokerName)
@@ -65,6 +66,7 @@ public class JokerManager : MonoBehaviour
 
         jokers.AddRange(startingJokers);
         maxJokers = startingMaxJokers;
+        StatsUpdater.Instance?.UpdateJokerCount();
     }
     public void AddJoker(string jokerName, string jokerCode, string jokerDescription, int price, Texture jokerTexture)
     {
@@ -89,6 +91,7 @@ public class JokerManager : MonoBehaviour
         }
         JokerSelect jokerSelect = jokerUI.GetComponent<JokerSelect>();
         jokerSelect.Initialize(jokerCode, jokerName, jokerDescription, price);
+        StatsUpdater.Instance?.UpdateJokerCount();
     }
 
 }

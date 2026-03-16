@@ -14,6 +14,7 @@ public class Shop : MonoBehaviour
     public JokerSpawner jokerSpawner;
     [SerializeField]
     public Texture[] imageArray;
+    public Texture[] consumableImageArray;
     public ConsumableGenerator consumableGenerator;
     public int jokerCount = 2;
     public int consumableCount = 1; 
@@ -96,7 +97,7 @@ public class Shop : MonoBehaviour
             }
         }
         // delete random color later
-        shopSlot.GetComponentInChildren<RawImage>(true).color = new Color(UnityEngine.Random.Range(0f, 1f), UnityEngine.Random.Range(0f, 1f), UnityEngine.Random.Range(0f, 1f)); // change later once we figure out joker images
+        shopSlot.GetComponentInChildren<RawImage>(true).texture = consumableImageArray[drops[0].imageIndex];
     }
     
     /* This is the main function that generates the loot from the loot table. 

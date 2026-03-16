@@ -1,4 +1,6 @@
 
+using Unity.VisualScripting;
+
 public class Consumable 
 {
     public string rarity;
@@ -9,7 +11,8 @@ public class Consumable
     public string description;
     public string code;
     public int price;
-    public Consumable(string name, string rarity, string code, string equationType, string description, int price)
+    public int imageIndex;
+    public Consumable(string name, string rarity, string code, string equationType, string description, int price, int imageIndex)
     {
         this.name = name;
         this.rarity = rarity;
@@ -17,6 +20,7 @@ public class Consumable
         this.equationType = equationType;
         this.description = description;
         this.price = price;
+        this.imageIndex = imageIndex;
     }
 
     // Copy constructor for carrying a bought consumable into inventory (shop may unload).
@@ -29,5 +33,7 @@ public class Consumable
         equationType = other.equationType;
         description = other.description;
         price = other.price;
+        imageIndex = other.imageIndex;
+
     }
 }

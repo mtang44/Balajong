@@ -11487,7 +11487,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1739145880}
         m_TargetAssemblyTypeName: ConsumableEffectSystem, Assembly-CSharp
-        m_MethodName: PurchaseAndActivateCurrentShopConsumable
+        m_MethodName: PurchaseFromShop
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

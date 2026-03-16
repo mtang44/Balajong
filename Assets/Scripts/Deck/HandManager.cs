@@ -122,8 +122,8 @@ public class HandManager : MonoBehaviour
     {
         return type switch
         {
-            TileType.Dragon => 0,
-            TileType.Wind => 1,
+            TileType.Wind => 0,
+            TileType.Dragon => 1,
             TileType.Dots or TileType.Bam or TileType.Crack => 2,
             TileType.Flower => 3,
             TileType.Season => 4,
@@ -137,8 +137,8 @@ public class HandManager : MonoBehaviour
     {
         return type switch
         {
-            TileType.Dragon => 0,
-            TileType.Wind => 1,
+            TileType.Wind => 0,
+            TileType.Dragon => 1,
             TileType.Dots => 2,
             TileType.Bam => 3,
             TileType.Crack => 4,

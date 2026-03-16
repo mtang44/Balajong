@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine.UI;
+using TMPro;
+using Unity.VisualScripting;
 
 public class JokerManager : MonoBehaviour
 {
@@ -73,6 +75,22 @@ public class JokerManager : MonoBehaviour
         jokers.Add(jokerCode);
         GameObject jokerUI = Instantiate(JokerUIPrefab, JokerUIContainer.transform);
         jokerUI.GetComponentInChildren<RawImage>(true).texture = jokerTexture;
+        TMP_Text[] foundTMPs = jokerUI.GetComponentsInChildren<TMP_Text>(true);
+        foreach(TMP_Text currentTMP in foundTMPs)
+        {
+            if(currentTMP.name == "Joker Title")
+            {
+                currentTMP.text = jokerName;
+            }
+            else if(currentTMP.name == "Description TMP")
+            {
+                currentTMP.text = jokerDescription;
+            }
+            else
+            {
+                Debug.Log("Unrecognized TMP acquired"); 
+            }
+        }
         JokerSelect jokerSelect = jokerUI.GetComponent<JokerSelect>();
         jokerSelect.Initialize(jokerCode, jokerName, jokerDescription, price);
     }

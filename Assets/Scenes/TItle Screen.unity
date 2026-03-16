@@ -8390,81 +8390,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 514303122}
   m_CullTransparentMesh: 1
---- !u!1 &523777700
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 523777701}
-  - component: {fileID: 523777703}
-  - component: {fileID: 523777702}
-  m_Layer: 5
-  m_Name: Panel
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &523777701
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 523777700}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 685837124}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &523777702
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 523777700}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.392}
-  m_RaycastTarget: 1
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
---- !u!222 &523777703
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 523777700}
-  m_CullTransparentMesh: 1
 --- !u!4 &530350415 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7317096856753047839, guid: f4ef62aeee9c25144a5c1fe006273c49, type: 3}
@@ -11046,14 +10971,13 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 523777701}
+  m_Children: []
   m_Father: {fileID: 1795479460}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.000015259, y: 362}
-  m_SizeDelta: {x: 1018.3, y: 307.4}
+  m_AnchoredPosition: {x: 0, y: 435}
+  m_SizeDelta: {x: 860.146, y: 307.4}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &685837125
 MonoBehaviour:
@@ -23275,7 +23199,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 2.253418, y: 5.5474854}
+  m_AnchoredPosition: {x: 2.253418, y: 5.5476074}
   m_SizeDelta: {x: -340.27, y: -293.79382}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1466385368
@@ -27013,6 +26937,7 @@ GameObject:
   - component: {fileID: 1795479458}
   - component: {fileID: 1795479457}
   - component: {fileID: 1795479461}
+  - component: {fileID: 1795479462}
   m_Layer: 5
   m_Name: JokerCanvas
   m_TagString: Untagged
@@ -27115,6 +27040,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a141d92528df9e438b32fc2814cad9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::JokerHolderUI
+--- !u!222 &1795479462
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1795479456}
+  m_CullTransparentMesh: 1
 --- !u!1 &1800983333
 GameObject:
   m_ObjectHideFlags: 0

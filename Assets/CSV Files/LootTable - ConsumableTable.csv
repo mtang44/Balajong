@@ -1,7 +1,7 @@
 Rarity,Name,Code,Equation Type,Description,Price
 Common,Zesty Orange,orange,Heal,Immidiately Restores 1 Bar of Lost Health,3
 Common,Clone Machine,clone,Add,Choose 1 Tile and add four more of it's kind to the deck,2
-Common,Gun,gun,Destroy,Choose a tile and Destroy every tile with a lower value from your hand,2
+Common,Gun,gun,Destroy,Choose a tile and Destroy every tile (any suit) with a lower value from your hand,2
 Common,Brain Rot,67,Enhance,All Cracks recieve a * 1 Multiplier to their score,5
 Uncommon,Gold Coin,coin,Econ,Gain $3 For Free,0
 Uncommon,Totem of Dying,totem,Destroy, Select 3 tiles to permanetly remove from the deck,10

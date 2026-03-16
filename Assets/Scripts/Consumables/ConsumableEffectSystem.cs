@@ -117,10 +117,20 @@ public class ConsumableEffectSystem : MonoBehaviour
         {
             if (copyButton != null && copyButton.gameObject.activeSelf)
                 copyButton.gameObject.SetActive(false);
-            bool oneSelected = count == 1;
+
+            // For non-Add consumables, required selection count may vary by code.
+            int requiredCount = 1;
+            if (activeConsumable != null)
+            {
+                var code = (activeConsumable.code ?? string.Empty).Trim().ToLowerInvariant();
+                if (code == "totem")
+                    requiredCount = 3;
+            }
+
+            bool selectionOk = count == requiredCount;
             var btn = GetUseButton(_slotIndexInUse);
             if (btn != null)
-                btn.interactable = oneSelected;
+                btn.interactable = selectionOk;
         }
     }
 
@@ -152,10 +162,23 @@ public class ConsumableEffectSystem : MonoBehaviour
             return;
         }
 
-        // Heal: immediate effect, no tile selection.
+        // Heal consumables (e.g. Zesty Orange, Golden Apple): immediate effect, no tile selection.
         if (IsEquationType(consumable, "Heal"))
         {
-            ApplyHeal();
+            var stats = PlayerStatManager.Instance;
+            if (stats != null)
+            {
+                // CSV codes:
+                // - "orange" => Zesty Orange: "Restores 1 Bar of Lost Health"
+                // - "apple"  => Golden Apple: "Restores all Bars of Lost health"
+                var code = (consumable.code ?? string.Empty).Trim().ToLowerInvariant();
+                int amount = code == "orange" ? 1 : stats.maxHealth;
+                stats.Heal(amount);
+
+                if (StatsUpdater.Instance != null)
+                    StatsUpdater.Instance.UpdateHealth(stats.currentHealth, stats.maxHealth);
+            }
+
             Finish();
             return;
         }
@@ -207,25 +230,107 @@ public class ConsumableEffectSystem : MonoBehaviour
         // Add/Clone flow uses Copy BTN (phase 0) and Discard button (phase 1), not Use.
         if (IsAddType(activeConsumable)) return;
 
-        // Non-Add consumables: single-tile selection (Destroy, Enhance)
+        // Code-specific behaviors driven by CSV "Code" when equationType is Destroy/Enhance.
+        var code = (activeConsumable.code ?? string.Empty).Trim().ToLowerInvariant();
+
+        // Gun: "Choose a tile and Destroy every tile with a lower value from your hand".
+        if (code == "gun")
+        {
+            if (sel.Count != 1) return;
+            var go = sel[0];
+            if (go == null) return;
+            var h = go.GetComponent<MahjongTileHolder>();
+            var chosen = h != null ? h.TileData : null;
+            if (chosen == null) return;
+
+            // Remove from hand any tile (any suit) with a strictly lower numbered value,
+            // then refill the hand from the deck as normal.
+            if (deckManager.Hand != null)
+            {
+                int chosenValue = (int)chosen.NumberedValue;
+                if (chosenValue > 0)
+                {
+                    var handCopy = new List<GameObject>(deckManager.Hand);
+                    foreach (var tileGo in handCopy)
+                    {
+                        if (tileGo == null) continue;
+                        var th = tileGo.GetComponent<MahjongTileHolder>();
+                        var data = th != null ? th.TileData : null;
+                        if (data == null) continue;
+
+                        int value = (int)data.NumberedValue;
+                        if (value <= 0) continue;               // skip non-numbered tiles (winds/dragons/flowers/seasons)
+                        if (value >= chosenValue) continue;     // strictly lower than chosen
+
+                        deckManager.discardTile(tileGo);
+                    }
+
+                    // After destroying lower-value tiles, draw up to full hand as usual.
+                    deckManager.redrawHand();
+                }
+            }
+
+            Finish();
+            return;
+        }
+
+        // Totem of Dying: "Select 3 tiles to permanently remove from the deck".
+        if (code == "totem")
+        {
+            if (sel.Count != 3) return;
+            var toRemove = new List<GameObject>(sel);
+            foreach (var go in toRemove)
+            {
+                if (go == null) continue;
+                var h = go.GetComponent<MahjongTileHolder>();
+                var chosen = h != null ? h.TileData : null;
+                if (chosen == null) continue;
+
+                // Remove all future copies from the deck and discard the selected instance.
+                DeckMutationHelpers.RemoveCopiesFromDeck(deckManager, chosen, int.MaxValue);
+                deckManager.discardTile(go);
+            }
+            deckManager.redrawHand();
+            Finish();
+            return;
+        }
+
+        // Weighted Dice: "Choose a tile Suit and add 1 more of each tile in that suit to the deck".
+        if (code == "dice")
+        {
+            if (sel.Count != 1) return;
+            var go = sel[0];
+            if (go == null) return;
+            var h = go.GetComponent<MahjongTileHolder>();
+            var chosen = h != null ? h.TileData : null;
+            if (chosen == null) return;
+
+            DeckMutationHelpers.AddSuitCopiesToDeck(deckManager, chosen.TileType);
+            Finish();
+            return;
+        }
+
+        // Generic non-Add consumables: single-tile selection (Destroy, Remove, Enhance).
         if (sel.Count != 1) return;
-        var go = sel[0];
-        if (go == null) return;
-        var h = go.GetComponent<MahjongTileHolder>();
-        var chosen = h != null ? h.TileData : null;
-        if (chosen == null) return;
+        {
+            var go = sel[0];
+            if (go == null) return;
+            var h = go.GetComponent<MahjongTileHolder>();
+            var chosen = h != null ? h.TileData : null;
+            if (chosen == null) return;
 
-        var eq = (activeConsumable.equationType ?? "").Trim();
-        if (string.Equals(eq, "Destroy", System.StringComparison.OrdinalIgnoreCase))
-            DeckMutationHelpers.RemoveCopiesFromDeck(deckManager, chosen, 4);
-        else if (string.Equals(eq, "Remove", System.StringComparison.OrdinalIgnoreCase))
-            DeckMutationHelpers.RemoveCopiesFromDeck(deckManager, chosen, int.MaxValue);
-        else if (string.Equals(eq, "Enhance", System.StringComparison.OrdinalIgnoreCase))
-            DeckMutationHelpers.EnhanceCopiesInDeckAndHand(deckManager, chosen, Edition.Ghost);
-        else if (string.Equals(eq, "Heal", System.StringComparison.OrdinalIgnoreCase))
-            ApplyHeal();
+            var eq = (activeConsumable.equationType ?? "").Trim();
+            if (string.Equals(eq, "Destroy", System.StringComparison.OrdinalIgnoreCase))
+                DeckMutationHelpers.RemoveCopiesFromDeck(deckManager, chosen, 4);
+            else if (string.Equals(eq, "Remove", System.StringComparison.OrdinalIgnoreCase))
+                DeckMutationHelpers.RemoveCopiesFromDeck(deckManager, chosen, int.MaxValue);
+            else if (string.Equals(eq, "Enhance", System.StringComparison.OrdinalIgnoreCase))
+                DeckMutationHelpers.EnhanceCopiesInDeckAndHand(deckManager, chosen, Edition.Ghost);
+            else if (string.Equals(eq, "Heal", System.StringComparison.OrdinalIgnoreCase))
+                ApplyHeal();
 
-        Finish();
+            Finish();
+        }
     }
 
     private void ApplyHeal()
@@ -337,6 +442,30 @@ public static class DeckMutationHelpers
         for (int i = 0; i < count; i++)
         {
             var clone = CloneWithEdition(identity);
+            deck.AddTile(clone);
+        }
+    }
+
+    // Adds one extra copy of every distinct tile identity of the given suit currently present in the deck.
+    public static void AddSuitCopiesToDeck(DeckManager manager, TileType suit)
+    {
+        if (manager == null) return;
+
+        var tiles = GetDeckTileList(manager);
+        var deck = GetDeck(manager);
+        if (tiles == null || deck == null) return;
+
+        var seen = new HashSet<string>();
+        foreach (var t in tiles)
+        {
+            if (t == null) continue;
+            if (t.TileType != suit) continue;
+
+            // Use GetTileString identity to avoid adding multiple copies per existing tile.
+            string key = t.GetTileString();
+            if (!seen.Add(key)) continue;
+
+            var clone = CloneWithEdition(t);
             deck.AddTile(clone);
         }
     }

@@ -16,6 +16,7 @@ public class ConsumableInventoryUI : MonoBehaviour
     [SerializeField] private List<Image> slotHighlights = new List<Image>();
     [Tooltip("Optional: one per slot (2), to show item name. Empty slot can show blank or placeholder.")]
     [SerializeField] private List<TMP_Text> slotLabels = new List<TMP_Text>();
+ 
 
     private void Start()
     {
@@ -65,6 +66,7 @@ public class ConsumableInventoryUI : MonoBehaviour
 
     private void OnSelectionChanged(int selectedIndex)
     {
+        
         for (int i = 0; i < slotHighlights.Count; i++)
         {
             if (slotHighlights[i] != null)

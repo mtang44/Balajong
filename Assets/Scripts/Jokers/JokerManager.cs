@@ -1,17 +1,23 @@
 using UnityEngine;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using UnityEngine.UI;
+using TMPro;
+using Unity.VisualScripting;
 
 public class JokerManager : MonoBehaviour
 {
     public static JokerManager Instance { get; private set; }
+    public GameObject JokerUIPrefab;
+    public GameObject JokerUIContainer;
     public List<string> jokers = new List<string>();
     public int currentJokers = 0;
     public int maxJokers = 5;
 
     private List<string> startingJokers = new List<string>();
-    private int startingCurrentJokers;
-    private int startingMaxJokers;
+    public int startingCurrentJokers;
+    public int startingMaxJokers;
 
     public int knightJokerBuff = 0;
     public int baggedJokerBuff = 0;
@@ -30,6 +36,10 @@ public class JokerManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
+    public void Start()
+    {
+        JokerUIContainer = JokerHolderUI.Instance.gameObject.transform.GetChild(0).gameObject;
     }
 
     public int numberOfActivations(string jokerName)
@@ -60,4 +70,29 @@ public class JokerManager : MonoBehaviour
         currentJokers = startingCurrentJokers;
         maxJokers = startingMaxJokers;
     }
+    public void AddJoker(string jokerName, string jokerCode, string jokerDescription, int price, Texture jokerTexture)
+    {
+        jokers.Add(jokerCode);
+        GameObject jokerUI = Instantiate(JokerUIPrefab, JokerUIContainer.transform);
+        jokerUI.GetComponentInChildren<RawImage>(true).texture = jokerTexture;
+        TMP_Text[] foundTMPs = jokerUI.GetComponentsInChildren<TMP_Text>(true);
+        foreach(TMP_Text currentTMP in foundTMPs)
+        {
+            if(currentTMP.name == "Joker Title")
+            {
+                currentTMP.text = jokerName;
+            }
+            else if(currentTMP.name == "Description TMP")
+            {
+                currentTMP.text = jokerDescription;
+            }
+            else
+            {
+                Debug.Log("Unrecognized TMP acquired"); 
+            }
+        }
+        JokerSelect jokerSelect = jokerUI.GetComponent<JokerSelect>();
+        jokerSelect.Initialize(jokerCode, jokerName, jokerDescription, price);
+    }
+
 }

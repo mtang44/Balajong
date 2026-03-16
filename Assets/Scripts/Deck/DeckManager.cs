@@ -15,6 +15,10 @@ public class DeckManager : MonoBehaviour
     public int MAX_DISCARD_SELECTION = 5;
     public static DeckManager Instance;
 
+    // Tiles queued for deal animation (populated during tileToHand, consumed after sort).
+    private List<GameObject> pendingDealTiles = new List<GameObject>();
+    private bool isDrawingHand = false;
+
     // Our hands! Deck is the wall, then the hand and discard.
     public Deck deck;
     public List<GameObject> hand = new List<GameObject>();
@@ -42,8 +46,8 @@ public class DeckManager : MonoBehaviour
     }
     public void Start()
     {
-        int HAND_SIZE = 14 + JokerManager.Instance.numberOfActivations("spider");
-        int MAX_DISCARD_SELECTION = 5 + (3 * JokerManager.Instance.numberOfActivations("basket"));
+        HAND_SIZE = 14 + JokerManager.Instance.numberOfActivations("spider");
+        MAX_DISCARD_SELECTION = 5 + (3 * JokerManager.Instance.numberOfActivations("basket"));
     }
 
     public void forceNewLists()
@@ -85,8 +89,12 @@ public class DeckManager : MonoBehaviour
 
     public void drawHand(int count = 0)
     {
-        int HAND_SIZE = 14 + JokerManager.Instance.numberOfActivations("spider");
-        int MAX_DISCARD_SELECTION = 5 + (3 * JokerManager.Instance.numberOfActivations("basket"));
+        // Track recursion depth so we only trigger the deal animation once at the top level.
+        bool isTopLevel = !isDrawingHand;
+        isDrawingHand = true;
+
+        HAND_SIZE = 14 + JokerManager.Instance.numberOfActivations("spider");
+        MAX_DISCARD_SELECTION = 5 + (3 * JokerManager.Instance.numberOfActivations("basket"));
         if(count == 0) count = HAND_SIZE;
         for (int i = 0; i < count; i++)
         {
@@ -100,6 +108,13 @@ public class DeckManager : MonoBehaviour
         } else
         {
             sortHand();
+        }
+
+        if (isTopLevel)
+        {
+            isDrawingHand = false;
+            DrawVisualization.Instance?.AnimateDeal(pendingDealTiles);
+            pendingDealTiles.Clear();
         }
     }
     public void sortHand()
@@ -173,6 +188,7 @@ public class DeckManager : MonoBehaviour
             tileObject.transform.SetParent(GetTileParentTransform(), false);
             tileObject.transform.localPosition = Vector3.zero;
             hand.Add(tileObject);
+            pendingDealTiles.Add(tileObject);
             tileObject.GetComponent<MahjongTileHolder>().SetTileData(tileData);
             tileObject.GetComponent<MahjongTileHolder>().OnValidate();
         }

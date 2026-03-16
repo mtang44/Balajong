@@ -17,7 +17,9 @@ public class ScoreVisualization : MonoBehaviour
     [SerializeField, Min(0.1f)] private float fontSize = 5f;
     [SerializeField, Min(0.1f)] private float singlePopupTextSizeMultiplier = 0.75f;
     [SerializeField, Min(0.1f)] private float balajongPopupTextSizeMultiplier = 1.25f;
+    [SerializeField, Min(0.1f)] private float editionTextSizeMultiplier = 0.65f;
     [SerializeField] private Color handTypeTextColor = new Color(0.75f, 0.9f, 1f, 1f);
+    [SerializeField] private Color editionTextColor = new Color(0.8f, 0.55f, 1f, 1f);
     [SerializeField] private Color scoreTextColor = new Color(1f, 0.85f, 0.1f, 1f);
     [SerializeField] private Vector3 popupWorldOffset = new Vector3(0f, 0.9f, -0.5f);
     [SerializeField, Min(0f)] private float horizontalEdgePadding = 24f;
@@ -31,6 +33,8 @@ public class ScoreVisualization : MonoBehaviour
     [SerializeField, Min(0f)] private float pauseBetweenSections = 0.5f;
     [SerializeField, Min(0f)] private float singleTimingMultiplier = 0.35f;
     [SerializeField, Min(0f)] private float scoreLerpDuration = 0.2f;
+    [SerializeField, Min(0f)] private float pauseAfterEditionPopup = 0.18f;
+    [SerializeField, Min(0f)] private float pauseBeforeScore = 0.15f;
 
     [Header("Tile Hop")]
     [SerializeField, Min(0f)] private float tileHopHeight = 0.2f;
@@ -102,6 +106,7 @@ public class ScoreVisualization : MonoBehaviour
         string[] slotTypeLabel = new string[hand.Count];
         Dictionary<int, List<int>> triggerHopIndices = new Dictionary<int, List<int>>();
         Dictionary<int, ScoringManager.MeldKind> triggerKinds = new Dictionary<int, ScoringManager.MeldKind>();
+        Dictionary<int, ScoringManager.Meld> triggerMelds = new Dictionary<int, ScoringManager.Meld>();
         for (int i = 0; i < hand.Count; i++) slotScore[i] = -1;
 
         foreach (ScoringManager.Meld meld in melds)
@@ -125,6 +130,7 @@ public class ScoreVisualization : MonoBehaviour
             slotTypeLabel[triggerIndex] = GetMeldDisplayName(meld.Kind);
             triggerHopIndices[triggerIndex] = new List<int>(meldIndices);
             triggerKinds[triggerIndex] = meld.Kind;
+            triggerMelds[triggerIndex] = meld;
         }
 
         // Go along the hand left to right, showing popups for melds
@@ -155,7 +161,29 @@ public class ScoreVisualization : MonoBehaviour
                 Vector3 spawnPos = hand[i].transform.position + popupWorldOffset;
                 string handType = string.IsNullOrEmpty(slotTypeLabel[i]) ? "Meld" : slotTypeLabel[i];
                 float popupTextSizeMultiplier = hasTriggerKind ? GetMeldPopupTextSizeMultiplier(triggerKind) : 1f;
-                SpawnPopup(spawnPos, handType, slotScore[i], handTypeTextColor, scoreTextColor, popupTextSizeMultiplier);
+
+                // 1. Meld type label
+                SpawnRawTextPopup(spawnPos, handType, handTypeTextColor, popupTextSizeMultiplier);
+
+                // 2. Non-base edition labels, one after another
+                if (triggerMelds.TryGetValue(i, out ScoringManager.Meld thisMeld))
+                {
+                    List<Edition> editions = GetNonBaseEditions(thisMeld);
+                    foreach (Edition ed in editions)
+                    {
+                        yield return new WaitForSeconds(pauseAfterEditionPopup);
+                        SpawnRawTextPopup(spawnPos, GetEditionDisplayName(ed), editionTextColor, editionTextSizeMultiplier);
+                    }
+                }
+
+                // Always leave a beat before score so type/score never overlap.
+                if (pauseBeforeScore > 0f)
+                {
+                    yield return new WaitForSeconds(pauseBeforeScore);
+                }
+
+                // 3. Score popup
+                SpawnRawTextPopup(spawnPos, $"+{slotScore[i]}", scoreTextColor, popupTextSizeMultiplier);
 
                 float pauseDuration = pauseAfterMeld * (isSingleTrigger ? singleTimingMultiplier : 1f);
                 yield return LerpScoreAndWait(runningScore, slotScore[i], pauseDuration);
@@ -379,6 +407,31 @@ public class ScoreVisualization : MonoBehaviour
         }
     }
 
+    private void SpawnRawTextPopup(Vector3 worldPos, string text, Color textColor, float textSizeMultiplier = 1f)
+    {
+        GameObject go = new GameObject("ScorePopup");
+        Camera cam = Camera.main;
+        go.transform.position = ClampWorldPositionX(worldPos, cam);
+
+        if (cam != null)
+            go.transform.rotation = cam.transform.rotation;
+
+        TextMeshPro tmp = go.AddComponent<TextMeshPro>();
+        string colorHex = ColorUtility.ToHtmlStringRGBA(textColor);
+        tmp.text = $"<color=#{colorHex}>{text}</color>";
+        tmp.fontSize = fontSize * Mathf.Max(0.1f, textSizeMultiplier);
+        tmp.color = Color.white;
+        tmp.alignment = TextAlignmentOptions.Center;
+        tmp.textWrappingMode = TextWrappingModes.NoWrap;
+        tmp.richText = true;
+        if (fontAsset != null) tmp.font = fontAsset;
+
+        MeshRenderer mr = go.GetComponent<MeshRenderer>();
+        if (mr != null) mr.sortingOrder = 100;
+
+        StartCoroutine(AnimatePopup(go));
+    }
+
     private void SpawnPopup(Vector3 worldPos, string handType, int scoreValue, Color handTypeColor, Color scoreColor, float textSizeMultiplier = 1f)
     {
         GameObject go = new GameObject("ScorePopup");
@@ -498,6 +551,29 @@ public class ScoreVisualization : MonoBehaviour
             TileType.Flower => "Flower\nBonus",
             TileType.Season => "Season\nBonus",
             _ => "Bonus"
+        };
+    }
+
+    private static List<Edition> GetNonBaseEditions(ScoringManager.Meld meld)
+    {
+        HashSet<Edition> seen = new HashSet<Edition>();
+        List<Edition> result = new List<Edition>();
+        foreach (MahjongTileData td in meld.Tiles)
+        {
+            if (td != null && td.Edition != Edition.Base && seen.Add(td.Edition))
+                result.Add(td.Edition);
+        }
+        return result;
+    }
+
+    private static string GetEditionDisplayName(Edition edition)
+    {
+        return edition switch
+        {
+            Edition.Ghost => "Ghost",
+            Edition.Enchanted => "Enchanted",
+            Edition.Crystal => "Crystal",
+            _ => edition.ToString()
         };
     }
 

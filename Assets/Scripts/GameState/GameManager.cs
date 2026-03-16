@@ -186,6 +186,7 @@ public class GameManager : MonoBehaviour
         StatsUpdater.Instance.UpdateScore(0);
         StatsUpdater.Instance.UpdateScoreThreshold(EnemyManager.Instance.returnScoreThreshold());
         StatsUpdater.Instance.UpdateCash(PlayerStatManager.Instance.cash);
+        StatsUpdater.Instance.UpdateJokerCount();
         Debug.Log("Game Started. Current State: " + currentState);
 
         if (TryGetDeckManager(out DeckManager deckManager))
@@ -456,6 +457,7 @@ public class GameManager : MonoBehaviour
 
             statsUpdater.UpdateDiscardCount();
             statsUpdater.UpdateScore(score);
+            statsUpdater.UpdateJokerCount();
         }
     }
 

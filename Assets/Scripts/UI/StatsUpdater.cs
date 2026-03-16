@@ -11,6 +11,7 @@ public class StatsUpdater : MonoBehaviour
     public GameObject winScreen;
     public GameObject loseScreen;
     public GameObject cash;
+    public GameObject jokerCount;
     // We probably want this
     public static StatsUpdater Instance;
     private void Awake()
@@ -81,6 +82,30 @@ public class StatsUpdater : MonoBehaviour
             }
         }
     }
+    public void UpdateJokerCount()
+    {
+        if (jokerCount != null)
+        {
+            TMPro.TextMeshProUGUI textComponent = jokerCount.GetComponent<TMPro.TextMeshProUGUI>();
+            if (textComponent != null)
+            {
+                int currentJokers = 0;
+                int maxJokers = 0;
+
+                if (JokerManager.Instance != null)
+                {
+                    if (JokerManager.Instance.jokers != null)
+                    {
+                        currentJokers = JokerManager.Instance.jokers.Count;
+                    }
+
+                    maxJokers = JokerManager.Instance.maxJokers;
+                }
+
+                textComponent.text = currentJokers + "/" + maxJokers;
+            }
+        }
+    }
     public void ShowWinScreen()
     {
         if (winScreen != null)
@@ -90,5 +115,10 @@ public class StatsUpdater : MonoBehaviour
     {
         if (loseScreen != null)
             loseScreen.SetActive(true);
+    }
+
+    private void Start()
+    {
+        UpdateJokerCount();
     }
 }

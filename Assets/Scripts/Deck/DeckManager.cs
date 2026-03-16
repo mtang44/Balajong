@@ -59,6 +59,22 @@ public class DeckManager : MonoBehaviour
         discard = new List<MahjongTileData>();
     }
 
+    public void PrepareForBattle()
+    {
+        forceNewLists();
+        pendingDealTiles.Clear();
+        isDrawingHand = false;
+
+        if (deck == null)
+        {
+            deck = new Deck(tilePrefab);
+            deck.InitializeDeck();
+            return;
+        }
+
+        deck.Shuffle();
+    }
+
     public void ResetToDefaultState()
     {
         DestroyTrackedTiles(hand);

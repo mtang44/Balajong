@@ -43,34 +43,34 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Aspect: 1.7777778
+    - _Aspect: 1.44
     - _Brightness: 0
     - _Contrast: 1.25
     - _CoordMode: 2
     - _EmissionStrength: 1.7
-    - _Gain: 0.4
+    - _Gain: 0.5
     - _Lacunarity: 2
     - _Metallic: 0
     - _Octaves: 4
     - _PaletteCount: 4
-    - _Scale: 16.75
-    - _ScrollSpeed: 0.0001
+    - _Scale: 2
+    - _ScrollSpeed: 0.000001
     - _Seed: 24161.99
     - _Smoothness: 0.5
-    - _Speed: 0.3
-    - _SpinDegPerSec: 0.2
+    - _Speed: 0.1
+    - _SpinDegPerSec: 0.02
     - _SpinEnabled: 1
-    - _SwirlDegrees: 100
+    - _SwirlDegrees: 1159.84
     - _SwirlEnabled: 1
     - _SwirlFalloff: 1
     - _T: 0
     - _UseObjectSpace: 0
     - _UsePalette: 1
-    - _WarpAmp: 26.9
+    - _WarpAmp: 9.2
     - _WarpEnabled: 1
     - _WarpOctaves: 4
-    - _WarpScale: 30.6
-    - _WarpSeed: 11581.5
+    - _WarpScale: 31.53
+    - _WarpSeed: 10.09
     - _WorldCoordScale: 0.9
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}

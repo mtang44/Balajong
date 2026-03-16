@@ -191,7 +191,7 @@ public class GameManager : MonoBehaviour
 
         if (TryGetDeckManager(out DeckManager deckManager))
         {
-            deckManager.forceNewLists();
+            deckManager.PrepareForBattle();
         }
 
         SwitchState(GameState.Start);

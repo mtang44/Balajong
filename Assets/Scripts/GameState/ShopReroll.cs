@@ -15,6 +15,7 @@ public class Shop : MonoBehaviour
     [SerializeField]
     public Texture[] imageArray;
     public ConsumableGenerator consumableGenerator;
+    public TileSpawner tileSpawner;
     public int jokerCount = 2;
     public int consumableCount = 1; 
 
@@ -28,7 +29,6 @@ public class Shop : MonoBehaviour
     {
         RerollJokers();
         RerollConsumables();
-        // reroll tiles here later
     }
     void Update()
     {
@@ -40,6 +40,27 @@ public class Shop : MonoBehaviour
         consumableDrops = GenerateLoot<Consumable>(consumablelootRarities, consumableLootTable, consumableCount);
         displayConsumableOutput(consumableDrops);
     }
+    public void RerollTiles()
+    {
+        if (tileSpawner == null)
+        {
+            tileSpawner = GetComponent<TileSpawner>();
+        }
+
+        if (tileSpawner == null)
+        {
+            tileSpawner = GetComponentInChildren<TileSpawner>(true);
+        }
+
+        if (tileSpawner == null)
+        {
+            Debug.LogWarning("Shop: no TileSpawner found for tile rerolls.", this);
+            return;
+        }
+
+        tileSpawner.RerollTiles();
+    }
+
     public void RerollJokers()
     {
         //some check for if player has enough currency to open chest here
@@ -47,6 +68,7 @@ public class Shop : MonoBehaviour
         jokerlootRarities = jokerSpawner.GetLootRarities();
         jokerDrops = GenerateLoot<Jokers>(jokerlootRarities,jokerLootTable, jokerCount);
         displayJokerOutput(jokerDrops);
+        RerollTiles();
     }
    
 // Takes in a LootChest and displays it's generated loot to the Unity UI 
@@ -60,7 +82,7 @@ public class Shop : MonoBehaviour
             {
                 if(currentTMP.name == "Price Tag TMP")
                 {
-                    currentTMP.transform.GetComponent<TMP_Text>().text = ""+ drops[dropIndex].price; // set price tmp
+                    currentTMP.transform.GetComponent<TMP_Text>().text = "$" + drops[dropIndex].price; // set price tmp
                 }
                 else if(currentTMP.name == "Title TMP")
                 {
@@ -84,7 +106,7 @@ public class Shop : MonoBehaviour
         {
             if(currentTMP.name == "Price Tag TMP")
             {
-                currentTMP.transform.GetComponent<TMP_Text>().text = ""+ drops[0].price; // set price tmp
+                currentTMP.transform.GetComponent<TMP_Text>().text = "$" + drops[0].price; // set price tmp
             }
             else if(currentTMP.name == "Title TMP")
             {

@@ -463,6 +463,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7980480237267112869, guid: f4ef62aeee9c25144a5c1fe006273c49, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2280001853409125535}
+    - targetCorrespondingSourceObject: {fileID: 7980480237267112869, guid: f4ef62aeee9c25144a5c1fe006273c49, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2671661190612726889}
   m_SourcePrefab: {fileID: 100100000, guid: f4ef62aeee9c25144a5c1fe006273c49, type: 3}
 --- !u!1 &174841215837349636 stripped
 GameObject:
@@ -482,8 +485,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TileTransition
   preserveAcrossScenes: 1
+  tileGenerator: {fileID: 2671661190612726889}
+--- !u!114 &2671661190612726889
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 174841215837349636}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e6c4d6a6e191a1443ba0592c8a8d6e75, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TileGenerator
+  randomizeOnStart: 0
   randomizeEdition: 1
-  typeWeight: 1400000014000000140000000a0000000a0000000a0000000a000000
+  typeWeight: 01000000010000000100000001000000010000000100000001000000
   editionWeight: 56000000070000000000000007000000
 --- !u!4 &659488742006160830 stripped
 Transform:

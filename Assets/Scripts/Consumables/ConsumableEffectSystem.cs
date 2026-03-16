@@ -144,6 +144,15 @@ public class ConsumableEffectSystem : MonoBehaviour
         if (deckManager != null && (deckManager.Hand == null || deckManager.Hand.Count == 0))
             deckManager.drawHand();
 
+        // Econ-type consumables (e.g. Gold Coin): immediate cash gain, no tile selection.
+        if (IsEquationType(consumable, "Econ"))
+        {
+            ApplyCash(3);
+            Finish();
+            return;
+        }
+
+        // Heal: immediate effect, no tile selection.
         if (IsEquationType(consumable, "Heal"))
         {
             ApplyHeal();
@@ -223,6 +232,16 @@ public class ConsumableEffectSystem : MonoBehaviour
     {
         if (PlayerStatManager.Instance == null) return;
         PlayerStatManager.Instance.Heal(PlayerStatManager.Instance.maxHealth);
+    }
+
+    private void ApplyCash(int amount)
+    {
+        var stats = PlayerStatManager.Instance;
+        if (stats == null) return;
+        stats.cash += amount;
+
+        if (StatsUpdater.Instance != null)
+            StatsUpdater.Instance.UpdateCash(stats.cash);
     }
 
     private void Finish()

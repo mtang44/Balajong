@@ -14,7 +14,6 @@ public class ShopPurchase : MonoBehaviour
         {
             PlayerStatManager.Instance.cash -= cost;
             Debug.Log("Purchase successful! Remaining cash: $" + PlayerStatManager.Instance.cash);
-            ShopTextPanel.GetComponent<UpdateCashOnEnable>().Start();
             return true;
         }
         else

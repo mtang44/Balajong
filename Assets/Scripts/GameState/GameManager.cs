@@ -51,6 +51,11 @@ public class GameManager : MonoBehaviour
     [Header("Win Payout Animation")]
     [SerializeField, Min(0f)] private float cashLerpDuration = 0.5f;
 
+    [Header("Tile Draw")]
+    [SerializeField] private bool skipTileDraws;
+
+    private bool warnedMissingDeckManager;
+
     void Awake()
     {
         if (Instance == null)
@@ -182,7 +187,12 @@ public class GameManager : MonoBehaviour
         StatsUpdater.Instance.UpdateScoreThreshold(EnemyManager.Instance.returnScoreThreshold());
         StatsUpdater.Instance.UpdateCash(PlayerStatManager.Instance.cash);
         Debug.Log("Game Started. Current State: " + currentState);
-        DeckManager.Instance.forceNewLists();
+
+        if (TryGetDeckManager(out DeckManager deckManager))
+        {
+            deckManager.forceNewLists();
+        }
+
         SwitchState(GameState.Start);
     }
     void SetState(GameState newState) { currentState = newState; }
@@ -220,7 +230,7 @@ public class GameManager : MonoBehaviour
     }
     void DrawState()
     {
-        DeckManager.Instance.redrawHand();
+        RedrawHandIfAllowed();
         SwitchState(GameState.Select);
     }
     void SelectState()
@@ -241,11 +251,43 @@ public class GameManager : MonoBehaviour
         currentDiscards++;
         StatsUpdater.Instance.UpdateDiscardCount();
         if (currentDiscards < maxDiscards)
+        {
             SwitchState(GameState.Draw);
+        }
         else
-            DeckManager.Instance.redrawHand();
+        {
+            RedrawHandIfAllowed();
             SwitchState(GameState.Select);
+        }
     }
+
+    private void RedrawHandIfAllowed()
+    {
+        if (skipTileDraws || !TryGetDeckManager(out DeckManager deckManager))
+        {
+            return;
+        }
+
+        deckManager.redrawHand();
+    }
+
+    private bool TryGetDeckManager(out DeckManager deckManager)
+    {
+        deckManager = DeckManager.Instance;
+        if (deckManager != null)
+        {
+            return true;
+        }
+
+        if (!skipTileDraws && !warnedMissingDeckManager)
+        {
+            warnedMissingDeckManager = true;
+            Debug.LogWarning("GameManager could not find a DeckManager while tile draws are enabled.");
+        }
+
+        return false;
+    }
+
     void ScoreState()
     {
         selecting = false;

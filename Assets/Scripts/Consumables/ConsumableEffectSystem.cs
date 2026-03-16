@@ -19,6 +19,12 @@ public class ConsumableEffectSystem : MonoBehaviour
     [SerializeField] private Button useButtonSlot1;
     [Tooltip("Copy BTN: shown in Add/Clone flow after selecting 1 tile. Bind OnClick to OnCopy().")]
     [SerializeField] private Button copyButton;
+    [Tooltip("Gun BTN: optional second-step button for Gun. Bind OnClick to OnGun().")]
+    [SerializeField] private Button gunButton;
+    [Tooltip("Totem BTN: optional second-step button for Totem of Dying. Bind OnClick to OnTotem().")]
+    [SerializeField] private Button totemButton;
+    [Tooltip("Weighted Dice BTN: optional second-step button for Weighted Dice. Bind OnClick to OnWeightedDice().")]
+    [SerializeField] private Button wdButton;
     [SerializeField] private GameObject CloneToolTip;
 
     private DeckManager deckManager;
@@ -52,9 +58,21 @@ public class ConsumableEffectSystem : MonoBehaviour
         if (useButtonSlot1 != null)
             useButtonSlot1.onClick.AddListener(() => UseSlot(1));
         if (copyButton != null)
+        {
             copyButton.onClick.AddListener(OnCopy);
-        if (copyButton != null)
             copyButton.gameObject.SetActive(false);
+        }
+
+        if (gunButton != null)
+            gunButton.onClick.AddListener(OnGun);
+        if (totemButton != null)
+            totemButton.onClick.AddListener(OnTotem);
+        if (wdButton != null)
+            wdButton.onClick.AddListener(OnWeightedDice);
+
+        if (gunButton != null) gunButton.gameObject.SetActive(false);
+        if (totemButton != null) totemButton.gameObject.SetActive(false);
+        if (wdButton != null) wdButton.gameObject.SetActive(false);
     }
 
     public void UseSlot0() => UseSlot(0);
@@ -103,38 +121,107 @@ public class ConsumableEffectSystem : MonoBehaviour
 
         if (IsAddType(activeConsumable))
         {
+            // Clone Machine: Use -> select 1 tile -> Copy button -> effect.
             if (copyButton != null)
             {
-              
-                CloneToolTip.SetActive(true);
+                if (CloneToolTip != null)
+                    CloneToolTip.SetActive(true);
                 bool showCopy = addConsumablePhase == 0;
                 if (copyButton.gameObject.activeSelf != showCopy)
                     copyButton.gameObject.SetActive(showCopy);
                 if (showCopy)
                     copyButton.interactable = count == 1;
             }
+
             var useBtn = GetUseButton(_slotIndexInUse);
             if (useBtn != null)
                 useBtn.interactable = false;
+
+            // Hide other action buttons while in Add/Clone flow.
+            if (gunButton != null) gunButton.gameObject.SetActive(false);
+            if (totemButton != null) totemButton.gameObject.SetActive(false);
+            if (wdButton != null) wdButton.gameObject.SetActive(false);
         }
         else
         {
+            // Hide Clone-specific UI when not in Add/Clone flow.
             if (copyButton != null && copyButton.gameObject.activeSelf)
                 copyButton.gameObject.SetActive(false);
+            if (CloneToolTip != null)
+                CloneToolTip.SetActive(false);
 
-            // For non-Add consumables, required selection count may vary by code.
-            int requiredCount = 1;
-            if (activeConsumable != null)
+            // Pattern identical to Copy:
+            // - For each non-immediate consumable, show its button only when the right number of tiles is selected,
+            //   and make it interactable only in that case.
+            // - Use button stays disabled for those; generic consumables still use Use as confirm.
+            var code = (activeConsumable.code ?? string.Empty).Trim().ToLowerInvariant();
+            var useBtn = GetUseButton(_slotIndexInUse);
+
+            // Default: generic Destroy/Remove/Enhance — Use button is the confirm when exactly 1 tile is selected.
+            if (code != "gun" && code != "totem" && code != "dice")
             {
-                var code = (activeConsumable.code ?? string.Empty).Trim().ToLowerInvariant();
-                if (code == "totem")
-                    requiredCount = 3;
+                if (gunButton != null) gunButton.gameObject.SetActive(false);
+                if (totemButton != null) totemButton.gameObject.SetActive(false);
+                if (wdButton != null) wdButton.gameObject.SetActive(false);
+
+                if (useBtn != null)
+                    useBtn.interactable = count == 1;
+                return;
             }
 
-            bool selectionOk = count == requiredCount;
-            var btn = GetUseButton(_slotIndexInUse);
-            if (btn != null)
-                btn.interactable = selectionOk;
+            // Gun: Use -> select 1 tile -> GunButton (OnGun) -> effect.
+            if (code == "gun")
+            {
+                if (useBtn != null)
+                    useBtn.interactable = false;
+
+                if (gunButton != null)
+                {
+                    bool show = activeConsumable != null;
+                    gunButton.gameObject.SetActive(show);
+                    gunButton.interactable = show && count == 1;
+                }
+
+                if (totemButton != null) totemButton.gameObject.SetActive(false);
+                if (wdButton != null) wdButton.gameObject.SetActive(false);
+                return;
+            }
+
+            // Totem of Dying: Use -> select 3 tiles -> TotemButton (OnTotem) -> effect.
+            if (code == "totem")
+            {
+                if (useBtn != null)
+                    useBtn.interactable = false;
+
+                if (totemButton != null)
+                {
+                    bool show = activeConsumable != null;
+                    totemButton.gameObject.SetActive(show);
+                    totemButton.interactable = show && count == 3;
+                }
+
+                if (gunButton != null) gunButton.gameObject.SetActive(false);
+                if (wdButton != null) wdButton.gameObject.SetActive(false);
+                return;
+            }
+
+            // Weighted Dice: Use -> select 1 tile (suit) -> WdButton (OnWeightedDice) -> effect.
+            if (code == "dice")
+            {
+                if (useBtn != null)
+                    useBtn.interactable = false;
+
+                if (wdButton != null)
+                {
+                    bool show = activeConsumable != null;
+                    wdButton.gameObject.SetActive(show);
+                    wdButton.interactable = show && count == 1;
+                }
+
+                if (gunButton != null) gunButton.gameObject.SetActive(false);
+                if (totemButton != null) totemButton.gameObject.SetActive(false);
+                return;
+            }
         }
     }
 
@@ -237,84 +324,12 @@ public class ConsumableEffectSystem : MonoBehaviour
         // Code-specific behaviors driven by CSV "Code" when equationType is Destroy/Enhance.
         var code = (activeConsumable.code ?? string.Empty).Trim().ToLowerInvariant();
 
-        // Gun: "Choose a tile and Destroy every tile with a lower value from your hand".
-        if (code == "gun")
-        {
-            if (sel.Count != 1) return;
-            var go = sel[0];
-            if (go == null) return;
-            var h = go.GetComponent<MahjongTileHolder>();
-            var chosen = h != null ? h.TileData : null;
-            if (chosen == null) return;
-
-            // Remove from hand any tile (any suit) with a strictly lower numbered value,
-            // then refill the hand from the deck as normal.
-            if (deckManager.Hand != null)
-            {
-                int chosenValue = (int)chosen.NumberedValue;
-                if (chosenValue > 0)
-                {
-                    var handCopy = new List<GameObject>(deckManager.Hand);
-                    foreach (var tileGo in handCopy)
-                    {
-                        if (tileGo == null) continue;
-                        var th = tileGo.GetComponent<MahjongTileHolder>();
-                        var data = th != null ? th.TileData : null;
-                        if (data == null) continue;
-
-                        int value = (int)data.NumberedValue;
-                        if (value <= 0) continue;               // skip non-numbered tiles (winds/dragons/flowers/seasons)
-                        if (value >= chosenValue) continue;     // strictly lower than chosen
-
-                        deckManager.discardTile(tileGo);
-                    }
-
-                    // After destroying lower-value tiles, draw up to full hand as usual.
-                    deckManager.redrawHand();
-                }
-            }
-
-            Finish();
+        // For gun/totem/dice we now use dedicated buttons (GunButton/TotemButton/WdButton) wired to
+        // OnGun / OnTotem / OnWeightedDice. Second Use click is reserved for generic Destroy/Remove/Enhance.
+        if (code == "gun" || code == "totem" || code == "dice")
             return;
-        }
 
-        // Totem of Dying: "Select 3 tiles to permanently remove from the deck".
-        if (code == "totem")
-        {
-            if (sel.Count != 3) return;
-            var toRemove = new List<GameObject>(sel);
-            foreach (var go in toRemove)
-            {
-                if (go == null) continue;
-                var h = go.GetComponent<MahjongTileHolder>();
-                var chosen = h != null ? h.TileData : null;
-                if (chosen == null) continue;
-
-                // Remove all future copies from the deck and discard the selected instance.
-                DeckMutationHelpers.RemoveCopiesFromDeck(deckManager, chosen, int.MaxValue);
-                deckManager.discardTile(go);
-            }
-            deckManager.redrawHand();
-            Finish();
-            return;
-        }
-
-        // Weighted Dice: "Choose a tile Suit and add 1 more of each tile in that suit to the deck".
-        if (code == "dice")
-        {
-            if (sel.Count != 1) return;
-            var go = sel[0];
-            if (go == null) return;
-            var h = go.GetComponent<MahjongTileHolder>();
-            var chosen = h != null ? h.TileData : null;
-            if (chosen == null) return;
-
-            DeckMutationHelpers.AddSuitCopiesToDeck(deckManager, chosen.TileType);
-            Finish();
-            return;
-        }
-
-        // Generic non-Add consumables: single-tile selection (Destroy, Remove, Enhance).
+        // Generic non-Add consumables: single-tile selection (Destroy, Remove, Enhance) using the Use button.
         if (sel.Count != 1) return;
         {
             var go = sel[0];
@@ -335,6 +350,93 @@ public class ConsumableEffectSystem : MonoBehaviour
 
             Finish();
         }
+    }
+
+    // GunButton handler: Use -> select 1 tile -> GunButton (OnGun) -> effect.
+    public void OnGun()
+    {
+        if (activeConsumable == null || deckManager == null) return;
+        var code = (activeConsumable.code ?? string.Empty).Trim().ToLowerInvariant();
+        if (code != "gun") return;
+
+        var sel = deckManager.selectedTiles;
+        if (sel == null || sel.Count != 1) return;
+        var go = sel[0];
+        if (go == null) return;
+        var h = go.GetComponent<MahjongTileHolder>();
+        var chosen = h != null ? h.TileData : null;
+        if (chosen == null) return;
+
+        if (deckManager.Hand != null)
+        {
+            int chosenValue = (int)chosen.NumberedValue;
+            if (chosenValue > 0)
+            {
+                var handCopy = new List<GameObject>(deckManager.Hand);
+                foreach (var tileGo in handCopy)
+                {
+                    if (tileGo == null) continue;
+                    var th = tileGo.GetComponent<MahjongTileHolder>();
+                    var data = th != null ? th.TileData : null;
+                    if (data == null) continue;
+
+                    int value = (int)data.NumberedValue;
+                    if (value <= 0) continue;               // skip non-numbered tiles (winds/dragons/flowers/seasons)
+                    if (value >= chosenValue) continue;     // strictly lower than chosen
+
+                    deckManager.discardTile(tileGo);
+                }
+
+                deckManager.redrawHand();
+            }
+        }
+
+        Finish();
+    }
+
+    // TotemButton handler: Use -> select 3 tiles -> TotemButton (OnTotem) -> effect.
+    public void OnTotem()
+    {
+        if (activeConsumable == null || deckManager == null) return;
+        var code = (activeConsumable.code ?? string.Empty).Trim().ToLowerInvariant();
+        if (code != "totem") return;
+
+        var sel = deckManager.selectedTiles;
+        if (sel == null || sel.Count != 3) return;
+
+        var toRemove = new List<GameObject>(sel);
+        foreach (var go in toRemove)
+        {
+            if (go == null) continue;
+            var h = go.GetComponent<MahjongTileHolder>();
+            var chosen = h != null ? h.TileData : null;
+            if (chosen == null) continue;
+
+            DeckMutationHelpers.RemoveCopiesFromDeck(deckManager, chosen, int.MaxValue);
+            deckManager.discardTile(go);
+        }
+
+        deckManager.redrawHand();
+        Finish();
+    }
+
+    // Weighted Dice button handler: Use -> select 1 tile (suit) -> WdButton (OnWeightedDice) -> effect.
+    public void OnWeightedDice()
+    {
+        if (activeConsumable == null || deckManager == null) return;
+        var code = (activeConsumable.code ?? string.Empty).Trim().ToLowerInvariant();
+        if (code != "dice") return;
+
+        var sel = deckManager.selectedTiles;
+        if (sel == null || sel.Count != 1) return;
+        var go = sel[0];
+        if (go == null) return;
+        var h = go.GetComponent<MahjongTileHolder>();
+        var chosen = h != null ? h.TileData : null;
+        if (chosen == null) return;
+
+        DeckMutationHelpers.AddSuitCopiesToDeck(deckManager, chosen.TileType);
+        Finish();
     }
 
     private void ApplyHeal()

@@ -19,6 +19,7 @@ public class Shop : MonoBehaviour
     public TileSpawner tileSpawner;
     public int jokerCount = 2;
     public int consumableCount = 1; 
+    public GameObject CurrencyTMP; 
 
     public List<Jokers> jokerDrops = new List<Jokers>();
     public List<Consumable> consumableDrops = new List<Consumable>();
@@ -30,9 +31,14 @@ public class Shop : MonoBehaviour
     {
         RerollJokers();
         RerollConsumables();
+        DisplayMoney();
     }
     void Update()
     {
+    }
+    public void DisplayMoney()
+    {
+        CurrencyTMP.GetComponent<TMP_Text>().text = "$" + PlayerStatManager.Instance.cash;
     }
     public void RerollConsumables()
     {

@@ -30,6 +30,7 @@ public class MapNodeData
     public MapNodeType type = MapNodeType.Battle;
     public NodeState state = NodeState.Locked;
     public List<int> nextNodeIds = new List<int>();
+    public EnemyInformation enemyInfo = new EnemyInformation();
 }
 
 // Data structure for the entire map

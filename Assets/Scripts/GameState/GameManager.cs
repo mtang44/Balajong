@@ -43,10 +43,10 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Color checkRackHoverGlintColor = new Color(1f, 0.96f, 0.82f, 1f);
     [SerializeField] private Color discardHoverGlintColor = new Color(0.84f, 0.92f, 1f, 1f);
 
-    [Header("Enemy Payouts")]
-    [SerializeField, Min(0)] private int normalBattlePayout = 5;
-    [SerializeField, Min(0)] private int eliteBattlePayout = 7;
-    [SerializeField, Min(0)] private int bossBattlePayout = 10;
+    // [Header("Enemy Payouts")]
+    // [SerializeField, Min(0)] private int normalBattlePayout = 5;
+    // [SerializeField, Min(0)] private int eliteBattlePayout = 7;
+    // [SerializeField, Min(0)] private int bossBattlePayout = 10;
 
     [Header("Win Payout Animation")]
     [SerializeField, Min(0f)] private float cashLerpDuration = 0.5f;
@@ -376,14 +376,15 @@ public class GameManager : MonoBehaviour
 
     private int ResolveBattlePayout()
     {
-        MapNodeType encounterType = ResolveCurrentEncounterType();
+        // MapNodeType encounterType = ResolveCurrentEncounterType();
 
-        return encounterType switch
-        {
-            MapNodeType.Elite => Mathf.Max(0, eliteBattlePayout),
-            MapNodeType.Boss => Mathf.Max(0, bossBattlePayout),
-            _ => Mathf.Max(0, normalBattlePayout)
-        };
+        // return encounterType switch
+        // {
+        //     MapNodeType.Elite => Mathf.Max(0, eliteBattlePayout),
+        //     MapNodeType.Boss => Mathf.Max(0, bossBattlePayout),
+        //     _ => Mathf.Max(0, normalBattlePayout)
+        // };
+        return EnemyManager.Instance.returnPayout();
     }
 
     private static MapNodeType ResolveCurrentEncounterType()

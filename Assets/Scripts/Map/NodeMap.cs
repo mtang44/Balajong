@@ -290,6 +290,7 @@ public class NodeMap : MonoBehaviour
         }
 
         mapData.currentNodeId = node.id;
+        EnemyManager.Instance.enemyInfo = node.enemyInfo;
         SaveRuntimeState();
 
         if (TryLoadEncounterScene())
@@ -622,10 +623,13 @@ public class NodeMap : MonoBehaviour
                 if (layerIndex == layers.Count - 1)
                 {
                     node.type = MapNodeType.Boss;
+                    node.enemyInfo = new EnemyInformation(node.type, layerIndex);
                     continue;
                 }
 
                 node.type = PickEncounterType(layerIndex, layers.Count);
+                //HERE IS WHERE WE ASSIGN THE THING
+                node.enemyInfo = new EnemyInformation(node.type, layerIndex);
             }
         }
     }
@@ -909,9 +913,9 @@ public class NodeMap : MonoBehaviour
         }
 
         view.Setup(this, node, nodeSprite);
-        view.SetEnemyNameText(enemyNameTooltipText);
-        view.SetEnemyHealthText(enemyHealthTooltipText);
-        view.SetBattlePayoutText(battlePayoutTooltipText);
+        view.SetEnemyNameText(node.enemyInfo.EnemyName);
+        view.SetEnemyHealthText(node.enemyInfo.getHealthString());
+        view.SetBattlePayoutText(node.enemyInfo.getPayoutString());
 
         return view;
     }
@@ -1414,6 +1418,7 @@ public class NodeMap : MonoBehaviour
 
     private bool TryLoadEncounterScene()
     {
+        
         if (config == null || !config.autoLoadEncounterScene || string.IsNullOrWhiteSpace(config.encounterSceneName))
         {
             return false;

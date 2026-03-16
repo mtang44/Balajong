@@ -171,6 +171,7 @@ public class ConsumableEffectSystem : MonoBehaviour
             || string.Equals(eq, "Duplicate", System.StringComparison.OrdinalIgnoreCase);
     }
 
+    // Use button click for a slot: if no active consumable, activate the one in that slot; if already active, treat as confirm and try to apply effect.
     private void UseSlot(int slotIndex)
     {
         var consumableAtSlot = ConsumableManager.Instance != null

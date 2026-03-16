@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Reflection;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -18,6 +19,7 @@ public class ConsumableEffectSystem : MonoBehaviour
     [SerializeField] private Button useButtonSlot1;
     [Tooltip("Copy BTN: shown in Add/Clone flow after selecting 1 tile. Bind OnClick to OnCopy().")]
     [SerializeField] private Button copyButton;
+    [SerializeField] private GameObject CloneToolTip;
 
     private DeckManager deckManager;
     private Consumable activeConsumable;
@@ -112,6 +114,8 @@ public class ConsumableEffectSystem : MonoBehaviour
         {
             if (copyButton != null)
             {
+              
+                CloneToolTip.SetActive(true);
                 bool showCopy = addConsumablePhase == 0;
                 if (copyButton.gameObject.activeSelf != showCopy)
                     copyButton.gameObject.SetActive(showCopy);
@@ -380,6 +384,8 @@ public class ConsumableEffectSystem : MonoBehaviour
             shopRoot.SetActive(true);
         if (copyButton != null)
             copyButton.gameObject.SetActive(false);
+           
+
 
         int slotToRemove = _slotIndexInUse >= 0 ? _slotIndexInUse : (ConsumableManager.Instance != null ? ConsumableManager.Instance.SelectedIndex : -1);
         if (activeConsumable != null && slotToRemove >= 0)

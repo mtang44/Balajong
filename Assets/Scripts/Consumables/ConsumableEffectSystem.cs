@@ -45,6 +45,11 @@ public class ConsumableEffectSystem : MonoBehaviour
         if (shop == null) shop = FindFirstObjectByType<Shop>();
         if (deckManager == null) deckManager = DeckManager.Instance ?? FindFirstObjectByType<DeckManager>();
 
+        // Use buttons: first click activates the consumable in that slot (if any).
+        // For non-immediate consumables, we then enter a selection phase and a follow-up action happens
+        // on a SECOND click (on the same Use button) or a dedicated button (like Copy for Clone Machine).
+        // ADD BUTTON AFTER USE FOR ACTION: if you introduce per-consumable action buttons (GunButton, TotemButton, etc.),
+        // this is where you should wire their OnClick callbacks, similar to how Copy is wired below.
         if (useButtonSlot0 != null)
             useButtonSlot0.onClick.AddListener(() => UseSlot(0));
         if (useButtonSlot1 != null)
@@ -71,6 +76,10 @@ public class ConsumableEffectSystem : MonoBehaviour
         addConsumablePhase = 1;
         deckManager.selectedTiles.Clear();
         deckManager.sortHand();
+        // ADD BUTTON AFTER USE FOR ACTION:
+        // For Clone Machine, Copy is the dedicated "second step" button shown after the first Use click.
+        // Other non-immediate consumables (Gun, Totem, Dice, etc.) could follow this pattern by having
+        // their own buttons that become visible once selection is ready, then trigger their effect here.
     }
 
     public void ConfirmAddDiscard()
@@ -234,6 +243,9 @@ public class ConsumableEffectSystem : MonoBehaviour
         var code = (activeConsumable.code ?? string.Empty).Trim().ToLowerInvariant();
 
         // Gun: "Choose a tile and Destroy every tile with a lower value from your hand".
+        // Flow: Use (slot) -> select 1 tile -> (optional GunButton here) -> effect runs in this block.
+        // ADD BUTTON AFTER USE FOR ACTION: if you add a GunButton, call into this logic from that button instead
+        // of (or in addition to) the second Use click.
         if (code == "gun")
         {
             if (sel.Count != 1) return;
@@ -275,6 +287,8 @@ public class ConsumableEffectSystem : MonoBehaviour
         }
 
         // Totem of Dying: "Select 3 tiles to permanently remove from the deck".
+        // Flow: Use (slot) -> select 3 tiles -> (optional TotemButton here) -> effect runs in this block.
+        // ADD BUTTON AFTER USE FOR ACTION: if you add a TotemButton, have it call this block after 3 tiles are selected.
         if (code == "totem")
         {
             if (sel.Count != 3) return;
@@ -296,6 +310,8 @@ public class ConsumableEffectSystem : MonoBehaviour
         }
 
         // Weighted Dice: "Choose a tile Suit and add 1 more of each tile in that suit to the deck".
+        // Flow: Use (slot) -> select 1 tile (suit) -> (optional DiceButton here) -> effect runs in this block.
+        // ADD BUTTON AFTER USE FOR ACTION: if you add a DiceButton, trigger this logic from that button.
         if (code == "dice")
         {
             if (sel.Count != 1) return;

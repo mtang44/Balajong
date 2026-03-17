@@ -97,7 +97,7 @@ public class ScoringManager : MonoBehaviour
     }
 
     // Returns the configured score value for this tile (by type). Used for individual tile scoring and meld eval.
-    public int GetTileScore(MahjongTile tile) //CHARLES WILL ADD ADDITIONAL JOKER CHECKS
+    public int GetTileScore(MahjongTile tile, bool modifyJokers = false) //CHARLES WILL ADD ADDITIONAL JOKER CHECKS
     {
         if (tile == null) return 0;
         int acc = 0;
@@ -133,7 +133,7 @@ public class ScoringManager : MonoBehaviour
             case TileType.Wind:
                 {
                     winded = true;
-                    if(JokerManager.Instance.jokers.Contains("bagged"))
+                    if(JokerManager.Instance.jokers.Contains("bagged") && modifyJokers)
                         JokerManager.Instance.baggedJokerBuff++;
                     acc += GetWindValue(tile.WindValue);
                     break;
@@ -745,11 +745,11 @@ public class ScoringManager : MonoBehaviour
     }
 
     // Total score of all melds by evaluating each meld (using individual tile values).
-    public int CalcAllMeldsScore(List<Meld> melds)
+    public int CalcAllMeldsScore(List<Meld> melds, bool finalCalc = false)
     {
         if (melds == null) return 0;
         int total = 0;
-        foreach (var m in melds) total += EvalMeld(m);
+        foreach (var m in melds) total += EvalMeld(m, true);
         return total;
     }
 
@@ -819,7 +819,7 @@ public class ScoringManager : MonoBehaviour
     // Chow: sum of 3 tiles * 3. Jog: ceil(sum of 4 tiles * 3.5).
     // Sprint: sum of 5 tiles * 4. Hydra: sum of 3 dragons * 3. NEWS: sum of 4 winds * 4.
     // BALAJONG: sum of 6 or more tiles * number of tiles.
-    public int EvalMeld(Meld meld)
+    public int EvalMeld(Meld meld, bool finalCalc = false)
     {
         if (meld.Tiles == null || meld.Tiles.Count == 0) return 0;
 
@@ -829,7 +829,7 @@ public class ScoringManager : MonoBehaviour
         bool meldContainsWind = false;
         foreach (var t in meld.Tiles)
         {
-            sum += GetTileScore(t);
+            sum += GetTileScore(t, finalCalc);
             if (t.TileType == TileType.Wind)
                 meldContainsWind = true;
             multTotal = jokerMeldMultPoints(multTotal, meld);

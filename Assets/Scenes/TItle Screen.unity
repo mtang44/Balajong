@@ -12833,6 +12833,14 @@ PrefabInstance:
       propertyPath: JokerUIContainer
       value: 
       objectReference: {fileID: 685837123}
+    - target: {fileID: 4327031755066331354, guid: 53852f4d3b9f95a4bbcc77ce96485991, type: 3}
+      propertyPath: jokers.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4327031755066331354, guid: 53852f4d3b9f95a4bbcc77ce96485991, type: 3}
+      propertyPath: 'jokers.Array.data[0]'
+      value: bagged
+      objectReference: {fileID: 0}
     - target: {fileID: 5328187807155830420, guid: 53852f4d3b9f95a4bbcc77ce96485991, type: 3}
       propertyPath: m_Name
       value: PlayerStatManager

@@ -15808,6 +15808,167 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 577961663}
   m_CullTransparentMesh: 1
+--- !u!1001 &580168646
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1110660835561396029, guid: 7e3481b7ac606ab4ba880f2fed2a8d73, type: 3}
+      propertyPath: tracks
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1110660835561396029, guid: 7e3481b7ac606ab4ba880f2fed2a8d73, type: 3}
+      propertyPath: volumeVariationRange
+      value: 0.146
+      objectReference: {fileID: 0}
+    - target: {fileID: 1110660835561396029, guid: 7e3481b7ac606ab4ba880f2fed2a8d73, type: 3}
+      propertyPath: ambianceClips.Array.size
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 1110660835561396029, guid: 7e3481b7ac606ab4ba880f2fed2a8d73, type: 3}
+      propertyPath: randomDelayBetweenAmbianceRange
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1110660835561396029, guid: 7e3481b7ac606ab4ba880f2fed2a8d73, type: 3}
+      propertyPath: ambianceClips.Array.data[0].clip
+      value: 
+      objectReference: {fileID: 8300000, guid: d8e3c5ad03287344f80ffa367fe19c05, type: 3}
+    - target: {fileID: 1110660835561396029, guid: 7e3481b7ac606ab4ba880f2fed2a8d73, type: 3}
+      propertyPath: ambianceClips.Array.data[1].clip
+      value: 
+      objectReference: {fileID: 8300000, guid: 84a9f82ba992aa94786280c24a4e1247, type: 3}
+    - target: {fileID: 1110660835561396029, guid: 7e3481b7ac606ab4ba880f2fed2a8d73, type: 3}
+      propertyPath: ambianceClips.Array.data[2].clip
+      value: 
+      objectReference: {fileID: 8300000, guid: 86e6e0cd7bb0094429749285d0c62ee5, type: 3}
+    - target: {fileID: 1110660835561396029, guid: 7e3481b7ac606ab4ba880f2fed2a8d73, type: 3}
+      propertyPath: ambianceClips.Array.data[3].clip
+      value: 
+      objectReference: {fileID: 8300000, guid: 9afb9a343a944e641b6221961a850c04, type: 3}
+    - target: {fileID: 1110660835561396029, guid: 7e3481b7ac606ab4ba880f2fed2a8d73, type: 3}
+      propertyPath: ambianceClips.Array.data[4].clip
+      value: 
+      objectReference: {fileID: 8300000, guid: 99dea9cdf68d287429b75373f12d22ff, type: 3}
+    - target: {fileID: 1110660835561396029, guid: 7e3481b7ac606ab4ba880f2fed2a8d73, type: 3}
+      propertyPath: ambianceClips.Array.data[5].clip
+      value: 
+      objectReference: {fileID: 8300000, guid: a5cdae0d4cbff6948ba87035c616623e, type: 3}
+    - target: {fileID: 1110660835561396029, guid: 7e3481b7ac606ab4ba880f2fed2a8d73, type: 3}
+      propertyPath: ambianceClips.Array.data[6].clip
+      value: 
+      objectReference: {fileID: 8300000, guid: 21cf065d2058cef449d3c1e2765789b0, type: 3}
+    - target: {fileID: 1110660835561396029, guid: 7e3481b7ac606ab4ba880f2fed2a8d73, type: 3}
+      propertyPath: ambianceClips.Array.data[0].volume
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1110660835561396029, guid: 7e3481b7ac606ab4ba880f2fed2a8d73, type: 3}
+      propertyPath: ambianceClips.Array.data[1].volume
+      value: 1.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1110660835561396029, guid: 7e3481b7ac606ab4ba880f2fed2a8d73, type: 3}
+      propertyPath: ambianceClips.Array.data[2].volume
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1110660835561396029, guid: 7e3481b7ac606ab4ba880f2fed2a8d73, type: 3}
+      propertyPath: ambianceClips.Array.data[3].volume
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1110660835561396029, guid: 7e3481b7ac606ab4ba880f2fed2a8d73, type: 3}
+      propertyPath: ambianceClips.Array.data[4].volume
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1110660835561396029, guid: 7e3481b7ac606ab4ba880f2fed2a8d73, type: 3}
+      propertyPath: ambianceClips.Array.data[5].volume
+      value: 1.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1110660835561396029, guid: 7e3481b7ac606ab4ba880f2fed2a8d73, type: 3}
+      propertyPath: ambianceClips.Array.data[6].volume
+      value: 1.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1110660835561396029, guid: 7e3481b7ac606ab4ba880f2fed2a8d73, type: 3}
+      propertyPath: ambianceClips.Array.data[0].priority
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1110660835561396029, guid: 7e3481b7ac606ab4ba880f2fed2a8d73, type: 3}
+      propertyPath: ambianceClips.Array.data[1].priority
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1110660835561396029, guid: 7e3481b7ac606ab4ba880f2fed2a8d73, type: 3}
+      propertyPath: ambianceClips.Array.data[2].priority
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1110660835561396029, guid: 7e3481b7ac606ab4ba880f2fed2a8d73, type: 3}
+      propertyPath: ambianceClips.Array.data[3].priority
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1110660835561396029, guid: 7e3481b7ac606ab4ba880f2fed2a8d73, type: 3}
+      propertyPath: ambianceClips.Array.data[4].priority
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1110660835561396029, guid: 7e3481b7ac606ab4ba880f2fed2a8d73, type: 3}
+      propertyPath: ambianceClips.Array.data[5].priority
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1110660835561396029, guid: 7e3481b7ac606ab4ba880f2fed2a8d73, type: 3}
+      propertyPath: ambianceClips.Array.data[6].priority
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2452212038052904813, guid: 7e3481b7ac606ab4ba880f2fed2a8d73, type: 3}
+      propertyPath: m_Name
+      value: AudioStreamGenerator
+      objectReference: {fileID: 0}
+    - target: {fileID: 3397845437160879367, guid: 7e3481b7ac606ab4ba880f2fed2a8d73, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 639.8632
+      objectReference: {fileID: 0}
+    - target: {fileID: 3397845437160879367, guid: 7e3481b7ac606ab4ba880f2fed2a8d73, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.00001
+      objectReference: {fileID: 0}
+    - target: {fileID: 3397845437160879367, guid: 7e3481b7ac606ab4ba880f2fed2a8d73, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 7974.1523
+      objectReference: {fileID: 0}
+    - target: {fileID: 3397845437160879367, guid: 7e3481b7ac606ab4ba880f2fed2a8d73, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3397845437160879367, guid: 7e3481b7ac606ab4ba880f2fed2a8d73, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3397845437160879367, guid: 7e3481b7ac606ab4ba880f2fed2a8d73, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3397845437160879367, guid: 7e3481b7ac606ab4ba880f2fed2a8d73, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3397845437160879367, guid: 7e3481b7ac606ab4ba880f2fed2a8d73, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3397845437160879367, guid: 7e3481b7ac606ab4ba880f2fed2a8d73, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3397845437160879367, guid: 7e3481b7ac606ab4ba880f2fed2a8d73, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6332274704148838674, guid: 7e3481b7ac606ab4ba880f2fed2a8d73, type: 3}
+      propertyPath: ambianceFolder
+      value: Assets/Audio/ASG/SRC/RackScreen
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 7e3481b7ac606ab4ba880f2fed2a8d73, type: 3}
 --- !u!1 &585236805
 GameObject:
   m_ObjectHideFlags: 0
@@ -54931,3 +55092,4 @@ SceneRoots:
   - {fileID: 3858034711770295369}
   - {fileID: 2035329019}
   - {fileID: 255148344}
+  - {fileID: 580168646}

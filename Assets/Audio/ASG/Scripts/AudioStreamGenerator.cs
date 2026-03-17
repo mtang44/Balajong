@@ -35,7 +35,7 @@ public class AudioStreamGenerator : MonoBehaviour
     // Interface for ASG to access audio clips and their properties
     [Header("Settings")]
     [Tooltip("Number of simultaneous ambiance tracks to play.")]
-    [SerializeField, Range(1, 8)] public int tracks = 2;
+    [SerializeField, Range(0, 8)] public int tracks = 2;
 
     [Header("Delay Control")]
     [Tooltip("Average delay between ambiance clips, in seconds.")]
@@ -77,8 +77,8 @@ public class AudioStreamGenerator : MonoBehaviour
     }
     void Start()
     {
-        int randomMusic = Random.Range(0, musicClips.Count);
-        ASG_AudioManager.Instance.StartMusicClip(musicClips[randomMusic].clip, 1f);
+        // int randomMusic = Random.Range(0, musicClips.Count);
+        // ASG_AudioManager.Instance.StartMusicClip(musicClips[randomMusic].clip, 1f);
         usableClips.AddRange(ambianceClips);
         StartCoroutine(BeginPlay(1f, 1f));
     }

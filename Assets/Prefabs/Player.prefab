@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 608205956180617561}
   - component: {fileID: 390901563365830465}
   - component: {fileID: 4327031755066331354}
-  - component: {fileID: 4022826382826687623}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -31,7 +30,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 2317427108783444203}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &390901563365830465
@@ -75,13 +75,46 @@ MonoBehaviour:
   jokerShakeDuration: 0.22
   jokerShakeAngle: 10
   jokerShakeFrequency: 28
---- !u!82 &4022826382826687623
+--- !u!1 &9123783388900658521
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2317427108783444203}
+  - component: {fileID: 1859246977004651246}
+  - component: {fileID: 1828677842618675723}
+  m_Layer: 0
+  m_Name: Music
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2317427108783444203
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9123783388900658521}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 608205956180617561}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!82 &1859246977004651246
 AudioSource:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5328187807155830420}
+  m_GameObject: {fileID: 9123783388900658521}
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: -3319390472926701453, guid: c93788f151038c44caeb1f22607e001f, type: 2}
@@ -172,3 +205,16 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &1828677842618675723
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9123783388900658521}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab7ad92828839b74b91f25303ec1cf33, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MutedMusic
+  mixer: {fileID: 24100000, guid: c93788f151038c44caeb1f22607e001f, type: 2}

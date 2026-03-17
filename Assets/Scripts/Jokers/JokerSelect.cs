@@ -19,5 +19,6 @@ public class JokerSelect : MonoBehaviour
         JokerHolderUI.Instance.RemoveJoker(JokerManager.Instance.jokers.IndexOf(code));
         JokerManager.Instance.jokers.Remove(code);
         PlayerStatManager.Instance.cash += price / 2;
+        StatsUpdater.Instance?.UpdateJokerCount();
     }
 }

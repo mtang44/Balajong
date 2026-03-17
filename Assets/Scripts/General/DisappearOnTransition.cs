@@ -95,7 +95,7 @@ public class DisappearOnTransition : MonoBehaviour
         {
         }
 
-        return FindObjectOfType<SceneChanger>();
+        return FindFirstObjectByType<SceneChanger>();
     }
 
     private void UnsubscribeFromSceneChanger()

@@ -34,15 +34,12 @@ public class ShopPurchase : MonoBehaviour
     }
     public void rerollCheck()
     {
-        int rerollCost = 5;
-        if(checkForCash(rerollCost))
-        {
-            foreach(GameObject panel in jokerPanels)
-            {
-                panel.SetActive(true);
-            }
-            ShopManager.GetComponent<Shop>().RerollJokers();
-        }
+        TryPaidReroll(true, true);
+    }
+
+    public void rerollConsumablesCheck()
+    {
+        TryPaidReroll(false, true);
     }
     public void purchaseJoker(int index)
     {
@@ -64,5 +61,39 @@ public class ShopPurchase : MonoBehaviour
     public void disableIndex(int index)
     {
         jokerPanels[index].SetActive(false);
+    }
+
+    private void TryPaidReroll(bool rerollJokers, bool rerollConsumables)
+    {
+        int rerollCost = 5;
+        if (!checkForCash(rerollCost))
+        {
+            return;
+        }
+
+        Shop shop = ShopManager != null ? ShopManager.GetComponent<Shop>() : null;
+        if (shop == null)
+        {
+            Debug.LogWarning("ShopPurchase: ShopManager is missing or has no Shop component.", this);
+            return;
+        }
+
+        if (rerollJokers)
+        {
+            foreach (GameObject panel in jokerPanels)
+            {
+                if (panel != null)
+                {
+                    panel.SetActive(true);
+                }
+            }
+
+            shop.RerollJokers();
+        }
+
+        if (rerollConsumables)
+        {
+            shop.RerollConsumables();
+        }
     }
 }

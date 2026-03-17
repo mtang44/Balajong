@@ -1,8 +1,8 @@
 using UnityEngine;
-using System.Collections;
 
 [DisallowMultipleComponent]
 [RequireComponent(typeof(MahjongTileHolder))]
+[RequireComponent(typeof(TileGenerator))]
 public class TileTransition : MonoBehaviour
 {
     [System.Serializable]
@@ -21,15 +21,10 @@ public class TileTransition : MonoBehaviour
     private static SavedTileData savedTile;
 
     [SerializeField] private bool preserveAcrossScenes = true;
-    [SerializeField] private bool randomizeEdition = true;
-    [SerializeField] public int[] typeWeight;
-    [SerializeField] public int[] editionWeight;
+    [SerializeField] private TileGenerator tileGenerator;
 
     private MahjongTileHolder tileHolder;
     private bool restoredSavedTile;
-
-    private static readonly int TileTypeCount = System.Enum.GetValues(typeof(TileType)).Length;
-    private static readonly int EditionCount = System.Enum.GetValues(typeof(Edition)).Length;
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
     private static void ResetStaticState()
@@ -40,7 +35,7 @@ public class TileTransition : MonoBehaviour
     private void Awake()
     {
         tileHolder = GetComponent<MahjongTileHolder>();
-        EnsureWeightArrays();
+        tileGenerator = ResolveTileGenerator();
 
         if (!preserveAcrossScenes)
         {
@@ -56,7 +51,10 @@ public class TileTransition : MonoBehaviour
 
     private void OnValidate()
     {
-        EnsureWeightArrays();
+        if (tileGenerator == null)
+        {
+            tileGenerator = GetComponent<TileGenerator>();
+        }
     }
 
     private System.Collections.IEnumerator Start()
@@ -66,7 +64,7 @@ public class TileTransition : MonoBehaviour
             yield break;
         }
 
-        // Wait one frame so RandomTileGen.Start can finish its randomization first.
+        // Wait one frame so any Start-time randomization can finish first.
         yield return null;
         SaveCurrentTile();
     }
@@ -93,145 +91,42 @@ public class TileTransition : MonoBehaviour
         {
             tileHolder = GetComponent<MahjongTileHolder>();
         }
-        
+
         if (tileHolder == null)
         {
             Debug.LogWarning("TileTransition requires a MahjongTileHolder on the same GameObject.", this);
             return;
         }
 
-        TileType randomType = (TileType)GetWeightedIndex(typeWeight, TileTypeCount);
-
-        NumberedValue numberedValue = NumberedValue.One;
-        WindValue windValue = WindValue.North;
-        DragonValue dragonValue = DragonValue.Red;
-        FlowerValue flowerValue = FlowerValue.Plum;
-        SeasonValue seasonValue = SeasonValue.Spring;
-
-        switch (randomType)
+        tileGenerator = ResolveTileGenerator();
+        if (tileGenerator == null)
         {
-            case TileType.Dots:
-            case TileType.Bam:
-            case TileType.Crack:
-                numberedValue = (NumberedValue)Random.Range(1, 10);
-                break;
-            case TileType.Wind:
-                windValue = (WindValue)Random.Range(0, 4);
-                break;
-            case TileType.Dragon:
-                dragonValue = (DragonValue)Random.Range(0, 3);
-                break;
-            case TileType.Flower:
-                flowerValue = (FlowerValue)Random.Range(0, 4);
-                break;
-            case TileType.Season:
-                seasonValue = (SeasonValue)Random.Range(0, 4);
-                break;
+            Debug.LogWarning("TileTransition requires a TileGenerator on the same GameObject.", this);
+            return;
         }
 
-        Edition edition = Edition.Base;
-        if (randomizeEdition)
+        if (!tileGenerator.TryRandomizeCurrentTile())
         {
-            edition = (Edition)GetWeightedIndex(editionWeight, EditionCount);
-        }
-        else if (tileHolder.TileData != null)
-        {
-            edition = tileHolder.TileData.Edition;
+            return;
         }
 
-        MahjongTileData tileData = new MahjongTileData(
-            randomType,
-            numberedValue,
-            windValue,
-            dragonValue,
-            flowerValue,
-            seasonValue,
-            edition);
-
-        tileHolder.SetTileData(tileData);
         SaveCurrentTile();
     }
 
-    private void EnsureWeightArrays()
+    private TileGenerator ResolveTileGenerator()
     {
-        EnsureWeightArrayLength(ref typeWeight, TileTypeCount, 1);
-        EnsureWeightArrayLength(ref editionWeight, EditionCount, 1);
-    }
-
-    private static void EnsureWeightArrayLength(ref int[] weights, int targetLength, int defaultValue)
-    {
-        if (weights == null)
+        if (tileGenerator != null)
         {
-            weights = new int[targetLength];
-            for (int i = 0; i < targetLength; i++)
-            {
-                weights[i] = defaultValue;
-            }
-            return;
+            return tileGenerator;
         }
 
-        if (weights.Length == targetLength)
+        tileGenerator = GetComponent<TileGenerator>();
+        if (tileGenerator == null)
         {
-            return;
+            tileGenerator = gameObject.AddComponent<TileGenerator>();
         }
 
-        int[] resized = new int[targetLength];
-        int copyCount = Mathf.Min(weights.Length, targetLength);
-        for (int i = 0; i < copyCount; i++)
-        {
-            resized[i] = weights[i];
-        }
-
-        for (int i = copyCount; i < targetLength; i++)
-        {
-            resized[i] = defaultValue;
-        }
-
-        weights = resized;
-    }
-
-    private static int GetWeightedIndex(int[] weights, int optionCount)
-    {
-        if (optionCount <= 0)
-        {
-            return 0;
-        }
-
-        int totalWeight = 0;
-        for (int i = 0; i < optionCount; i++)
-        {
-            if (weights == null || i >= weights.Length)
-            {
-                continue;
-            }
-
-            totalWeight += Mathf.Max(0, weights[i]);
-        }
-
-        if (totalWeight <= 0)
-        {
-            return Random.Range(0, optionCount);
-        }
-
-        int roll = Random.Range(0, totalWeight);
-        int cumulativeWeight = 0;
-
-        for (int i = 0; i < optionCount; i++)
-        {
-            int weight = 0;
-            if (weights != null && i < weights.Length)
-            {
-                weight = Mathf.Max(0, weights[i]);
-            }
-
-            cumulativeWeight += weight;
-            if (roll < cumulativeWeight)
-            {
-                return i;
-            }
-        }
-
-        return optionCount - 1;
+        return tileGenerator;
     }
 
     private void SaveCurrentTile()

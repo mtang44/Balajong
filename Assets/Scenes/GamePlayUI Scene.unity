@@ -4388,6 +4388,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ScoringManager
   logScoringDetails: 0
   handInfoTextObject: {fileID: 0}
+  jokerInfoTextObject: {fileID: 0}
   autoUpdateHandInfo: 1
   showTotal: 1
   dotsValues: 00000000000000000000000000000000000000000000000000000000000000000000000000000000
@@ -5489,6 +5490,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 309893237}
   m_CullTransparentMesh: 1
+--- !u!1 &314916496 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4021293540373017939, guid: 2c55e2a91a23ea0449d70d0ab8c59146, type: 3}
+  m_PrefabInstance: {fileID: 2374388135027412578}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &316360367
 GameObject:
   m_ObjectHideFlags: 0
@@ -9128,7 +9134,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 140.03735, y: -145}
+  m_AnchoredPosition: {x: 140.03735, y: -144.99998}
   m_SizeDelta: {x: -1430.2695, y: -982.226}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &587452164
@@ -11124,6 +11130,7 @@ MonoBehaviour:
   titleLabel: {fileID: 1674669102}
   descriptionLabel: {fileID: 1307281774}
   priceTagPanel: {fileID: 811680765}
+  overlayChildToDisableOnPurchase: {fileID: 0}
   hideBuyButtonOnStart: 1
   hideBuyButtonAfterPurchase: 1
   hideBuyButtonOnPointerExit: 1
@@ -12427,7 +12434,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 140.03735, y: -145}
+  m_AnchoredPosition: {x: 140.03735, y: -144.99998}
   m_SizeDelta: {x: -1430.2695, y: -982.226}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &811778301
@@ -16190,6 +16197,7 @@ MonoBehaviour:
   loseScreen: {fileID: 0}
   cash: {fileID: 537163357}
   jokerCount: {fileID: 1573202347}
+  deckCount: {fileID: 0}
 --- !u!4 &1156448486
 Transform:
   m_ObjectHideFlags: 0
@@ -17521,6 +17529,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1242322070}
   m_CullTransparentMesh: 1
+--- !u!1 &1243860388 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6305856318619003910, guid: 2c55e2a91a23ea0449d70d0ab8c59146, type: 3}
+  m_PrefabInstance: {fileID: 2374388135027412578}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1255650944
 GameObject:
   m_ObjectHideFlags: 0
@@ -21314,6 +21327,102 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 314916496}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1243860388}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 2089748903}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 234494393}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 776855883}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1275893828}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1255692553}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 770858410}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1563989754
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23249,6 +23358,7 @@ MonoBehaviour:
   titleLabel: {fileID: 1280077616}
   descriptionLabel: {fileID: 1812164617}
   priceTagPanel: {fileID: 1840597742}
+  overlayChildToDisableOnPurchase: {fileID: 0}
   hideBuyButtonOnStart: 1
   hideBuyButtonAfterPurchase: 1
   hideBuyButtonOnPointerExit: 1

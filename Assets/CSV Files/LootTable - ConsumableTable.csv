@@ -1,9 +1,9 @@
 Rarity,Name,Code,Equation Type,Description,Price
 Common,Zesty Orange,orange,Heal,Immidiately Restores 1 HP,3
 Common,Clone Machine,clone,Add,Choose 1 Tile and add four more of it's kind to the deck,2
-Common,Gun,gun,Destroy,Choose a tile and Destroy all tiles in your rack with a lower value,2
-Common,Brain Rot,67,Enhance,All Cracks recieve a 1x Multiplier to their score,5
+Common,Gun,gun,Destroy,Choose a tile and Destroy all tiles in your rack with a lower value,5
+Common,Brain Rot,67,Enhance,All Cracks recieve a 1x Multiplier to their score,4
 Uncommon,Gold Coin,coin,Econ,Gain  $3 For Free,0
 Uncommon,Totem of Dying,totem,Destroy,Select 3 tiles to Destroy permanently,10
-Uncommon,Weighted Dice,dice,Enhance,TBD,10
+Uncommon,Weighted Dice,dice,Enhance,Select 3 tiles to add random editions to,10
 Uncommon,Golden Apple,apple,Heal,Immidiately Restores all HP,3

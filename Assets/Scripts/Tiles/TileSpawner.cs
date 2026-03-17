@@ -18,9 +18,6 @@ public class TileSpawner : MonoBehaviour
     [Tooltip("Optional parent override for slot 1 (second tile), for example Tile2.")]
     [SerializeField] private Transform tile2Parent;
 
-    [Tooltip("ShopTilePurchaseUI overlays that should be re-enabled when tiles are rerolled.")]
-    [SerializeField] private ShopTilePurchaseUI[] slotOverlays;
-
     [Tooltip("Local scale applied to each spawned tile prefab.")]
     [SerializeField] private Vector3 tileScale = Vector3.one;
 
@@ -38,17 +35,6 @@ public class TileSpawner : MonoBehaviour
 
     public void RerollTiles()
     {
-        if (slotOverlays != null)
-        {
-            for (int i = 0; i < slotOverlays.Length; i++)
-            {
-                if (slotOverlays[i] != null)
-                {
-                    slotOverlays[i].gameObject.SetActive(true);
-                }
-            }
-        }
-
         if (tilePrefab == null)
         {
             Debug.LogWarning("TileSpawner: no tilePrefab assigned.", this);

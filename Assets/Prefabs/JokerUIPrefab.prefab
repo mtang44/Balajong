@@ -1084,7 +1084,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 227f636743cc3734b9dbeec3e352d1cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TitleAnimation
-  tiltAngle: 4
+  tiltAngle: 1
   tiltSpeed: 0.5
 --- !u!1 &8268888421600679128
 GameObject:

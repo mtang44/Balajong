@@ -21,6 +21,7 @@ public class ShopPurchase : MonoBehaviour
         if (PlayerStatManager.Instance.cash >= cost)
         {
             PlayerStatManager.Instance.cash -= cost;
+            PlayerStatManager.Instance.AddMoneySpent(cost);
             statsUpdater?.UpdateCash(PlayerStatManager.Instance.cash);
 
             Debug.Log("Purchase successful! Remaining cash: $" + PlayerStatManager.Instance.cash);

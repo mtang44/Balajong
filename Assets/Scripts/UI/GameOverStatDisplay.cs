@@ -19,10 +19,11 @@ public class GameOverStatDisplay : MonoBehaviour
     public void UpdateDisplay()
     {
         PlayerStatManager playerStats = PlayerStatManager.Instance;
+        if (playerStats == null) return;
 
-        // HighestScoreTMP.text = playerStats.
-        // MeldsScoredTMP.text = playerStats.
-        // EnemiesDefeatedTMP.text = playerStats.
-        // MoneySpentTMP.text = playerStats.
+        HighestScoreTMP.text = playerStats.highestScoringRack.ToString();
+        MeldsScoredTMP.text = playerStats.totalMeldsScored.ToString();
+        EnemiesDefeatedTMP.text = playerStats.enemiesDefeated.ToString();
+        MoneySpentTMP.text = "$" + playerStats.totalMoneySpent.ToString();
     }
 }

@@ -165,7 +165,7 @@ public class ConsumableEffectSystem : MonoBehaviour
                 if (wdButton != null) wdButton.gameObject.SetActive(false);
 
                 if (useBtn != null)
-                    useBtn.interactable = count == 1;
+                    useBtn.interactable = code == "67" ? true : count == 1;
                 return;
             }
 
@@ -243,6 +243,7 @@ public class ConsumableEffectSystem : MonoBehaviour
         if (!PlayerStatManager.Instance.AddConsumableToInventory(offeredConsumable)) return;
 
         PlayerStatManager.Instance.cash -= offeredConsumable.price;
+        PlayerStatManager.Instance.AddMoneySpent(offeredConsumable.price);
         StatsUpdater.Instance?.UpdateCash(PlayerStatManager.Instance.cash);
 
         if (shop.Shop_Item_TMPs != null && shop.Shop_Item_TMPs.Length > 4 && shop.Shop_Item_TMPs[4] != null)
@@ -264,6 +265,9 @@ public class ConsumableEffectSystem : MonoBehaviour
         // Econ-type consumables (e.g. Gold Coin): immediate cash gain, no tile selection.
         if (IsEquationType(consumable, "Econ"))
         {
+            var code = (consumable.code ?? string.Empty).Trim().ToLowerInvariant();
+            if (code == "67") { Finish(); return;}
+            
             ApplyCash(3);
             Finish();
             return;
@@ -348,6 +352,8 @@ public class ConsumableEffectSystem : MonoBehaviour
         // Generic non-Add consumables: single-tile selection (Destroy, Remove, Enhance) using the Use button.
         if (sel.Count != 1) return;
         {
+            if (code == "67") { Finish(); return; }
+
             var go = sel[0];
             if (go == null) return;
             var h = go.GetComponent<MahjongTileHolder>();

@@ -301,6 +301,15 @@ public class GameManager : MonoBehaviour
         int handScore = ScoringManager.Instance.CalcHandScore(DeckManager.Instance.getHandAsMahjongTileData());
         Debug.Log($"ScoreState: Hand scored {handScore} points.");
 
+        // Track run stats
+        var handTiles = DeckManager.Instance.getHandAsMahjongTileData();
+        var melds = ScoringManager.Instance.DetectMelds(handTiles);
+        int nonSingleMeldCount = 0;
+        foreach (var meld in melds)
+            if (meld.Kind != ScoringManager.MeldKind.Single) nonSingleMeldCount++;
+        PlayerStatManager.Instance.RecordHandScore(handScore);
+        PlayerStatManager.Instance.AddMeldsScored(nonSingleMeldCount);
+
         int targetScoreAfterHand = score + handScore;
 
         // Animate score rise (melds, bonuses, then any final joker/global delta) up to the final total.

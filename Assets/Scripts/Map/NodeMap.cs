@@ -30,9 +30,9 @@ public class NodeMap : MonoBehaviour
     [SerializeField] private float mapUnitsToPixels = 120f;
     [SerializeField] private float nodeUiSize = 96f;
     [SerializeField, Min(0.05f)] private float bossNodeScaleMultiplier = 1.35f;
-    [SerializeField] private string enemyNameTooltipText = "???";
-    [SerializeField] private string enemyHealthTooltipText = "???";
-    [SerializeField] private string battlePayoutTooltipText = "???";
+    //[SerializeField] private string enemyNameTooltipText = "???";
+    //[SerializeField] private string enemyHealthTooltipText = "???";
+    //[SerializeField] private string battlePayoutTooltipText = "???";
     [SerializeField] private MapConnectionVisualSettings connectionVisualSettings = new MapConnectionVisualSettings
     {
         lineWidth = 10f,
@@ -631,13 +631,13 @@ public class NodeMap : MonoBehaviour
                 if (layerIndex == layers.Count - 1)
                 {
                     node.type = MapNodeType.Boss;
-                    node.enemyInfo = new EnemyInformation(node.type, layerIndex);
+                    node.enemyInfo = new EnemyInformation(node.type, GetProjectedEnemiesDefeatedForLayer(layerIndex));
                     continue;
                 }
 
                 node.type = PickEncounterType(layerIndex, layers.Count);
                 //HERE IS WHERE WE ASSIGN THE THING
-                node.enemyInfo = new EnemyInformation(node.type, layerIndex);
+                node.enemyInfo = new EnemyInformation(node.type, GetProjectedEnemiesDefeatedForLayer(layerIndex));
             }
         }
     }
@@ -1330,6 +1330,7 @@ public class NodeMap : MonoBehaviour
 
         MapRunState runState = MapRunState.Instance;
         mapData = runState.CurrentMap;
+        RefreshEnemyInfoForCurrentProgress();
         pendingMapEntryDefeatAnimationNodeId = ResolveCurrentMapEntryDefeatAnimationNodeId();
         if (!animateRecentlyDefeatedNodeOnMapEntry)
         {
@@ -1343,6 +1344,59 @@ public class NodeMap : MonoBehaviour
         CenterOnCurrentNode();
         TryQueuePendingMapEntryDefeatAnimation();
         return true;
+    }
+
+    private void RefreshEnemyInfoForCurrentProgress()
+    {
+        if (mapData == null || mapData.nodes == null)
+        {
+            return;
+        }
+
+        for (int i = 0; i < mapData.nodes.Count; i++)
+        {
+            MapNodeData node = mapData.nodes[i];
+            if (!IsEnemyNode(node))
+            {
+                continue;
+            }
+
+            if (node.enemyInfo == null)
+            {
+                node.enemyInfo = new EnemyInformation(node.type, GetProjectedEnemiesDefeatedForLayer(node.layer));
+                continue;
+            }
+
+            node.enemyInfo.EnemyHealth = EnemyInformation.CalculateEnemyHealth(node.type, GetProjectedEnemiesDefeatedForLayer(node.layer));
+        }
+    }
+
+    private int GetProjectedEnemiesDefeatedForLayer(int layerIndex)
+    {
+        int enemiesDefeated = PlayerStatManager.Instance != null ? PlayerStatManager.Instance.enemiesDefeated : 0;
+        int anchorLayer = GetEnemyProgressAnchorLayer();
+        return Mathf.Max(0, enemiesDefeated + (layerIndex - anchorLayer));
+    }
+
+    private int GetEnemyProgressAnchorLayer()
+    {
+        if (mapData == null || mapData.currentNodeId < 0)
+        {
+            return 1;
+        }
+
+        MapNodeData currentNode = mapData.FindNodeById(mapData.currentNodeId);
+        if (currentNode == null)
+        {
+            return 1;
+        }
+
+        if (currentNode.type == MapNodeType.Start || currentNode.state == NodeState.Cleared)
+        {
+            return currentNode.layer + 1;
+        }
+
+        return currentNode.layer;
     }
 
     private int ResolveCurrentMapEntryDefeatAnimationNodeId()

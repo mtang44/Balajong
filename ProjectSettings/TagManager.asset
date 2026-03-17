@@ -11,6 +11,7 @@ TagManager:
   - Info
   - StatsUpdater
   - TransitionManager
+  - EndScreen
   layers:
   - Default
   - TransparentFX

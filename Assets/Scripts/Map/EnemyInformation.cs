@@ -13,7 +13,7 @@ public class EnemyInformation
         EnemyPayout = 5;
         EnemyName = "Unknown";
     }
-    public EnemyInformation(MapNodeType type, int layer)
+    public EnemyInformation(MapNodeType type, int enemiesDefeatedBeforeEncounter)
     {
         EnemyName = getRandomName(type);
         switch (type)
@@ -23,7 +23,7 @@ public class EnemyInformation
             case MapNodeType.Boss: {EnemyPayout = 10; break;}
             default: {EnemyPayout = 5; break;}
         }
-        EnemyHealth = getEnemyHealth(type, layer);
+        EnemyHealth = CalculateEnemyHealth(type, enemiesDefeatedBeforeEncounter);
     }
     public EnemyInformation(MapNodeType type)
     {
@@ -77,8 +77,13 @@ public class EnemyInformation
     public string getHealthString() { return "" + EnemyHealth; }
     public string getPayoutString() { return "$" + EnemyPayout; }
 
-    int getEnemyHealth(MapNodeType type, int layer) {
-        int basicValue = EnemyInformationGrammer.scoreThresholds[layer - 1];
+    public static int CalculateEnemyHealth(MapNodeType type, int enemiesDefeatedBeforeEncounter)
+    {
+        if (EnemyInformationGrammer.scoreThresholds == null || EnemyInformationGrammer.scoreThresholds.Count == 0)
+            return 100;
+
+        int thresholdIndex = Mathf.Clamp(enemiesDefeatedBeforeEncounter, 0, EnemyInformationGrammer.scoreThresholds.Count - 1);
+        int basicValue = EnemyInformationGrammer.scoreThresholds[thresholdIndex];
         if(type == MapNodeType.Elite)
             basicValue = (int)(basicValue * 1.5f);
         else if(type == MapNodeType.Boss)

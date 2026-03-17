@@ -37,6 +37,8 @@ public class MapEncounterResultHandler : MonoBehaviour
     {
         PlayEnemyDefeatAnimation();
 
+        PlayerStatManager.Instance?.RecordEnemyDefeated();
+
         // Reset the deck for the next encounter
         DeckManager.Instance.endRound();
 

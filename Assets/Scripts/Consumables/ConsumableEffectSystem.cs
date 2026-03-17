@@ -205,7 +205,7 @@ public class ConsumableEffectSystem : MonoBehaviour
                 return;
             }
 
-            // Weighted Dice: Use -> select 1 tile (suit) -> WdButton (OnWeightedDice) -> effect.
+            // Weighted Dice: Use -> select 3 tiles -> WdButton (OnWeightedDice) -> edition effect.
             if (code == "dice")
             {
                 if (useBtn != null)
@@ -215,7 +215,7 @@ public class ConsumableEffectSystem : MonoBehaviour
                 {
                     bool show = activeConsumable != null;
                     wdButton.gameObject.SetActive(show);
-                    wdButton.interactable = show && count == 1;
+                    wdButton.interactable = show && count == 3;
                 }
 
                 if (gunButton != null) gunButton.gameObject.SetActive(false);
@@ -436,7 +436,7 @@ public class ConsumableEffectSystem : MonoBehaviour
         Finish();
     }
 
-    // Weighted Dice button handler: Use -> select 1 tile (suit) -> WdButton (OnWeightedDice) -> effect.
+    // Weighted Dice button handler: Use -> select 3 tiles -> WdButton (OnWeightedDice) -> random non-base editions.
     public void OnWeightedDice()
     {
         if (activeConsumable == null || deckManager == null) return;
@@ -444,15 +444,50 @@ public class ConsumableEffectSystem : MonoBehaviour
         if (code != "dice") return;
 
         var sel = deckManager.selectedTiles;
-        if (sel == null || sel.Count != 1) return;
-        var go = sel[0];
-        if (go == null) return;
-        var h = go.GetComponent<MahjongTileHolder>();
-        var chosen = h != null ? h.TileData : null;
-        if (chosen == null) return;
+        if (sel == null || sel.Count != 3) return;
 
-        DeckMutationHelpers.AddSuitCopiesToDeck(deckManager, chosen.TileType);
+        var selectedHolders = new List<MahjongTileHolder>(sel.Count);
+        foreach (var selectedGo in sel)
+        {
+            if (selectedGo == null) return;
+
+            var holder = selectedGo.GetComponent<MahjongTileHolder>();
+            if (holder == null || holder.TileData == null) return;
+
+            selectedHolders.Add(holder);
+        }
+
+        foreach (var holder in selectedHolders)
+        {
+            var updatedTile = CloneTileWithEdition(holder.TileData, GetRandomNonBaseEdition());
+            holder.SetTileData(updatedTile);
+        }
+
         Finish();
+    }
+
+    private static Edition GetRandomNonBaseEdition()
+    {
+        return Random.Range(0, 3) switch
+        {
+            0 => Edition.Ghost,
+            1 => Edition.Enchanted,
+            _ => Edition.Crystal
+        };
+    }
+
+    private static MahjongTileData CloneTileWithEdition(MahjongTileData source, Edition edition)
+    {
+        if (source == null) return null;
+
+        return new MahjongTileData(
+            source.TileType,
+            source.NumberedValue,
+            source.WindValue,
+            source.DragonValue,
+            source.FlowerValue,
+            source.SeasonValue,
+            edition);
     }
 
     private void ApplyHeal()

@@ -58,7 +58,7 @@ public class ConsumableInventoryUI : MonoBehaviour
 
             if (i < slotButtons.Count && slotButtons[i] != null)
             {
-                slotButtons[i].gameObject.SetActive(true);
+                //slotButtons[i].gameObject.SetActive(true);
                 slotButtons[i].interactable = hasItem;
             }
 

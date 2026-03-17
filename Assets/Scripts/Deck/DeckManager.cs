@@ -69,10 +69,12 @@ public class DeckManager : MonoBehaviour
         {
             deck = new Deck(tilePrefab);
             deck.InitializeDeck();
+            NotifyDeckCountChanged();
             return;
         }
 
         deck.Shuffle();
+        NotifyDeckCountChanged();
     }
 
     public void ResetToDefaultState()
@@ -85,6 +87,7 @@ public class DeckManager : MonoBehaviour
         forceNewLists();
         deck = new Deck(tilePrefab);
         deck.InitializeDeck();
+        NotifyDeckCountChanged();
     }
 
     private void DestroyTrackedTiles(List<GameObject> tiles)
@@ -131,6 +134,7 @@ public class DeckManager : MonoBehaviour
             isDrawingHand = false;
             DrawVisualization.Instance?.AnimateDeal(pendingDealTiles);
             pendingDealTiles.Clear();
+            NotifyDeckCountChanged();
         }
     }
     public void sortHand()
@@ -338,6 +342,7 @@ public class DeckManager : MonoBehaviour
 
         Debug.Log("Deck count after endRound: " + deck.GetDeckCount());
         deck.Shuffle();
+        NotifyDeckCountChanged();
     }
 
     public List<MahjongTileData> getHandAsMahjongTileData()
@@ -367,5 +372,10 @@ public class DeckManager : MonoBehaviour
         }
 
         return transform;
+    }
+
+    private static void NotifyDeckCountChanged()
+    {
+        StatsUpdater.Instance?.UpdateDeckCount();
     }
 }

@@ -16,6 +16,7 @@ public class StatsUpdater : MonoBehaviour
     public GameObject loseScreen;
     public GameObject cash;
     public GameObject jokerCount;
+    public GameObject deckCount;
     // We probably want this
     public static StatsUpdater Instance;
     private void Awake()
@@ -115,6 +116,38 @@ public class StatsUpdater : MonoBehaviour
             }
         }
     }
+
+    public void UpdateDeckCount()
+    {
+        if (deckCount == null)
+        {
+            return;
+        }
+
+        TMPro.TextMeshProUGUI textComponent = deckCount.GetComponent<TMPro.TextMeshProUGUI>();
+        if (textComponent == null)
+        {
+            return;
+        }
+
+        int currentDeckTiles = 0;
+        int totalDeckTiles = 0;
+
+        DeckManager deckManager = DeckManager.Instance;
+        if (deckManager != null)
+        {
+            currentDeckTiles = deckManager.deck != null ? deckManager.deck.GetDeckCount() : 0;
+
+            int handCount = deckManager.hand != null ? deckManager.hand.Count : 0;
+            int flowerCount = deckManager.flowerTiles != null ? deckManager.flowerTiles.Count : 0;
+            int seasonCount = deckManager.seasonTiles != null ? deckManager.seasonTiles.Count : 0;
+            int discardCount = deckManager.discard != null ? deckManager.discard.Count : 0;
+
+            totalDeckTiles = currentDeckTiles + handCount + flowerCount + seasonCount + discardCount;
+        }
+
+        textComponent.text = currentDeckTiles + "/" + totalDeckTiles;
+    }
     public void ShowWinScreen()
     {
         if (winScreen != null)
@@ -164,5 +197,6 @@ public class StatsUpdater : MonoBehaviour
         }
 
         UpdateJokerCount();
+        UpdateDeckCount();
     }
 }

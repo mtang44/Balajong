@@ -36,6 +36,9 @@ public class AbandonRun : MonoBehaviour
 
     private void ConfirmAbandonRun()
     {
+        // Clear all joker visuals from shop
+        ClearJokerVisuals();
+
         if (GameManager.Instance != null)
         {
             GameManager.Instance.EnterResetStateFromAbandon();
@@ -59,6 +62,21 @@ public class AbandonRun : MonoBehaviour
         }
 
         SceneManager.LoadScene(returnSceneName);
+    }
+
+    private void ClearJokerVisuals()
+    {
+        ShopPurchase shopPurchase = FindFirstObjectByType<ShopPurchase>(FindObjectsInactive.Include);
+        if (shopPurchase != null && shopPurchase.jokerPanels != null)
+        {
+            foreach (GameObject panel in shopPurchase.jokerPanels)
+            {
+                if (panel != null)
+                {
+                    panel.SetActive(true);
+                }
+            }
+        }
     }
 
     private void SetConfirmationPanelVisible(bool isVisible)

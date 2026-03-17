@@ -325,7 +325,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8267152115198997579}
-  - component: {fileID: 1238189624075684690}
   - component: {fileID: 6387953065571189182}
   m_Layer: 1
   m_Name: Visual Holder
@@ -356,20 +355,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0.2958, y: 1.2828}
   m_SizeDelta: {x: 125.0309, y: 186.9711}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1238189624075684690
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5764199300175290608}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0f4a449e8d0d7d442847886683442c55, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DisappearOnTransition
-  useSceneTransitionDuration: 0
-  defaultScaleDuration: 0.15
 --- !u!222 &6387953065571189182
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -465,6 +450,8 @@ GameObject:
   - component: {fileID: 4373650203639930967}
   - component: {fileID: 5422248950185235850}
   - component: {fileID: 7053452864136913757}
+  - component: {fileID: 7809973788904938023}
+  - component: {fileID: 7320444983080233863}
   m_Layer: 1
   m_Name: JokerUIPrefab
   m_TagString: Untagged
@@ -646,6 +633,34 @@ MonoBehaviour:
             m_StringArgument: 
             m_BoolArgument: 1
           m_CallState: 2
+--- !u!114 &7809973788904938023
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6012966194957384303}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 344a92b0ff5897b4aa1b36d97e282cc8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DeactivateOnObjectActivate
+  watchedTags:
+  - EndScreen
+--- !u!114 &7320444983080233863
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6012966194957384303}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f4a449e8d0d7d442847886683442c55, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DisappearOnTransition
+  useSceneTransitionDuration: 1
+  defaultScaleDuration: 0.15
 --- !u!1 &6300195098722103606
 GameObject:
   m_ObjectHideFlags: 0
@@ -1021,7 +1036,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7684150872822638197}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.9499998, y: 0.9416702, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1084,7 +1099,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 227f636743cc3734b9dbeec3e352d1cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TitleAnimation
-  tiltAngle: 4
+  tiltAngle: 1
   tiltSpeed: 0.5
 --- !u!1 &8268888421600679128
 GameObject:

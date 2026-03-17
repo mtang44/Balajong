@@ -2150,7 +2150,8 @@ MonoBehaviour:
   m_text: '
 
     To view all possible scoring methods, please refer to the "Run Info"
-    page. Included within are examples of each meld in BALAJONG.'
+    page. Included within are examples of each meld possible in BALAJONG. Build your
+    melds to increase your score!'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1b63278fe00715f4b80786ec5da8bac0, type: 2}
   m_sharedMaterial: {fileID: 1401845529319845980, guid: 1b63278fe00715f4b80786ec5da8bac0, type: 2}
@@ -2975,7 +2976,7 @@ GameObject:
   - component: {fileID: 431916723}
   - component: {fileID: 431916722}
   m_Layer: 5
-  m_Name: Page 4 Panel
+  m_Name: Shopping Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3697,8 +3698,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_text: "At the start of a round, you will be delt a random Rack of 14 Mahjong
-    Tiles. To beat a round, your Rack must accumulate a score higher than the Enemy's
-    Minimum Scoring Threshold. \n\n\n\n\n"
+    Tiles from your deck. To beat a round, your Rack must accumulate a score higher
+    than the Enemy's Minimum Scoring Threshold. \n\n\n\n\n"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1b63278fe00715f4b80786ec5da8bac0, type: 2}
   m_sharedMaterial: {fileID: 1401845529319845980, guid: 1b63278fe00715f4b80786ec5da8bac0, type: 2}
@@ -5094,9 +5095,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Scoring in this game revolves around the the idea of creating  Mahjong
-    "Melds". A Meld in Mahjong consists of either having x matching tiles (4,4,4),
-    or having tiles create a straight (1,2,3 . . .)
+  m_text: 'Scoring in BALAJONG revolves around the idea of creating  Mahjong "Melds".
+    A Meld in Mahjong consists of either having x matching tiles (4,4,4), or having
+    tiles that create a straight (1,2,3 . . .)
 
 
 
@@ -7683,7 +7684,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1132800138}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0.000015055}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -7691,7 +7692,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -277.36, y: -150}
+  m_AnchoredPosition: {x: -277, y: -138}
   m_SizeDelta: {x: 945.69, y: 234.101}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1132800140
@@ -7716,8 +7717,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: There are 3 types of items for sale in the shop. A Joker Card will provide
     permanent benefits that last throughout the game. A consumable Item will provide
-    a strong powerup, but can only be used once. A tile will permantly add that tile
-    to the deck allowing for deck modifications.
+    a strong powerup, but it can only be used once. A tile can be permantly added
+    to your deck, allowing for deck modifications.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1b63278fe00715f4b80786ec5da8bac0, type: 2}
   m_sharedMaterial: {fileID: 1401845529319845980, guid: 1b63278fe00715f4b80786ec5da8bac0, type: 2}
@@ -7783,7 +7784,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: 0, y: -27.092003, z: 11.226379, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -8591,9 +8592,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'The Better your Rack, the more you points you will earn. You are given
-    5 discards to improve your Rack. When discarding you may select up to 5 tiles
-    to Discard. '
+  m_text: 'The Better your Rack, the more points you will earn. You are given 3 discards
+    to improve your Rack before being forced to check your rack. When discarding
+    you may select up to 5 tiles to Discard. '
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1b63278fe00715f4b80786ec5da8bac0, type: 2}
   m_sharedMaterial: {fileID: 1401845529319845980, guid: 1b63278fe00715f4b80786ec5da8bac0, type: 2}
@@ -9644,9 +9645,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Between Enemy Encounters you will be taken to a shop. Here you can use
-    currency gained from defeating enemies to buy upgrades that will help you throughout
-    your run. '
+  m_text: 'Between enemy encounters, you will be taken to the shop. Here, you can
+    use credits gained from defeating enemies to buy upgrades that will help you
+    throughout your run. '
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1b63278fe00715f4b80786ec5da8bac0, type: 2}
   m_sharedMaterial: {fileID: 1401845529319845980, guid: 1b63278fe00715f4b80786ec5da8bac0, type: 2}
@@ -12148,8 +12149,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'The "Rack Info" button will show you what Runs currently exist in your
-    Rack, as well as the total score you will earn with the current Rack.  '
+  m_text: The "Rack Info" button will show you which Melds currently exist within
+    your Rack, as well as the total score you will earn with the current Rack.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1b63278fe00715f4b80786ec5da8bac0, type: 2}
   m_sharedMaterial: {fileID: 1401845529319845980, guid: 1b63278fe00715f4b80786ec5da8bac0, type: 2}
@@ -13807,12 +13808,12 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'When you feel you have a strong hand, press "Check Rack" This will give
-    you points based on based on the amount of Runs you have.
+  m_text: 'When you feel you have a strong rack, press "Check Rack" This will earn
+    you points based on the amount of Melds you have.
 
 
-    If your score
-    does not meet the Enemy''s minimum score threshold you will take damage.
+    If your score does not
+    meet the Enemy''s minimum score threshold, you will take one hit of damage.
 
 
 '
@@ -13881,7 +13882,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: -647.70715, y: 0, z: 0, w: -280.39636}
+  m_margin: {x: -647.70715, y: 0, z: 27.763275, w: -280.39636}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0

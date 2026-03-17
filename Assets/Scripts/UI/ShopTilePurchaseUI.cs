@@ -204,6 +204,7 @@ public class ShopTilePurchaseUI : MonoBehaviour, IPointerClickHandler, IPointerE
         }
 
         playerStats.cash -= price;
+        playerStats.AddMoneySpent(price);
         StatsUpdater.Instance?.UpdateCash(playerStats.cash);
 
         deckManager.deck.AddTileAtFront(purchasedTileData);

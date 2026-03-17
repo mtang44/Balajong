@@ -55,7 +55,6 @@ public class ConsumableInventoryUI : MonoBehaviour
         {
             var c = manager.GetAt(i);
             bool hasItem = c != null;
-
             if (i < slotButtons.Count && slotButtons[i] != null)
             {
                 //slotButtons[i].gameObject.SetActive(true);
@@ -64,7 +63,13 @@ public class ConsumableInventoryUI : MonoBehaviour
 
             if (i < slotLabels.Count && slotLabels[i] != null)
                 slotLabels[i].text = hasItem ? c.name : "";
-                imagePanels[i].texture = hasItem? consumableImageArray[c.imageIndex]: null;
+
+            if (i < imagePanels.Count && imagePanels[i] != null)
+            {
+                imagePanels[i].gameObject.SetActive(hasItem);
+                if (hasItem && c.imageIndex < consumableImageArray.Count)
+                    imagePanels[i].texture = consumableImageArray[c.imageIndex];
+            }
 
         }
     }

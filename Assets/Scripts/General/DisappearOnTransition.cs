@@ -177,6 +177,7 @@ public class DisappearOnTransition : MonoBehaviour
 
     private void SetScaleInstant(Vector3 scale)
     {
+        transform.localRotation = new Quaternion(0f, 0f, 0f, 1f);
         transform.localScale = scale;
     }
 

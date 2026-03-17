@@ -43,4 +43,5 @@ public class SoundManager : MonoBehaviour
     public void playZoomSound() { playSound(sounds[9], 2f); }
     public void playWhooshSound() { playSound(sounds[10]); }
     public void playCoinSound() { playSound(sounds[11]); }
+    public void playClickSound() { playSound(sounds[12]); }
 }

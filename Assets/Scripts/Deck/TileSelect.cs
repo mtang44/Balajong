@@ -222,11 +222,12 @@ public class TileSelect : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
         bool inSelectionMode = (GameManager.Instance != null && GameManager.Instance.selecting)
             || ConsumableEffectSystem.InTileSelectionPhase;
         if (!inSelectionMode) return;
-
+        SoundManager.Instance.playClickSound();
         if (deckManager.selectedTiles.Contains(gameObject))
             removeFromSelection();
         else if (deckManager.selectedTiles.Count < deckManager.MAX_DISCARD_SELECTION)
             addToSelection();
+            
     }
     void addToSelection()
     {

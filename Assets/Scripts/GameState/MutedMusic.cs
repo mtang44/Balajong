@@ -48,7 +48,7 @@ public class MutedMusic : MonoBehaviour
     }
     void muffleMusic()
     {
-        LerpLowpass(500);
+        LerpLowpass(800);
     }
     void unmuffleMusic()
     {

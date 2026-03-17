@@ -16,7 +16,7 @@ Uncommon,Alt F4,alt-four,Utility,Destroy first Discard if Rack hasn't been check
 Uncommon,Unbreaking,unbreaking,xMult,Enchanted editions give x2 mult instead,4
 Uncommon,Gravestone,grave,Points,Ghost editions give 100 points instead,4
 Uncommon,Double Rainbow,rainbow,Mult,Crystal editions give +10 mult insead,10
-Uncommon,Second Wind,secondwind,xMult,Each Wind Meld gains x2 mult,4
+Uncommon,Second Wind,secondwind,xMult,Each Wind Meld gains x1.5 mult,4
 Uncommon,FishDish,fishdish,Points,Add a Random number of Points to the final score,5
 Uncommon,HatCat,hatcat,Mult,Add a Random Mult value to the final score,5
 Rare,Knight Joker,knight,Mult,For every discarded dragon; gain +1 Mult,6

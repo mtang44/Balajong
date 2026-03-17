@@ -12059,7 +12059,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 456265341}
+      - m_Target: {fileID: 68106604}
         m_TargetAssemblyTypeName: AbandonRun, Assembly-CSharp
         m_MethodName: OnAbandonRunConfirmPressed
         m_Mode: 1
@@ -15431,7 +15431,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 573678086}
+      - m_Target: {fileID: 68106604}
         m_TargetAssemblyTypeName: AbandonRun, Assembly-CSharp
         m_MethodName: OnAbandonRunConfirmPressed
         m_Mode: 1

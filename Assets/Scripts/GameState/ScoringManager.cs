@@ -968,7 +968,7 @@ public class ScoringManager : MonoBehaviour
         {
             for (int i = 0; i < JokerManager.Instance.numberOfActivations("secondwind"); i++)
             {
-                multMultTotal *= 2.0f;
+                multMultTotal *= 1.5f;
             }
         }
 

@@ -36,7 +36,12 @@ public class JokerManager : MonoBehaviour
     }
     public void Start()
     {
-        JokerUIContainer = JokerHolderUI.Instance.gameObject.transform.GetChild(0).gameObject;
+        if (JokerHolderUI.Instance != null && JokerHolderUI.Instance.gameObject.transform.childCount > 0)
+        {
+            JokerUIContainer = JokerHolderUI.Instance.gameObject.transform.GetChild(0).gameObject;
+            EnsureAllJokersDraggable();
+            SyncJokerOrderFromUI();
+        }
         StatsUpdater.Instance?.UpdateJokerCount();
     }
 
@@ -72,6 +77,7 @@ public class JokerManager : MonoBehaviour
     {
         jokers.Add(jokerCode);
         GameObject jokerUI = Instantiate(JokerUIPrefab, JokerUIContainer.transform);
+        EnsureJokerDraggable(jokerUI);
         jokerUI.GetComponentInChildren<RawImage>(true).texture = jokerTexture;
         TMP_Text[] foundTMPs = jokerUI.GetComponentsInChildren<TMP_Text>(true);
         foreach(TMP_Text currentTMP in foundTMPs)
@@ -92,6 +98,53 @@ public class JokerManager : MonoBehaviour
         JokerSelect jokerSelect = jokerUI.GetComponent<JokerSelect>();
         jokerSelect.Initialize(jokerCode, jokerName, jokerDescription, price);
         StatsUpdater.Instance?.UpdateJokerCount();
+    }
+
+    public void SyncJokerOrderFromUI()
+    {
+        if (JokerUIContainer == null || jokers == null)
+            return;
+
+        List<string> orderedCodes = new List<string>();
+        Transform containerTransform = JokerUIContainer.transform;
+        for (int i = 0; i < containerTransform.childCount; i++)
+        {
+            JokerSelect jokerSelect = containerTransform.GetChild(i).GetComponent<JokerSelect>();
+            if (jokerSelect == null || string.IsNullOrEmpty(jokerSelect.code))
+                continue;
+
+            orderedCodes.Add(jokerSelect.code);
+        }
+
+        if (orderedCodes.Count == 0)
+            return;
+
+        jokers.Clear();
+        jokers.AddRange(orderedCodes);
+    }
+
+    private void EnsureAllJokersDraggable()
+    {
+        if (JokerUIContainer == null)
+            return;
+
+        Transform containerTransform = JokerUIContainer.transform;
+        for (int i = 0; i < containerTransform.childCount; i++)
+        {
+            EnsureJokerDraggable(containerTransform.GetChild(i).gameObject);
+        }
+    }
+
+    private static void EnsureJokerDraggable(GameObject jokerUI)
+    {
+        if (jokerUI == null)
+            return;
+
+        if (jokerUI.GetComponent<JokerDrag>() == null)
+            jokerUI.AddComponent<JokerDrag>();
+
+        if (jokerUI.GetComponent<CanvasGroup>() == null)
+            jokerUI.AddComponent<CanvasGroup>();
     }
 
 }

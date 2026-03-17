@@ -227,10 +227,26 @@ public class ConsumableEffectSystem : MonoBehaviour
 
     public void PurchaseFromShop()
     {
+        ShopPurchase purchase = FindFirstObjectByType<ShopPurchase>();
+        if (purchase != null)
+        {
+            purchase.purchaseConsumable(0);
+            return;
+        }
+
         if (shop == null) shop = FindFirstObjectByType<Shop>();
         if (shop == null || shop.consumableDrops == null || shop.consumableDrops.Count == 0) return;
         if (PlayerStatManager.Instance == null) return;
-        PlayerStatManager.Instance.AddConsumableToInventory(shop.consumableDrops[0]);
+
+        Consumable offeredConsumable = shop.consumableDrops[0];
+        if (PlayerStatManager.Instance.cash < offeredConsumable.price) return;
+        if (!PlayerStatManager.Instance.AddConsumableToInventory(offeredConsumable)) return;
+
+        PlayerStatManager.Instance.cash -= offeredConsumable.price;
+        StatsUpdater.Instance?.UpdateCash(PlayerStatManager.Instance.cash);
+
+        if (shop.Shop_Item_TMPs != null && shop.Shop_Item_TMPs.Length > 4 && shop.Shop_Item_TMPs[4] != null)
+            shop.Shop_Item_TMPs[4].SetActive(false);
     }
 
 

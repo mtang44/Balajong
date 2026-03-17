@@ -309,7 +309,7 @@ public class ScoringManager : MonoBehaviour
     int jokerMultMult()
     {
         int acc = 1;
-        for(int i = 0; i < JokerManager.Instance.numberOfActivations("secondwind"); i++)
+        for(int i = 0; i < JokerManager.Instance.numberOfActivations("spider"); i++)
         {
             acc *= (PlayerStatManager.Instance.maxHealth - PlayerStatManager.Instance.currentHealth) + 1;
         }
@@ -826,11 +826,22 @@ public class ScoringManager : MonoBehaviour
         int sum = 0;
         float multTotal = 1;
         float multMultTotal = 1;
+        bool meldContainsWind = false;
         foreach (var t in meld.Tiles)
         {
             sum += GetTileScore(t);
+            if (t.TileType == TileType.Wind)
+                meldContainsWind = true;
             multTotal = jokerMeldMultPoints(multTotal, meld);
             multMultTotal = jokerMeldMultMaxxingPoints(multMultTotal, meld);
+        }
+
+        if (meldContainsWind)
+        {
+            for (int i = 0; i < JokerManager.Instance.numberOfActivations("secondwind"); i++)
+            {
+                multMultTotal *= 2.0f;
+            }
         }
 
         if (meld.Kind == MeldKind.Single && meld.Tiles.Count == 1)

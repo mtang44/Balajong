@@ -179,7 +179,7 @@ public class GameManager : MonoBehaviour
     {
         EnsureActionButtonHoverPreviews();
         maxDiscards = 3 + JokerManager.Instance.numberOfActivations("trash");
-        PlayerStatManager.Instance.updateTheMax();
+        PlayerStatManager.Instance.healToMax();
         StatsUpdater.Instance.UpdateHealth(PlayerStatManager.Instance.currentHealth, PlayerStatManager.Instance.maxHealth);
         StatsUpdater.Instance.UpdateDiscardCount();
         StatsUpdater.Instance.UpdateCash(PlayerStatManager.Instance.cash);

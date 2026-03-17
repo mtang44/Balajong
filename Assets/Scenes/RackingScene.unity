@@ -3163,6 +3163,7 @@ GameObject:
   m_Component:
   - component: {fileID: 138108891}
   - component: {fileID: 138108893}
+  - component: {fileID: 138108894}
   - component: {fileID: 138108892}
   m_Layer: 5
   m_Name: You Win TMP
@@ -3187,7 +3188,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 236, y: 388}
+  m_AnchoredPosition: {x: 80.39075, y: 388}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &138108892
@@ -3290,6 +3291,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 138108890}
   m_CullTransparentMesh: 1
+--- !u!114 &138108894
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 138108890}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 227f636743cc3734b9dbeec3e352d1cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TitleAnimation
+  tiltAngle: 10
+  tiltSpeed: 1
 --- !u!1 &140121177
 GameObject:
   m_ObjectHideFlags: 0
@@ -5048,7 +5063,7 @@ GameObject:
   - component: {fileID: 204302749}
   - component: {fileID: 204302748}
   m_Layer: 5
-  m_Name: Panel
+  m_Name: Highest Score Rack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5073,7 +5088,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 217.45801, y: 207.68451}
+  m_AnchoredPosition: {x: 61.848755, y: 207.68451}
   m_SizeDelta: {x: -1275.4279, y: -982.226}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &204302748
@@ -7206,7 +7221,7 @@ GameObject:
   - component: {fileID: 317392138}
   - component: {fileID: 317392137}
   m_Layer: 5
-  m_Name: Panel (3)
+  m_Name: Money Spent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7226,11 +7241,12 @@ RectTransform:
   m_Children:
   - {fileID: 822790814}
   - {fileID: 1169297456}
+  - {fileID: 1356197658}
   m_Father: {fileID: 1378343575}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 140.03735, y: -145}
+  m_AnchoredPosition: {x: -15.571899, y: -145}
   m_SizeDelta: {x: -1430.2695, y: -982.226}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &317392137
@@ -8980,7 +8996,7 @@ GameObject:
   - component: {fileID: 368006633}
   - component: {fileID: 368006632}
   m_Layer: 5
-  m_Name: Panel (2)
+  m_Name: Enemies Defeated
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9005,7 +9021,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 217.45801, y: -25.999878}
+  m_AnchoredPosition: {x: 61.848755, y: -25.999878}
   m_SizeDelta: {x: -1275.4279, y: -982.226}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &368006632
@@ -10221,7 +10237,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Some Text Here
+  m_text: 'Highest Scoring Rack:
+
+'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1b63278fe00715f4b80786ec5da8bac0, type: 2}
   m_sharedMaterial: {fileID: 1401845529319845980, guid: 1b63278fe00715f4b80786ec5da8bac0, type: 2}
@@ -10248,7 +10266,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 39.75
+  m_fontSize: 38.15
   m_fontSizeBase: 30
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -10992,6 +11010,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 456265333}
+  - component: {fileID: 456265341}
   - component: {fileID: 456265339}
   - component: {fileID: 456265338}
   - component: {fileID: 456265337}
@@ -11130,9 +11149,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 456265340}
-        m_TargetAssemblyTypeName: EasierToNukeTheGame, Assembly-CSharp
-        m_MethodName: NukeTheGame
+      - m_Target: {fileID: 456265341}
+        m_TargetAssemblyTypeName: AbandonRun, Assembly-CSharp
+        m_MethodName: OnAbandonRunConfirmPressed
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -11212,6 +11231,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23df5e0d8e526d94ca13163a03ac512e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EasierToNukeTheGame
+--- !u!114 &456265341
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 456265332}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9d0223ec98c68b449b0264f56fcd851a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AbandonRun
+  returnSceneName: TItle Screen
+  confirmationPanel: {fileID: 0}
+  sceneChanger: {fileID: 0}
 --- !u!4 &457542089 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7317096856753047839, guid: f4ef62aeee9c25144a5c1fe006273c49, type: 3}
@@ -14440,7 +14474,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 203, y: -330}
+  m_AnchoredPosition: {x: 47.390747, y: -330}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &573678081
@@ -14548,21 +14582,9 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 573678086}
-        m_TargetAssemblyTypeName: SceneChanger, Assembly-CSharp
-        m_MethodName: ChangeScene
-        m_Mode: 3
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 1378343574}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
+        m_TargetAssemblyTypeName: AbandonRun, Assembly-CSharp
+        m_MethodName: OnAbandonRunConfirmPressed
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -14618,17 +14640,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 573678079}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 350713cafb270c54885107c74cadcc2f, type: 3}
+  m_Script: {fileID: 11500000, guid: 9d0223ec98c68b449b0264f56fcd851a, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SceneChanger
-  animator: {fileID: 0}
-  transitionTime: 1
-  transitionObject: {fileID: 0}
-  tileTransition: {fileID: 0}
-  transitionCanvas: {fileID: 0}
-  transitionCanvasCamera: {fileID: 0}
-  autoConfigureTransitionCanvas: 1
-  suppressTransitionOnInitialSceneLoad: 1
+  m_EditorClassIdentifier: Assembly-CSharp::AbandonRun
+  returnSceneName: TItle Screen
+  confirmationPanel: {fileID: 0}
+  sceneChanger: {fileID: 0}
 --- !u!1 &573939092
 GameObject:
   m_ObjectHideFlags: 0
@@ -16853,7 +16870,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: New Text
+  m_text: '0
+
+'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1b63278fe00715f4b80786ec5da8bac0, type: 2}
   m_sharedMaterial: {fileID: 1401845529319845980, guid: 1b63278fe00715f4b80786ec5da8bac0, type: 2}
@@ -16880,7 +16899,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 42.65
+  m_fontSize: 56.85
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -21939,7 +21958,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Some Text Here
+  m_text: 'Money Spent:'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1b63278fe00715f4b80786ec5da8bac0, type: 2}
   m_sharedMaterial: {fileID: 1401845529319845980, guid: 1b63278fe00715f4b80786ec5da8bac0, type: 2}
@@ -21966,7 +21985,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 38.15
+  m_fontSize: 41.65
   m_fontSizeBase: 30
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -23309,7 +23328,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: New Text
+  m_text: '0
+
+'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1b63278fe00715f4b80786ec5da8bac0, type: 2}
   m_sharedMaterial: {fileID: 1401845529319845980, guid: 1b63278fe00715f4b80786ec5da8bac0, type: 2}
@@ -23336,7 +23357,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 42.65
+  m_fontSize: 56.85
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -25294,7 +25315,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Some Text Here
+  m_text: 'Enemies Defeated:
+
+'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1b63278fe00715f4b80786ec5da8bac0, type: 2}
   m_sharedMaterial: {fileID: 1401845529319845980, guid: 1b63278fe00715f4b80786ec5da8bac0, type: 2}
@@ -25321,7 +25344,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 39.75
+  m_fontSize: 38.15
   m_fontSizeBase: 30
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -31998,8 +32021,7 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1356197658}
+  m_Children: []
   m_Father: {fileID: 317392136}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -36030,11 +36052,11 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1169297456}
+  m_Father: {fileID: 317392136}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -1.5344238, y: 0.18261719}
+  m_AnchoredPosition: {x: 138.46558, y: 0}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1356197659
@@ -36057,7 +36079,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: New Text
+  m_text: $0
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1b63278fe00715f4b80786ec5da8bac0, type: 2}
   m_sharedMaterial: {fileID: 1401845529319845980, guid: 1b63278fe00715f4b80786ec5da8bac0, type: 2}
@@ -36084,7 +36106,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 26.9
+  m_fontSize: 56.85
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -36484,6 +36506,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1378343575}
+  - component: {fileID: 1378343578}
   - component: {fileID: 1378343577}
   - component: {fileID: 1378343576}
   m_Layer: 5
@@ -36557,6 +36580,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1378343574}
   m_CullTransparentMesh: 1
+--- !u!114 &1378343578
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1378343574}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f4f60d4911395a458bd425acd5000fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GameOverStatDisplay
+  HighestScoreTMP: {fileID: 653416315}
+  MeldsScoredTMP: {fileID: 874293380}
+  EnemiesDefeatedTMP: {fileID: 1840880998}
+  MoneySpentTMP: {fileID: 1356197659}
 --- !u!4 &1388795964 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7317096856753047839, guid: f4ef62aeee9c25144a5c1fe006273c49, type: 3}
@@ -38831,7 +38870,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1528765345
 RectTransform:
   m_ObjectHideFlags: 0
@@ -45073,7 +45112,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1787190716
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -45255,6 +45294,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1804591020}
+  - component: {fileID: 1804591024}
   - component: {fileID: 1804591022}
   - component: {fileID: 1804591021}
   - component: {fileID: 1804591023}
@@ -45397,6 +45437,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TitleAnimation
   tiltAngle: 3
+  tiltSpeed: 1
+--- !u!114 &1804591024
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1804591019}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 227f636743cc3734b9dbeec3e352d1cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TitleAnimation
+  tiltAngle: 5
   tiltSpeed: 1
 --- !u!1001 &1809766146
 PrefabInstance:
@@ -46184,7 +46238,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: New Text
+  m_text: '0
+
+'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1b63278fe00715f4b80786ec5da8bac0, type: 2}
   m_sharedMaterial: {fileID: 1401845529319845980, guid: 1b63278fe00715f4b80786ec5da8bac0, type: 2}
@@ -46211,7 +46267,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 42.65
+  m_fontSize: 56.85
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -46752,7 +46808,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 216.60925, y: 4.3759766}
+  m_AnchoredPosition: {x: 61, y: 4.3759766}
   m_SizeDelta: {x: -1194.6334, y: -218.7974}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1866307328
@@ -48018,7 +48074,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Some Text Here
+  m_text: 'Melds Scored:
+
+'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1b63278fe00715f4b80786ec5da8bac0, type: 2}
   m_sharedMaterial: {fileID: 1401845529319845980, guid: 1b63278fe00715f4b80786ec5da8bac0, type: 2}
@@ -48045,7 +48103,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 39.75
+  m_fontSize: 42.8
   m_fontSizeBase: 30
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -49353,7 +49411,7 @@ GameObject:
   - component: {fileID: 2004593071}
   - component: {fileID: 2004593070}
   m_Layer: 5
-  m_Name: Panel (1)
+  m_Name: Melds Scored
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -49378,7 +49436,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 217.45801, y: 92}
+  m_AnchoredPosition: {x: 61.848755, y: 92}
   m_SizeDelta: {x: -1275.4279, y: -982.226}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2004593070

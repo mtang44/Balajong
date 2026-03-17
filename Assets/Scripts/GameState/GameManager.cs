@@ -430,6 +430,7 @@ public class GameManager : MonoBehaviour
         score = 0;
 
         MapRunState.Instance.ClearMap();
+        MapRunState.Instance.ResetLoopCount();
 
         PlayerStatManager playerStats = PlayerStatManager.Instance;
         if (playerStats != null)
@@ -479,6 +480,8 @@ public class GameManager : MonoBehaviour
     void Loss()
     {
         Debug.Log("Player has lost the game.");
+
+        DeckManager.Instance.endRound();
         StatsUpdater.Instance.ShowLoseScreen();
     }
 

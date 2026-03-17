@@ -13,6 +13,10 @@ public class MapEncounterResultHandler : MonoBehaviour
     [SerializeField] private GameObject battleWin;
     [SerializeField] private TextHopEffect battleWinTextHopEffect;
 
+    [Header("Boss Win Feedback")]
+    [SerializeField] private GameObject bossWin;
+    [SerializeField] private TextHopEffect bossWinTextHopEffect;
+
     [Header("Enemy Defeat Animation")]
     [SerializeField] private Animator enemyAnimator;
     [SerializeField] private string enemyDeadBoolParameterName = "EnemyDead";
@@ -46,24 +50,29 @@ public class MapEncounterResultHandler : MonoBehaviour
         if (!isBossEncounter)
         {
             ShowBattleWinFeedback();
+            StartSceneTransitionAfterDelay(nextSceneName);
         }
         else
         {
             SetBattleWinActive(false);
+            ShowBossWinFeedback();
+
+            // If no boss win overlay is assigned, fall back to auto-transition
+            if (bossWin == null)
+            {
+                string targetSceneName = !string.IsNullOrWhiteSpace(winSceneName) ? winSceneName : nextSceneName;
+                StartSceneTransitionAfterDelay(targetSceneName);
+            }
         }
-
-        string targetSceneName = isBossEncounter && !string.IsNullOrWhiteSpace(winSceneName)
-            ? winSceneName
-            : nextSceneName;
-
-        StartSceneTransitionAfterDelay(targetSceneName);
     }
 
     // Called when the player loses an encounter
     // This returns the player to the map without advancing the node
     public void ResolveEncounterLoss()
     {
+        DeckManager.Instance.endRound();
         SetBattleWinActive(false);
+        SetBossWinActive(false);
         StartSceneTransitionAfterDelay(nextSceneName);
     }
 
@@ -110,6 +119,52 @@ public class MapEncounterResultHandler : MonoBehaviour
         {
             battleWin.SetActive(shouldBeActive);
         }
+    }
+
+    private void ShowBossWinFeedback()
+    {
+        if (bossWin == null)
+        {
+            return;
+        }
+
+        SetBossWinActive(true);
+
+        if (bossWinTextHopEffect == null)
+        {
+            bossWinTextHopEffect = bossWin.GetComponentInChildren<TextHopEffect>(true);
+        }
+
+        if (bossWinTextHopEffect != null)
+        {
+            bossWinTextHopEffect.PlayHop();
+        }
+    }
+
+    private void SetBossWinActive(bool shouldBeActive)
+    {
+        if (bossWin != null && bossWin.activeSelf != shouldBeActive)
+        {
+            bossWin.SetActive(shouldBeActive);
+        }
+    }
+
+    // Called by a UI button to loop the run: resets the map and returns the player to the start
+    public void LoopRun()
+    {
+        if (transitionRoutine != null)
+        {
+            StopCoroutine(transitionRoutine);
+            transitionRoutine = null;
+        }
+
+        MapRunState.Instance.IncrementLoop();
+        MapRunState.Instance.ClearMap();
+
+        if (sceneChanger != null)
+            sceneChanger.ChangeScene(nextSceneName);
+        else
+            SceneManager.LoadScene(nextSceneName);
     }
 
     private void StartSceneTransitionAfterDelay(string sceneName)

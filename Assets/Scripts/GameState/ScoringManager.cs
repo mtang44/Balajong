@@ -518,7 +518,7 @@ public class ScoringManager : MonoBehaviour
         AppendJokerEffectLine(sb, "HatCat", "Adds Random Mult", hatCatActivations);
         AppendJokerEffectLine(sb, "Knight Joker", $"{jokerManager.knightJokerBuff}x Mult", knightActivations);
         AppendJokerEffectLine(sb, "Ledger", "Adds Random Points and Mult", ledgerActivations);
-        AppendJokerEffectLine(sb, "Bagged Joker", $"{jokerManager.baggedJokerBuff} Points", baggedActivations);
+        AppendJokerEffectLine(sb, "Bagged Joker", $"{jokerManager.baggedJokerBuff * 30} Points", baggedActivations);
 
         return sb.ToString().TrimEnd();
     }

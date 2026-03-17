@@ -1752,7 +1752,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Gun ToolTip:'
+  m_text: 'Gun:'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1b63278fe00715f4b80786ec5da8bac0, type: 2}
   m_sharedMaterial: {fileID: 1401845529319845980, guid: 1b63278fe00715f4b80786ec5da8bac0, type: 2}
@@ -2526,7 +2526,7 @@ RectTransform:
   m_GameObject: {fileID: 91429202}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.997947, y: 0.997947, z: 0.997947}
+  m_LocalScale: {x: 0.9979469, y: 0.99794704, z: 0.99794704}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 766030405}
@@ -2537,8 +2537,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -6.787842, y: 233.68811}
-  m_SizeDelta: {x: 557.1, y: 350.30008}
+  m_AnchoredPosition: {x: -6.788025, y: 236.73099}
+  m_SizeDelta: {x: 557.1, y: 356.3931}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &91429204
 MonoBehaviour:
@@ -4334,7 +4334,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Clone Machine ToolTip:'
+  m_text: 'Clone Machine:'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1b63278fe00715f4b80786ec5da8bac0, type: 2}
   m_sharedMaterial: {fileID: 1401845529319845980, guid: 1b63278fe00715f4b80786ec5da8bac0, type: 2}
@@ -4860,7 +4860,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -1.7973022, y: 236.05847}
+  m_AnchoredPosition: {x: -1.7973022, y: 234.2}
   m_SizeDelta: {x: 563.1, y: 361.60007}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &178954014
@@ -5245,7 +5245,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 7.999878, y: 221.05472}
+  m_AnchoredPosition: {x: 7.999878, y: 241}
   m_SizeDelta: {x: 563.1, y: 361.6}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &197429002
@@ -6313,7 +6313,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Totem ToolTip:'
+  m_text: 'Totem Of Dying:'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1b63278fe00715f4b80786ec5da8bac0, type: 2}
   m_sharedMaterial: {fileID: 1401845529319845980, guid: 1b63278fe00715f4b80786ec5da8bac0, type: 2}
@@ -13394,14 +13394,14 @@ RectTransform:
   m_LocalScale: {x: 0.8594756, y: 0.8511345, z: 1.0013347}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 91429203}
   - {fileID: 1758751608}
+  - {fileID: 91429203}
   m_Father: {fileID: 331660375}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -816, y: -344}
-  m_SizeDelta: {x: 190, y: 60}
+  m_AnchoredPosition: {x: -816, y: -365.4}
+  m_SizeDelta: {x: 190, y: 53.907}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &533589101
 MonoBehaviour:
@@ -29562,7 +29562,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: '1: Select 3 Tiles to destroy their existence
+  m_text: '1: Select 3 Tiles to destroy permanently
 
 
     2: Click Destroy button
@@ -29684,7 +29684,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -830.8003, y: -336.13998}
+  m_AnchoredPosition: {x: -830.8003, y: -348}
   m_SizeDelta: {x: 184, y: 48.7}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1096461842
@@ -41764,8 +41764,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "1: Select a Tile in hand you want to duplicate\n\n2: Click Copy button\n\n
-    Your next 4 tiles drawn will the tile you selected\n"
+  m_text: "1: Select a Tile in your rack that you want to duplicate\n\n2: Click the
+    Copy button\n\n Your next 4 tiles drawn will the tile you selected\n"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1b63278fe00715f4b80786ec5da8bac0, type: 2}
   m_sharedMaterial: {fileID: 1401845529319845980, guid: 1b63278fe00715f4b80786ec5da8bac0, type: 2}
@@ -45347,7 +45347,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1731922309
 RectTransform:
   m_ObjectHideFlags: 0
@@ -45366,7 +45366,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -824, y: -354}
+  m_AnchoredPosition: {x: -818.8, y: -354}
   m_SizeDelta: {x: 184, y: 48.7}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1731922310
@@ -46098,7 +46098,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -0.00012207031, y: 0.000030517578}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1758751609
@@ -47078,7 +47078,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: '1: Select a Tile: all tiles in hand with a lower value will cease to exist
+  m_text: '1: Select a Tile. All tiles in the rack with a lower value will be destroyed
 
 
     2:

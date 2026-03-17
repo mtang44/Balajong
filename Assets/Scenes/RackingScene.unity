@@ -989,7 +989,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -21.971985, y: -145}
+  m_AnchoredPosition: {x: -21.971924, y: -145}
   m_SizeDelta: {x: -1533.1582, y: -982.1964}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &24824386
@@ -1571,7 +1571,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 55.44876, y: 207.68451}
+  m_AnchoredPosition: {x: 55.44873, y: 207.68451}
   m_SizeDelta: {x: -1378.3164, y: -982.1964}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &64734776
@@ -9820,6 +9820,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
+      - m_Target: {fileID: 4026329264694745114, guid: a61d1a1b9c4378b4ba37fda582556700, type: 3}
+        m_TargetAssemblyTypeName: SoundManager, Assembly-CSharp
+        m_MethodName: playClickSound
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
 --- !u!114 &360092422
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17097,7 +17109,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 4026329264694745114, guid: a61d1a1b9c4378b4ba37fda582556700, type: 3}
         m_TargetAssemblyTypeName: SoundManager, Assembly-CSharp
-        m_MethodName: playMenuSound
+        m_MethodName: playClickSound
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -22547,7 +22559,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 55.44876, y: 92}
+  m_AnchoredPosition: {x: 55.44873, y: 92}
   m_SizeDelta: {x: -1378.3164, y: -982.1964}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &795586122
@@ -24658,7 +24670,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 4026329264694745114, guid: a61d1a1b9c4378b4ba37fda582556700, type: 3}
         m_TargetAssemblyTypeName: SoundManager, Assembly-CSharp
-        m_MethodName: playMenuSound
+        m_MethodName: playClickSound
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -25362,7 +25374,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 54.600006, y: 4.3759766}
+  m_AnchoredPosition: {x: 54.599976, y: 4.3759766}
   m_SizeDelta: {x: -1297.522, y: -218.7677}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &909659804
@@ -26000,7 +26012,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 4026329264694745114, guid: a61d1a1b9c4378b4ba37fda582556700, type: 3}
         m_TargetAssemblyTypeName: SoundManager, Assembly-CSharp
-        m_MethodName: playMenuSound
+        m_MethodName: playClickSound
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -40561,7 +40573,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 6.3999634, y: 0}
+  m_AnchoredPosition: {x: 6.3999023, y: 0}
   m_SizeDelta: {x: 102.88867, y: -0.02960205}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1528765346
@@ -49553,7 +49565,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 55.44876, y: -25.999878}
+  m_AnchoredPosition: {x: 55.44873, y: -25.999878}
   m_SizeDelta: {x: -1378.3164, y: -982.1964}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1905936933
@@ -50605,6 +50617,18 @@ MonoBehaviour:
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
         m_MethodName: SetActive
         m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 4026329264694745114, guid: a61d1a1b9c4378b4ba37fda582556700, type: 3}
+        m_TargetAssemblyTypeName: SoundManager, Assembly-CSharp
+        m_MethodName: playClickSound
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine

@@ -20,6 +20,7 @@ public class ShopPurchase : MonoBehaviour
     {
         if (PlayerStatManager.Instance.cash >= cost)
         {
+            SoundManager.Instance.playCoinSound();
             PlayerStatManager.Instance.cash -= cost;
             statsUpdater?.UpdateCash(PlayerStatManager.Instance.cash);
 

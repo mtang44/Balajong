@@ -113,6 +113,7 @@ public class DrawVisualization : MonoBehaviour
 
         if (tile != null)
         {
+            SoundManager.Instance.playDrawSound();
             tile.transform.localPosition = endLocalPos;
             tile.transform.localRotation = endLocalRot;
         }

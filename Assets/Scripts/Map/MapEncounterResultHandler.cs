@@ -202,6 +202,7 @@ public class MapEncounterResultHandler : MonoBehaviour
 
     private void PlayEnemyDefeatAnimation()
     {
+        SoundManager.Instance.playKillSound();
         if (enemyAnimator == null && EnemyManager.Instance != null)
         {
             enemyAnimator = EnemyManager.Instance.GetComponentInChildren<Animator>(true);

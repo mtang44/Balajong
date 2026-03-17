@@ -2,7 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-
+public enum ScoreSound
+{
+    Small,
+    Medium,
+    Large
+}
 // Drives the end-of-round score animation.
 // The hand is read left to right; when the last tile of each meld is reached a
 // "+score" popup rises from it and the score counter ticks up.
@@ -279,6 +284,7 @@ public class ScoreVisualization : MonoBehaviour
             if (bonus <= 0) continue;
 
             TriggerTileHop(tile);
+            playScoreSound(1);
 
             Vector3 spawnPos = tile.transform.position + popupWorldOffset;
             string handType = GetBonusDisplayName(td);
@@ -572,6 +578,20 @@ public class ScoreVisualization : MonoBehaviour
             }
 
             TriggerTileHop(tile);
+            playScoreSound(meldIndices.Count);
+        }
+    }
+    public void playScoreSound(int numTiles)
+    {
+        ScoreSound type = ScoreSound.Small;
+        if(numTiles >= 3) type = ScoreSound.Medium;
+        if(numTiles >= 5) type = ScoreSound.Large;
+        switch (type)
+        {
+            case ScoreSound.Small: { SoundManager.Instance.playSmallScoreSound(); break; }
+            case ScoreSound.Medium: { SoundManager.Instance.playMediumScoreSound(); break; }
+            case ScoreSound.Large: { SoundManager.Instance.playBigScoreSound(); break; }
+            default: { SoundManager.Instance.playSmallScoreSound(); break; }
         }
     }
 

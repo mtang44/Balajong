@@ -889,7 +889,7 @@ GameObject:
   - component: {fileID: 24824387}
   - component: {fileID: 24824386}
   m_Layer: 5
-  m_Name: Panel (3)
+  m_Name: Money Spent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -909,11 +909,12 @@ RectTransform:
   m_Children:
   - {fileID: 2042810512}
   - {fileID: 873957379}
+  - {fileID: 1595144004}
   m_Father: {fileID: 1528765345}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 140.03735, y: -145}
+  m_AnchoredPosition: {x: 29.4281, y: -145}
   m_SizeDelta: {x: -1430.2695, y: -982.226}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &24824386
@@ -1458,7 +1459,7 @@ GameObject:
   - component: {fileID: 64734777}
   - component: {fileID: 64734776}
   m_Layer: 5
-  m_Name: Panel
+  m_Name: Highest Scoring Rack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1483,7 +1484,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 217.45801, y: 207.68451}
+  m_AnchoredPosition: {x: 106.848755, y: 207.68451}
   m_SizeDelta: {x: -1275.4279, y: -982.226}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &64734776
@@ -2569,7 +2570,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Some Text Here
+  m_text: 'Melds Scored:
+
+'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1b63278fe00715f4b80786ec5da8bac0, type: 2}
   m_sharedMaterial: {fileID: 1401845529319845980, guid: 1b63278fe00715f4b80786ec5da8bac0, type: 2}
@@ -2596,7 +2599,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 39.75
+  m_fontSize: 42.8
   m_fontSizeBase: 30
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -6541,11 +6544,11 @@ RectTransform:
   - {fileID: 790749848}
   - {fileID: 619711460}
   - {fileID: 1109300133}
-  m_Father: {fileID: 921290022}
+  m_Father: {fileID: 1799451318}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: -79, y: 90}
+  m_AnchoredPosition: {x: -79, y: -399.977}
   m_SizeDelta: {x: 1492.2988, y: 1126.9502}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &292142227
@@ -7109,7 +7112,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: New Text
+  m_text: '0
+
+'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1b63278fe00715f4b80786ec5da8bac0, type: 2}
   m_sharedMaterial: {fileID: 1401845529319845980, guid: 1b63278fe00715f4b80786ec5da8bac0, type: 2}
@@ -7136,7 +7141,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 42.65
+  m_fontSize: 56.85
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -11018,7 +11023,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 203, y: -330}
+  m_AnchoredPosition: {x: 92.39074, y: -330}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &456265334
@@ -20171,7 +20176,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: New Text
+  m_text: '0
+
+'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1b63278fe00715f4b80786ec5da8bac0, type: 2}
   m_sharedMaterial: {fileID: 1401845529319845980, guid: 1b63278fe00715f4b80786ec5da8bac0, type: 2}
@@ -20198,7 +20205,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 42.65
+  m_fontSize: 56.85
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -21297,7 +21304,7 @@ GameObject:
   - component: {fileID: 795586123}
   - component: {fileID: 795586122}
   m_Layer: 5
-  m_Name: Panel (1)
+  m_Name: Melds Scored
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -21322,7 +21329,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 217.45801, y: 92}
+  m_AnchoredPosition: {x: 106.848755, y: 92}
   m_SizeDelta: {x: -1275.4279, y: -982.226}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &795586122
@@ -23062,8 +23069,7 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1595144004}
+  m_Children: []
   m_Father: {fileID: 24824385}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -24062,7 +24068,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 216.60925, y: 4.3759766}
+  m_AnchoredPosition: {x: 106, y: 4.3759766}
   m_SizeDelta: {x: -1194.6334, y: -218.7974}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &909659804
@@ -24441,7 +24447,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1799451318}
-  - {fileID: 292142226}
   - {fileID: 933034593}
   - {fileID: 1244693142}
   - {fileID: 518283661}
@@ -29220,7 +29225,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: New Text
+  m_text: '0
+
+'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1b63278fe00715f4b80786ec5da8bac0, type: 2}
   m_sharedMaterial: {fileID: 1401845529319845980, guid: 1b63278fe00715f4b80786ec5da8bac0, type: 2}
@@ -29247,7 +29254,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 42.65
+  m_fontSize: 56.85
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -33089,7 +33096,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Some Text Here
+  m_text: 'Enemies Defeated:
+
+'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1b63278fe00715f4b80786ec5da8bac0, type: 2}
   m_sharedMaterial: {fileID: 1401845529319845980, guid: 1b63278fe00715f4b80786ec5da8bac0, type: 2}
@@ -33116,7 +33125,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 39.75
+  m_fontSize: 38.15
   m_fontSizeBase: 30
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -38814,6 +38823,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1528765345}
   - component: {fileID: 1528765347}
+  - component: {fileID: 1528765348}
   - component: {fileID: 1528765346}
   m_Layer: 5
   m_Name: Lose Panel
@@ -38821,7 +38831,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1528765345
 RectTransform:
   m_ObjectHideFlags: 0
@@ -38845,7 +38855,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -25, y: 0}
   m_SizeDelta: {x: 1821.2113, y: 979.8297}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1528765346
@@ -38886,6 +38896,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1528765344}
   m_CullTransparentMesh: 1
+--- !u!114 &1528765348
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1528765344}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f4f60d4911395a458bd425acd5000fd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GameOverStatDisplay
+  HighestScoreTMP: {fileID: 315502337}
+  MeldsScoredTMP: {fileID: 749872457}
+  EnemiesDefeatedTMP: {fileID: 1100188869}
+  MoneySpentTMP: {fileID: 1595144005}
 --- !u!1 &1532563196
 GameObject:
   m_ObjectHideFlags: 0
@@ -40259,11 +40285,11 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 873957379}
+  m_Father: {fileID: 24824385}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -1.5344238, y: 0.18261719}
+  m_AnchoredPosition: {x: 138.46559, y: 0.00003761053}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1595144005
@@ -40286,7 +40312,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: New Text
+  m_text: '$0
+
+'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1b63278fe00715f4b80786ec5da8bac0, type: 2}
   m_sharedMaterial: {fileID: 1401845529319845980, guid: 1b63278fe00715f4b80786ec5da8bac0, type: 2}
@@ -40313,7 +40341,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 26.9
+  m_fontSize: 56.85
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -41997,7 +42025,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 82.35, y: -14.020264}
+  m_AnchoredPosition: {x: 82.350006, y: -14.020264}
   m_SizeDelta: {x: -197.61, y: -174.62}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1662503756
@@ -42439,7 +42467,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Some Text Here
+  m_text: 'Highest Scoring Rack:'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1b63278fe00715f4b80786ec5da8bac0, type: 2}
   m_sharedMaterial: {fileID: 1401845529319845980, guid: 1b63278fe00715f4b80786ec5da8bac0, type: 2}
@@ -42466,7 +42494,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 39.75
+  m_fontSize: 38.15
   m_fontSizeBase: 30
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -45113,6 +45141,7 @@ RectTransform:
   m_Children:
   - {fileID: 2114159485}
   - {fileID: 1415273039}
+  - {fileID: 292142226}
   - {fileID: 1378343575}
   - {fileID: 1528765345}
   - {fileID: 836629901}
@@ -45252,7 +45281,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 221, y: 361}
+  m_AnchoredPosition: {x: 110.39075, y: 361}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1804591021
@@ -47357,7 +47386,7 @@ GameObject:
   - component: {fileID: 1905936934}
   - component: {fileID: 1905936933}
   m_Layer: 5
-  m_Name: Panel (2)
+  m_Name: Enemies Defeated
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -47382,7 +47411,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 217.45801, y: -25.999878}
+  m_AnchoredPosition: {x: 106.848755, y: -25.999878}
   m_SizeDelta: {x: -1275.4279, y: -982.226}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1905936933
@@ -50052,7 +50081,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Some Text Here
+  m_text: Money Spent
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 1b63278fe00715f4b80786ec5da8bac0, type: 2}
   m_sharedMaterial: {fileID: 1401845529319845980, guid: 1b63278fe00715f4b80786ec5da8bac0, type: 2}
@@ -50079,7 +50108,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 38.15
+  m_fontSize: 45.45
   m_fontSizeBase: 30
   m_fontWeight: 400
   m_enableAutoSizing: 1

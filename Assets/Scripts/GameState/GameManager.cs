@@ -301,13 +301,11 @@ public class GameManager : MonoBehaviour
         int handScore = ScoringManager.Instance.CalcHandScore(DeckManager.Instance.getHandAsMahjongTileData());
         Debug.Log($"ScoreState: Hand scored {handScore} points.");
 
-        int targetScoreAfterHand = score + handScore;
-
-        // Animate score rise (melds, bonuses, then any final joker/global delta) up to the final total.
+        // Animate the score rising tile-by-tile before applying the final total
         if (ScoreVisualization.Instance != null)
-            yield return ScoreVisualization.Instance.AnimateScore(score, targetScoreAfterHand);
+            yield return ScoreVisualization.Instance.AnimateScore(score);
 
-        score = targetScoreAfterHand;
+        score += handScore;
         StatsUpdater.Instance.UpdateScore(score);
 
         bool reachedThreshold = score >= EnemyManager.Instance.returnScoreThreshold();

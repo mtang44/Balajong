@@ -20,13 +20,6 @@ public class JokerManager : MonoBehaviour
     public int knightJokerBuff = 0;
     public int baggedJokerBuff = 0;
 
-    [Header("Joker UI Shake")]
-    [SerializeField, Min(0.01f)] private float jokerShakeDuration = 0.22f;
-    [SerializeField, Range(0f, 45f)] private float jokerShakeAngle = 10f;
-    [SerializeField, Min(1f)] private float jokerShakeFrequency = 28f;
-
-    private readonly Dictionary<RectTransform, Coroutine> activeJokerShakes = new Dictionary<RectTransform, Coroutine>();
-
     void Awake()
     {
         if (Instance == null)
@@ -128,85 +121,6 @@ public class JokerManager : MonoBehaviour
 
         jokers.Clear();
         jokers.AddRange(orderedCodes);
-    }
-
-    public void ShakeJokers(IEnumerable<string> jokerCodes)
-    {
-        if (JokerUIContainer == null || jokerCodes == null)
-            return;
-
-        HashSet<string> targetCodes = new HashSet<string>();
-        foreach (string code in jokerCodes)
-        {
-            if (!string.IsNullOrEmpty(code))
-                targetCodes.Add(code);
-        }
-
-        if (targetCodes.Count == 0)
-            return;
-
-        Transform containerTransform = JokerUIContainer.transform;
-        for (int i = 0; i < containerTransform.childCount; i++)
-        {
-            JokerSelect jokerSelect = containerTransform.GetChild(i).GetComponent<JokerSelect>();
-            if (jokerSelect == null || string.IsNullOrEmpty(jokerSelect.code))
-                continue;
-
-            if (targetCodes.Contains(jokerSelect.code))
-            {
-                ShakeJokerRect(containerTransform.GetChild(i) as RectTransform);
-            }
-        }
-    }
-
-    public void ShakeJoker(string jokerCode)
-    {
-        if (string.IsNullOrEmpty(jokerCode))
-            return;
-
-        ShakeJokers(new[] { jokerCode });
-    }
-
-    private void ShakeJokerRect(RectTransform rect)
-    {
-        if (rect == null)
-            return;
-
-        if (activeJokerShakes.TryGetValue(rect, out Coroutine runningShake) && runningShake != null)
-        {
-            StopCoroutine(runningShake);
-        }
-
-        activeJokerShakes[rect] = StartCoroutine(AnimateJokerShake(rect));
-    }
-
-    private System.Collections.IEnumerator AnimateJokerShake(RectTransform rect)
-    {
-        if (rect == null)
-            yield break;
-
-        Quaternion startRotation = rect.localRotation;
-        float duration = Mathf.Max(0.01f, jokerShakeDuration);
-        float frequency = Mathf.Max(1f, jokerShakeFrequency);
-        float elapsed = 0f;
-
-        while (elapsed < duration && rect != null)
-        {
-            float t = elapsed / duration;
-            float damping = 1f - t;
-            float angle = Mathf.Sin(elapsed * frequency) * jokerShakeAngle * damping;
-            rect.localRotation = startRotation * Quaternion.Euler(0f, 0f, angle);
-
-            elapsed += Time.unscaledDeltaTime;
-            yield return null;
-        }
-
-        if (rect != null)
-        {
-            rect.localRotation = startRotation;
-        }
-
-        activeJokerShakes.Remove(rect);
     }
 
     private void EnsureAllJokersDraggable()

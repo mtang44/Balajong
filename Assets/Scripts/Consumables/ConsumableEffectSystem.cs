@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Reflection;
-using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 // Consumable use: Consumable 1 -> Use BTN 1 (slot 0), Consumable 2 -> Use BTN 2 (slot 1). Buttons stay visible.
@@ -13,17 +13,17 @@ public class ConsumableEffectSystem : MonoBehaviour
     [Header("Scene References (optional; auto-found if null)")]
     [SerializeField] private Shop shop;
     [SerializeField] private GameObject shopRoot;
-    [Tooltip("Use BTN 1: click activates consumable in slot 0 (first consumable).")]
+    [Tooltip("Use BTN 1: auto-wired at runtime for consumable slot 0.")]
     [SerializeField] private Button useButtonSlot0;
-    [Tooltip("Use BTN 2: click activates consumable in slot 1 (second consumable).")]
+    [Tooltip("Use BTN 2: auto-wired at runtime for consumable slot 1.")]
     [SerializeField] private Button useButtonSlot1;
-    [Tooltip("Copy BTN: shown in Add/Clone flow after selecting 1 tile. Bind OnClick to OnCopy().")]
+    [Tooltip("Copy BTN: auto-wired at runtime for Add/Clone flow after selecting 1 tile.")]
     [SerializeField] private Button copyButton;
-    [Tooltip("Gun BTN: optional second-step button for Gun. Bind OnClick to OnGun().")]
+    [Tooltip("Gun BTN: auto-wired at runtime for Gun.")]
     [SerializeField] private Button gunButton;
-    [Tooltip("Totem BTN: optional second-step button for Totem of Dying. Bind OnClick to OnTotem().")]
+    [Tooltip("Totem BTN: auto-wired at runtime for Totem of Dying.")]
     [SerializeField] private Button totemButton;
-    [Tooltip("Weighted Dice BTN: optional second-step button for Weighted Dice. Bind OnClick to OnWeightedDice().")]
+    [Tooltip("Weighted Dice BTN: auto-wired at runtime for Weighted Dice.")]
     [SerializeField] private Button wdButton;
     [SerializeField] private GameObject CloneToolTip;
 
@@ -53,26 +53,23 @@ public class ConsumableEffectSystem : MonoBehaviour
         if (shop == null) shop = FindFirstObjectByType<Shop>();
         if (deckManager == null) deckManager = DeckManager.Instance ?? FindFirstObjectByType<DeckManager>();
 
-        if (useButtonSlot0 != null)
-            useButtonSlot0.onClick.AddListener(() => UseSlot(0));
-        if (useButtonSlot1 != null)
-            useButtonSlot1.onClick.AddListener(() => UseSlot(1));
-        if (copyButton != null)
-        {
-            copyButton.onClick.AddListener(OnCopy);
-            copyButton.gameObject.SetActive(false);
-        }
+        WireButton(useButtonSlot0, UseSlot0);
+        WireButton(useButtonSlot1, UseSlot1);
+        WireButton(copyButton, OnCopy, startHidden: true);
+        WireButton(gunButton, OnGun, startHidden: true);
+        WireButton(totemButton, OnTotem, startHidden: true);
+        WireButton(wdButton, OnWeightedDice, startHidden: true);
+    }
 
-        if (gunButton != null)
-            gunButton.onClick.AddListener(OnGun);
-        if (totemButton != null)
-            totemButton.onClick.AddListener(OnTotem);
-        if (wdButton != null)
-            wdButton.onClick.AddListener(OnWeightedDice);
+    private static void WireButton(Button button, UnityAction handler, bool startHidden = false)
+    {
+        if (button == null || handler == null) return;
 
-        if (gunButton != null) gunButton.gameObject.SetActive(false);
-        if (totemButton != null) totemButton.gameObject.SetActive(false);
-        if (wdButton != null) wdButton.gameObject.SetActive(false);
+        button.onClick = new Button.ButtonClickedEvent();
+        button.onClick.AddListener(handler);
+
+        if (startHidden)
+            button.gameObject.SetActive(false);
     }
 
     public void UseSlot0() => UseSlot(0);
@@ -88,9 +85,7 @@ public class ConsumableEffectSystem : MonoBehaviour
         var chosenTile = holder != null ? holder.TileData : null;
         if (chosenTile == null) return;
         DeckMutationHelpers.AddCopiesToDeckFront(deckManager, chosenTile, 4);
-        addConsumablePhase = 1;
-        deckManager.selectedTiles.Clear();
-        deckManager.sortHand();
+        Finish();
     }
 
     public void ConfirmAddDiscard()

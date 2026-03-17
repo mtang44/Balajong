@@ -58,7 +58,7 @@ public class HandManager : MonoBehaviour
                 return;
             }
         }
-        SoundManager.Instance.playMenuSound();
+        //SoundManager.Instance.playMenuSound();
         List<GameObject> hand = deckManager.Hand;
         if (hand == null || hand.Count == 0) return;
 

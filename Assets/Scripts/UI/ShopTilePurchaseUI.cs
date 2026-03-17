@@ -358,6 +358,10 @@ public class ShopTilePurchaseUI : MonoBehaviour, IPointerClickHandler, IPointerE
             TileType.Dots => (int)tileData.NumberedValue,
             TileType.Bam => (int)tileData.NumberedValue,
             TileType.Crack => (int)tileData.NumberedValue,
+            TileType.Wind => ScoreTable.HonorScore,
+            TileType.Dragon => ScoreTable.HonorScore,
+            TileType.Flower => ScoreTable.BonusScore,
+            TileType.Season => ScoreTable.BonusScore,
             _ => 0
         };
     }

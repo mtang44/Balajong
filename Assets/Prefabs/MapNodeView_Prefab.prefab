@@ -170,7 +170,7 @@ MonoBehaviour:
   tooltipFontSize: 32
   tooltipPadding: 12
   tooltipSpacing: 4
-  tooltipFont: {fileID: 12800000, guid: ba47b797d34b7f54ab9fffc633427192, type: 3}
+  tooltipFont: {fileID: 12800000, guid: 957b0403bfed9c141abc5820120eff50, type: 3}
   tooltipRoot: {fileID: 0}
   tooltipTypeText: {fileID: 0}
   tooltipEnemyNameText: {fileID: 0}

@@ -3,28 +3,28 @@ Common,Joker,joker,pMult,Gain +3 mult,3
 Common,Polar Joker,polar,pMult,Each Dot Meld gets +5 Mult,3
 Common,Grizzly Joker,grizzly,pMult,Each Crack Meld gets +5 Mult,3
 Common,Panda Joker,panda,pMult,Each Bam Meld gets +5 Mult,3
-Common,Blue Joke,blue,Points,Each Dot Tile gives +10 Points,3
+Common,Blue Joker,blue,Points,Each Dot Tile gives +10 Points,3
 Common,Red Joker,red,Points,Each Crack Tile gives +10 Points,3
 Common,Green Joker,green,Points,Each Bam Tile gives +10 Points,3
 Common,Shower ,golden,Econ,Gain an additional $5 on victory,3
-Common,Knight Joker,knight,Mult,For every discarded dragon; gain +1 Mult,3
 Uncommon,Banker,banker,Econ,Gives 1 gold for each 5 gold held at the end of the round (max 10 earned),4
-Uncommon,Trash Joker,trash,Utility,Gain +1 Discard Each Round,4
-Uncommon,Medic Joker,medic,Health,Gain +3 Max Health,4
-Uncommon,Eggs in one Basket,basket,Utility,Select +3 tiles each discard,4
-Uncommon,Spider Man,spider,Utility,Increase Hand Size by 1,5
-Uncommon,Alt F4,alt-four,Utility,Destroy first discarded tiles if hand hasn't been checked.,4
-Uncommon,,iridescent,xMult,Polychrome editions give x2 mult instead,4
-Uncommon,,silver,Points,Foil editions give 100 points instead,4
-Uncommon,Double Rainbow,rainbow,Mult,Holographic editions give +15 mult insead,10
-Uncommon,Second Wind,secondwind,xMult,Gain x1 mult; with each damage increasing value by 1,4
-Uncommon,FishDish,fishdish,Points,Random Points to final score,5
-Uncommon,HatCat,hatcat,Mult,Random Mult to final score,5
-Rare,All Eyes,eyes,xMult,If all melds are pairs x4 mult.,6
-Rare,Three Of A Kind,three,xMult,If all melds are pungs x3 mult.,7
-Rare,Four Leaf Clover,clover,xMult,If all melds are kongs x4 mult.,7
-Rare,Ledger,ledger,Mult,Random Points & Mult,7
-Rare,Ancalagon,ancalagon,xMult,Each dragon gives x2 Mult if hand contains a Wind,8
-Epic,Simpson,simpson,Utility,Duplicate the joker to the right,8
-Epic,Bagged Joker,bagged,Points,For each played wind; gain +30 points,10
-Epic,JackJack,jackjack,Utility,Duplicates first discarded hand that hans't been checked,10
+Uncommon,Trash Joker,trash,Utility,Gain +1 Discard before each Rack Check,4
+Uncommon,Medic Joker,medic,Health,Fully Heal at the beginning of each battle,4
+Uncommon,Eggs in one Basket,basket,Utility,Select +3 Tiles each discard,4
+Uncommon,Spider Man,spider,Utility,Gain x1 mult. Each missing health increasing value by 1,5
+Uncommon,Alt F4,alt-four,Utility,Destroy first Discard if Rack hasn't been checked,4
+Uncommon,Unbreaking,unbreaking,xMult,Enchanted editions give x2 mult instead,4
+Uncommon,Gravestone,grave,Points,Ghost editions give 100 points instead,4
+Uncommon,Double Rainbow,rainbow,Mult,Crystal editions give +10 mult insead,10
+Uncommon,Second Wind,secondwind,xMult,Each Wind Meld gains x2 mult,4
+Uncommon,FishDish,fishdish,Points,Add a Random number of Points to the final score,5
+Uncommon,HatCat,hatcat,Mult,Add a Random Mult value to the final score,5
+Rare,Knight Joker,knight,Mult,For every discarded dragon; gain +1 Mult,6
+Rare,All Eyes,eyes,xMult,All eyes gain x3 mult,6
+Rare,Three Of A Kind,three,xMult,All pungs gain x3 mult,7
+Rare,Four Leaf Clover,clover,xMult,All kongs quints and BALAJONGs gain x4 mult,7
+Rare,Ledger,ledger,Mult,Add a Random number of Points & Mult to the final score,7
+Rare,Ancalagon,ancalagon,xMult,Each dragon gives x2 Mult if rack contains a Wind,8
+Epic,Simpson,simpson,Utility,Copy the ability of the joker to the right,8
+Epic,Bagged Joker,bagged,Points,This joker gains +30 points for each played Wind Tile,10
+Epic,JackJack,jackjack,Utility,Duplicates first discarded rack that hasn't been checked,10

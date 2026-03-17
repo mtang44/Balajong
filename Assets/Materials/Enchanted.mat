@@ -143,8 +143,8 @@ Material:
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _BoarderColor: {r: 0, g: 2.9960787, b: 0.20429648, a: 1}
-    - _Boarder_Color: {r: 0.856393, g: 0.35763502, b: 2.6272426, a: 0.6941177}
-    - _Color: {r: 0.2256073, g: 0.042452812, b: 1, a: 1}
+    - _Boarder_Color: {r: 1.9925998, g: 1.6316757, b: 3.9760375, a: 0.6941177}
+    - _Color: {r: 0.25335082, g: 0.06074228, b: 0.990566, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
   m_BuildTextureStacks: []

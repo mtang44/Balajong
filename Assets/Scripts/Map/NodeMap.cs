@@ -252,10 +252,18 @@ public class NodeMap : MonoBehaviour
         AssignNodeTypes(layers);
         InitializeNodeStates(layers);
 
+        // On a loop, queue the start node's defeat animation so it plays on map entry
+        if (animateRecentlyDefeatedNodeOnMapEntry && MapRunState.Instance.LoopCount > 0
+            && layers.Count > 0 && layers[0].Count > 0)
+        {
+            pendingMapEntryDefeatAnimationNodeId = layers[0][0].id;
+        }
+
         BuildLookup();
         RebuildVisuals();
         ComputePanBounds();
         CenterOnCurrentNode();
+        TryQueuePendingMapEntryDefeatAnimation();
         SaveRuntimeState();
     }
 
@@ -1000,7 +1008,7 @@ public class NodeMap : MonoBehaviour
 
     private bool ShouldShowMapDeadVisual(MapNodeData node)
     {
-        if (!IsEnemyNode(node) || node.state != NodeState.Cleared)
+        if ((!IsEnemyNode(node) && !IsLoopStartNode(node)) || node.state != NodeState.Cleared)
         {
             return false;
         }
@@ -1013,8 +1021,20 @@ public class NodeMap : MonoBehaviour
         return node != null && node.type != MapNodeType.Start;
     }
 
+    private static bool IsLoopStartNode(MapNodeData node)
+    {
+        return node != null && node.type == MapNodeType.Start
+            && MapRunState.Instance != null && MapRunState.Instance.LoopCount > 0;
+    }
+
     private Sprite ResolveNodeSprite(MapNodeType type)
     {
+        // On a loop, the start node displays the boss sprite (it represents the defeated prior boss)
+        if (type == MapNodeType.Start && MapRunState.Instance.LoopCount > 0)
+        {
+            return bossNodeSprite != null ? bossNodeSprite : (defaultNodeSprite != null ? defaultNodeSprite : GetOrCreateCircleSprite());
+        }
+
         Sprite sprite = type switch
         {
             MapNodeType.Start => startNodeSprite,
@@ -1351,7 +1371,7 @@ public class NodeMap : MonoBehaviour
         }
 
         if (!nodesById.TryGetValue(pendingMapEntryDefeatAnimationNodeId, out MapNodeData node) ||
-            !IsEnemyNode(node) ||
+            (!IsEnemyNode(node) && !IsLoopStartNode(node)) ||
             node.state != NodeState.Cleared ||
             !viewsById.ContainsKey(pendingMapEntryDefeatAnimationNodeId))
         {
@@ -1375,7 +1395,7 @@ public class NodeMap : MonoBehaviour
         pendingMapEntryDefeatAnimationCoroutine = null;
 
         if (!nodesById.TryGetValue(nodeId, out MapNodeData node) ||
-            !IsEnemyNode(node) ||
+            (!IsEnemyNode(node) && !IsLoopStartNode(node)) ||
             node.state != NodeState.Cleared ||
             !viewsById.TryGetValue(nodeId, out MapNodeView view) ||
             view == null)

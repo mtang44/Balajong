@@ -189,6 +189,7 @@ public class ShopTilePurchaseUI : MonoBehaviour, IPointerClickHandler, IPointerE
         }
 
         UpdatePriceLabel();
+        gameObject.SetActive(false);
     }
 
     private void UpdatePriceLabel()

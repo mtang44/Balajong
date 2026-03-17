@@ -301,11 +301,13 @@ public class GameManager : MonoBehaviour
         int handScore = ScoringManager.Instance.CalcHandScore(DeckManager.Instance.getHandAsMahjongTileData());
         Debug.Log($"ScoreState: Hand scored {handScore} points.");
 
-        // Animate the score rising tile-by-tile before applying the final total
-        if (ScoreVisualization.Instance != null)
-            yield return ScoreVisualization.Instance.AnimateScore(score);
+        int targetScoreAfterHand = score + handScore;
 
-        score += handScore;
+        // Animate score rise (melds, bonuses, then any final joker/global delta) up to the final total.
+        if (ScoreVisualization.Instance != null)
+            yield return ScoreVisualization.Instance.AnimateScore(score, targetScoreAfterHand);
+
+        score = targetScoreAfterHand;
         StatsUpdater.Instance.UpdateScore(score);
 
         bool reachedThreshold = score >= EnemyManager.Instance.returnScoreThreshold();
@@ -428,6 +430,7 @@ public class GameManager : MonoBehaviour
         score = 0;
 
         MapRunState.Instance.ClearMap();
+        MapRunState.Instance.ResetLoopCount();
 
         PlayerStatManager playerStats = PlayerStatManager.Instance;
         if (playerStats != null)
@@ -477,6 +480,8 @@ public class GameManager : MonoBehaviour
     void Loss()
     {
         Debug.Log("Player has lost the game.");
+
+        DeckManager.Instance.endRound();
         StatsUpdater.Instance.ShowLoseScreen();
     }
 

@@ -41,6 +41,9 @@ public class ScoringManager : MonoBehaviour
     private GameObject handInfoTextObject;
 
     [SerializeField]
+    private GameObject jokerInfoTextObject;
+
+    [SerializeField]
     private bool autoUpdateHandInfo = true;
 
     [SerializeField]
@@ -49,6 +52,9 @@ public class ScoringManager : MonoBehaviour
     private TMPro.TextMeshProUGUI handInfoTmpText;
     private UnityEngine.UI.Text handInfoLegacyText;
     private string lastRenderedHandInfo = string.Empty;
+    private TMPro.TextMeshProUGUI jokerInfoTmpText;
+    private UnityEngine.UI.Text jokerInfoLegacyText;
+    private string lastRenderedJokerInfo = string.Empty;
 
     bool winded = false;
 
@@ -319,17 +325,38 @@ public class ScoringManager : MonoBehaviour
     public void UpdateHandInfoDisplay()
     {
         if (DeckManager.Instance == null) return;
-        if (!TryResolveHandInfoText()) return;
 
-        string handInfo = BuildCurrentHandInfoText();
-        if (handInfo == lastRenderedHandInfo) return;
+        bool hasHandInfoText = TryResolveHandInfoText();
+        bool hasJokerInfoText = TryResolveJokerInfoText();
+        if (!hasHandInfoText && !hasJokerInfoText) return;
 
-        if (handInfoTmpText != null)
-            handInfoTmpText.text = handInfo;
-        else if (handInfoLegacyText != null)
-            handInfoLegacyText.text = handInfo;
+        if (hasHandInfoText)
+        {
+            string handInfo = BuildCurrentHandInfoText();
+            if (handInfo != lastRenderedHandInfo)
+            {
+                if (handInfoTmpText != null)
+                    handInfoTmpText.text = handInfo;
+                else if (handInfoLegacyText != null)
+                    handInfoLegacyText.text = handInfo;
 
-        lastRenderedHandInfo = handInfo;
+                lastRenderedHandInfo = handInfo;
+            }
+        }
+
+        if (hasJokerInfoText)
+        {
+            string jokerInfo = BuildCurrentJokerInfoText();
+            if (jokerInfo != lastRenderedJokerInfo)
+            {
+                if (jokerInfoTmpText != null)
+                    jokerInfoTmpText.text = jokerInfo;
+                else if (jokerInfoLegacyText != null)
+                    jokerInfoLegacyText.text = jokerInfo;
+
+                lastRenderedJokerInfo = jokerInfo;
+            }
+        }
     }
 
     private bool TryResolveHandInfoText()
@@ -345,6 +372,21 @@ public class ScoringManager : MonoBehaviour
             handInfoLegacyText = handInfoTextObject.GetComponent<UnityEngine.UI.Text>();
 
         return handInfoTmpText != null || handInfoLegacyText != null;
+    }
+
+    private bool TryResolveJokerInfoText()
+    {
+        if (jokerInfoTmpText != null || jokerInfoLegacyText != null)
+            return true;
+
+        if (jokerInfoTextObject == null)
+            return false;
+
+        jokerInfoTmpText = jokerInfoTextObject.GetComponent<TMPro.TextMeshProUGUI>();
+        if (jokerInfoTmpText == null)
+            jokerInfoLegacyText = jokerInfoTextObject.GetComponent<UnityEngine.UI.Text>();
+
+        return jokerInfoTmpText != null || jokerInfoLegacyText != null;
     }
 
     private string BuildCurrentHandInfoText()
@@ -414,7 +456,7 @@ public class ScoringManager : MonoBehaviour
         int total = meldTotal + flowerTotal + seasonTotal;
 
         var sb = new StringBuilder();
-        sb.AppendLine("Hand Info:");
+        sb.AppendLine("Melds:");
         AppendTypeCountLine(sb, "Single", singleCount);     // Single tile (not involved in any meld)
         AppendTypeCountLine(sb, "Eyes", eyesCount);         // Pair
         AppendTypeCountLine(sb, "Pung", pungCount);         // Three of a kind
@@ -432,6 +474,92 @@ public class ScoringManager : MonoBehaviour
             sb.Append($"Total - {total}");
 
         return sb.ToString().TrimEnd();
+    }
+
+    private string BuildCurrentJokerInfoText()
+    {
+        JokerManager jokerManager = JokerManager.Instance;
+        if (jokerManager == null)
+        {
+            return string.Empty;
+        }
+
+        int jokerActivations = jokerManager.numberOfActivations("joker");
+        int spiderActivations = jokerManager.numberOfActivations("spider");
+        int fishDishActivations = jokerManager.numberOfActivations("fishdish");
+        int hatCatActivations = jokerManager.numberOfActivations("hatcat");
+        int knightActivations = jokerManager.numberOfActivations("knight");
+        int ledgerActivations = jokerManager.numberOfActivations("ledger");
+        int baggedActivations = jokerManager.numberOfActivations("bagged");
+
+        bool hasEndScoreJoker =
+            jokerActivations > 0 ||
+            spiderActivations > 0 ||
+            fishDishActivations > 0 ||
+            hatCatActivations > 0 ||
+            knightActivations > 0 ||
+            ledgerActivations > 0 ||
+            baggedActivations > 0;
+
+        if (!hasEndScoreJoker)
+        {
+            return string.Empty;
+        }
+
+        var sb = new StringBuilder();
+        sb.AppendLine("Jokers:");
+
+        AppendJokerEffectLine(sb, "Joker", "3x Mult", jokerActivations);
+
+        int spiderCurrentMult = GetCurrentSpiderMultiplier(spiderActivations);
+        AppendJokerEffectLine(sb, "Spider Man", $"{spiderCurrentMult}x Mult", spiderActivations);
+
+        AppendJokerEffectLine(sb, "FishDish", "Adds Random Points", fishDishActivations);
+        AppendJokerEffectLine(sb, "HatCat", "Adds Random Mult", hatCatActivations);
+        AppendJokerEffectLine(sb, "Knight Joker", $"{jokerManager.knightJokerBuff}x Mult", knightActivations);
+        AppendJokerEffectLine(sb, "Ledger", "Adds Random Points and Mult", ledgerActivations);
+        AppendJokerEffectLine(sb, "Bagged Joker", $"{jokerManager.baggedJokerBuff * 30} Points", baggedActivations);
+
+        return sb.ToString().TrimEnd();
+    }
+
+    private static void AppendJokerEffectLine(StringBuilder sb, string label, string effectText, int activationCount)
+    {
+        if (activationCount <= 0)
+        {
+            return;
+        }
+
+        if (activationCount > 1)
+        {
+            sb.AppendLine($"{label} x{activationCount}: {effectText}");
+            return;
+        }
+
+        sb.AppendLine($"{label}: {effectText}");
+    }
+
+    private static int GetCurrentSpiderMultiplier(int activationCount)
+    {
+        if (activationCount <= 0)
+        {
+            return 1;
+        }
+
+        int perActivationMult = 1;
+        if (PlayerStatManager.Instance != null)
+        {
+            perActivationMult = (PlayerStatManager.Instance.maxHealth - PlayerStatManager.Instance.currentHealth) + 1;
+            perActivationMult = Mathf.Max(1, perActivationMult);
+        }
+
+        int totalMult = 1;
+        for (int i = 0; i < activationCount; i++)
+        {
+            totalMult *= perActivationMult;
+        }
+
+        return totalMult;
     }
 
     private int AddBonusBreakdown(List<GameObject> tiles, out int tileCount)

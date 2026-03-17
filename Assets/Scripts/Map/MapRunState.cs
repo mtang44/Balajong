@@ -68,5 +68,11 @@ public class MapRunState : MonoBehaviour
         return true;
     }
 
+    public int LoopCount { get; private set; }
+
+    public void IncrementLoop() { LoopCount++; }
+
+    public void ResetLoopCount() { LoopCount = 0; }
+
     public void ClearMap() => CurrentMap = null;
 }

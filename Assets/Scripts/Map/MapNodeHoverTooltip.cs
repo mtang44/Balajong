@@ -381,6 +381,7 @@ public class MapNodeHoverTooltip : MonoBehaviour, IPointerEnterHandler, IPointer
 
         if (shouldShow)
         {
+            SoundManager.Instance.playZoomSound();
             tooltipRoot.SetAsLastSibling();
             ClampTooltipToTopEdge();
         }

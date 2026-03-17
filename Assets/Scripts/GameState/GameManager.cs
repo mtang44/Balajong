@@ -495,6 +495,7 @@ public class GameManager : MonoBehaviour
         }
         if (selecting && HasAnySelectedTile())
         {
+            //SoundManager.Instance.playDiscardSound();
             selecting = false;
             SwitchState(GameState.Discard);
         }

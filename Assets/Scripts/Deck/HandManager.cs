@@ -37,7 +37,6 @@ public class HandManager : MonoBehaviour
                 return;
             }
         }
-
         List<GameObject> hand = deckManager.Hand;
         if (hand == null || hand.Count == 0) return;
 
@@ -53,14 +52,13 @@ public class HandManager : MonoBehaviour
     {
         if (deckManager == null)
         {
-            deckManager = DeckManager.Instance;
             if (deckManager == null)
             {
                 Debug.LogWarning("DeckManager not found!");
                 return;
             }
         }
-
+        SoundManager.Instance.playMenuSound();
         List<GameObject> hand = deckManager.Hand;
         if (hand == null || hand.Count == 0) return;
 

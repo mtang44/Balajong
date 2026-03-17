@@ -9,6 +9,7 @@ public class ShopPurchase : MonoBehaviour
     public GameObject ShopManager;
     public GameObject Player;
     private StatsUpdater statsUpdater;
+    public GameObject consumableContainer;
     private void Start()
     {
         statsUpdater = GameObject.FindWithTag("StatsUpdater")?.GetComponent<StatsUpdater>();
@@ -58,6 +59,14 @@ public class ShopPurchase : MonoBehaviour
         }
 
     }
+    public void purchaseConsumable()
+    {
+        if(checkForCash(ShopManager.GetComponent<Shop>().consumableDrops[0].price));
+        {
+            PlayerStatManager.Instance.AddConsumableToInventory(ShopManager.GetComponent<Shop>().consumableDrops[0]);
+            consumableContainer.SetActive(false);
+        }
+    }
     public void disableIndex(int index)
     {
         jokerPanels[index].SetActive(false);
@@ -65,7 +74,7 @@ public class ShopPurchase : MonoBehaviour
 
     private void TryPaidReroll(bool rerollJokers, bool rerollConsumables)
     {
-        int rerollCost = 5;
+         int rerollCost = 5;
         if (!checkForCash(rerollCost))
         {
             return;

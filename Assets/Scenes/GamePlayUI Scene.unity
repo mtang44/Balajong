@@ -10870,9 +10870,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1739145880}
-        m_TargetAssemblyTypeName: ConsumableEffectSystem, Assembly-CSharp
-        m_MethodName: PurchaseFromShop
+      - m_Target: {fileID: 2001318429}
+        m_TargetAssemblyTypeName: ShopPurchase, Assembly-CSharp
+        m_MethodName: purchaseConsumable
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -10896,7 +10896,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
   m_Color: {r: 0.99215686, g: 0.6745098, b: 0, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -26499,6 +26499,7 @@ MonoBehaviour:
   ShopTextPanel: {fileID: 537163357}
   ShopManager: {fileID: 172759713}
   Player: {fileID: 0}
+  consumableContainer: {fileID: 2141479397}
   jokerPanels:
   - {fileID: 296444833}
   - {fileID: 453824314}

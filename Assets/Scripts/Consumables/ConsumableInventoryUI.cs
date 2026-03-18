@@ -67,8 +67,10 @@ public class ConsumableInventoryUI : MonoBehaviour
             if (i < imagePanels.Count && imagePanels[i] != null)
             {
                 imagePanels[i].gameObject.SetActive(hasItem);
-                if (hasItem && c.imageIndex < consumableImageArray.Count)
+                if (hasItem && c.imageIndex >= 0 && c.imageIndex < consumableImageArray.Count)
                     imagePanels[i].texture = consumableImageArray[c.imageIndex];
+                else if (hasItem)
+                    imagePanels[i].texture = null;
             }
 
         }

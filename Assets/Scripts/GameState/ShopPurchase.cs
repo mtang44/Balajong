@@ -1,4 +1,3 @@
-using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
@@ -57,7 +56,12 @@ public class ShopPurchase : MonoBehaviour
             string code = boughtJoker.code;
             string description = boughtJoker.description;
             int price =  boughtJoker.price;
-            Texture img = ShopManager.GetComponent<Shop>().imageArray[boughtJoker.imageIndex];
+            Texture img = null;
+            Texture[] shopImages = ShopManager.GetComponent<Shop>().imageArray;
+            if (shopImages != null && boughtJoker.imageIndex >= 0 && boughtJoker.imageIndex < shopImages.Length)
+            {
+                img = shopImages[boughtJoker.imageIndex];
+            }
             JokerManager.Instance.AddJoker(name, code, description,price, img);
         }
 

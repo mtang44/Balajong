@@ -171,6 +171,7 @@ MonoBehaviour:
     seasonValue: 0
     edition: 0
     sprite: {fileID: 1245946512, guid: 728422e951c025d44b907401c3a07f88, type: 3}
+  runtimeAtlasSourceSprite: {fileID: 0}
 --- !u!114 &8360231360980700292
 MonoBehaviour:
   m_ObjectHideFlags: 0

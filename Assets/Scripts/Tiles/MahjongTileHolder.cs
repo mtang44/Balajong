@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 using System.Linq;
 #if UNITY_EDITOR
 using UnityEditor;
@@ -8,10 +9,22 @@ public class MahjongTileHolder : MonoBehaviour
 {
     private const string SpriteSheetPath = "Assets/Art Assets/Tiles/MahjongTilesTransparent.png";
     private const string SpriteNamePrefix = "MahjongTilesTransparent_";
+    private const int AtlasColumns = 9;
+    private const int AtlasRows = 5;
+    private const int AtlasSpriteWidth = 61;
+    private const int AtlasSpriteHeight = 82;
+    private const int AtlasStepX = 69;
+    private const int AtlasStepY = 91;
+    private const int AtlasMaxSpriteIndex = 43;
+    private static readonly Dictionary<int, Sprite> RuntimeSpriteCache = new Dictionary<int, Sprite>();
+    private static Texture2D sharedRuntimeAtlasTexture;
 
     [SerializeField]
     private MahjongTileData tileData;
     public MahjongTileData TileData => tileData;
+
+    [SerializeField]
+    private Sprite runtimeAtlasSourceSprite;
     
     private void OnEnable()
     {
@@ -20,6 +33,8 @@ public class MahjongTileHolder : MonoBehaviour
         {
             tileData = new MahjongTileData(TileType.Dots, NumberedValue.One);
         }
+
+        CacheRuntimeAtlasSource(tileData.Sprite);
     }
 
     private void Start()
@@ -40,7 +55,11 @@ public class MahjongTileHolder : MonoBehaviour
     
     public void SetTileData(MahjongTileData newData)
     {
+        CacheRuntimeAtlasSource(tileData != null ? tileData.Sprite : null);
+
         tileData = newData;
+        CacheRuntimeAtlasSource(tileData != null ? tileData.Sprite : null);
+
         if (tileData != null && tileData.Sprite == null)
         {
             LookupAndSetSprite();
@@ -93,7 +112,6 @@ public class MahjongTileHolder : MonoBehaviour
             tileData.SetSprite(foundSprite);
         }
 #else
-        // Runtime fallback: attempt to load from Resources
         int spriteIndex = GetSpriteIndex(
             tileData.TileType,
             tileData.NumberedValue,
@@ -106,14 +124,109 @@ public class MahjongTileHolder : MonoBehaviour
         if (spriteIndex < 0)
             return;
 
-        string spriteName = GetSpriteName(spriteIndex);
-        // Try to load from sprite atlas or resources
-        Sprite sprite = Resources.LoadAll<Sprite>("Tiles").FirstOrDefault(s => s.name == spriteName);
-        if (sprite != null)
-        {
-            tileData.SetSprite(sprite);
-        }
+        TryAssignRuntimeAtlasSprite(spriteIndex);
 #endif
+    }
+
+    private void CacheRuntimeAtlasSource(Sprite sprite)
+    {
+        if (sprite == null)
+        {
+            return;
+        }
+
+        if (runtimeAtlasSourceSprite == null)
+        {
+            runtimeAtlasSourceSprite = sprite;
+        }
+
+        if (sprite.texture != null)
+        {
+            sharedRuntimeAtlasTexture = sprite.texture;
+        }
+    }
+
+    private bool TryAssignRuntimeAtlasSprite(int spriteIndex)
+    {
+        if (tileData == null)
+        {
+            return false;
+        }
+
+        if (RuntimeSpriteCache.TryGetValue(spriteIndex, out Sprite cachedSprite) && cachedSprite != null)
+        {
+            tileData.SetSprite(cachedSprite);
+            return true;
+        }
+
+        Texture2D atlasTexture = ResolveRuntimeAtlasTexture();
+        if (atlasTexture == null)
+        {
+            return false;
+        }
+
+        if (!TryGetAtlasRect(spriteIndex, out Rect atlasRect))
+        {
+            return false;
+        }
+
+        if (atlasRect.xMax > atlasTexture.width || atlasRect.yMax > atlasTexture.height)
+        {
+            return false;
+        }
+
+        Sprite generatedSprite = Sprite.Create(
+            atlasTexture,
+            atlasRect,
+            new Vector2(0.5f, 0.5f),
+            100f);
+        generatedSprite.name = GetSpriteName(spriteIndex);
+
+        RuntimeSpriteCache[spriteIndex] = generatedSprite;
+        tileData.SetSprite(generatedSprite);
+        return true;
+    }
+
+    private Texture2D ResolveRuntimeAtlasTexture()
+    {
+        if (sharedRuntimeAtlasTexture != null)
+        {
+            return sharedRuntimeAtlasTexture;
+        }
+
+        if (runtimeAtlasSourceSprite != null && runtimeAtlasSourceSprite.texture != null)
+        {
+            sharedRuntimeAtlasTexture = runtimeAtlasSourceSprite.texture;
+            return sharedRuntimeAtlasTexture;
+        }
+
+        if (tileData != null && tileData.Sprite != null && tileData.Sprite.texture != null)
+        {
+            sharedRuntimeAtlasTexture = tileData.Sprite.texture;
+            return sharedRuntimeAtlasTexture;
+        }
+
+        return null;
+    }
+
+    private static bool TryGetAtlasRect(int spriteIndex, out Rect rect)
+    {
+        if (spriteIndex < 0 || spriteIndex > AtlasMaxSpriteIndex)
+        {
+            rect = default;
+            return false;
+        }
+
+        int rowFromTop = spriteIndex / AtlasColumns;
+        int column = spriteIndex % AtlasColumns;
+        int rowFromBottom = (AtlasRows - 1) - rowFromTop;
+
+        rect = new Rect(
+            column * AtlasStepX,
+            rowFromBottom * AtlasStepY,
+            AtlasSpriteWidth,
+            AtlasSpriteHeight);
+        return true;
     }
 
     private static string GetSpriteName(int spriteIndex)

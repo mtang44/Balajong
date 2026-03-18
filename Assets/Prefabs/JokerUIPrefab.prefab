@@ -454,7 +454,7 @@ GameObject:
   - component: {fileID: 7320444983080233863}
   m_Layer: 1
   m_Name: JokerUIPrefab
-  m_TagString: Untagged
+  m_TagString: JokerCanvas
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

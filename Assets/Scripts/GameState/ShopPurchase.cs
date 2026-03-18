@@ -31,6 +31,7 @@ public class ShopPurchase : MonoBehaviour
         }
         else
         {
+            SoundManager.Instance.playIncorrectSound();
             Debug.Log("Not enough cash to make this purchase.");
         }
         return false;

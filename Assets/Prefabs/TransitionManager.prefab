@@ -501,7 +501,7 @@ MonoBehaviour:
   randomizeOnStart: 0
   randomizeEdition: 1
   typeWeight: 01000000010000000100000001000000010000000100000001000000
-  editionWeight: 56000000070000000000000007000000
+  editionWeight: 54000000070000000200000007000000
 --- !u!4 &659488742006160830 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7317096856753047839, guid: f4ef62aeee9c25144a5c1fe006273c49, type: 3}

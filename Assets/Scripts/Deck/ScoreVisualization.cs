@@ -2,7 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-
+public enum ScoreSound
+{
+    Small,
+    Medium,
+    Large
+}
 // Drives the end-of-round score animation.
 // The hand is read left to right; when the last tile of each meld is reached a
 // "+score" popup rises from it and the score counter ticks up.
@@ -48,9 +53,9 @@ public class ScoreVisualization : MonoBehaviour
         else Destroy(gameObject);
     }
     
-    // Animate the score readout starting from <paramref name="baseScore"/>.
+    // Animate the score readout starting from <paramref name="baseScore"/> and land at <paramref name="finalScore"/>.
     // Yield on this coroutine from GameManager; it resolves when the animation finishes.
-    public IEnumerator AnimateScore(int baseScore)
+    public IEnumerator AnimateScore(int baseScore, int finalScore)
     {
         DeckManager    deck    = DeckManager.Instance;
         ScoringManager scoring = ScoringManager.Instance;
@@ -79,6 +84,8 @@ public class ScoreVisualization : MonoBehaviour
 
                 yield return ShowBonusTiles(deck.seasonTiles, runningScore);
             }
+
+            yield return AnimateFinalScoreDelta(runningScore, finalScore);
 
             yield break;
         }
@@ -146,9 +153,12 @@ public class ScoreVisualization : MonoBehaviour
                 triggerKind == ScoringManager.MeldKind.Single;
 
             List<Edition> triggerEditions = null;
+            ScoringManager.Meld triggerMeld = default;
+            bool hasTriggerMeld = false;
             bool hasNonBaseEditions = false;
-            if (slotScore[i] > 0 && triggerMelds.TryGetValue(i, out ScoringManager.Meld triggerMeld))
+            if (slotScore[i] > 0 && triggerMelds.TryGetValue(i, out triggerMeld))
             {
+                hasTriggerMeld = true;
                 triggerEditions = GetNonBaseEditions(triggerMeld);
                 hasNonBaseEditions = triggerEditions.Count > 0;
             }
@@ -166,6 +176,11 @@ public class ScoreVisualization : MonoBehaviour
 
             if (slotScore[i] > 0) // trigger tile: fire the popup
             {
+                if (hasTriggerMeld)
+                {
+                    TriggerMeldJokerShakes(triggerMeld);
+                }
+
                 if (triggerHopIndices.TryGetValue(i, out List<int> hopIndices))
                 {
                     TriggerMeldHop(hand, hopIndices);
@@ -226,6 +241,8 @@ public class ScoreVisualization : MonoBehaviour
 
             yield return ShowBonusTiles(deck.seasonTiles, runningScore);
         }
+
+        yield return AnimateFinalScoreDelta(runningScore, finalScore);
     }
 
     private bool HasScorableBonusTiles(List<GameObject> tiles)
@@ -267,6 +284,7 @@ public class ScoreVisualization : MonoBehaviour
             if (bonus <= 0) continue;
 
             TriggerTileHop(tile);
+            playScoreSound(1);
 
             Vector3 spawnPos = tile.transform.position + popupWorldOffset;
             string handType = GetBonusDisplayName(td);
@@ -330,6 +348,209 @@ public class ScoreVisualization : MonoBehaviour
         }
     }
 
+    private IEnumerator AnimateFinalScoreDelta(int[] runningScore, int finalScore)
+    {
+        if (runningScore == null || runningScore.Length == 0)
+            yield break;
+
+        if (runningScore[0] == finalScore)
+            yield break;
+
+        HashSet<string> endRoundJokers = GetRoundEndJokersThatAffectFinalScore();
+        if (endRoundJokers.Count > 0)
+        {
+            JokerManager.Instance?.ShakeJokers(endRoundJokers);
+        }
+
+        float finalLerpDuration = Mathf.Max(scoreLerpDuration, 0.35f);
+        yield return LerpScoreToTarget(runningScore, finalScore, finalLerpDuration);
+    }
+
+    private IEnumerator LerpScoreToTarget(int[] runningScore, int targetScore, float duration)
+    {
+        if (runningScore == null || runningScore.Length == 0)
+            yield break;
+
+        int startScore = runningScore[0];
+        if (startScore == targetScore)
+            yield break;
+
+        float lerpDuration = Mathf.Max(0f, duration);
+        if (lerpDuration <= 0f)
+        {
+            runningScore[0] = targetScore;
+            StatsUpdater.Instance.UpdateScore(runningScore[0]);
+            yield break;
+        }
+
+        float elapsed = 0f;
+        while (elapsed < lerpDuration)
+        {
+            float t = Mathf.Clamp01(elapsed / lerpDuration);
+            int displayScore = Mathf.RoundToInt(Mathf.Lerp(startScore, targetScore, t));
+            if (displayScore != runningScore[0])
+            {
+                runningScore[0] = displayScore;
+                StatsUpdater.Instance.UpdateScore(runningScore[0]);
+            }
+
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        runningScore[0] = targetScore;
+        StatsUpdater.Instance.UpdateScore(runningScore[0]);
+    }
+
+    private void TriggerMeldJokerShakes(ScoringManager.Meld meld)
+    {
+        JokerManager jokerManager = JokerManager.Instance;
+        if (jokerManager == null)
+            return;
+
+        HashSet<string> impactingJokers = GetMeldImpactingJokers(meld);
+        if (impactingJokers.Count > 0)
+        {
+            jokerManager.ShakeJokers(impactingJokers);
+        }
+    }
+
+    private HashSet<string> GetMeldImpactingJokers(ScoringManager.Meld meld)
+    {
+        HashSet<string> impacting = new HashSet<string>();
+        if (meld.Tiles == null)
+            return impacting;
+
+        bool hasDots = false;
+        bool hasBam = false;
+        bool hasCrack = false;
+        bool hasWind = false;
+        bool hasDragon = false;
+        bool hasCrystal = false;
+        bool hasEnchanted = false;
+        bool hasGhost = false;
+
+        foreach (MahjongTileData tile in meld.Tiles)
+        {
+            if (tile == null)
+                continue;
+
+            switch (tile.TileType)
+            {
+                case TileType.Dots:
+                    hasDots = true;
+                    break;
+                case TileType.Bam:
+                    hasBam = true;
+                    break;
+                case TileType.Crack:
+                    hasCrack = true;
+                    break;
+                case TileType.Wind:
+                    hasWind = true;
+                    break;
+                case TileType.Dragon:
+                    hasDragon = true;
+                    break;
+            }
+
+            if (tile.Edition == Edition.Crystal)
+                hasCrystal = true;
+            if (tile.Edition == Edition.Enchanted)
+                hasEnchanted = true;
+            if (tile.Edition == Edition.Ghost)
+                hasGhost = true;
+        }
+
+        if (hasDots) AddIfActive(impacting, "blue");
+        if (hasBam) AddIfActive(impacting, "green");
+        if (hasCrack) AddIfActive(impacting, "red");
+        if (hasDots) AddIfActive(impacting, "polar");
+        if (hasCrack) AddIfActive(impacting, "grizzly");
+        if (hasBam) AddIfActive(impacting, "panda");
+        if (hasWind) AddIfActive(impacting, "secondwind");
+
+        if (hasCrystal && HasActivation("rainbow"))
+            impacting.Add("rainbow");
+        if (hasEnchanted && HasActivation("unbreaking"))
+            impacting.Add("unbreaking");
+        if (hasGhost && HasActivation("grave"))
+            impacting.Add("grave");
+        if (hasDragon && HandContainsWind() && HasActivation("ancalagon"))
+            impacting.Add("ancalagon");
+
+        switch (meld.Kind)
+        {
+            case ScoringManager.MeldKind.Eyes:
+                AddIfActive(impacting, "eyes");
+                break;
+            case ScoringManager.MeldKind.Pung:
+                AddIfActive(impacting, "three");
+                break;
+            case ScoringManager.MeldKind.Kong:
+            case ScoringManager.MeldKind.Quint:
+            case ScoringManager.MeldKind.Balajong:
+                AddIfActive(impacting, "clover");
+                break;
+        }
+
+        return impacting;
+    }
+
+    private HashSet<string> GetRoundEndJokersThatAffectFinalScore()
+    {
+        HashSet<string> impacting = new HashSet<string>();
+        JokerManager jokerManager = JokerManager.Instance;
+        if (jokerManager == null)
+            return impacting;
+
+        if (HasActivation("bagged") && jokerManager.baggedJokerBuff > 0)
+            impacting.Add("bagged");
+        if (HasActivation("fishdish"))
+            impacting.Add("fishdish");
+        if (HasActivation("ledger"))
+            impacting.Add("ledger");
+        if (HasActivation("joker"))
+            impacting.Add("joker");
+        if (HasActivation("hatcat"))
+            impacting.Add("hatcat");
+        if (HasActivation("knight") && jokerManager.knightJokerBuff > 0)
+            impacting.Add("knight");
+
+        PlayerStatManager stats = PlayerStatManager.Instance;
+        if (HasActivation("spider") && stats != null && (stats.maxHealth - stats.currentHealth) > 0)
+            impacting.Add("spider");
+
+        return impacting;
+    }
+
+    private static bool HasActivation(string jokerCode)
+    {
+        return JokerManager.Instance != null && JokerManager.Instance.numberOfActivations(jokerCode) > 0;
+    }
+
+    private static void AddIfActive(HashSet<string> impacting, string jokerCode)
+    {
+        if (HasActivation(jokerCode))
+            impacting.Add(jokerCode);
+    }
+
+    private static bool HandContainsWind()
+    {
+        DeckManager deck = DeckManager.Instance;
+        if (deck == null || deck.hand == null)
+            return false;
+
+        foreach (GameObject tile in deck.hand)
+        {
+            MahjongTileData tileData = tile != null ? tile.GetComponent<MahjongTileHolder>()?.TileData : null;
+            if (tileData != null && tileData.TileType == TileType.Wind)
+                return true;
+        }
+
+        return false;
+    }
+
     private void TriggerMeldHop(List<GameObject> hand, List<int> meldIndices)
     {
         if (hand == null || meldIndices == null || meldIndices.Count == 0)
@@ -357,6 +578,20 @@ public class ScoreVisualization : MonoBehaviour
             }
 
             TriggerTileHop(tile);
+            playScoreSound(meldIndices.Count);
+        }
+    }
+    public void playScoreSound(int numTiles)
+    {
+        ScoreSound type = ScoreSound.Small;
+        if(numTiles >= 3) type = ScoreSound.Medium;
+        if(numTiles >= 5) type = ScoreSound.Large;
+        switch (type)
+        {
+            case ScoreSound.Small: { SoundManager.Instance.playSmallScoreSound(); break; }
+            case ScoreSound.Medium: { SoundManager.Instance.playMediumScoreSound(); break; }
+            case ScoreSound.Large: { SoundManager.Instance.playBigScoreSound(); break; }
+            default: { SoundManager.Instance.playSmallScoreSound(); break; }
         }
     }
 

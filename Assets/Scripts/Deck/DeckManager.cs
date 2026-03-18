@@ -46,7 +46,7 @@ public class DeckManager : MonoBehaviour
     }
     public void Start()
     {
-        HAND_SIZE = 14 + JokerManager.Instance.numberOfActivations("spider");
+        HAND_SIZE = 14;
         MAX_DISCARD_SELECTION = 5 + (3 * JokerManager.Instance.numberOfActivations("basket"));
     }
 
@@ -69,10 +69,12 @@ public class DeckManager : MonoBehaviour
         {
             deck = new Deck(tilePrefab);
             deck.InitializeDeck();
+            NotifyDeckCountChanged();
             return;
         }
 
         deck.Shuffle();
+        NotifyDeckCountChanged();
     }
 
     public void ResetToDefaultState()
@@ -85,6 +87,7 @@ public class DeckManager : MonoBehaviour
         forceNewLists();
         deck = new Deck(tilePrefab);
         deck.InitializeDeck();
+        NotifyDeckCountChanged();
     }
 
     private void DestroyTrackedTiles(List<GameObject> tiles)
@@ -109,7 +112,7 @@ public class DeckManager : MonoBehaviour
         bool isTopLevel = !isDrawingHand;
         isDrawingHand = true;
 
-        HAND_SIZE = 14 + JokerManager.Instance.numberOfActivations("spider");
+        HAND_SIZE = 14;
         MAX_DISCARD_SELECTION = 5 + (3 * JokerManager.Instance.numberOfActivations("basket"));
         if(count == 0) count = HAND_SIZE;
         for (int i = 0; i < count; i++)
@@ -131,6 +134,7 @@ public class DeckManager : MonoBehaviour
             isDrawingHand = false;
             DrawVisualization.Instance?.AnimateDeal(pendingDealTiles);
             pendingDealTiles.Clear();
+            NotifyDeckCountChanged();
         }
     }
     public void sortHand()
@@ -267,7 +271,7 @@ public class DeckManager : MonoBehaviour
 
     public void redrawHand()
     {
-        int HAND_SIZE = 14 + JokerManager.Instance.numberOfActivations("spider");
+        int HAND_SIZE = 14;
         int MAX_DISCARD_SELECTION = 5 + (3 * JokerManager.Instance.numberOfActivations("basket"));
         int tilesToDraw = HAND_SIZE - hand.Count;
         if (tilesToDraw > 0)
@@ -338,6 +342,7 @@ public class DeckManager : MonoBehaviour
 
         Debug.Log("Deck count after endRound: " + deck.GetDeckCount());
         deck.Shuffle();
+        NotifyDeckCountChanged();
     }
 
     public List<MahjongTileData> getHandAsMahjongTileData()
@@ -367,5 +372,10 @@ public class DeckManager : MonoBehaviour
         }
 
         return transform;
+    }
+
+    private static void NotifyDeckCountChanged()
+    {
+        StatsUpdater.Instance?.UpdateDeckCount();
     }
 }

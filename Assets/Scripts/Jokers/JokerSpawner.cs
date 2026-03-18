@@ -2,12 +2,19 @@
 using System.IO;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 
 public class JokerSpawner : MonoBehaviour
 {
     [SerializeField]
     public string LootTableFilePath;
+
+    [SerializeField]
+    private TextAsset lootTableTextAsset;
+
+    [SerializeField]
+    private string lootTableResourcePath;
 
     public string[] Rarities = new string[] {"Common","Uncommon","Rare","Epic","Legendary"};
     [SerializeField]
@@ -67,50 +74,143 @@ public class JokerSpawner : MonoBehaviour
     // outputs a dictionary storing the string of the rarity category, and a list of objects that exist within that rarity
     public Dictionary<string, List<Jokers>> insertCustomLootTable(string filePath)
     {
-        string path = filePath;
-        StreamReader reader;
         Dictionary<string, List<Jokers>> customLootTable = new Dictionary<string, List<Jokers>>();
-        if(File.Exists(path))
+
+        if (!TryReadLootLines(filePath, out List<string> lines))
         {
-            reader = new StreamReader(File.OpenRead(path));
-            if(!reader.EndOfStream)
-            {
-                reader.ReadLine(); // skip header line
-            }
-            int index = 0;
-            while(!reader.EndOfStream)
-            {
-                var line = reader.ReadLine();
-                var values = line.Split(',');
-                string jokerRarity = values[0];
-                string jokerName = values[1];
-                string jokerCode = values[2];
-                string jokerEquationType = values[3];
-                string jokerDescription = values[4];
-                int jokerPrice = int.Parse(values[5]);
-
-                Jokers newJoker = new Jokers (jokerName, jokerRarity, jokerCode, jokerEquationType, jokerDescription, jokerPrice, index);
-
-                // if item rarity key already exists, add newItem to the list, else create new rarity key with a new list of items. 
-                if(customLootTable.ContainsKey(jokerRarity))
-                {
-                    customLootTable[jokerRarity].Add(newJoker);
-                }
-                else
-                {
-                    customLootTable.Add(jokerRarity, new List<Jokers> {newJoker});
-                }
-                //Debug.Log("Joker added to loot table: " + newJoker.name + " of rarity " + newJoker.rarity);
-                index++;
-            }
-            reader.Close();
-
             return customLootTable;
         }
-        else
+
+        int index = 0;
+        for (int lineIndex = 1; lineIndex < lines.Count; lineIndex++)
         {
-            Debug.LogError("Error: File not found.");
-            return customLootTable;
+            string line = lines[lineIndex];
+            if (string.IsNullOrWhiteSpace(line))
+            {
+                continue;
+            }
+
+            string[] values = line.Split(',');
+            if (values.Length < 6)
+            {
+                Debug.LogWarning($"JokerSpawner: Skipping malformed loot line {lineIndex + 1}.", this);
+                continue;
+            }
+
+            string jokerRarity = values[0].Trim();
+            string jokerName = values[1].Trim();
+            string jokerCode = values[2].Trim();
+            string jokerEquationType = values[3].Trim();
+            string jokerDescription = values[4].Trim();
+            if (!int.TryParse(values[5], out int jokerPrice))
+            {
+                Debug.LogWarning($"JokerSpawner: Invalid price on loot line {lineIndex + 1}.", this);
+                continue;
+            }
+
+            Jokers newJoker = new Jokers(jokerName, jokerRarity, jokerCode, jokerEquationType, jokerDescription, jokerPrice, index);
+
+            // if item rarity key already exists, add newItem to the list, else create new rarity key with a new list of items.
+            if (customLootTable.ContainsKey(jokerRarity))
+            {
+                customLootTable[jokerRarity].Add(newJoker);
+            }
+            else
+            {
+                customLootTable.Add(jokerRarity, new List<Jokers> { newJoker });
+            }
+
+            index++;
+        }
+
+        return customLootTable;
+    }
+
+    private bool TryReadLootLines(string configuredPath, out List<string> lines)
+    {
+        if (lootTableTextAsset != null)
+        {
+            lines = SplitLines(lootTableTextAsset.text);
+            return lines.Count > 0;
+        }
+
+        List<string> attemptedPaths = BuildCandidatePaths(configuredPath);
+        for (int i = 0; i < attemptedPaths.Count; i++)
+        {
+            string candidatePath = attemptedPaths[i];
+            if (File.Exists(candidatePath))
+            {
+                lines = new List<string>(File.ReadAllLines(candidatePath));
+                return lines.Count > 0;
+            }
+        }
+
+        string resourcePath = string.IsNullOrWhiteSpace(lootTableResourcePath)
+            ? Path.GetFileNameWithoutExtension(configuredPath)
+            : lootTableResourcePath;
+        TextAsset resourceCsv = Resources.Load<TextAsset>(resourcePath);
+        if (resourceCsv != null)
+        {
+            lines = SplitLines(resourceCsv.text);
+            return lines.Count > 0;
+        }
+
+        Debug.LogError($"JokerSpawner: Could not load loot table CSV. Checked file paths: {string.Join(" | ", attemptedPaths)} and Resources path '{resourcePath}'.", this);
+        lines = new List<string>();
+        return false;
+    }
+
+    private static List<string> SplitLines(string text)
+    {
+        List<string> lines = new List<string>();
+        using (StringReader reader = new StringReader(text ?? string.Empty))
+        {
+            string line;
+            while ((line = reader.ReadLine()) != null)
+            {
+                lines.Add(line);
+            }
+        }
+
+        return lines;
+    }
+
+    private static List<string> BuildCandidatePaths(string configuredPath)
+    {
+        List<string> paths = new List<string>();
+        AddPath(paths, configuredPath);
+
+        string normalized = string.IsNullOrWhiteSpace(configuredPath)
+            ? string.Empty
+            : configuredPath.Replace('\\', '/');
+
+        if (normalized.StartsWith("Assets/", StringComparison.OrdinalIgnoreCase))
+        {
+            string relativeToAssets = normalized.Substring("Assets/".Length);
+            AddPath(paths, Path.Combine(Application.dataPath, relativeToAssets));
+            AddPath(paths, Path.Combine(Application.streamingAssetsPath, relativeToAssets));
+        }
+
+        string fileName = Path.GetFileName(normalized);
+        if (!string.IsNullOrWhiteSpace(fileName))
+        {
+            AddPath(paths, Path.Combine(Application.streamingAssetsPath, fileName));
+            AddPath(paths, Path.Combine(Application.streamingAssetsPath, "CSV Files", fileName));
+        }
+
+        return paths;
+    }
+
+    private static void AddPath(List<string> paths, string path)
+    {
+        if (string.IsNullOrWhiteSpace(path))
+        {
+            return;
+        }
+
+        if (!paths.Contains(path))
+        {
+            paths.Add(path);
         }
     }
 

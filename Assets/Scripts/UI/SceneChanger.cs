@@ -104,6 +104,7 @@ public class SceneChanger : MonoBehaviour
         float delay = TransitionDuration;
         if (delay > 0f)
         {
+            //SoundManager.Instance.playTailWhooshSound();
             yield return new WaitForSeconds(delay);
         }
 
@@ -176,6 +177,7 @@ public class SceneChanger : MonoBehaviour
             tileTransition.RandomizeAndSave();
         }
 
+        //SoundManager.Instance.playWhooshSound();
         hasPendingTransitionEnd = true;
         IsTransitionInProgress = true;
         pendingTransitionSource = this;

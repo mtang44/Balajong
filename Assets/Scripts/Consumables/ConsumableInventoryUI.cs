@@ -16,6 +16,8 @@ public class ConsumableInventoryUI : MonoBehaviour
     [SerializeField] private List<Image> slotHighlights = new List<Image>();
     [Tooltip("Optional: one per slot (2), to show item name. Empty slot can show blank or placeholder.")]
     [SerializeField] private List<TMP_Text> slotLabels = new List<TMP_Text>();
+    [SerializeField] private List<RawImage> imagePanels = new List<RawImage>();
+    [SerializeField] private List<Texture> consumableImageArray = new  List<Texture>();
  
 
     private void Start()
@@ -30,6 +32,7 @@ public class ConsumableInventoryUI : MonoBehaviour
             int index = i;
             if (i < slotButtons.Count && slotButtons[i] != null)
                 slotButtons[i].onClick.AddListener(() => ConsumableManager.Instance?.Select(index));
+
         }
 
         Refresh();
@@ -52,15 +55,24 @@ public class ConsumableInventoryUI : MonoBehaviour
         {
             var c = manager.GetAt(i);
             bool hasItem = c != null;
-
             if (i < slotButtons.Count && slotButtons[i] != null)
             {
-                slotButtons[i].gameObject.SetActive(true);
+                //slotButtons[i].gameObject.SetActive(true);
                 slotButtons[i].interactable = hasItem;
             }
 
             if (i < slotLabels.Count && slotLabels[i] != null)
                 slotLabels[i].text = hasItem ? c.name : "";
+
+            if (i < imagePanels.Count && imagePanels[i] != null)
+            {
+                imagePanels[i].gameObject.SetActive(hasItem);
+                if (hasItem && c.imageIndex >= 0 && c.imageIndex < consumableImageArray.Count)
+                    imagePanels[i].texture = consumableImageArray[c.imageIndex];
+                else if (hasItem)
+                    imagePanels[i].texture = null;
+            }
+
         }
     }
 

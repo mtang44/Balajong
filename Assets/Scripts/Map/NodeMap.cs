@@ -30,9 +30,9 @@ public class NodeMap : MonoBehaviour
     [SerializeField] private float mapUnitsToPixels = 120f;
     [SerializeField] private float nodeUiSize = 96f;
     [SerializeField, Min(0.05f)] private float bossNodeScaleMultiplier = 1.35f;
-    [SerializeField] private string enemyNameTooltipText = "???";
-    [SerializeField] private string enemyHealthTooltipText = "???";
-    [SerializeField] private string battlePayoutTooltipText = "???";
+    //[SerializeField] private string enemyNameTooltipText = "???";
+    //[SerializeField] private string enemyHealthTooltipText = "???";
+    //[SerializeField] private string battlePayoutTooltipText = "???";
     [SerializeField] private MapConnectionVisualSettings connectionVisualSettings = new MapConnectionVisualSettings
     {
         lineWidth = 10f,
@@ -252,10 +252,18 @@ public class NodeMap : MonoBehaviour
         AssignNodeTypes(layers);
         InitializeNodeStates(layers);
 
+        // On a loop, queue the start node's defeat animation so it plays on map entry
+        if (animateRecentlyDefeatedNodeOnMapEntry && MapRunState.Instance.LoopCount > 0
+            && layers.Count > 0 && layers[0].Count > 0)
+        {
+            pendingMapEntryDefeatAnimationNodeId = layers[0][0].id;
+        }
+
         BuildLookup();
         RebuildVisuals();
         ComputePanBounds();
         CenterOnCurrentNode();
+        TryQueuePendingMapEntryDefeatAnimation();
         SaveRuntimeState();
     }
 
@@ -623,13 +631,13 @@ public class NodeMap : MonoBehaviour
                 if (layerIndex == layers.Count - 1)
                 {
                     node.type = MapNodeType.Boss;
-                    node.enemyInfo = new EnemyInformation(node.type, layerIndex);
+                    node.enemyInfo = new EnemyInformation(node.type, GetProjectedEnemiesDefeatedForLayer(layerIndex));
                     continue;
                 }
 
                 node.type = PickEncounterType(layerIndex, layers.Count);
                 //HERE IS WHERE WE ASSIGN THE THING
-                node.enemyInfo = new EnemyInformation(node.type, layerIndex);
+                node.enemyInfo = new EnemyInformation(node.type, GetProjectedEnemiesDefeatedForLayer(layerIndex));
             }
         }
     }
@@ -1000,7 +1008,7 @@ public class NodeMap : MonoBehaviour
 
     private bool ShouldShowMapDeadVisual(MapNodeData node)
     {
-        if (!IsEnemyNode(node) || node.state != NodeState.Cleared)
+        if ((!IsEnemyNode(node) && !IsLoopStartNode(node)) || node.state != NodeState.Cleared)
         {
             return false;
         }
@@ -1013,8 +1021,20 @@ public class NodeMap : MonoBehaviour
         return node != null && node.type != MapNodeType.Start;
     }
 
+    private static bool IsLoopStartNode(MapNodeData node)
+    {
+        return node != null && node.type == MapNodeType.Start
+            && MapRunState.Instance != null && MapRunState.Instance.LoopCount > 0;
+    }
+
     private Sprite ResolveNodeSprite(MapNodeType type)
     {
+        // On a loop, the start node displays the boss sprite (it represents the defeated prior boss)
+        if (type == MapNodeType.Start && MapRunState.Instance.LoopCount > 0)
+        {
+            return bossNodeSprite != null ? bossNodeSprite : (defaultNodeSprite != null ? defaultNodeSprite : GetOrCreateCircleSprite());
+        }
+
         Sprite sprite = type switch
         {
             MapNodeType.Start => startNodeSprite,
@@ -1310,6 +1330,7 @@ public class NodeMap : MonoBehaviour
 
         MapRunState runState = MapRunState.Instance;
         mapData = runState.CurrentMap;
+        RefreshEnemyInfoForCurrentProgress();
         pendingMapEntryDefeatAnimationNodeId = ResolveCurrentMapEntryDefeatAnimationNodeId();
         if (!animateRecentlyDefeatedNodeOnMapEntry)
         {
@@ -1323,6 +1344,59 @@ public class NodeMap : MonoBehaviour
         CenterOnCurrentNode();
         TryQueuePendingMapEntryDefeatAnimation();
         return true;
+    }
+
+    private void RefreshEnemyInfoForCurrentProgress()
+    {
+        if (mapData == null || mapData.nodes == null)
+        {
+            return;
+        }
+
+        for (int i = 0; i < mapData.nodes.Count; i++)
+        {
+            MapNodeData node = mapData.nodes[i];
+            if (!IsEnemyNode(node))
+            {
+                continue;
+            }
+
+            if (node.enemyInfo == null)
+            {
+                node.enemyInfo = new EnemyInformation(node.type, GetProjectedEnemiesDefeatedForLayer(node.layer));
+                continue;
+            }
+
+            node.enemyInfo.EnemyHealth = EnemyInformation.CalculateEnemyHealth(node.type, GetProjectedEnemiesDefeatedForLayer(node.layer));
+        }
+    }
+
+    private int GetProjectedEnemiesDefeatedForLayer(int layerIndex)
+    {
+        int enemiesDefeated = PlayerStatManager.Instance != null ? PlayerStatManager.Instance.enemiesDefeated : 0;
+        int anchorLayer = GetEnemyProgressAnchorLayer();
+        return Mathf.Max(0, enemiesDefeated + (layerIndex - anchorLayer));
+    }
+
+    private int GetEnemyProgressAnchorLayer()
+    {
+        if (mapData == null || mapData.currentNodeId < 0)
+        {
+            return 1;
+        }
+
+        MapNodeData currentNode = mapData.FindNodeById(mapData.currentNodeId);
+        if (currentNode == null)
+        {
+            return 1;
+        }
+
+        if (currentNode.type == MapNodeType.Start || currentNode.state == NodeState.Cleared)
+        {
+            return currentNode.layer + 1;
+        }
+
+        return currentNode.layer;
     }
 
     private int ResolveCurrentMapEntryDefeatAnimationNodeId()
@@ -1351,7 +1425,7 @@ public class NodeMap : MonoBehaviour
         }
 
         if (!nodesById.TryGetValue(pendingMapEntryDefeatAnimationNodeId, out MapNodeData node) ||
-            !IsEnemyNode(node) ||
+            (!IsEnemyNode(node) && !IsLoopStartNode(node)) ||
             node.state != NodeState.Cleared ||
             !viewsById.ContainsKey(pendingMapEntryDefeatAnimationNodeId))
         {
@@ -1375,7 +1449,7 @@ public class NodeMap : MonoBehaviour
         pendingMapEntryDefeatAnimationCoroutine = null;
 
         if (!nodesById.TryGetValue(nodeId, out MapNodeData node) ||
-            !IsEnemyNode(node) ||
+            (!IsEnemyNode(node) && !IsLoopStartNode(node)) ||
             node.state != NodeState.Cleared ||
             !viewsById.TryGetValue(nodeId, out MapNodeView view) ||
             view == null)

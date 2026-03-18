@@ -84,48 +84,83 @@ public class Shop : MonoBehaviour
         for(int dropIndex = 0; dropIndex < 2; dropIndex++) 
         {
             GameObject shopSlot = Shop_Item_TMPs[dropIndex];
+            Jokers currentDrop = (drops != null && dropIndex < drops.Count) ? drops[dropIndex] : null;
             TMP_Text[] foundTMPs = shopSlot.GetComponentsInChildren<TMP_Text>(true);
             foreach(TMP_Text currentTMP in foundTMPs)
             {
                 if(currentTMP.name == "Price Tag TMP")
                 {
-                    currentTMP.transform.GetComponent<TMP_Text>().text = "$" + drops[dropIndex].price; // set price tmp
+                    currentTMP.transform.GetComponent<TMP_Text>().text = currentDrop != null ? "$" + currentDrop.price : ""; // set price tmp
                 }
                 else if(currentTMP.name == "Title TMP")
                 {
-                    currentTMP.transform.GetComponent<TMP_Text>().text  = ""+ drops[dropIndex].name; // set Item Name tmp
+                    currentTMP.transform.GetComponent<TMP_Text>().text  = currentDrop != null ? "" + currentDrop.name : ""; // set Item Name tmp
                 }
                 else if(currentTMP.name == "Description TMP")
                 {
-                    currentTMP.transform.GetComponent<TMP_Text>().text  = ""+ drops[dropIndex].description; // sets description of item to tmp
+                    currentTMP.transform.GetComponent<TMP_Text>().text  = currentDrop != null ? "" + currentDrop.description : ""; // sets description of item to tmp
                 }
             }
-            // delete random color later
-             shopSlot.GetComponentInChildren<RawImage>(true).texture = imageArray[drops[dropIndex].imageIndex];
+
+            RawImage image = shopSlot.GetComponentInChildren<RawImage>(true);
+            if (image == null)
+            {
+                continue;
+            }
+
+            if (currentDrop != null && currentDrop.imageIndex >= 0 && imageArray != null && currentDrop.imageIndex < imageArray.Length)
+            {
+                image.texture = imageArray[currentDrop.imageIndex];
+            }
+            else
+            {
+                image.texture = null;
+                if (currentDrop != null)
+                {
+                    Debug.LogWarning($"Shop: Joker image index {currentDrop.imageIndex} is out of range for imageArray length {(imageArray == null ? 0 : imageArray.Length)}.", this);
+                }
+            }
         }
     }
     public void displayConsumableOutput(List<Consumable> drops = null)
     {   
-       
         GameObject shopSlot = Shop_Item_TMPs[4];
+        Consumable currentDrop = (drops != null && drops.Count > 0) ? drops[0] : null;
         TMP_Text[] foundTMPs = shopSlot.GetComponentsInChildren<TMP_Text>(true);
         foreach(TMP_Text currentTMP in foundTMPs)
         {
             if(currentTMP.name == "Price Tag TMP")
             {
-                currentTMP.transform.GetComponent<TMP_Text>().text = "$" + drops[0].price; // set price tmp
+                currentTMP.transform.GetComponent<TMP_Text>().text = currentDrop != null ? "$" + currentDrop.price : ""; // set price tmp
             }
             else if(currentTMP.name == "Title TMP")
             {
-                currentTMP.transform.GetComponent<TMP_Text>().text  = ""+ drops[0].name; // set Item Name tmp
+                currentTMP.transform.GetComponent<TMP_Text>().text  = currentDrop != null ? "" + currentDrop.name : ""; // set Item Name tmp
             }
             else if(currentTMP.name == "Description TMP")
             {
-                currentTMP.transform.GetComponent<TMP_Text>().text  = ""+ drops[0].description; // sets description of item to tmp
+                currentTMP.transform.GetComponent<TMP_Text>().text  = currentDrop != null ? "" + currentDrop.description : ""; // sets description of item to tmp
             }
         }
-        // delete random color later
-        shopSlot.GetComponentInChildren<RawImage>(true).texture = consumableImageArray[drops[0].imageIndex];
+
+        RawImage image = shopSlot.GetComponentInChildren<RawImage>(true);
+        if (image == null)
+        {
+            return;
+        }
+
+        if (currentDrop != null && currentDrop.imageIndex >= 0 && consumableImageArray != null && currentDrop.imageIndex < consumableImageArray.Length)
+        {
+            image.texture = consumableImageArray[currentDrop.imageIndex];
+        }
+        else
+        {
+            image.texture = null;
+            if (currentDrop != null)
+            {
+                Debug.LogWarning($"Shop: Consumable image index {currentDrop.imageIndex} is out of range for consumableImageArray length {(consumableImageArray == null ? 0 : consumableImageArray.Length)}.", this);
+            }
+        }
     }
     
     /* This is the main function that generates the loot from the loot table. 
@@ -187,7 +222,12 @@ public class Shop : MonoBehaviour
         {
             for(int i = 0; i < r.Value; i++)
             {
-                var itemList = lootTable[r.Key]; 
+                if (!lootTable.TryGetValue(r.Key, out var itemList) || itemList == null || itemList.Count == 0)
+                {
+                    Debug.LogWarning($"Shop: Loot table has no entries for rarity '{r.Key}'.", this);
+                    continue;
+                }
+
                 T selectedItem = itemList[rand.Next(0,itemList.Count)];
                 selectedItems.Add(selectedItem);
             }

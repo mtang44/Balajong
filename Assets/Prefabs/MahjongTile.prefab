@@ -171,6 +171,7 @@ MonoBehaviour:
     seasonValue: 0
     edition: 0
     sprite: {fileID: 1245946512, guid: 728422e951c025d44b907401c3a07f88, type: 3}
+  runtimeAtlasSourceSprite: {fileID: 0}
 --- !u!114 &8360231360980700292
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -196,7 +197,7 @@ MonoBehaviour:
     panelPadding: {x: 12, y: 8}
     scalePanelToFitText: 1
     maxAutoPanelWidth: 0
-    fontAsset: {fileID: 0}
+    fontAsset: {fileID: 11400000, guid: 1b63278fe00715f4b80786ec5da8bac0, type: 2}
     fontSize: 24
     fontStyle: 1
     textAlignment: 514

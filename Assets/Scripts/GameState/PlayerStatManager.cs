@@ -18,6 +18,12 @@ public class PlayerStatManager : MonoBehaviour
     public const int ConsumableInventorySize = 2;
     private readonly List<Consumable> _consumableSlots = new List<Consumable> { null, null };
 
+    [Header("Run Stats")]
+    public int highestScoringRack = 0;
+    public int totalMeldsScored = 0;
+    public int enemiesDefeated = 0;
+    public int totalMoneySpent = 0;
+
     public event Action ConsumableInventoryChanged;
 
     void Awake()
@@ -51,6 +57,11 @@ public class PlayerStatManager : MonoBehaviour
         maxHealth = startingMaxHealth;
         currentHealth = maxHealth;
         cash = startingCash;
+
+        highestScoringRack = 0;
+        totalMeldsScored = 0;
+        enemiesDefeated = 0;
+        totalMoneySpent = 0;
 
         for (int i = 0; i < _consumableSlots.Count; i++)
         {
@@ -90,6 +101,27 @@ public class PlayerStatManager : MonoBehaviour
         _consumableSlots[index] = null;
         ConsumableInventoryChanged?.Invoke();
     }
+
+    public void RecordHandScore(int handScore)
+    {
+        if (handScore > highestScoringRack)
+            highestScoringRack = handScore;
+    }
+
+    public void AddMeldsScored(int count)
+    {
+        totalMeldsScored += count;
+    }
+
+    public void RecordEnemyDefeated()
+    {
+        enemiesDefeated++;
+    }
+
+    public void AddMoneySpent(int amount)
+    {
+        totalMoneySpent += amount;
+    }
     public void TakeDamage(int damage)
     {
         currentHealth -= damage;
@@ -114,15 +146,12 @@ public class PlayerStatManager : MonoBehaviour
             currentHealth = maxHealth;
         }
     }
-    public void updateTheMax()
+    public void healToMax()
     {
-        int prevHealth = maxHealth;
-        maxHealth = 4 + (3 * JokerManager.Instance.numberOfActivations("medic"));
-        if(maxHealth != prevHealth)
+        if (JokerManager.Instance.numberOfActivations("medic") > 0)
         {
-            currentHealth = currentHealth + (3 * JokerManager.Instance.numberOfActivations("medic"));
+            currentHealth = maxHealth;
         }
-        
     }
 }
 

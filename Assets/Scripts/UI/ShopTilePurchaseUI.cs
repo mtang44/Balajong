@@ -28,11 +28,17 @@ public class ShopTilePurchaseUI : MonoBehaviour, IPointerClickHandler, IPointerE
     [Tooltip("Optional panel GameObject wrapping the price tag. Hidden when there is no tile in this slot.")]
     [SerializeField] private GameObject priceTagPanel;
 
+    [Tooltip("Optional child object to disable after this slot is purchased. If empty, the first child is used.")]
+    [SerializeField] private GameObject overlayChildToDisableOnPurchase;
+
     [SerializeField] private bool hideBuyButtonOnStart = true;
     [SerializeField] private bool hideBuyButtonAfterPurchase = true;
     [SerializeField] private bool hideBuyButtonOnPointerExit = true;
 
     private TileSpawner subscribedTileSpawner;
+    private EventTrigger overlayEventTrigger;
+    private bool isOverlayDisabledByPurchase;
+    [SerializeField] ShopPurchase purchase;
 
     private void Awake()
     {
@@ -41,8 +47,11 @@ public class ShopTilePurchaseUI : MonoBehaviour, IPointerClickHandler, IPointerE
             buyButton = GetComponentInChildren<Button>(true);
         }
 
+        overlayEventTrigger = GetComponent<EventTrigger>();
+
         ResolveTextLabelsByName();
         ResolvePriceTagPanel();
+        ResolveOverlayChildToDisable();
 
         if (priceLabel == null)
         {
@@ -91,6 +100,12 @@ public class ShopTilePurchaseUI : MonoBehaviour, IPointerClickHandler, IPointerE
             return;
         }
 
+        if (isOverlayDisabledByPurchase)
+        {
+            buyButton.gameObject.SetActive(false);
+            return;
+        }
+
         ResolveTileSpawner();
         if (tileSpawner == null || tileSpawner.GetSpawnedTile(slotIndex) == null)
         {
@@ -111,6 +126,12 @@ public class ShopTilePurchaseUI : MonoBehaviour, IPointerClickHandler, IPointerE
             return;
         }
 
+        if (isOverlayDisabledByPurchase)
+        {
+            buyButton.gameObject.SetActive(false);
+            return;
+        }
+
         if (eventData != null && eventData.pointerEnter != null)
         {
             Transform enteredTransform = eventData.pointerEnter.transform;
@@ -125,6 +146,11 @@ public class ShopTilePurchaseUI : MonoBehaviour, IPointerClickHandler, IPointerE
 
     public void BuyCurrentSlotTile()
     {
+        if (isOverlayDisabledByPurchase)
+        {
+            return;
+        }
+
         ResolveTileSpawner();
         if (tileSpawner == null)
         {
@@ -161,7 +187,7 @@ public class ShopTilePurchaseUI : MonoBehaviour, IPointerClickHandler, IPointerE
         }
 
         int price = GetTilePrice(holder.TileData);
-        if (playerStats.cash < price)
+        if (!purchase.checkForCash(price))
         {
             Debug.Log("Not enough cash to buy this tile.");
             return;
@@ -177,9 +203,11 @@ public class ShopTilePurchaseUI : MonoBehaviour, IPointerClickHandler, IPointerE
             UpdatePriceLabel();
             return;
         }
+        
 
-        playerStats.cash -= price;
-        StatsUpdater.Instance?.UpdateCash(playerStats.cash);
+        // playerStats.cash -= price;
+        // playerStats.AddMoneySpent(price);
+        // StatsUpdater.Instance?.UpdateCash(playerStats.cash);
 
         deckManager.deck.AddTileAtFront(purchasedTileData);
 
@@ -188,6 +216,7 @@ public class ShopTilePurchaseUI : MonoBehaviour, IPointerClickHandler, IPointerE
             buyButton.gameObject.SetActive(false);
         }
 
+        SetOverlayChildActive(false);
         UpdatePriceLabel();
     }
 
@@ -290,6 +319,65 @@ public class ShopTilePurchaseUI : MonoBehaviour, IPointerClickHandler, IPointerE
         }
     }
 
+    private void ResolveOverlayChildToDisable()
+    {
+        if (overlayChildToDisableOnPurchase != null)
+        {
+            return;
+        }
+
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            Transform child = transform.GetChild(i);
+            if (child == null)
+            {
+                continue;
+            }
+
+            GameObject childObject = child.gameObject;
+            if (childObject == priceTagPanel)
+            {
+                continue;
+            }
+
+            if (buyButton != null && childObject == buyButton.gameObject)
+            {
+                continue;
+            }
+
+            overlayChildToDisableOnPurchase = childObject;
+            return;
+        }
+
+        if (transform.childCount > 0)
+        {
+            overlayChildToDisableOnPurchase = transform.GetChild(0).gameObject;
+        }
+    }
+
+    private void SetOverlayChildActive(bool isActive)
+    {
+        ResolveOverlayChildToDisable();
+
+        if (overlayChildToDisableOnPurchase == null)
+        {
+            Debug.LogWarning("ShopTilePurchaseUI: No overlay child found to toggle after purchase.", this);
+            return;
+        }
+
+        if (overlayChildToDisableOnPurchase.activeSelf != isActive)
+        {
+            overlayChildToDisableOnPurchase.SetActive(isActive);
+        }
+
+        if (overlayEventTrigger != null)
+        {
+            overlayEventTrigger.enabled = isActive;
+        }
+
+        isOverlayDisabledByPurchase = !isActive;
+    }
+
     private void SetPriceTagPanelVisible(bool isVisible)
     {
         ResolvePriceTagPanel();
@@ -358,6 +446,10 @@ public class ShopTilePurchaseUI : MonoBehaviour, IPointerClickHandler, IPointerE
             TileType.Dots => (int)tileData.NumberedValue,
             TileType.Bam => (int)tileData.NumberedValue,
             TileType.Crack => (int)tileData.NumberedValue,
+            TileType.Wind => ScoreTable.HonorScore,
+            TileType.Dragon => ScoreTable.HonorScore,
+            TileType.Flower => ScoreTable.BonusScore,
+            TileType.Season => ScoreTable.BonusScore,
             _ => 0
         };
     }
@@ -420,6 +512,15 @@ public class ShopTilePurchaseUI : MonoBehaviour, IPointerClickHandler, IPointerE
 
     private void HandleTilesChanged()
     {
+        if (isOverlayDisabledByPurchase)
+        {
+            ResolveTileSpawner();
+            if (tileSpawner != null && tileSpawner.GetSpawnedTile(slotIndex) != null)
+            {
+                SetOverlayChildActive(true);
+            }
+        }
+
         UpdatePriceLabel();
     }
 }

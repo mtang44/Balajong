@@ -179,7 +179,7 @@ public class GameManager : MonoBehaviour
     {
         EnsureActionButtonHoverPreviews();
         maxDiscards = 3 + JokerManager.Instance.numberOfActivations("trash");
-        PlayerStatManager.Instance.updateTheMax();
+        PlayerStatManager.Instance.healToMax();
         StatsUpdater.Instance.UpdateHealth(PlayerStatManager.Instance.currentHealth, PlayerStatManager.Instance.maxHealth);
         StatsUpdater.Instance.UpdateDiscardCount();
         StatsUpdater.Instance.UpdateCash(PlayerStatManager.Instance.cash);
@@ -301,11 +301,22 @@ public class GameManager : MonoBehaviour
         int handScore = ScoringManager.Instance.CalcHandScore(DeckManager.Instance.getHandAsMahjongTileData());
         Debug.Log($"ScoreState: Hand scored {handScore} points.");
 
-        // Animate the score rising tile-by-tile before applying the final total
-        if (ScoreVisualization.Instance != null)
-            yield return ScoreVisualization.Instance.AnimateScore(score);
+        // Track run stats
+        var handTiles = DeckManager.Instance.getHandAsMahjongTileData();
+        var melds = ScoringManager.Instance.DetectMelds(handTiles);
+        int nonSingleMeldCount = 0;
+        foreach (var meld in melds)
+            if (meld.Kind != ScoringManager.MeldKind.Single) nonSingleMeldCount++;
+        PlayerStatManager.Instance.RecordHandScore(handScore);
+        PlayerStatManager.Instance.AddMeldsScored(nonSingleMeldCount);
 
-        score += handScore;
+        int targetScoreAfterHand = score + handScore;
+
+        // Animate score rise (melds, bonuses, then any final joker/global delta) up to the final total.
+        if (ScoreVisualization.Instance != null)
+            yield return ScoreVisualization.Instance.AnimateScore(score, targetScoreAfterHand);
+
+        score = targetScoreAfterHand;
         StatsUpdater.Instance.UpdateScore(score);
 
         bool reachedThreshold = score >= EnemyManager.Instance.returnScoreThreshold();
@@ -428,6 +439,7 @@ public class GameManager : MonoBehaviour
         score = 0;
 
         MapRunState.Instance.ClearMap();
+        MapRunState.Instance.ResetLoopCount();
 
         PlayerStatManager playerStats = PlayerStatManager.Instance;
         if (playerStats != null)
@@ -477,6 +489,8 @@ public class GameManager : MonoBehaviour
     void Loss()
     {
         Debug.Log("Player has lost the game.");
+
+        DeckManager.Instance.endRound();
         StatsUpdater.Instance.ShowLoseScreen();
     }
 
@@ -495,6 +509,7 @@ public class GameManager : MonoBehaviour
         }
         if (selecting && HasAnySelectedTile())
         {
+            //SoundManager.Instance.playDiscardSound();
             selecting = false;
             SwitchState(GameState.Discard);
         }

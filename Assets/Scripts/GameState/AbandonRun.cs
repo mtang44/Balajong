@@ -3,6 +3,8 @@ using UnityEngine.SceneManagement;
 
 public class AbandonRun : MonoBehaviour
 {
+    private const string JokerCanvasTag = "JokerCanvas";
+
     [SerializeField] private string returnSceneName = "TItle Screen";
     [SerializeField] private GameObject confirmationPanel;
     [SerializeField] private SceneChanger sceneChanger;
@@ -38,6 +40,7 @@ public class AbandonRun : MonoBehaviour
     {
         // Clear all joker visuals from shop
         ClearJokerVisuals();
+        DestroyJokerCanvasObjects();
 
         if (GameManager.Instance != null)
         {
@@ -76,6 +79,21 @@ public class AbandonRun : MonoBehaviour
                     panel.SetActive(true);
                 }
             }
+        }
+    }
+
+    private void DestroyJokerCanvasObjects()
+    {
+        GameObject[] allObjects = FindObjectsByType<GameObject>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+        for (int i = 0; i < allObjects.Length; i++)
+        {
+            GameObject currentObject = allObjects[i];
+            if (currentObject == null || currentObject.tag != JokerCanvasTag)
+            {
+                continue;
+            }
+
+            Destroy(currentObject);
         }
     }
 

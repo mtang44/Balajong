@@ -12,6 +12,7 @@ TagManager:
   - StatsUpdater
   - TransitionManager
   - EndScreen
+  - JokerCanvas
   layers:
   - Default
   - TransparentFX

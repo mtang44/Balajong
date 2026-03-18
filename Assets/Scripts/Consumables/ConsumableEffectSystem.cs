@@ -522,6 +522,14 @@ public class ConsumableEffectSystem : MonoBehaviour
             shopRoot.SetActive(true);
         if (copyButton != null)
             copyButton.gameObject.SetActive(false);
+        if (gunButton != null)
+            gunButton.gameObject.SetActive(false);
+        if (totemButton != null)
+            totemButton.gameObject.SetActive(false);
+        if (wdButton != null)
+            wdButton.gameObject.SetActive(false);
+        if (CloneToolTip != null)
+            CloneToolTip.SetActive(false);
            
 
 

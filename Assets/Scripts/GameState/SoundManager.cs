@@ -36,12 +36,12 @@ public class SoundManager : MonoBehaviour
     }
     public void playSmallScoreSound() { playSound(sounds[3]); }
     public void playMediumScoreSound() { playSound(sounds[4]); }
-    public void playBigScoreSound() { playSound(sounds[5]); }
+    public void playBigScoreSound() { playSound(sounds[5], 0.7f); }
     public void playDiscardSound() { playSound(sounds[6]); }
     public void playMenuSound() { playSound(sounds[7]); }
     public void playKillSound() { playSound(sounds[8]); }
     public void playZoomSound() { playSound(sounds[9], 2f); }
-    public void playWhooshSound() { playSound(sounds[10]); }
-    public void playCoinSound() { playSound(sounds[11]); }
+    public void playWhooshSound() { playSound(sounds[10], 0.3f); }
+    public void playCoinSound() { playSound(sounds[11], 0.7f); }
     public void playClickSound() { playSound(sounds[12]); }
 }

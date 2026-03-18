@@ -29,7 +29,7 @@ public class EnemyUIUpdater : MonoBehaviour
         {
             TMPro.TextMeshProUGUI textComponent = enemyDesc.GetComponent<TMPro.TextMeshProUGUI>();
             if (textComponent != null)
-                textComponent.text = "This Guy is a LOSER!";
+                textComponent.text = EnemyManager.Instance.getRandomDesc();
         }
     }
 }

@@ -26,7 +26,7 @@ public class EnemyManager : MonoBehaviour
     public string getHealthString() { return "" + enemyInfo.EnemyHealth; }
     public string getPayoutString() { return "$" + enemyInfo.EnemyPayout; }
     public string getRandomDesc() {
-        string comp = "";
+        //string comp = "";
         int index = Random.Range(0, EnemyInformationGrammer.descriptionVerb.Count);
         string verb = EnemyInformationGrammer.descriptionVerb[index];
 

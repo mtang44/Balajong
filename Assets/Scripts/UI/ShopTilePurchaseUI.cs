@@ -38,6 +38,7 @@ public class ShopTilePurchaseUI : MonoBehaviour, IPointerClickHandler, IPointerE
     private TileSpawner subscribedTileSpawner;
     private EventTrigger overlayEventTrigger;
     private bool isOverlayDisabledByPurchase;
+    [SerializeField] ShopPurchase purchase;
 
     private void Awake()
     {
@@ -186,7 +187,7 @@ public class ShopTilePurchaseUI : MonoBehaviour, IPointerClickHandler, IPointerE
         }
 
         int price = GetTilePrice(holder.TileData);
-        if (playerStats.cash < price)
+        if (!purchase.checkForCash(price))
         {
             Debug.Log("Not enough cash to buy this tile.");
             return;
@@ -202,10 +203,11 @@ public class ShopTilePurchaseUI : MonoBehaviour, IPointerClickHandler, IPointerE
             UpdatePriceLabel();
             return;
         }
+        
 
-        playerStats.cash -= price;
-        playerStats.AddMoneySpent(price);
-        StatsUpdater.Instance?.UpdateCash(playerStats.cash);
+        // playerStats.cash -= price;
+        // playerStats.AddMoneySpent(price);
+        // StatsUpdater.Instance?.UpdateCash(playerStats.cash);
 
         deckManager.deck.AddTileAtFront(purchasedTileData);
 

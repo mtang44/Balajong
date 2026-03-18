@@ -11146,6 +11146,7 @@ MonoBehaviour:
   hideBuyButtonOnStart: 1
   hideBuyButtonAfterPurchase: 1
   hideBuyButtonOnPointerExit: 1
+  purchase: {fileID: 2001318429}
 --- !u!222 &759248716
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -23470,6 +23471,7 @@ MonoBehaviour:
   hideBuyButtonOnStart: 1
   hideBuyButtonAfterPurchase: 1
   hideBuyButtonOnPointerExit: 1
+  purchase: {fileID: 2001318429}
 --- !u!114 &1697470021
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -26750,7 +26752,7 @@ Transform:
   m_GameObject: {fileID: 2001318428}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -6153.936, y: -0.00001, z: 290352.7}
+  m_LocalPosition: {x: -6153.936, y: -0.00001, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

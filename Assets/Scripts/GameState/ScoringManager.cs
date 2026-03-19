@@ -521,7 +521,7 @@ public class ScoringManager : MonoBehaviour
 
         AppendJokerEffectLine(sb, "FishDish", "Adds Random Points", fishDishActivations);
         AppendJokerEffectLine(sb, "HatCat", "Adds Random Mult", hatCatActivations);
-        AppendJokerEffectLine(sb, "Knight Joker", $"{jokerManager.knightJokerBuff}x Mult", knightActivations);
+        AppendJokerEffectLine(sb, "Knight Joker", $"+{jokerManager.knightJokerBuff} Mult", knightActivations);
         AppendJokerEffectLine(sb, "Ledger", "Adds Random Points and Mult", ledgerActivations);
         int baggedPoints = ScoreMath.SaturatingMultiply(jokerManager.baggedJokerBuff, 30);
         AppendJokerEffectLine(sb, "Bagged Joker", $"{baggedPoints} Points", baggedActivations);

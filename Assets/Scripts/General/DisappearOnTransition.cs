@@ -120,7 +120,7 @@ public class DisappearOnTransition : MonoBehaviour
     private void HandleTransitionEnded()
     {
         waitingForTransitionEnd = false;
-        AnimateScale(Vector3.one, ResolveDuration());
+        AnimateScale(new Vector3(0.8647109f, 0.9126073f, 1f), ResolveDuration());
     }
 
     private float ResolveDuration()

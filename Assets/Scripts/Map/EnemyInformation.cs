@@ -82,8 +82,14 @@ public class EnemyInformation
         if (EnemyInformationGrammer.scoreThresholds == null || EnemyInformationGrammer.scoreThresholds.Count == 0)
             return 100;
 
-        int thresholdIndex = Mathf.Clamp(enemiesDefeatedBeforeEncounter, 0, EnemyInformationGrammer.scoreThresholds.Count - 1);
+        int lastThresholdIndex = EnemyInformationGrammer.scoreThresholds.Count - 1;
+        int thresholdIndex = Mathf.Clamp(enemiesDefeatedBeforeEncounter, 0, lastThresholdIndex);
         int basicValue = EnemyInformationGrammer.scoreThresholds[thresholdIndex];
+
+        // Once the final configured threshold is reached, keep reusing it for all future encounters.
+        if (thresholdIndex >= lastThresholdIndex)
+            return basicValue;
+
         if(type == MapNodeType.Elite)
             basicValue = (int)(basicValue * 1.5f);
         else if(type == MapNodeType.Boss)

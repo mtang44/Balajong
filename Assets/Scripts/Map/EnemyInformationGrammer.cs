@@ -39,7 +39,7 @@ public class EnemyInformationGrammer : MonoBehaviour
         "dogs", "mothers", "fathers", "flowers", "people",
         "summers", "springs", "winters", "autumns", "bams",
         "cracks", "dots", "bears", "batman", "spiderman",
-        "adventures", "dragons"
+        "adventures", "dragons", "jokes", "tricks"
     };
     public static List<string>descriptionAdjective = new List<string>
     {

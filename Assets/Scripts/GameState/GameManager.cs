@@ -310,7 +310,7 @@ public class GameManager : MonoBehaviour
         PlayerStatManager.Instance.RecordHandScore(handScore);
         PlayerStatManager.Instance.AddMeldsScored(nonSingleMeldCount);
 
-        int targetScoreAfterHand = score + handScore;
+        int targetScoreAfterHand = ScoreMath.SaturatingAdd(score, handScore);
 
         // Animate score rise (melds, bonuses, then any final joker/global delta) up to the final total.
         if (ScoreVisualization.Instance != null)

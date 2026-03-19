@@ -8462,7 +8462,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'The Better your Rack, the more points you will earn. You are given 3 discards
+  m_text: 'The better your Rack, the more points you will earn. You are given 3 discards
     to improve your Rack before being forced to check your rack. When discarding
     you may select up to 5 tiles to Discard. '
   m_isRightToLeft: 0

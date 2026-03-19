@@ -308,7 +308,7 @@ public class ScoreVisualization : MonoBehaviour
         }
 
         int startScore = runningScore[0];
-        int targetScore = startScore + scoreDelta;
+        int targetScore = ScoreMath.SaturatingAdd(startScore, scoreDelta);
         float lerpDuration = Mathf.Max(0f, scoreLerpDuration);
         if (totalWaitDuration > 0f)
         {

@@ -6,6 +6,8 @@ public class DrawVisualization : MonoBehaviour
 {
     public static DrawVisualization Instance;
 
+    private readonly HashSet<GameObject> dealLockedTiles = new HashSet<GameObject>();
+
     [Tooltip("Tiles spawn here and travel to their hand positions.")]
     public Transform drawOrigin;
 
@@ -28,6 +30,19 @@ public class DrawVisualization : MonoBehaviour
             Destroy(gameObject);
     }
 
+    private void OnDisable()
+    {
+        dealLockedTiles.Clear();
+    }
+
+    private void OnDestroy()
+    {
+        if (Instance == this)
+            Instance = null;
+
+        dealLockedTiles.Clear();
+    }
+
     /// <summary>
     /// Animate a list of tiles from the draw origin to their already-assigned local positions.
     /// Call this after sortHand() has set the final positions on the tiles.
@@ -38,17 +53,23 @@ public class DrawVisualization : MonoBehaviour
         StartCoroutine(DealSequence(new List<GameObject>(tiles)));
     }
 
+    public bool IsTileDealLocked(GameObject tile)
+    {
+        return tile != null && dealLockedTiles.Contains(tile);
+    }
+
     private IEnumerator DealSequence(List<GameObject> tiles)
     {
-        // Sort tiles left-to-right by their final hand X position (already set by sortHand).
+        // Sort tiles left-to-right by their current intended target slot.
         tiles.Sort((a, b) =>
         {
             if (a == null || b == null) return 0;
-            return a.transform.localPosition.x.CompareTo(b.transform.localPosition.x);
+
+            TryResolveCurrentTargetPose(a, out Vector3 aPos, out _);
+            TryResolveCurrentTargetPose(b, out Vector3 bPos, out _);
+            return aPos.x.CompareTo(bPos.x);
         });
 
-        // Capture every tile's final destination before moving anything.
-        var destinations = new (Vector3 pos, Quaternion rot)[tiles.Count];
         Vector3 originLocalPos = Vector3.zero;
         bool originComputed = false;
 
@@ -56,8 +77,7 @@ public class DrawVisualization : MonoBehaviour
         {
             GameObject tile = tiles[i];
             if (tile == null) continue;
-
-            destinations[i] = (tile.transform.localPosition, tile.transform.localRotation);
+            dealLockedTiles.Add(tile);
 
             if (!originComputed)
             {
@@ -82,24 +102,36 @@ public class DrawVisualization : MonoBehaviour
             GameObject tile = tiles[i];
             if (tile == null) continue;
 
-            StartCoroutine(MoveTile(tile, originLocalPos, destinations[i].pos, destinations[i].rot));
+            StartCoroutine(MoveTile(tile, originLocalPos));
             yield return new WaitForSeconds(dealDelay);
         }
     }
 
-    private IEnumerator MoveTile(GameObject tile, Vector3 startLocalPos, Vector3 endLocalPos, Quaternion endLocalRot)
+    private IEnumerator MoveTile(GameObject tile, Vector3 startLocalPos)
     {
-        if (tile == null) yield break;
+        if (tile == null)
+        {
+            yield break;
+        }
+
+        TryResolveCurrentTargetPose(tile, out Vector3 initialEndLocalPos, out Quaternion initialEndLocalRot);
 
         // Tile starts turned 90 degrees on Y so it appears to spin into place.
-        Quaternion startRot = endLocalRot * Quaternion.Euler(0f, -90f, 0f);
+        Quaternion startRot = initialEndLocalRot * Quaternion.Euler(0f, -90f, 0f);
 
         float elapsed = 0f;
         while (elapsed < dealDuration)
         {
-            if (tile == null) yield break;
+            if (tile == null)
+            {
+                dealLockedTiles.Remove(tile);
+                yield break;
+            }
+
             elapsed += Time.deltaTime;
             float t = dealCurve.Evaluate(Mathf.Clamp01(elapsed / dealDuration));
+
+            TryResolveCurrentTargetPose(tile, out Vector3 endLocalPos, out Quaternion endLocalRot);
 
             // Arc the tile upward along a sine curve for a lively feel.
             Vector3 pos = Vector3.Lerp(startLocalPos, endLocalPos, t);
@@ -113,9 +145,31 @@ public class DrawVisualization : MonoBehaviour
 
         if (tile != null)
         {
+            TryResolveCurrentTargetPose(tile, out Vector3 finalLocalPos, out Quaternion finalLocalRot);
             SoundManager.Instance.playDrawSound();
-            tile.transform.localPosition = endLocalPos;
-            tile.transform.localRotation = endLocalRot;
+            tile.transform.localPosition = finalLocalPos;
+            tile.transform.localRotation = finalLocalRot;
         }
+
+        dealLockedTiles.Remove(tile);
+    }
+
+    private static void TryResolveCurrentTargetPose(GameObject tile, out Vector3 localPos, out Quaternion localRot)
+    {
+        if (tile == null)
+        {
+            localPos = Vector3.zero;
+            localRot = Quaternion.identity;
+            return;
+        }
+
+        DeckManager deckManager = DeckManager.Instance;
+        if (deckManager != null && deckManager.TryGetIntendedTilePose(tile, out localPos, out localRot))
+        {
+            return;
+        }
+
+        localPos = tile.transform.localPosition;
+        localRot = tile.transform.localRotation;
     }
 }

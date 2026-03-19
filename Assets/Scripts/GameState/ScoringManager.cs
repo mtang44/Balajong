@@ -113,27 +113,27 @@ public class ScoringManager : MonoBehaviour
                 {
                     for(int i = 0; i < JokerManager.Instance.numberOfActivations("blue"); i++)
                     {
-                        acc += 10;
+                        acc = ScoreMath.SaturatingAdd(acc, 10);
                     }
-                    acc += GetSuitedValue(dotsValues, (int)tile.NumberedValue);
+                    acc = ScoreMath.SaturatingAdd(acc, GetSuitedValue(dotsValues, (int)tile.NumberedValue));
                     break;
                 }
             case TileType.Bam:
                 {
                     for(int i = 0; i < JokerManager.Instance.numberOfActivations("green"); i++)
                     {
-                        acc += 10;
+                        acc = ScoreMath.SaturatingAdd(acc, 10);
                     }
-                    acc += GetSuitedValue(bamValues, (int)tile.NumberedValue);
+                    acc = ScoreMath.SaturatingAdd(acc, GetSuitedValue(bamValues, (int)tile.NumberedValue));
                     break;
                 }
             case TileType.Crack:
                 {
                     for(int i = 0; i < JokerManager.Instance.numberOfActivations("red"); i++)
                     {
-                        acc += 10;
+                        acc = ScoreMath.SaturatingAdd(acc, 10);
                     }
-                    acc += GetSuitedValue(crackValues, (int)tile.NumberedValue);
+                    acc = ScoreMath.SaturatingAdd(acc, GetSuitedValue(crackValues, (int)tile.NumberedValue));
                     break;
                 }
             case TileType.Wind:
@@ -141,22 +141,22 @@ public class ScoringManager : MonoBehaviour
                     winded = true;
                     if(JokerManager.Instance.jokers.Contains("bagged") && modifyJokers)
                         JokerManager.Instance.baggedJokerBuff++;
-                    acc += GetWindValue(tile.WindValue);
+                    acc = ScoreMath.SaturatingAdd(acc, GetWindValue(tile.WindValue));
                     break;
                 }
             case TileType.Dragon:
                 {
-                    acc += GetDragonValue(tile.DragonValue);
+                    acc = ScoreMath.SaturatingAdd(acc, GetDragonValue(tile.DragonValue));
                     break;
                 }
             case TileType.Flower:
                 {
-                    acc += GetFlowerValue(tile.FlowerValue);
+                    acc = ScoreMath.SaturatingAdd(acc, GetFlowerValue(tile.FlowerValue));
                     break;
                 }
             case TileType.Season:
                 {
-                    acc += GetSeasonValue(tile.SeasonValue);
+                    acc = ScoreMath.SaturatingAdd(acc, GetSeasonValue(tile.SeasonValue));
                     break;
                 }
             default:
@@ -165,9 +165,9 @@ public class ScoringManager : MonoBehaviour
         if(tile.Edition == Edition.Ghost)
             {
                 if (JokerManager.Instance.numberOfActivations("grave") > 0)
-                    acc += 100;
+                    acc = ScoreMath.SaturatingAdd(acc, 100);
                 else
-                    acc += 50;
+                    acc = ScoreMath.SaturatingAdd(acc, 50);
             }
         return acc;
     }
@@ -252,22 +252,24 @@ public class ScoringManager : MonoBehaviour
             if (tile == null) continue;
             var tileData = tile.GetComponent<MahjongTileHolder>()?.TileData;
             if (tileData != null)
-                bonusScore += GetTileScore(tileData);
+                bonusScore = ScoreMath.SaturatingAdd(bonusScore, GetTileScore(tileData));
         }
         foreach (var tile in DeckManager.Instance.seasonTiles)
         {
             if (tile == null) continue;
             var tileData = tile.GetComponent<MahjongTileHolder>()?.TileData;
             if (tileData != null)
-                bonusScore += GetTileScore(tileData);
+                bonusScore = ScoreMath.SaturatingAdd(bonusScore, GetTileScore(tileData));
         }
 
-        int total = meldScore + bonusScore;
+        int total = ScoreMath.SaturatingAdd(meldScore, bonusScore);
 
         int jokerBonusPoints = JokerPoints();
         int jokerMultiplier = jokerMult();
         int jokerMultMultiplier = jokerMultMult();
-        int newTotal = ((total + jokerBonusPoints) * jokerMultiplier) * jokerMultMultiplier;
+        int totalWithJokers = ScoreMath.SaturatingAdd(total, jokerBonusPoints);
+        int afterMultiplier = ScoreMath.SaturatingMultiply(totalWithJokers, jokerMultiplier);
+        int newTotal = ScoreMath.SaturatingMultiply(afterMultiplier, jokerMultMultiplier);
         if (logScoringDetails)
             Debug.Log($"Rack score: total={newTotal}, melds={meldScore}, bonus={bonusScore}, jokerBonus={jokerBonusPoints}, jokerMult={jokerMultiplier}" + (jokerMultMultiplier > 1 ? $", jokerMultMult={jokerMultMultiplier}" : ""));
         return newTotal;
@@ -279,15 +281,16 @@ public class ScoringManager : MonoBehaviour
         int acc = 0;
         for(int i = 0; i < JokerManager.Instance.numberOfActivations("bagged"); i++) //IMPLEMENT THE DISCARD BONUS
         {
-            acc += JokerManager.Instance.baggedJokerBuff * 30;
+            int baggedBonus = ScoreMath.SaturatingMultiply(JokerManager.Instance.baggedJokerBuff, 30);
+            acc = ScoreMath.SaturatingAdd(acc, baggedBonus);
         }
         for(int i = 0; i < JokerManager.Instance.numberOfActivations("fishdish"); i++)
         {
-            acc += Random.Range(10,50);
+            acc = ScoreMath.SaturatingAdd(acc, Random.Range(10,50));
         }
         for(int i = 0; i < JokerManager.Instance.numberOfActivations("ledger"); i++)
         {
-            acc += Random.Range(20,80);
+            acc = ScoreMath.SaturatingAdd(acc, Random.Range(20,80));
         }
         return acc;
     }
@@ -296,19 +299,19 @@ public class ScoringManager : MonoBehaviour
         int acc = 1;
         for(int i = 0; i < JokerManager.Instance.numberOfActivations("joker"); i++)
         {
-            acc += 3;
+            acc = ScoreMath.SaturatingAdd(acc, 3);
         }
         for(int i = 0; i < JokerManager.Instance.numberOfActivations("hatcat"); i++)
         {
-            acc += Random.Range(2,10);
+            acc = ScoreMath.SaturatingAdd(acc, Random.Range(2,10));
         }
         for(int i = 0; i < JokerManager.Instance.numberOfActivations("ledger"); i++)
         {
-            acc += Random.Range(5,15);
+            acc = ScoreMath.SaturatingAdd(acc, Random.Range(5,15));
         }
         for(int i = 0; i < JokerManager.Instance.numberOfActivations("knight"); i++) //IMPLEMENT THE DISCARD BONUS
         {
-            acc += JokerManager.Instance.knightJokerBuff;
+            acc = ScoreMath.SaturatingAdd(acc, JokerManager.Instance.knightJokerBuff);
         }
         return acc;
     }
@@ -317,7 +320,8 @@ public class ScoringManager : MonoBehaviour
         int acc = 1;
         for(int i = 0; i < JokerManager.Instance.numberOfActivations("spider"); i++)
         {
-            acc *= (PlayerStatManager.Instance.maxHealth - PlayerStatManager.Instance.currentHealth) + 1;
+            int spiderMult = (PlayerStatManager.Instance.maxHealth - PlayerStatManager.Instance.currentHealth) + 1;
+            acc = ScoreMath.SaturatingMultiply(acc, spiderMult);
         }
         return acc;
     }
@@ -410,7 +414,7 @@ public class ScoringManager : MonoBehaviour
         foreach (var meld in melds)
         {
             int meldScore = EvalMeld(meld);
-            meldTotal += meldScore;
+            meldTotal = ScoreMath.SaturatingAdd(meldTotal, meldScore);
 
             switch (meld.Kind)
             {
@@ -453,7 +457,8 @@ public class ScoringManager : MonoBehaviour
         int flowerTotal = AddBonusBreakdown(DeckManager.Instance.flowerTiles, out int flowerCount);
         int seasonTotal = AddBonusBreakdown(DeckManager.Instance.seasonTiles, out int seasonCount);
 
-        int total = meldTotal + flowerTotal + seasonTotal;
+        int total = ScoreMath.SaturatingAdd(meldTotal, flowerTotal);
+        total = ScoreMath.SaturatingAdd(total, seasonTotal);
 
         var sb = new StringBuilder();
         sb.AppendLine("Melds:");
@@ -518,7 +523,8 @@ public class ScoringManager : MonoBehaviour
         AppendJokerEffectLine(sb, "HatCat", "Adds Random Mult", hatCatActivations);
         AppendJokerEffectLine(sb, "Knight Joker", $"{jokerManager.knightJokerBuff}x Mult", knightActivations);
         AppendJokerEffectLine(sb, "Ledger", "Adds Random Points and Mult", ledgerActivations);
-        AppendJokerEffectLine(sb, "Bagged Joker", $"{jokerManager.baggedJokerBuff * 30} Points", baggedActivations);
+        int baggedPoints = ScoreMath.SaturatingMultiply(jokerManager.baggedJokerBuff, 30);
+        AppendJokerEffectLine(sb, "Bagged Joker", $"{baggedPoints} Points", baggedActivations);
 
         return sb.ToString().TrimEnd();
     }
@@ -556,7 +562,7 @@ public class ScoringManager : MonoBehaviour
         int totalMult = 1;
         for (int i = 0; i < activationCount; i++)
         {
-            totalMult *= perActivationMult;
+            totalMult = ScoreMath.SaturatingMultiply(totalMult, perActivationMult);
         }
 
         return totalMult;
@@ -576,7 +582,7 @@ public class ScoringManager : MonoBehaviour
             if (tileData == null) continue;
 
             int tileScore = GetTileScore(tileData);
-            total += tileScore;
+            total = ScoreMath.SaturatingAdd(total, tileScore);
             tileCount++;
         }
 
@@ -877,7 +883,7 @@ public class ScoringManager : MonoBehaviour
     {
         if (melds == null) return 0;
         int total = 0;
-        foreach (var m in melds) total += EvalMeld(m, true);
+        foreach (var m in melds) total = ScoreMath.SaturatingAdd(total, EvalMeld(m, true));
         return total;
     }
 
@@ -957,7 +963,7 @@ public class ScoringManager : MonoBehaviour
         bool meldContainsWind = false;
         foreach (var t in meld.Tiles)
         {
-            sum += GetTileScore(t, finalCalc);
+            sum = ScoreMath.SaturatingAdd(sum, GetTileScore(t, finalCalc));
             if (t.TileType == TileType.Wind)
                 meldContainsWind = true;
             multTotal = jokerMeldMultPoints(multTotal, meld);
@@ -1035,7 +1041,8 @@ public class ScoringManager : MonoBehaviour
         {
             multTotal += 4;
         }
-        return sum * (int)(multTotal * multMultTotal);
+        int resolvedMultiplier = ScoreMath.SaturatingFromDouble(multTotal * multMultTotal);
+        return ScoreMath.SaturatingMultiply(sum, resolvedMultiplier);
     }
 
     private static List<MahjongTile> GetOrCreateHonorList(Dictionary<string, List<MahjongTile>> honorLists, string key)

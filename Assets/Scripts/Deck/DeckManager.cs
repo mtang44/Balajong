@@ -145,18 +145,69 @@ public class DeckManager : MonoBehaviour
         for (int i = 0; i < hand.Count; i++)
         {
             GameObject tileGO = hand[i];
+
+            if (tileGO == null)
+            {
+                continue;
+            }
+
+            // Deal-locked tiles are animated by DrawVisualization and should not be snapped here.
+            if (DrawVisualization.Instance != null && DrawVisualization.Instance.IsTileDealLocked(tileGO))
+            {
+                continue;
+            }
+
+            if (!TryGetIntendedTilePose(tileGO, out Vector3 targetPos, out Quaternion targetRot))
+            {
+                continue;
+            }
+
+            tileGO.transform.localPosition = targetPos;
+            tileGO.transform.localRotation = targetRot;
+        }
+        cornerFlowers();
+    }
+
+    public bool TryGetIntendedTilePose(GameObject tileGO, out Vector3 targetPos, out Quaternion targetRot)
+    {
+        targetPos = Vector3.zero;
+        targetRot = Quaternion.identity;
+
+        if (tileGO == null)
+        {
+            return false;
+        }
+
+        int handIndex = hand.IndexOf(tileGO);
+        if (handIndex >= 0)
+        {
             float baseY = -0.5f;
-            
-            // Preserve Y offset for selected tiles
+
             if (selectedTiles.Contains(tileGO))
             {
                 baseY += 0.125f;
             }
-            
-            tileGO.transform.localPosition = new Vector3((i * 0.25f) - ((hand.Count - 1) * 0.125f), baseY, 1.5f);
-            tileGO.transform.localRotation = Quaternion.Euler(-20, 180, 0);
+
+            targetPos = new Vector3((handIndex * 0.25f) - ((hand.Count - 1) * 0.125f), baseY, 1.5f);
+            targetRot = Quaternion.Euler(-20, 180, 0);
+            return true;
         }
-        cornerFlowers();
+
+        if (flowerTiles.Contains(tileGO))
+        {
+            targetPos = new Vector3(-1.5f, -0.85f, 1.5f);
+            targetRot = Quaternion.Euler(-20, 180, 0);
+            return true;
+        }
+
+        if (seasonTiles.Contains(tileGO))
+        {
+            targetPos = new Vector3(1.5f, -0.85f, 1.5f);
+            targetRot = Quaternion.Euler(-20, 180, 0);
+            return true;
+        }
+
+        return false;
     }
     void cornerFlowers()
     {
